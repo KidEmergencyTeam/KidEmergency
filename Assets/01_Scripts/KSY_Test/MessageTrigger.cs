@@ -16,6 +16,7 @@ public enum InteractionMode
 public class InteractionSetting
 {
     [Header("메시지, 지연 시간, 적용 색상")]
+    [TextArea(3, 10)]
     public string message;         
     public int delayTime;       
     public Color highlightColor;  
