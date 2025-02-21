@@ -4,22 +4,25 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    public TextMeshProUGUI hintText;  // UI Text 오브젝트
+    public TextMeshProUGUI explanationText;
 
     void Awake()
     {
         instance = this;
     }
 
-    public void ShowHint(string message)
+    public void ShowExplanation(string message)
     {
-        hintText.text = message;
-        hintText.gameObject.SetActive(true);
-        Invoke("HideHint", 3f);  // 3초 후 자동 사라짐
+        explanationText.text = message;
+        explanationText.gameObject.SetActive(true);
+
+        // 메시지 출력후
+        // 3초 후 비활성화
+        Invoke("HideExplanation", 3f);  
     }
 
-    void HideHint()
+    void HideExplanation()
     {
-        hintText.gameObject.SetActive(false);
+        explanationText.gameObject.SetActive(false);
     }
 }

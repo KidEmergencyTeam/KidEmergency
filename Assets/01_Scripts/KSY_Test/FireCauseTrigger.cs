@@ -4,46 +4,46 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class FireCauseTrigger : MonoBehaviour
 {
     public string message = "";
-    private Renderer objRenderer;  // 오브젝트 색상 변경을 위한 Renderer
-    private Color originalColor;   // 원래 색상 저장
-    public Color highlightColor = Color.red;  // 클릭 시 변경할 색상
+    private Renderer objRenderer;
+    private Color originalColor;
+    public Color highlightColor = Color.white;
 
-    void Start()
+    private void Start()
     {
-        objRenderer = GetComponent<Renderer>();  // Renderer 가져오기
+        objRenderer = GetComponent<Renderer>();
         if (objRenderer != null)
         {
-            originalColor = objRenderer.material.color;  // 원래 색상 저장
+            originalColor = objRenderer.material.color;
         }
     }
 
-    // VR 컨트롤러 또는 클릭 이벤트로 실행
-    public void OnObjectClicked()
+    // Select Entered 이벤트 핸들러: SelectEnterEventArgs를 매개변수로 받음
+    public void OnObjectGrabbed(SelectEnterEventArgs args)
     {
         ShowMessage();
-        ChangeObjectColor();  // 즉시 색상 변경 후 복구
+        ChangeObjectColor();
     }
 
-    // 메시지 출력
-    void ShowMessage()
+    private void ShowMessage()
     {
-        Debug.Log(message + gameObject.name);  // 콘솔 출력
-        UIManager.instance.ShowHint(message + gameObject.name);  // UI 출력 (VR HUD)
+        Debug.Log(message);
+        UIManager.instance.ShowExplanation(message);
     }
 
-    // 색상 변경 즉시 실행 후 바로 복구
-    void ChangeObjectColor()
+    private void ChangeObjectColor()
     {
         if (objRenderer != null)
         {
-            objRenderer.material.color = highlightColor;  // 색상 변경
-            objRenderer.material.color = originalColor;  // 즉시 원래 색으로 복구
+            objRenderer.material.color = highlightColor;
+            Invoke("ResetColor", 5f);  // 5초 후 원래 색상 복구
         }
     }
 
-    // [PC 테스트용] 마우스로 클릭하면 실행
-    private void OnMouseDown()
+    private void ResetColor()
     {
-        OnObjectClicked();
+        if (objRenderer != null)
+        {
+            objRenderer.material.color = originalColor;
+        }
     }
 }
