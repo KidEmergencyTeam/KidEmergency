@@ -5,7 +5,7 @@ using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
+public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
 	[SerializeField] private NetworkPrefabRef _playerPrefab;
 	[SerializeField] private Transform spawnTransform;
@@ -15,21 +15,14 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 
 	private void Start()
 	{
-		if (FindObjectsOfType<NetworkRunner>().Length == 0)
-		{
-			StartGame(GameMode.Host);
-		}
-		else
-		{
-			StartGame(GameMode.Client);
-		}
-	}
-
-	async void StartGame(GameMode mode)
-	{
 		_networkRunner = gameObject.AddComponent<NetworkRunner>();
 		_networkRunner.ProvideInput = true;
 		
+		StartGame(GameMode.AutoHostOrClient);
+	}
+
+	private void StartGame(GameMode mode)
+	{
 		var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
 		var sceneInfo = new NetworkSceneInfo();
 		if (scene.IsValid)
@@ -37,7 +30,7 @@ public class NetworkManager : MonoBehaviour, INetworkRunnerCallbacks
 			sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
 		}
 
-		await _networkRunner.StartGame(new StartGameArgs()
+		_networkRunner.StartGame(new StartGameArgs()
 		{
 			GameMode = mode,
 			SessionName = "TestRoom",
