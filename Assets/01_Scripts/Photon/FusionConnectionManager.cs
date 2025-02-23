@@ -10,6 +10,7 @@ public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 	[SerializeField] private NetworkPrefabRef _playerPrefab;
 	[SerializeField] private Transform spawnTransform;
 	
+	private HardwareRig _hardwareRig;
 	private NetworkRunner _networkRunner;
 	private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -17,6 +18,8 @@ public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		_networkRunner = gameObject.AddComponent<NetworkRunner>();
 		_networkRunner.ProvideInput = true;
+		
+		_hardwareRig = FindObjectOfType<HardwareRig>();
 		
 		StartGame(GameMode.AutoHostOrClient);
 	}
@@ -57,21 +60,13 @@ public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 			_spawnedPlayers.Remove(player);
 		}
 	}
-
+	
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
-		var data = new NetworkInputData();
-		
-		if(Input.GetKey(KeyCode.W))
-			data.direction += Vector3.forward;
-		if(Input.GetKey(KeyCode.S))
-			data.direction += Vector3.back;
-		if(Input.GetKey(KeyCode.A))
-			data.direction += Vector3.left;
-		if (Input.GetKey(KeyCode.D))
-			data.direction += Vector3.right;
-
-		input.Set(data);
+		if (_hardwareRig != null)
+		{
+			_hardwareRig.OnInput(runner, input);
+		}
 	}
 
 	#endregion
