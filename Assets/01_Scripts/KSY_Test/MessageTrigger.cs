@@ -48,6 +48,7 @@ public class MessageTrigger : MonoBehaviour
         if (grabInteractable == null)
         {
             grabInteractable = gameObject.AddComponent<XRGrabInteractable>();
+            Debug.Log("MessageTrigger -> XRGrabInteractable 컴포넌트가 자동으로 추가되었습니다.");
         }
 
         // 이벤트 등록
