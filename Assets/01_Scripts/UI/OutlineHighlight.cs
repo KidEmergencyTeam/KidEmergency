@@ -6,6 +6,7 @@ public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExi
 {
     public Image outline; // 버튼 충돌시 변경될 아웃라인
     private Color originalOutlineColor; // 기본 아웃라인 색상
+
     private void Start()
     {
         originalOutlineColor = outline.color;
