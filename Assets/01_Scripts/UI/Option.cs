@@ -5,13 +5,13 @@ using ColorUtility = UnityEngine.ColorUtility;
 public class Option : OutlineHighlight
 {
     public string highlightText; // 강조할 문자
-    private TMP_Text _optionText; // 문자 TMP
+    private TextMeshProUGUI _optionText; // 문자 TMP
     public Color highlightColor; // 강조할 색상
 
     protected override void Awake()
     {
         base.Awake();
-        _optionText = GetComponentInChildren<TMP_Text>();
+        _optionText = GetComponentInChildren<TextMeshProUGUI>();
         HighlightSetting();
     }
     
