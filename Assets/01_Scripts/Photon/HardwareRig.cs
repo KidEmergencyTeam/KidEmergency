@@ -1,9 +1,16 @@
-using System;
 using UnityEngine;
 using Fusion;
 
+public enum RigPart
+{
+	LeftController,
+	RightController
+}
+
 public struct RigInput : INetworkInput
 {
+	public Vector3 playAreaPosition;
+	public Quaternion playAreaRotation;
 	public Vector3 headPosition;
 	public Quaternion headRotation;
 	public Vector3 leftHandPosition;
