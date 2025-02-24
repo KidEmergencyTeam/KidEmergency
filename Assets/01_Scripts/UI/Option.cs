@@ -5,20 +5,22 @@ using ColorUtility = UnityEngine.ColorUtility;
 public class Option : OutlineHighlight
 {
     public string highlightText; // 강조할 문자
-    public TMP_Text optionText; // 문자 TMP
+    private TMP_Text _optionText; // 문자 TMP
     public Color highlightColor; // 강조할 색상
-    
-    private void Start()
+
+    protected override void Awake()
     {
+        base.Awake();
+        _optionText = GetComponentInChildren<TMP_Text>();
         HighlightSetting();
     }
     
     private void HighlightSetting()
     {
-        if (optionText.text.Contains(highlightText))
+        if (_optionText.text.Contains(highlightText))
         {
             string colorCode = ColorUtility.ToHtmlStringRGB(highlightColor);
-            optionText.text = optionText.text.Replace(highlightText, $"<color=#{colorCode}>"+ highlightText + "</color>");
+            _optionText.text = _optionText.text.Replace(highlightText, $"<color=#{colorCode}>"+ highlightText + "</color>");
         }
 
         else

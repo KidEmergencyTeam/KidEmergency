@@ -5,11 +5,11 @@ using UnityEngine.UI;
 public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image outline; // 버튼 충돌시 변경될 아웃라인
-    private Color originalOutlineColor; // 기본 아웃라인 색상
+    private Color _originalOutlineColor; // 기본 아웃라인 색상
 
-    private void Start()
+    protected virtual void Awake()
     {
-        originalOutlineColor = outline.color;
+        _originalOutlineColor = outline.color;
     }
 
 
@@ -20,6 +20,6 @@ public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        outline.color = originalOutlineColor;
+        outline.color = _originalOutlineColor;
     }
 }

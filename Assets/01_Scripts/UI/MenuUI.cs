@@ -4,20 +4,21 @@ using UnityEngine.UI;
 
 public class MenuUI : OutlineHighlight
 {
-    public TextMeshProUGUI text;
-    public GameObject activeImage;
-    public Color originalColor;
-    public string menuName;
+    [HideInInspector] public TextMeshProUGUI text;
+    [HideInInspector] public GameObject activeImage;
+    [HideInInspector] public Color originalColor;
+    private string _menuName;
     private Button _button;
-    
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
         text = GetComponentInChildren<TextMeshProUGUI>();
         activeImage = this.transform.GetChild(1).gameObject;
         originalColor = text.color;
         activeImage.SetActive(false);
-        menuName = this.transform.name;
+        _menuName = this.transform.name;
         
         _button = GetComponent<Button>();
         _button.onClick.AddListener(MenuButtonClicked);
@@ -28,8 +29,8 @@ public class MenuUI : OutlineHighlight
         text.color = Color.white;
         activeImage.SetActive(true);
 
-        TitleUI titleUI = GameObject.FindObjectOfType<TitleUI>();
-        titleUI.currentMenu = menuName;
+        TitleUI titleUI = GetComponentInParent<TitleUI>();
+        titleUI.currentMenu = _menuName;
         titleUI.SetCurrentMenu();
     }
 
