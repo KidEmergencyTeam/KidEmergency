@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using ColorUtility = UnityEngine.ColorUtility;
 
 public class Option : OutlineHighlight
@@ -20,7 +21,8 @@ public class Option : OutlineHighlight
         if (_optionText.text.Contains(highlightText))
         {
             string colorCode = ColorUtility.ToHtmlStringRGB(highlightColor);
-            _optionText.text = _optionText.text.Replace(highlightText, $"<color=#{colorCode}>"+ highlightText + "</color>");
+            _optionText.text = _optionText.text.Replace(highlightText, $"<b><color=#{colorCode}>"+ highlightText + "</color></b>");
+            // 색상 변경 <color=컬러코드></color> / 폰트 굵기 <b></b> / 폰트 변경(Legacy만 가능) <font=\"폰트명\"><font>
         }
 
         else
