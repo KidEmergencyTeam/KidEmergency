@@ -5,10 +5,10 @@ using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
+public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
 	[SerializeField] private NetworkPrefabRef _playerPrefab;
-	[SerializeField] private Transform spawnTransform;
+	[SerializeField] private Transform _spawnTransform;
 	
 	private HardwareRig _hardwareRig;
 	private NetworkRunner _networkRunner;
@@ -47,7 +47,7 @@ public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		if (runner.IsServer)
 		{
-			NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnTransform.position, Quaternion.identity, player);
+			NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, _spawnTransform.position, Quaternion.identity, player);
 			_spawnedPlayers.Add(player, networkPlayerObject);
 		}
 	}
@@ -60,18 +60,13 @@ public class FusionConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 			_spawnedPlayers.Remove(player);
 		}
 	}
-	
-	public void OnInput(NetworkRunner runner, NetworkInput input)
-	{
-		if (_hardwareRig != null)
-		{
-			_hardwareRig.OnInput(runner, input);
-		}
-	}
 
 	#endregion
 
 	#region 사용하지 않는 INetworkRunnerCallbacks
+	
+	public void OnInput(NetworkRunner runner, NetworkInput input) { }
+	
 	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
 	{
 	}
