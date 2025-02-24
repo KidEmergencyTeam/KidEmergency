@@ -1,19 +1,12 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 [RequireComponent(typeof(XRGrabInteractable))]
 public class AutoAttach : MonoBehaviour
 {
     [Header("부착 설정")]
-    [Tooltip("AttachZone 안에서 놓았을 때 오브젝트가 부착될 위치/회전")]
+    [Tooltip("AttachZone 안에서 놓였을 때 오브젝트가 부착될 위치/회전")]
     public Transform attachPoint;
-
-    [Tooltip("부착 후 XR 레이 인식을 위한 가상 콜라이더의 크기 (모든 축 동일 적용)")]
-    public float proxyColliderSize = 0.5f;
 
     private XRGrabInteractable grabInteractable;
 
@@ -22,9 +15,6 @@ public class AutoAttach : MonoBehaviour
 
     // 현재 attachPoint에 부착되어 있는지 여부
     private bool isAttached = false;
-
-    // 프록시 콜라이더를 한 번만 생성하기 위한 플래그
-    private bool proxyAdded = false;
 
     // 부착 전 Rigidbody의 kinematic 상태 저장
     private bool originalKinematic;
@@ -69,7 +59,6 @@ public class AutoAttach : MonoBehaviour
     {
         if (other.CompareTag("AttachZone"))
         {
-            // 오브젝트가 잡혀 있거나 부착 중이면 로그 출력하지 않음
             if (grabInteractable != null && (grabInteractable.isSelected || isAttached))
             {
                 isInAttachZone = false;
@@ -170,11 +159,10 @@ public class AutoAttach : MonoBehaviour
         }
 
         isAttached = true;
-        AddProxyCollider();
         Debug.Log("새로운 오브젝트가 장착되었습니다.");
     }
 
-    // 부착 상태 해제 (부모 해제, 물리 상태 복원, 프록시 제거)
+    // 부착 상태 해제 (부모 해제, 물리 상태 복원)
     public void Detach()
     {
         Debug.Log("오브젝트 부착 해제");
@@ -186,17 +174,10 @@ public class AutoAttach : MonoBehaviour
         {
             rb.isKinematic = originalKinematic;
         }
-
-        Transform proxy = transform.Find("AttachPointProxyCollider");
-        if (proxy != null)
-        {
-            Destroy(proxy.gameObject);
-        }
-        proxyAdded = false;
         isAttached = false;
     }
 
-    // AttachZone 밖에서 놓이면 씬의 최상위 계층(루트)으로 이동
+    // AttachZone 밖에서 놓이면 씬의 최상위 계층으로 이동
     private void DetachToSceneRoot()
     {
         if (isAttached)
@@ -214,51 +195,6 @@ public class AutoAttach : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        Debug.Log("AttachZone 밖에 놓여, 씬 루트로 해제하였습니다.");
-    }
-
-    // XR Ray Interactor가 인식하기 쉬운 프록시 박스 콜라이더 추가
-    private void AddProxyCollider()
-    {
-        if (proxyAdded)
-            return;
-
-        GameObject proxy = new GameObject("AttachPointProxyCollider");
-        proxy.transform.SetParent(transform, false);
-        proxy.transform.localPosition = Vector3.zero;
-        proxy.transform.localRotation = Quaternion.identity;
-
-        BoxCollider boxCollider = proxy.AddComponent<BoxCollider>();
-        boxCollider.size = new Vector3(proxyColliderSize, proxyColliderSize, proxyColliderSize);
-        boxCollider.isTrigger = false;
-
-        if (grabInteractable != null)
-        {
-            grabInteractable.colliders.Clear();
-            grabInteractable.colliders.Add(boxCollider);
-        }
-        else
-        {
-            Debug.LogWarning("XRGrabInteractable이 null입니다. 프록시 콜라이더 등록 실패!");
-        }
-
-        proxyAdded = true;
-        Debug.Log("AttachPoint 프록시 박스 콜라이더 추가");
-    }
-
-    // 씬 뷰에서 프록시 콜라이더 크기 시각화 (디버깅용)
-    private void OnDrawGizmosSelected()
-    {
-        if (attachPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(attachPoint.position,
-                new Vector3(proxyColliderSize, proxyColliderSize, proxyColliderSize));
-
-#if UNITY_EDITOR
-            Handles.Label(attachPoint.position + Vector3.up * proxyColliderSize,
-                          "Size: " + proxyColliderSize.ToString("F2"));
-#endif
-        }
+        Debug.Log("AttachZone 밖에 놓여, 상속 관계를 해제하였습니다.");
     }
 }
