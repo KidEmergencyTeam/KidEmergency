@@ -1,11 +1,8 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using ColorUtility = UnityEngine.ColorUtility;
 
-public class TitleMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image outline; // 버튼 충돌시 변경될 아웃라인
     private Color originalOutlineColor; // 기본 아웃라인 색상
