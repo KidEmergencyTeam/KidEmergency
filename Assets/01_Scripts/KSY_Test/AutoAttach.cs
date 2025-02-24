@@ -15,9 +15,6 @@ public class AutoAttach : MonoBehaviour
     [Tooltip("부착 후 XR 레이 인식을 위한 가상 콜라이더의 크기 (모든 축 동일 적용)")]
     public float proxyColliderSize = 0.5f;
 
-    [Tooltip("XR Origin (XR Rig) 밖으로 이동시킬 부모 (없으면 씬 루트)")]
-    public Transform sceneRootObject;
-
     private XRGrabInteractable grabInteractable;
 
     // AttachZone 안에 있는지 여부 (OnTriggerEnter/Exit로 업데이트)
@@ -38,6 +35,8 @@ public class AutoAttach : MonoBehaviour
 
         if (grabInteractable != null)
         {
+            // 기본적으로 Throw On Detach를 활성화한 상태로 둡니다.
+            grabInteractable.throwOnDetach = true;
             grabInteractable.selectEntered.AddListener(OnSelectEntered);
             grabInteractable.selectExited.AddListener(OnSelectExited);
         }
@@ -65,11 +64,12 @@ public class AutoAttach : MonoBehaviour
             Debug.Log("AttachZone에 진입했습니다.");
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("AttachZone"))
         {
-            // 만약 오브젝트가 잡혀 있거나(Select중) 부착 상태이면 로그 출력하지 않음
+            // 오브젝트가 잡혀 있거나 부착 중이면 로그 출력하지 않음
             if (grabInteractable != null && (grabInteractable.isSelected || isAttached))
             {
                 isInAttachZone = false;
@@ -86,7 +86,6 @@ public class AutoAttach : MonoBehaviour
     {
         Debug.Log("오브젝트를 잡았습니다.");
 
-        // 이미 부착되어 있다면(attachPoint의 자식 상태라면) 먼저 해제
         if (isAttached)
         {
             Detach();
@@ -99,7 +98,6 @@ public class AutoAttach : MonoBehaviour
         if (args.isCanceled)
             return;
 
-        // 놓는 순간, AttachZone 내에 있으면 부착, 그렇지 않으면 XR Origin 밖으로 해제
         if (isInAttachZone)
         {
             Attach();
@@ -119,20 +117,35 @@ public class AutoAttach : MonoBehaviour
             return;
         }
 
-        // 이미 부착 중이면 중복 처리하지 않음
+        if (attachPoint.childCount > 0 && attachPoint.GetChild(0) != transform)
+        {
+            Debug.Log("이미 부착된 오브젝트가 있습니다. 기존 오브젝트를 해제합니다.");
+
+            Transform previous = attachPoint.GetChild(0);
+            AutoAttach previousAutoAttach = previous.GetComponent<AutoAttach>();
+            if (previousAutoAttach != null)
+            {
+                previousAutoAttach.Detach();
+            }
+            else
+            {
+                previous.SetParent(null, true);
+            }
+        }
+
         if (isAttached)
             return;
 
         Debug.Log("AttachZone 내에 놓여 attachPoint에 부착합니다.");
 
-        // 월드 스케일 보존을 위해 현재 스케일 저장
-        Vector3 worldScaleBefore = transform.lossyScale;
+        // attachPoint 영역에 배치할 때는 Throw On Detach 기능을 비활성화
+        if (grabInteractable != null)
+            grabInteractable.throwOnDetach = false;
 
-        // attachPoint의 위치와 회전으로 이동
+        Vector3 worldScaleBefore = transform.lossyScale;
         transform.position = attachPoint.position;
         transform.rotation = attachPoint.rotation;
 
-        // Rigidbody의 상태 변경: 물리 영향을 제거하기 위해 kinematic으로 전환
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -140,10 +153,8 @@ public class AutoAttach : MonoBehaviour
             rb.isKinematic = true;
         }
 
-        // attachPoint를 부모로 설정 (worldPositionStays 기본값 true)
         transform.SetParent(attachPoint, true);
 
-        // 부모의 스케일 영향을 제거하여 원래 월드 스케일 유지
         Vector3 parentScale = attachPoint.lossyScale;
         if (parentScale.x != 0 && parentScale.y != 0 && parentScale.z != 0)
         {
@@ -159,62 +170,51 @@ public class AutoAttach : MonoBehaviour
         }
 
         isAttached = true;
-
-        // XR Ray Interactor가 인식할 수 있도록 프록시 콜라이더 추가 (한번만 추가)
         AddProxyCollider();
+        Debug.Log("새로운 오브젝트가 장착되었습니다.");
     }
 
     // 부착 상태 해제 (부모 해제, 물리 상태 복원, 프록시 제거)
-    private void Detach()
+    public void Detach()
     {
         Debug.Log("오브젝트 부착 해제");
 
-        // 부모 관계 해제 (worldPositionStays true로 하여 위치 유지)
         transform.SetParent(null, true);
 
-        // Rigidbody 물리 상태 복원
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = originalKinematic;
         }
 
-        // 프록시 콜라이더 제거
         Transform proxy = transform.Find("AttachPointProxyCollider");
         if (proxy != null)
         {
             Destroy(proxy.gameObject);
         }
         proxyAdded = false;
-
         isAttached = false;
     }
 
-    // AttachZone 밖에서 놓이면 XR Origin(또는 sceneRootObject) 밖으로 이동
+    // AttachZone 밖에서 놓이면 씬의 최상위 계층(루트)으로 이동
     private void DetachToSceneRoot()
     {
-        // 만약 부착되어 있다면 먼저 해제
         if (isAttached)
             Detach();
 
-        // sceneRootObject가 지정되어 있으면 그 아래로, 없으면 씬 루트로 이동
-        if (sceneRootObject != null)
-        {
-            transform.SetParent(sceneRootObject, true);
-        }
-        else
-        {
-            transform.SetParent(null, true);
-        }
+        // attachPoint 영역 외에서는 던지기 기능을 활성화합니다.
+        if (grabInteractable != null)
+            grabInteractable.throwOnDetach = true;
 
-        // Rigidbody 물리 재활성 (자유롭게 움직이도록)
+        transform.SetParent(null, true);
+
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = false;
         }
 
-        Debug.Log("AttachZone 밖에 놓여, XR Origin 계층에서 해제하였습니다.");
+        Debug.Log("AttachZone 밖에 놓여, 씬 루트로 해제하였습니다.");
     }
 
     // XR Ray Interactor가 인식하기 쉬운 프록시 박스 콜라이더 추가
@@ -229,13 +229,9 @@ public class AutoAttach : MonoBehaviour
         proxy.transform.localRotation = Quaternion.identity;
 
         BoxCollider boxCollider = proxy.AddComponent<BoxCollider>();
-        // 모든 축 동일 크기 적용
         boxCollider.size = new Vector3(proxyColliderSize, proxyColliderSize, proxyColliderSize);
-
-        // 프로젝트 설정에 맞게 trigger 여부 결정 (일반적으로 XR Ray Interactor는 non-trigger를 감지)
         boxCollider.isTrigger = false;
 
-        // grabInteractable의 콜라이더 목록을 갱신 (필요 시 기존 콜라이더 삭제)
         if (grabInteractable != null)
         {
             grabInteractable.colliders.Clear();
