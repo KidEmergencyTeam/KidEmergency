@@ -11,6 +11,7 @@ public class Player : NetworkBehaviour
     public Transform leftFootTransform;
     public Transform rightFootTransform;
 
+    [Networked] public int Token {get;set;}
     [Header("Foot Settings")]
     public float footOffset = 0.3f;
     public float footHeight = 0.1f;
