@@ -42,10 +42,10 @@ public class Option : OutlineHighlight
             anim.SetTrigger("Selected");
         }
         
-        else if (true)
-        {
-            anim.SetTrigger("Unselected");
-        }
+        // else if (true)
+        // {
+        //     anim.SetTrigger("Unselected");
+        // }
 }
 
 }
