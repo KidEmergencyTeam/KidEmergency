@@ -50,9 +50,12 @@ public class TypingEffect : MonoBehaviour
     // 버튼 클릭 시 호출되어, 인덱스에 해당하는 텍스트를 타이핑 효과로 출력합니다.
     public void PlayTypingAtIndex(int index)
     {
-        // 이미 타이핑 중이면 실행하지 않음
+        // 이미 타이핑 중이면 디버그 메시지를 출력하고 함수 종료
         if (isTyping)
+        {
+            Debug.Log("이미 타이핑이 진행 중입니다.");
             return;
+        }
 
         // 인덱스 범위 확인
         if (index < 0 || index >= typingContents.Count)
