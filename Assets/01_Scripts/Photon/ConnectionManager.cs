@@ -6,6 +6,7 @@ using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
@@ -18,7 +19,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
     private List<int> _pendingTokens = new List<int>();
     private System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
-    private const float CLEANUP_TIMEOUT = 10000f; // 10초
+    private const float _cleanupTime = 5000f; // 5초
 
     private void Start()
     {
@@ -54,7 +55,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
         if (_networkRunner == null) return;
 
         // 재접속 대기 시간 초과 체크
-        if (_networkRunner.IsServer && _watch.IsRunning && _watch.ElapsedMilliseconds > CLEANUP_TIMEOUT)
+        if (_networkRunner.IsServer && _watch.IsRunning && _watch.ElapsedMilliseconds > _cleanupTime)
         {
             _watch.Stop();
             _watch.Reset();
