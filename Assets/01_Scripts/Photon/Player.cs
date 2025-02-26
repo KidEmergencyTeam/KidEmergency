@@ -5,11 +5,8 @@ public class Player : NetworkBehaviour
 {
     [Header("Player Parts")]
     public Transform headTransform;
-    public Transform bodyTransform;
     public Transform leftHandTransform;
     public Transform rightHandTransform;
-    public Transform leftFootTransform;
-    public Transform rightFootTransform;
 
     [Networked] public int Token {get;set;}
     [Header("Foot Settings")]
