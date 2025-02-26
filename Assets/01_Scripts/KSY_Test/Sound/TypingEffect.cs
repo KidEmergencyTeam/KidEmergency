@@ -29,9 +29,9 @@ public class TypingEffect : MonoBehaviour
     public List<MultilineString> typingContents = new List<MultilineString>();  
     public TextMeshProUGUI tmpText;
 
-    private float sentenceDelay = 1f;
+    private float sentenceDelay = 0.5f;
 
-    // 타이핑 진행 중 여부 플래그
+    // 타이핑 진행 중 여부 플래그 -> 참이면 중복 호출x
     private bool isTyping = false;
 
     void Start()
