@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class AutoAttach : MonoBehaviour
 {
     [Header("부착 설정")]
-    [Tooltip("AttachZone 안에서 놓였을 때 오브젝트가 부착될 위치/회전")]
     public Transform attachPoint;
+    [TagSelector]
+    public string attachPointTag;
 
     private XRGrabInteractable grabInteractable;
 
@@ -34,14 +36,42 @@ public class AutoAttach : MonoBehaviour
         {
             Debug.LogError("XRGrabInteractable이 존재하지 않습니다!");
         }
+
+        // 최초 씬에서 attachPoint를 태그로 할당
+        AssignAttachPoint();
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        if (grabInteractable != null)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // 씬 전환 시 attachPoint 재참조
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AssignAttachPoint();
+    }
+
+    // attachPointTag를 이용해 attachPoint 할당
+    private void AssignAttachPoint()
+    {
+        if (!string.IsNullOrEmpty(attachPointTag))
         {
-            grabInteractable.selectEntered.RemoveListener(OnSelectEntered);
-            grabInteractable.selectExited.RemoveListener(OnSelectExited);
+            GameObject attachObj = GameObject.FindGameObjectWithTag(attachPointTag);
+            if (attachObj != null)
+            {
+                attachPoint = attachObj.transform;
+                Debug.Log("현재 씬에서 attachPoint가 할당되었습니다. 태그: " + attachPointTag);
+            }
+            else
+            {
+                Debug.LogWarning("태그 '" + attachPointTag + "'를 가진 attachPoint 오브젝트를 찾을 수 없습니다.");
+            }
         }
     }
 
