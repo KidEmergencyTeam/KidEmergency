@@ -16,13 +16,6 @@ public class SceneSpawnInfo
 }
 
 [System.Serializable]
-public class SceneSpawnSettings
-{
-    [Header("씬 전환 정보 (첫 번째는 현재 씬)")]
-    public List<SceneSpawnInfo> sceneSpawnInfos;
-}
-
-[System.Serializable]
 public class DisableSceneGroup
 {
     [Header("씬 이름")]
@@ -46,8 +39,8 @@ public class WaitStateManager : MonoBehaviour
     [TagSelector]
     public string WaitStateTextTag;
 
-    // 현재 씬 포함 모든 씬의 spawn 정보를 하나의 리스트로 관리 (첫 번째 요소는 현재 씬)
-    public SceneSpawnSettings sceneSpawnSettings;
+    [Header("씬 전환 정보")]
+    public List<SceneSpawnInfo> sceneSpawnInfos;
 
     [Header("씬별 오브젝트 비활성화 설정")]
     public List<DisableSceneGroup> disableSceneGroups;
@@ -60,6 +53,10 @@ public class WaitStateManager : MonoBehaviour
     private int nextSceneIndex = 1;
 
     private bool isReady = false;
+
+    // 게임 시작 대기 시간 (인스펙터에서 조정 가능)
+    [Header("게임 시작 대기 시간")]
+    public float gameStartDelay = 2f;
 
     private InputDevice leftDevice;
     private InputDevice rightDevice;
@@ -112,17 +109,15 @@ public class WaitStateManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // 초기 씬의 모든 오브젝트 초기화 완료 후, 플레이어 위치를 현재 씬의 spawn 위치(리스트의 첫 번째 요소)로 설정
+    // 초기 씬의 모든 오브젝트 초기화 완료 후, 플레이어 위치를 현재 씬의 스폰 위치(리스트의 첫 번째 요소)로 설정
     IEnumerator DelayedInitialization()
     {
         yield return new WaitForEndOfFrame();
         UpdateDisableSceneGroups(SceneManager.GetActiveScene().name);
 
-        if (player != null && sceneSpawnSettings != null &&
-            sceneSpawnSettings.sceneSpawnInfos != null &&
-            sceneSpawnSettings.sceneSpawnInfos.Count > 0)
+        if (player != null && sceneSpawnInfos != null && sceneSpawnInfos.Count > 0)
         {
-            player.transform.position = sceneSpawnSettings.sceneSpawnInfos[0].spawnPosition;
+            player.transform.position = sceneSpawnInfos[0].spawnPosition;
         }
     }
 
@@ -137,7 +132,7 @@ public class WaitStateManager : MonoBehaviour
                 {
                     isReady = true;
                     UpdateUI("준비 완료");
-                    Invoke("StartGame", 2f);
+                    Invoke("StartGame", gameStartDelay);
                 }
             }
             // VR 모드: 각 컨트롤러의 그립 버튼 입력 체크
@@ -155,7 +150,7 @@ public class WaitStateManager : MonoBehaviour
                 {
                     isReady = true;
                     UpdateUI("준비 완료");
-                    Invoke("StartGame", 2f);
+                    Invoke("StartGame", gameStartDelay);
                 }
             }
         }
@@ -182,16 +177,13 @@ public class WaitStateManager : MonoBehaviour
 
     void StartGame()
     {
-        // 현재 씬(리스트 인덱스 0)을 제외한, 나머지 씬 정보를 사용하여 전환 (리스트에 최소 2개 이상의 정보가 있어야 함)
-        if (sceneSpawnSettings != null &&
-            sceneSpawnSettings.sceneSpawnInfos != null &&
-            sceneSpawnSettings.sceneSpawnInfos.Count > 1)
+        if (sceneSpawnInfos != null && sceneSpawnInfos.Count > 1)
         {
-            selectedSceneName = sceneSpawnSettings.sceneSpawnInfos[nextSceneIndex].sceneName;
-            selectedSpawnPosition = sceneSpawnSettings.sceneSpawnInfos[nextSceneIndex].spawnPosition;
+            selectedSceneName = sceneSpawnInfos[nextSceneIndex].sceneName;
+            selectedSpawnPosition = sceneSpawnInfos[nextSceneIndex].spawnPosition;
 
-            // 리스트 순환 (0은 현재 씬이므로 건너뛰기)
-            nextSceneIndex = (nextSceneIndex + 1) % sceneSpawnSettings.sceneSpawnInfos.Count;
+            // 리스트 순환 (인덱스 0은 현재 씬이므로 건너뜀)
+            nextSceneIndex = (nextSceneIndex + 1) % sceneSpawnInfos.Count;
             if (nextSceneIndex == 0)
                 nextSceneIndex = 1;
         }
