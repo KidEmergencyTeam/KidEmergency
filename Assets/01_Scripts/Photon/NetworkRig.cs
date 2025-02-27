@@ -30,6 +30,8 @@ public class NetworkRig : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        base.FixedUpdateNetwork();
+        
         if (GetInput<RigInput>(out var input))
         {
             transform.position = input.playAreaPosition;
@@ -42,8 +44,7 @@ public class NetworkRig : NetworkBehaviour
             headset.transform.rotation = input.headRotation;
         }
     }
-
-
+    
     public override void Render()
     {
         base.Render();
