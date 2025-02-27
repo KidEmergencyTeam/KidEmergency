@@ -15,12 +15,12 @@ public class MultilineString
     [Header("타이핑 오디오 클립")]
     public AudioClip typingSound;
 
-    [Header("버튼 설정")]
+    [Header("버튼")]
     public Button associatedButton;
     [TagSelector]
     public string associatedButtonTag;
 
-    [Header("타이핑 설정")]
+    [Header("타이핑 속도")]
     public float typingSpeed;
 }
 
@@ -29,15 +29,15 @@ public class TypingEffect : MonoBehaviour
     [Header("타이핑 설정")]
     public List<MultilineString> typingContents = new List<MultilineString>();
 
-    [Header("타이핑 텍스트 삭제 간격")]
-    public float clearDelay;
-
     [Header("타이핑 표시")]
     public TextMeshProUGUI typingText;
     [TagSelector]
     public string typingTextTag;
 
-    // 타이핑 전,후 간격
+    [Header("타이핑 텍스트 삭제 대기 시간")]
+    public float clearDelay;
+
+    // 타이핑 전,후 대기 시간
     private float sentenceDelay = 0.5f;
 
     // 타이핑 진행 중 여부 플래그
