@@ -174,7 +174,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
         else
         {
             Debug.Log($"새로운 플레이어: {playerToken}");
-            var playerObject = runner.Spawn(_playerPrefab, 
+            NetworkObject playerObject = runner.Spawn(_playerPrefab, 
                 _spawnTransform.position,
                 Quaternion.identity,
                 player,
