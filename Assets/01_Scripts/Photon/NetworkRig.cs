@@ -10,6 +10,8 @@ public class NetworkRig : NetworkBehaviour
     public NetworkHand rightHand;
     public NetworkHeadset headset;
     
+    public bool IsLocalNetworkRig => Object.HasInputAuthority;
+    
     [HideInInspector] public NetworkTransform networkTransform;
 
     private void Awake()
@@ -20,7 +22,10 @@ public class NetworkRig : NetworkBehaviour
     public override void Spawned()
     {
         base.Spawned();
-        hardwareRig = FindObjectOfType<HardwareRig>();
+        if (IsLocalNetworkRig)
+        {
+            hardwareRig = FindObjectOfType<HardwareRig>();
+        }
     }
 
     public override void FixedUpdateNetwork()
@@ -38,7 +43,6 @@ public class NetworkRig : NetworkBehaviour
         }
     }
 
-    public bool IsLocalNetworkRig => Object.HasInputAuthority;
 
     public override void Render()
     {
