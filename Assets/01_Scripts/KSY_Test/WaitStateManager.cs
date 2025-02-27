@@ -52,12 +52,14 @@ public class WaitStateManager : MonoBehaviour
     // 현재 씬은 0번, 씬 전환은 인덱스 1부터 시작하도록 함
     private int nextSceneIndex = 1;
 
+    // 로컬 플레이어 준비 여부
     private bool isReady = false;
 
     // 게임 시작 대기 시간 (인스펙터에서 조정 가능)
     [Header("게임 시작 대기 시간")]
     public float gameStartDelay = 2f;
 
+    // 1명 기준이므로 준비된 인원 수를 확인할 필요 없이 단순히 1명일 때 준비 완료 처리
     private InputDevice leftDevice;
     private InputDevice rightDevice;
 
@@ -90,7 +92,9 @@ public class WaitStateManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(DelayedInitialization());
-        UpdateUI("대기중...");
+
+        // 초기 UI에 준비 상태를 표시 (1명 기준)
+        UpdateUI("대기중: 0/1");
 
         // 왼손 컨트롤러 찾기
         List<InputDevice> devices = new List<InputDevice>();
@@ -128,11 +132,9 @@ public class WaitStateManager : MonoBehaviour
             // PC (시뮬레이션) 모드: 컨트롤러가 없으면 키보드 Space 체크
             if (!leftDevice.isValid && !rightDevice.isValid)
             {
-                if (Input.GetKey(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    isReady = true;
-                    UpdateUI("준비 완료");
-                    Invoke("StartGame", gameStartDelay);
+                    RegisterReady();
                 }
             }
             // VR 모드: 각 컨트롤러의 그립 버튼 입력 체크
@@ -148,14 +150,27 @@ public class WaitStateManager : MonoBehaviour
 
                 if (leftGripPressed && rightGripPressed)
                 {
-                    isReady = true;
-                    UpdateUI("준비 완료");
-                    Invoke("StartGame", gameStartDelay);
+                    RegisterReady();
                 }
             }
         }
     }
 
+    // 플레이어가 준비되었음을 등록하는 메서드 (1명 기준)
+    void RegisterReady()
+    {
+        if (isReady) return; // 중복 등록 방지
+
+        isReady = true;
+
+        // 1명 기준이므로 바로 1/1 표시
+        UpdateUI("준비 완료: 1/1");
+        Debug.Log("플레이어 준비 완료! 게임 시작 대기...");
+
+        Invoke("StartGame", gameStartDelay);
+    }
+
+    // UI 업데이트 (대기 상태 및 준비 상태 표시)
     void UpdateUI(string status)
     {
         if (WaitStateText == null)
