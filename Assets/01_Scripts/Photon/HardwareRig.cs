@@ -25,9 +25,9 @@ public struct RigInput : INetworkInput
 public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 {
 	[Header("VR References")]
-	public Transform headset;
-	public Transform leftController;
-	public Transform rightController;
+	public HardwareHeadset headset;
+	public HardwareHand leftController;
+	public HardwareHand rightController;
     
 	private NetworkRunner _runner;
 
@@ -39,12 +39,12 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
 		var rigInput = new RigInput();
-		rigInput.headPosition = headset.position;
-		rigInput.headRotation = headset.rotation;
-		rigInput.leftHandPosition = leftController.position;
-		rigInput.leftHandRotation = leftController.rotation;
-		rigInput.rightHandPosition = rightController.position;
-		rigInput.rightHandRotation = rightController.rotation;
+		rigInput.headPosition = headset.transform.position;
+		rigInput.headRotation = headset.transform.rotation;
+		rigInput.leftHandPosition = leftController.transform.position;
+		rigInput.leftHandRotation = leftController.transform.rotation;
+		rigInput.rightHandPosition = rightController.transform.position;
+		rigInput.rightHandRotation = rightController.transform.rotation;
 
 		input.Set(rigInput);
 	}
