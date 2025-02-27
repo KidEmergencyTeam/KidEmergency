@@ -30,7 +30,6 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	public Transform rightController;
     
 	private NetworkRunner _runner;
-	private Player _Player;
 
 	private void Start()
 	{
@@ -51,7 +50,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 
 		input.Set(rigInput);
 	}
-	#region Unuse INetworkRunnerCallbacks
+	#region Unuse Callbacks
 	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 	public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }

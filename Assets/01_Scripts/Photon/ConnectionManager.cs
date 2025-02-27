@@ -149,7 +149,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    #region 사용하는 Callbacks
+    #region Callbacks
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (!runner.IsServer) return;
@@ -221,7 +221,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     }
     #endregion
 
-    #region 사용 안 하는 Callbacks
+    #region Unuse Callbacks
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
