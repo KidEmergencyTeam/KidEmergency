@@ -1,8 +1,10 @@
 using Fusion;
 using UnityEngine;
 
+[DefaultExecutionOrder(NetworkRig.ExecutionOrder)]
 public class NetworkRig : NetworkBehaviour
 {
+    public const int ExecutionOrder = 100;
     public HardwareRig hardwareRig;
     public NetworkHand leftHand;
     public NetworkHand rightHand;
