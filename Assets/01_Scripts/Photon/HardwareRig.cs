@@ -38,15 +38,13 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
-		var rigInput = new RigInput
-		{
-			headPosition = headset.position,
-			headRotation = headset.rotation,
-			leftHandPosition = leftController.position,
-			leftHandRotation = leftController.rotation,
-			rightHandPosition = rightController.position,
-			rightHandRotation = rightController.rotation
-		};
+		var rigInput = new RigInput();
+		rigInput.headPosition = headset.position;
+		rigInput.headRotation = headset.rotation;
+		rigInput.leftHandPosition = leftController.position;
+		rigInput.leftHandRotation = leftController.rotation;
+		rigInput.rightHandPosition = rightController.position;
+		rigInput.rightHandRotation = rightController.rotation;
 
 		input.Set(rigInput);
 	}
