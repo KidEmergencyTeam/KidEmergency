@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using ColorUtility = UnityEngine.ColorUtility;
 
@@ -9,7 +8,7 @@ public class OptionUI : OutlineHighlight
     public TextMeshProUGUI optionText; // 문자 TMP
     public string highlightText; // 강조할 문자
     public Image optionImage; // 옵션 이미지
-    public Color highlightColor; // 강조할 색상
+    public Color highlightColor; // 강조할 문자 색상
 
     private Animator _anim;
     private Dialog.DialogChoice _myChoice;
@@ -21,7 +20,6 @@ public class OptionUI : OutlineHighlight
         _anim = GetComponent<Animator>();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(OptionClicked);
-        gameObject.SetActive(false);
     }
     
     public void SetChoice(Dialog.DialogChoice choice)
