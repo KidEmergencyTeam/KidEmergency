@@ -106,7 +106,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (_networkRunner == null)
         {
-            _networkRunner = gameObject.AddComponent<NetworkRunner>();
+            GetRunner("Runner");
             _networkRunner.ProvideInput = true;
             _networkRunner.AddCallbacks(this);
         }
