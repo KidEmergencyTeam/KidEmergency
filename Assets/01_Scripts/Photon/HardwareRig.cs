@@ -42,10 +42,13 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	
 	bool searchingForRunner  = false;
 
-	private void Start()
+	private async void Start()
 	{
-		_runner = FindObjectOfType<NetworkRunner>();
-		_runner.AddCallbacks(this);
+		await FindRunner();
+		if (_runner)
+		{
+			_runner.AddCallbacks(this);
+		}
 	}
 
 	public async Task<NetworkRunner> FindRunner()
