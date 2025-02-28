@@ -111,7 +111,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
     
-        await _networkRunner.StartGame(new StartGameArgs()
+        await _instanceRunner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
             SessionName = "TestRoom",
