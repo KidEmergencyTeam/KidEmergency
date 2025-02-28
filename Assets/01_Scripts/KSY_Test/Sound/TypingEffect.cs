@@ -22,6 +22,8 @@ public class TypingEffect : MonoBehaviour
 
     [Header("타이핑 표시")]
     public TextMeshProUGUI typingText;
+
+    [TagSelector]
     public string typingTextTag;
 
     [Header("타이핑 공통 속도")]
