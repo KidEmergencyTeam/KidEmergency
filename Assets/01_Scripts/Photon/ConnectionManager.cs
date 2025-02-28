@@ -107,8 +107,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
         if (_networkRunner == null)
         {
             _instanceRunner = GetRunner("Runner");
-            _networkRunner.ProvideInput = true;
-            _networkRunner.AddCallbacks(this);
         }
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
