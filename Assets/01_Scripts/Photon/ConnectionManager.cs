@@ -9,11 +9,17 @@ using UnityEngine.SceneManagement;
 
 public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    private static ConnectionManager _instance;
+    
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkRunner _runnerPrefab;
     [SerializeField] private Transform _spawnTransform;
     
     private HardwareRig _hardwareRig;
     private NetworkRunner _networkRunner;
+    
+    private NetworkRunner _instanceRunner;
+    
     private byte[] _connectionToken;
     private Dictionary<int, NetworkObject> _playersMap = new Dictionary<int, NetworkObject>();
     private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
@@ -21,12 +27,81 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     private System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
     private const float _cleanupTime = 5000f; // 5초
 
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+
+            _instance._connectionToken = ConnectionTokenUtils.NewToken();
+            _instance._playersMap = new Dictionary<int, NetworkObject>();
+            _instance._pendingTokens = new List<int>();
+        }
+
+        if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
     private void Start()
     {
-        _connectionToken = ConnectionTokenUtils.NewToken();
         StartGame(GameMode.AutoHostOrClient);
     }
 
+    private void Update()
+    {
+        if (_instanceRunner == null) return;
+
+        // 재접속 대기 시간 초과 체크
+        if (_instanceRunner.IsServer && _watch.IsRunning && _watch.ElapsedMilliseconds > _cleanupTime)
+        {
+            _watch.Stop();
+            _watch.Reset();
+
+            lock (_pendingTokens)
+            {
+                foreach (var token in _pendingTokens.ToList())
+                {
+                    if (_playersMap.TryGetValue(token, out var playerObject))
+                    {
+                        Debug.Log($"시간 초과로 플레이어 제거: {token}");
+                        _playersMap.Remove(token);
+                        _instanceRunner.Despawn(playerObject);
+                    }
+                }
+
+                if (_pendingTokens.Count > 0)
+                {
+                    PushNewSnapshot(_instanceRunner);
+                }
+                _pendingTokens.Clear();
+            }
+        }
+    }
+
+    async void PushNewSnapshot(NetworkRunner runner)
+    {
+        Log.Debug("PushNewSnapshot");
+
+        bool result = await runner.PushHostMigrationSnapshot();
+        Log.Debug($"PushNewSnapshot : {result}");
+    }
+    
+    private NetworkRunner GetRunner(string runnerId)
+    {
+        var runner = Instantiate(_runnerPrefab);
+        runner.name = runnerId;
+        runner.ProvideInput = true;
+        runner.AddCallbacks(this);
+        
+        return runner;
+    }
+    
     private async void StartGame(GameMode mode, HostMigrationToken hostMigrationToken = null)
     {
         if (_networkRunner == null)
@@ -48,37 +123,6 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
             HostMigrationToken = hostMigrationToken,
             HostMigrationResume = hostMigrationToken != null ? HostMigrationResumeMethod : null
         });
-    }
-
-    private void Update()
-    {
-        if (_networkRunner == null) return;
-
-        // 재접속 대기 시간 초과 체크
-        if (_networkRunner.IsServer && _watch.IsRunning && _watch.ElapsedMilliseconds > _cleanupTime)
-        {
-            _watch.Stop();
-            _watch.Reset();
-
-            lock (_pendingTokens)
-            {
-                foreach (var token in _pendingTokens.ToList())
-                {
-                    if (_playersMap.TryGetValue(token, out var playerObject))
-                    {
-                        Debug.Log($"시간 초과로 플레이어 제거: {token}");
-                        _networkRunner.Despawn(playerObject);
-                        _playersMap.Remove(token);
-                    }
-                }
-                _pendingTokens.Clear();
-            }
-
-            if (_networkRunner.IsServer)
-            {
-                _networkRunner.PushHostMigrationSnapshot();
-            }
-        }
     }
 
     private void HostMigrationResumeMethod(NetworkRunner runner)
