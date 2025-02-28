@@ -8,48 +8,33 @@ using UnityEngine.SceneManagement;
 [Serializable]
 public class ChoiceUIItem
 {
-    public GameObject panel;       // 선택지 패널
-    public List<Button> buttons;   // 해당 패널에 포함된 선택 버튼들 (1번, 2번, …)
+    public GameObject panel;      
+    public List<Button> buttons;   
 }
 
 public class ScenarioManager : MonoBehaviour
 {
-    // --------------------
-    //   싱글톤 인스턴스
-    // --------------------
     public static ScenarioManager Instance { get; private set; }
 
-    // --------------------
-    //   타이핑 효과 및 UI
-    // --------------------
-    public TypingEffect typingEffect;         // 타이핑 효과 스크립트
+    [Header("typingEffect")]
+    public TypingEffect typingEffect;         
 
-    [Header("선택지")]
-    public List<ChoiceUIItem> choiceUIItems;  // 선택지 패널+버튼 묶음 리스트
-
-    // --------------------
-    //   연기 파티클 관련
-    // --------------------
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
-    // --------------------
-    //      씬 전환
-    // --------------------
+    [Header("선택지")]
+    public List<ChoiceUIItem> choiceUIItems;  
+
     [Header("씬 이름")]
     public List<string> sceneNames; // [0] 복도, [1] 계단/엘리베이터, [2] 운동장 등
 
-    // --------------------
     //  내부 상태값
-    // --------------------
     private int userChoice = 0;      // 유저가 선택한 값 (1,2,…)
     private int currentStep = 1;     // 현재 진행 스텝 (1~37)
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
     private int activeChoiceUIIndex = -1; // 현재 활성화된 선택지 UI 인덱스
 
-    // --------------------
     //  싱글톤 & DontDestroy
-    // --------------------
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -143,9 +128,7 @@ public class ScenarioManager : MonoBehaviour
         StartCoroutine(RunScenario());
     }
 
-    /// <summary>
-    /// 전체 시나리오 실행 루프
-    /// </summary>
+    // 전체 시나리오 실행 루프
     IEnumerator RunScenario()
     {
         while (currentStep <= 37)
@@ -163,18 +146,14 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// TypingEffect로 index번째 텍스트를 출력하고 대사가 끝날 때까지 대기
-    /// </summary>
+    // TypingEffect로 index번째 텍스트를 출력하고 대사가 끝날 때까지 대기
     IEnumerator PlayAndWait(int index)
     {
         typingEffect.PlayTypingAtIndex(index);
         yield return new WaitUntil(() => !typingEffect.IsTyping);
     }
 
-    // -------------------------------------------------
-    //               시나리오 스텝들
-    // -------------------------------------------------
+    // 시나리오 스텝
 
     // 1. (세티) 안녕 내 이름은 세티야…
     IEnumerator Step1()
@@ -485,9 +464,7 @@ public class ScenarioManager : MonoBehaviour
         // 시나리오 종료 후 추가 연출 등
     }
 
-    // -------------------------------------------------
-    //             선택지 UI 표시/숨김
-    // -------------------------------------------------
+    // 선택지 UI 표시/숨김
     void ShowChoiceUI(int index, bool show)
     {
         if (index < 0 || index >= choiceUIItems.Count)
@@ -510,9 +487,7 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------
-    //              씬 전환 메서드
-    // -------------------------------------------------
+    // 씬 전환
     void ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
