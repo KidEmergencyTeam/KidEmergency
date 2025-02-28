@@ -34,6 +34,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	private void Start()
 	{
 		_runner = FindObjectOfType<NetworkRunner>();
+		_runner.AddCallbacks(this);
 	}
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)
