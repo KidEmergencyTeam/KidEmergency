@@ -20,12 +20,12 @@ public class TypingEffect : MonoBehaviour
     [Header("타이핑 설정")]
     public List<MultilineString> typingContents = new List<MultilineString>();
 
-    [Header("타이핑 공통 속도")]
-    public float commonTypingSpeed;
-
     [Header("타이핑 표시")]
     public TextMeshProUGUI typingText;
     public string typingTextTag;
+
+    [Header("타이핑 공통 속도")]
+    public float commonTypingSpeed;
 
     [Header("타이핑 텍스트 삭제 대기 시간")]
     public float clearDelay;
