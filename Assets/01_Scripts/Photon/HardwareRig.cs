@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
@@ -28,13 +29,57 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	public HardwareHeadset headset;
 	public HardwareHand leftController;
 	public HardwareHand rightController;
-    
+
+	public enum RunnerExpectations
+	{
+		NoRunner,
+		PresetRunner,
+		DetectRunner
+	}
+	public RunnerExpectations runnerExpectations = RunnerExpectations.DetectRunner;
+	
 	private NetworkRunner _runner;
+	
+	bool searchingForRunner  = false;
 
 	private void Start()
 	{
 		_runner = FindObjectOfType<NetworkRunner>();
 		_runner.AddCallbacks(this);
+	}
+
+	public async Task<NetworkRunner> FindRunner()
+	{
+		while(searchingForRunner) await Task.Delay(10);
+		searchingForRunner = true;
+		if (_runner == null && runnerExpectations != RunnerExpectations.NoRunner)
+		{
+			if (runnerExpectations == RunnerExpectations.PresetRunner ||
+			    NetworkProjectConfig.Global.PeerMode ==
+			    NetworkProjectConfig.PeerModes.Multiple)
+			{
+				Debug.LogWarning("인스펙터에 러너 설정 안 됨");
+			}
+			else
+			{
+				_runner = FindObjectOfType<NetworkRunner>(true);
+				var searchStart = Time.time;
+				while (searchingForRunner && _runner == null)
+				{
+					if (NetworkRunner.Instances.Count > 0)
+					{
+						_runner = NetworkRunner.Instances[0]; 
+					}
+
+					if (_runner == null)
+					{
+						await Task.Delay(10);
+					}
+				}
+			}
+		}
+		searchingForRunner = false;
+		return _runner;
 	}
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)
