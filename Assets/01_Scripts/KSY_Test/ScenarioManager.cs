@@ -16,7 +16,7 @@ public class ScenarioManager : MonoBehaviour
 {
     public static ScenarioManager Instance { get; private set; }
 
-    [Header("typingEffect")]
+    [Header("스크립트")]
     public TypingEffect typingEffect;         
 
     [Header("연기 파티클")]
