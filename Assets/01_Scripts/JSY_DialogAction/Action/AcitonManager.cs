@@ -31,7 +31,6 @@ public class ActionManager : SingletonManager<ActionManager>
         switch (currentAction)
         {
             case ActionType.Basic:
-                OnActionComplete?.Invoke();
                 break;
             
             case ActionType.ShowDialog:
