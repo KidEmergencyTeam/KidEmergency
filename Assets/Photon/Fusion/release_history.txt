@@ -1,3 +1,42 @@
+# 2.0.5
+
+## Stable
+
+### Build 920 (Feb 12, 2025)
+
+**What's New**
+
+- Support for breakpoints: ClientServer Mode only. Working on both Multi-Peer and Unity MPPM
+- `SimulationMessage.GetRawData`
+- `Fusion.Unsafe` - a replacement for `System.Runtime.CompilerServices.Unsafe`
+
+**Changes**
+
+- `NetworkRunner` tries to quickly rejoin the session automatically (Client-Server mode only)
+- Skip opening Fusion Hub in batchmode
+- `NetworkTRSP` state authority change error correction delta default value set to 0
+- `SimulationMessage.GetData` is now obsolete
+- `NetworkObjectHeader` up to `Flags` fields is now read only
+- Improve support for Break-points
+
+**Bug Fixes**
+
+- Fixed: Stability and robustness fixes when under heavy network load
+- Fixed: Unable to spawn during StateAuthorityChanged callback on MasterClientObjects
+- Fixed: Incorrect reset/jump of time on proxy objects after a frame of exceptionally long duration
+- Fixed: Lag Compensation box overlap problem with hitbox Y rotation
+- Fixed: A sequence of lost packets resulting in a partial object data being sent
+- Fixed: Lag Compensation box overlap having problems with hitboxes offset
+- Fixed: `IndexOutOfRange` exception when reading negative offsets in skip data
+- Fixed: `ReadObjectDataIntoPtr` throwing null ref exception in case of repeated word check errors
+- Fixed: No flags for attached objects
+- Fixed: Lag compensation layer masks being ignored with subtick accuracy
+- Fixed: Check word count before Allocating an object (always) and compare against page size
+- Fixed: Apply NetworkTransform.DisableSharedModeInterpolation in Single Mode
+- Fixed: Intro Sample Menu Dependency
+- Fixed: Odin drawers not finding underlying fields
+- Fixed: Realtime ConnectionHandler stacking
+
 # 2.0.4
 
 ## Stable

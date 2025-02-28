@@ -997,6 +997,12 @@ namespace Fusion {
 #if FUSION_TRACE_MEMORYTRACK
       traceChannels |= TraceChannels.MemoryTrack;
 #endif
+#if FUSION_TRACE_SNAPSHOTS
+      traceChannels |= TraceChannels.Snapshots;
+#endif
+#if FUSION_TRACE_TIME
+      traceChannels |= TraceChannels.Time;
+#endif
       return traceChannels;
     }
   }

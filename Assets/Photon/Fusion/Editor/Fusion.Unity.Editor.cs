@@ -36,6 +36,125 @@ namespace Fusion.Editor {
 #endregion
 
 
+#region Assets/Photon/Fusion/Editor/ChangeDllManager.cs
+
+namespace Fusion.Editor {
+  using System;
+  using System.IO;
+  using System.Linq;
+  using UnityEditor;
+  using UnityEngine;
+
+  /// <summary>
+  /// Provides methods to toggle between different DLL modes for the Fusion framework.
+  /// </summary>
+  public static class ChangeDllManager {
+    private const string FusionRuntimeDllGuid = "e725a070cec140c4caffb81624c8c787";
+
+    private static readonly string[] FileList = { "Fusion.Common.dll", "Fusion.Runtime.dll", "Fusion.Realtime.dll", "Fusion.Sockets.dll", "Fusion.Log.dll" };
+
+    /// <summary>
+    /// Changes the DLL mode to Debug.
+    /// </summary>
+    [MenuItem("Tools/Fusion/Change Dll Mode/Debug", false, 500)]
+    public static void ChangeDllModeToSharedDebug() {
+      ChangeDllMode(NetworkRunner.BuildTypes.Debug);
+    }
+
+    /// <summary>
+    /// Changes the DLL mode to Release.
+    /// </summary>
+    [MenuItem("Tools/Fusion/Change Dll Mode/Release", false, 501)]
+    public static void ChangeDllModeToSharedRelease() {
+      ChangeDllMode(NetworkRunner.BuildTypes.Release);
+    }
+
+    /// <summary>
+    /// Changes the DLL mode based on the specified build type and build mode.
+    /// </summary>
+    /// <param name="buildType">The build type (<see cref="NetworkRunner.BuildTypes"/>).</param>
+    private static void ChangeDllMode(NetworkRunner.BuildTypes buildType) {
+      if (NetworkRunner.BuildType == buildType) {
+        Debug.Log($"Fusion Dll Mode is already {buildType}");
+        return;
+      }
+
+      Debug.Log($"Changing Fusion Dll Mode from {NetworkRunner.BuildType} to {buildType}");
+
+      var targetExtension = $"{GetBuildTypeExtension(buildType)}";
+      var targetSubFolder = GetBuildTypeSubFolder(buildType);
+
+      // find the root
+      var fusionRuntimeDllPath = AssetDatabase.GUIDToAssetPath(FusionRuntimeDllGuid);
+      if (string.IsNullOrEmpty(fusionRuntimeDllPath)) {
+        Debug.LogError($"Cannot locate Fusion assemblies directory");
+        return;
+      }
+
+      // Check if all dlls are present
+      var assembliesDir        = PathUtils.Normalize(Path.GetDirectoryName(fusionRuntimeDllPath));
+      var originalFileTemplate = $"{assembliesDir}/{{0}}";
+      var targetFileTemplate   = $"{assembliesDir}/{targetSubFolder}/{{0}}{targetExtension}";
+      var currentDlls          = FileList.All(f => File.Exists(string.Format(originalFileTemplate, f)));
+      var targetDlls           = FileList.All(f => File.Exists(string.Format(targetFileTemplate, f)));
+
+      if (currentDlls == false) {
+        Debug.LogError("Cannot find all Fusion dlls");
+        return;
+      }
+
+      if (targetDlls == false) {
+        Debug.LogError($"Cannot find all Fusion dlls marked with {targetExtension}");
+        return;
+      }
+
+      if (FileList.Any(f => new FileInfo(string.Format(targetFileTemplate, f)).Length == 0)) {
+        Debug.LogError("Targets dlls are not valid");
+        return;
+      }
+
+      // Move the files
+      try {
+        foreach (var f in FileList) {
+          var source = string.Format(targetFileTemplate, f);
+          var dest   = string.Format(originalFileTemplate, f);
+
+          Debug.Log($"Moving {source} to {dest}");
+          FileUtil.ReplaceFile(source, dest);
+        }
+
+        Debug.Log($"Activated Fusion {buildType} dlls");
+      } catch (Exception e) {
+        Debug.LogAssertion(e);
+        Debug.LogError($"Failed to Change Fusion Dll Mode");
+      }
+
+      AssetDatabase.Refresh();
+
+      return;
+
+      // Gets the file extension for the specified build type.
+      string GetBuildTypeExtension(NetworkRunner.BuildTypes referenceBuildType) =>
+        referenceBuildType switch {
+          NetworkRunner.BuildTypes.Debug   => ".debug",
+          NetworkRunner.BuildTypes.Release => ".release",
+          _                                => throw new ArgumentOutOfRangeException()
+        };
+
+      // Gets the subfolder name for the specified build type.
+      string GetBuildTypeSubFolder(NetworkRunner.BuildTypes referenceBuildModes) =>
+        referenceBuildModes switch {
+          NetworkRunner.BuildTypes.Debug   => "Debug",
+          NetworkRunner.BuildTypes.Release => "Release",
+          _                                => throw new ArgumentOutOfRangeException()
+        };
+    }
+  }
+}
+
+#endregion
+
+
 #region Assets/Photon/Fusion/Editor/ChildLookupEditor.cs
 
 // removed July 12 2021
@@ -1603,92 +1722,6 @@ namespace Fusion.Editor {
 
   }
 }
-
-#endregion
-
-
-#region Assets/Photon/Fusion/Editor/DebugDllToggle.cs
-
-namespace Fusion.Editor {
-  using System;
-  using System.IO;
-  using System.Linq;
-  using UnityEditor;
-  using UnityEngine;
-
-  public static class DebugDllToggle {
-
-    const string FusionRuntimeDllGuid = "e725a070cec140c4caffb81624c8c787";
-
-    public static string[] FileList = new[] {
-      "Fusion.Common.dll",
-      "Fusion.Common.pdb",
-      "Fusion.Runtime.dll",
-      "Fusion.Runtime.pdb",
-      "Fusion.Realtime.dll",
-      "Fusion.Realtime.pdb",
-      "Fusion.Sockets.dll",
-      "Fusion.Sockets.pdb"};
-
-    [MenuItem("Tools/Fusion/Toggle Debug Dlls")]
-    public static void Toggle() {
-
-      // find the root
-      string dir;
-      {
-        var fusionRuntimeDllPath = AssetDatabase.GUIDToAssetPath(FusionRuntimeDllGuid);
-        if (string.IsNullOrEmpty(fusionRuntimeDllPath)) {
-          Debug.LogError($"Cannot locate assemblies directory");
-          return;
-        } else {
-          dir = PathUtils.Normalize(Path.GetDirectoryName(fusionRuntimeDllPath));
-        }
-      }
-
-      var dllsAvailable       = FileList.All(f => File.Exists($"{dir}/{f}"));
-      var debugFilesAvailable = FileList.All(f => File.Exists($"{dir}/{f}.debug"));
-
-      if (dllsAvailable == false) {
-        Debug.LogError("Cannot find all fusion dlls");
-        return;
-      }
-
-      if (debugFilesAvailable == false) {
-        Debug.LogError("Cannot find all specially marked .debug dlls");
-        return;
-      }
-
-      if (FileList.Any(f => new FileInfo($"{dir}/{f}.debug").Length == 0)) { 
-        Debug.LogError("Debug dlls are not valid");
-        return;
-      }
-
-      try {
-        foreach (var f in FileList) {
-          var tempFile = FileUtil.GetUniqueTempPathInProject();
-          FileUtil.MoveFileOrDirectory($"{dir}/{f}",        tempFile);
-          FileUtil.MoveFileOrDirectory($"{dir}/{f}.debug",  $"{dir}/{f}");
-          FileUtil.MoveFileOrDirectory(tempFile,            $"{dir}/{f}.debug");
-          File.Delete(tempFile);
-        }
-
-        if (new FileInfo($"{dir}/{FileList[0]}").Length >
-            new FileInfo($"{dir}/{FileList[0]}.debug").Length) {
-          Debug.Log("Activated Fusion DEBUG dlls");
-        }
-        else  {
-          Debug.Log("Activated Fusion RELEASE dlls");
-        }
-      } catch (Exception e) {
-        Debug.LogAssertion(e);
-        Debug.LogError($"Failed to rename files");
-      }
-
-      AssetDatabase.Refresh();
-    }
-  }
-}
-
 
 #endregion
 
@@ -8179,7 +8212,7 @@ namespace Fusion.Editor {
 
       private GUIContent GetHelpContent(InspectorProperty property, bool includeTypeHelp) {
         var parentType = property.ValueEntry.ParentType;
-        var memberInfo = parentType.GetField(property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        var memberInfo = parentType.GetFieldIncludingBaseTypes(property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
         return FusionCodeDoc.FindEntry(memberInfo, includeTypeHelp) ?? GUIContent.none;
       }
 
@@ -11950,7 +11983,7 @@ namespace Fusion.Editor {
   using UnityEngine;
 
   [InitializeOnLoad]
-  class FusionInstaller {
+  internal class FusionInstaller {
     const string DEFINE_VERSION = "FUSION2";
     const string DEFINE = "FUSION_WEAVER";
     const string PACKAGE_TO_SEARCH = "nuget.mono-cecil";
@@ -11959,13 +11992,7 @@ namespace Fusion.Editor {
     const string MANIFEST_FILE = "manifest.json";
 
     static FusionInstaller() {
-
-#if UNITY_SERVER
-      var defines = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Server);
-#else
-      var group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-      var defines = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(group));
-#endif
+      var defines = GetCurrentDefines();
 
       // Check for Defines
       // change based on https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2249
@@ -11985,22 +12012,38 @@ namespace Fusion.Editor {
 
         // append defines
         if (defines.Contains(DEFINE) == false) { defines = $"{defines};{DEFINE}"; }
+
         if (defines.Contains(DEFINE_VERSION) == false) { defines = $"{defines};{DEFINE_VERSION}"; }
-        
-#if UNITY_SERVER
-        PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Server, defines);
-#else
-        PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(group), defines);
-#endif
+
+        SetCurrentDefines(defines);
       } else {
         FusionEditorLog.LogInstaller($"Installing '{PACKAGE_TO_INSTALL}' package");
         Client.Add(PACKAGE_TO_INSTALL);
       }
     }
+
+    private static string GetCurrentDefines() {
+#if UNITY_SERVER
+      var defines = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Server);
+#else
+      var group   = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+      var defines = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(group));
+#endif
+
+      return defines;
+    }
+
+    private static void SetCurrentDefines(string defines) {
+#if UNITY_SERVER
+      PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Server, defines);
+#else
+      var group = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
+      PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(group), defines);
+#endif
+    }
   }
 #endif
 }
-
 
 #endregion
 
@@ -12328,10 +12371,24 @@ namespace Fusion.Editor {
   using UnityEditor;
   using UnityEngine;
   
-
   public static class NetworkMecanimAnimatorBaker {
     [NetworkObjectBakerEditTimeHandler]
     public static bool PostprocessAnimator(NetworkMecanimAnimator animator) {
+      bool dirty = false;
+      if (animator.Animator == null) {
+        animator.Animator = animator.GetComponent<Animator>();
+        if (animator.Animator == null) {
+          FusionEditorLog.Error($"Cannot bake {animator.name}'s {nameof(NetworkMecanimAnimator)} without an {nameof(Animator)} assigned!");
+          return false;
+        } else {
+          dirty = true;
+        }
+      }
+      if (AnimatorControllerTools.GetController(animator.Animator) == null) {
+        FusionEditorLog.Error($"Cannot bake {animator.name}'s {nameof(NetworkMecanimAnimator)} without an {nameof(UnityEditor.Animations.AnimatorController)} assigned to its {nameof(Animator)}!");
+        return dirty;
+      }
+      
       AnimatorControllerTools.GetHashesAndNames(animator, null, null, ref animator.TriggerHashes, ref animator.StateHashes);
       
       // this is dictated by the animator controller
@@ -12356,7 +12413,7 @@ namespace Fusion.Editor {
         return true;
       }
 
-      return false;
+      return dirty;
     }
   }
 }
@@ -12582,9 +12639,9 @@ namespace Fusion.Editor {
               EditorGUILayout.IntField("Word Count", NetworkObject.GetWordCount(obj));
 
 
-              bool headerIsNull = obj.Header == null;
-              EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _nestingRoot), _nestingRoot.Name, headerIsNull ? "---" : obj.Header->NestingRoot.ToString());
-              EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _nestingKey), _nestingKey.Name, headerIsNull ? "---" : obj.Header->NestingKey.ToString());
+              bool headerIsNull = obj.Meta == null;
+              EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _nestingRoot), _nestingRoot.Name, headerIsNull ? "---" : obj.Meta.NestingRoot.ToString());
+              EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _nestingKey), _nestingKey.Name, headerIsNull ? "---" : obj.Meta.NestingKey.ToString());
 
               EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _InputAuthority), _InputAuthority.Name, obj.InputAuthority.ToString());
               EditorGUI.LabelField(FusionEditorGUI.LayoutHelpPrefix(this, _StateAuthority), _StateAuthority.Name, obj.StateAuthority.ToString());
@@ -12592,12 +12649,12 @@ namespace Fusion.Editor {
               EditorGUI.Toggle(FusionEditorGUI.LayoutHelpPrefix(this, _HasInputAuthority), _InputAuthority.Name, obj.HasInputAuthority);
               EditorGUI.Toggle(FusionEditorGUI.LayoutHelpPrefix(this, _HasStateAuthority), _StateAuthority.Name, obj.HasStateAuthority);
 
-              EditorGUILayout.Toggle("Is Simulated", obj.Runner.Simulation.IsSimulated(obj));
+              EditorGUILayout.Toggle("Is Simulated", obj.IsInSimulation);
               EditorGUILayout.Toggle("Is Local PlayerObject", ReferenceEquals(obj.Runner.GetPlayerObject(obj.Runner.LocalPlayer), obj));
-              EditorGUILayout.Toggle("Has Main TRSP", obj.Meta.HasMainTRSP);
+              EditorGUILayout.Toggle("Has Main TRSP", obj.Meta?.HasMainTRSP ?? false);
               
               EditorGUILayout.LabelField("Runtime Flags", obj.RuntimeFlags.ToString());
-              EditorGUILayout.LabelField("Header Flags", obj.Header->Flags.ToString());
+              EditorGUILayout.LabelField("Header Flags", obj.Meta?.Flags.ToString());
               
 
               if (obj.Runner.IsClient) {
@@ -13681,7 +13738,7 @@ namespace Fusion.Editor {
     //  NetworkedAnimator.GetWordCountDelegate = GetWordCount;
     //}
 
-    private static AnimatorController GetController(Animator a) {
+    internal static AnimatorController GetController(Animator a) {
       
       RuntimeAnimatorController rac = a.runtimeAnimatorController;
       AnimatorOverrideController overrideController = rac as AnimatorOverrideController;

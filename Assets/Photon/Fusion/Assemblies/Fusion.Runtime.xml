@@ -27,25 +27,41 @@
         <member name="F:Fusion.Allocator.BUCKET_INVALID">
             <summary>Bucket Invalid</summary>
         </member>
+        <member name="M:Fusion.Allocator.LogPointerInfo(System.Void*)">
+            <summary>
+            LogPointerInfo
+            </summary>
+        </member>
         <member name="M:Fusion.Allocator.GetTotalSegmentsUsedInBytes">
             <summary>
             Returns the total size in bytes used by the allocator segments.
             </summary>
         </member>
-        <member name="M:Fusion.Allocator.GetMemorySnapshot(Fusion.Statistics.MemoryStatisticsSnapshot@,Fusion.Allocator*)">
+        <member name="M:Fusion.Allocator.GetMemorySnapshot(Fusion.Statistics.MemoryStatisticsSnapshot@)">
             <summary>
             Fills the given MemoryStatisticsSnapshot object with memory allocation statistics.
             </summary>
         </member>
-        <member name="M:Fusion.Allocator.Alloc(Fusion.Allocator*,System.Int32)">
+        <member name="M:Fusion.Allocator.Alloc(System.Int32)">
             <summary>
             Allocates a memory segment of the specified size from the allocator.
             </summary>
-            <param name="a">Pointer to the allocator.</param>
             <param name="size">Size of the memory segment to allocate.</param>
             <returns>Pointer to the allocated memory segment.</returns>
             <exception cref="T:System.InvalidOperationException">Thrown if the size is less than 1 or greater than or equal to the block byte size.</exception>
             <exception cref="T:System.OutOfMemoryException">Thrown if all buckets are full and memory cannot be allocated.</exception>
+        </member>
+        <member name="M:Fusion.Allocator.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Fusion.Allocator.Create(Fusion.Allocator.Config)">
+            <summary>
+            
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
         </member>
         <member name="M:Fusion.Allocator.Block.ToString">
             <summary>
@@ -3449,7 +3465,10 @@
         </member>
         <member name="F:Fusion.NetworkTRSP._stateAuthorityChangeErrorCorrectionDelta">
             <summary>
-            Specify the delta used to correct the render error when state authority changes.
+            Specify the delta used to smoothly correct the render error when state authority changes.
+            When the state authority changes, the render position and rotation will have an error on the previous authority due to the discarded prediction.
+            This error will be smoothed out over time by this delta.
+            Keep it 0 to disable it.
             </summary>
         </member>
         <member name="F:Fusion.NetworkTRSP.reenabledTick">
@@ -10532,11 +10551,6 @@
             Gets a bitmask of <see cref="T:Fusion.AuthorityMasks"/> flags, representing the current local authority over this <see cref="T:Fusion.NetworkObject"/>.
             </summary>
         </member>
-        <member name="M:Fusion.NetworkObject.GetRpcSourceAuthorityMask(Fusion.PlayerRef)">
-            <summary>
-            Gets a bitmask of <see cref="T:Fusion.AuthorityMasks"/> flags, representing the supplied <see cref="T:Fusion.PlayerRef"/> RPC authority for this <see cref="T:Fusion.NetworkObject"/>.
-            </summary>
-        </member>
         <member name="M:Fusion.NetworkObject.AssignInputAuthority(Fusion.PlayerRef)">
             <summary>
             Sets which <see cref="T:Fusion.PlayerRef"/> has Input Authority for this Object.
@@ -11070,6 +11084,12 @@
             This struct is unsafe because it uses pointers.
             </summary>
         </member>
+        <member name="M:Fusion.NetworkObjectHeaderPtr.#ctor(Fusion.NetworkObjectHeader*)">
+            <summary>
+            Represents a pointer to a NetworkObjectHeader.
+            This struct is unsafe because it uses pointers.
+            </summary>
+        </member>
         <member name="F:Fusion.NetworkObjectHeaderPtr.Ptr">
             <summary>
             Pointer to a NetworkObjectHeader.
@@ -11085,14 +11105,17 @@
             Gets the Id of the NetworkObjectHeader this struct points to.
             </summary>
         </member>
-        <member name="M:Fusion.NetworkObjectHeaderPtr.op_Implicit(Fusion.NetworkObjectHeader*)~Fusion.NetworkObjectHeaderPtr">
+        <member name="P:Fusion.NetworkObjectHeaderPtr.Data">
             <summary>
             
             </summary>
-            <param name="ptr"></param>
-            <returns></returns>
         </member>
         <member name="T:Fusion.NetworkObjectHeader">
+            <summary>
+            Network object header information for a <see cref="T:Fusion.NetworkObject"/>.
+            </summary>
+        </member>
+        <member name="M:Fusion.NetworkObjectHeader.#ctor(Fusion.NetworkId,System.Int16,System.Int16,Fusion.NetworkObjectTypeId,Fusion.NetworkId,Fusion.NetworkObjectNestingKey,Fusion.NetworkObjectHeaderFlags)">
             <summary>
             Network object header information for a <see cref="T:Fusion.NetworkObject"/>.
             </summary>
@@ -11367,7 +11390,7 @@
         </member>
         <member name="T:Fusion.INetworkObjectProvider">
             <summary>
-            Interface which defines the handlers for <see cref="T:Fusion.NetworkRunner"/> Spawn() and Despawn() actions. 
+            Interface which defines the handlers for <see cref="T:Fusion.NetworkRunner"/> Spawn() and Despawn() actions.
             Passing an instance of this interface to <see cref="M:Fusion.NetworkRunner.StartGame(Fusion.StartGameArgs)"/> 
             as the <see cref="F:Fusion.StartGameArgs.ObjectProvider"/> argument value will assign that instance 
             as the handler for runner Spawn() and Despawn() actions.
@@ -11455,8 +11478,7 @@
             <summary>
             Gets the data pointer to the first word of this NetworkObject's data block.
             </summary>
-            <returns>Data pointer to the first word of this NetworkObject's data block.</returns>
-            <exception cref="T:System.InvalidOperationException">Thrown when the Header is null.</exception>
+            <returns>Data pointer to the first word of this NetworkObject's data block or null, if data is not yet allocated.</returns>
         </member>
         <member name="T:Fusion.NetworkObjectReleaseContext">
             <summary>
@@ -11939,39 +11961,6 @@
         <member name="M:Fusion.NetworkPrefabId.CompareTo(Fusion.NetworkPrefabId)">
             <summary>
             Compares the NetworkPrefabId to another NetworkPrefabId.
-            </summary>
-        </member>
-        <member name="T:Fusion.NetworkPrefabInfo">
-            <summary>
-            Meta data for a <see cref="T:Fusion.NetworkObject"/> prefab which has been cataloged in a <see cref="F:Fusion.NetworkProjectConfig.PrefabTable"/>.
-            </summary>
-        </member>
-        <member name="F:Fusion.NetworkPrefabInfo.Prefab">
-            <summary>
-            Prefab ID.
-            Use <see cref="M:Fusion.NetworkPrefabTable.TryAddSource(Fusion.INetworkPrefabSource,Fusion.NetworkPrefabId@)"/> 
-            to look up the actual prefab reference in the <see cref="F:Fusion.NetworkProjectConfig.PrefabTable"/>.
-            </summary>
-        </member>
-        <member name="F:Fusion.NetworkPrefabInfo.Header">
-            <summary>
-            Header data for the <see cref="T:Fusion.NetworkObject"/> prefab.
-            </summary>
-        </member>
-        <member name="F:Fusion.NetworkPrefabInfo.IsSynchronous">
-            <summary>
-            Is the prefab supposed to be loaded in a synchronous way. Fusion will report an error
-            if this field is set to true and no prefab is returned by <see cref="T:Fusion.INetworkObjectProvider"/>.
-            </summary>
-        </member>
-        <member name="P:Fusion.NetworkPrefabInfo.HasHeader">
-            <summary>
-            If the Header is not null.
-            </summary>
-        </member>
-        <member name="P:Fusion.NetworkPrefabInfo.Data">
-            <summary>
-            Data pointer to the first word of this <see cref="T:Fusion.NetworkObject"/>'s data block.
             </summary>
         </member>
         <member name="T:Fusion.NetworkPrefabTableGetPrefabResult">
@@ -13464,14 +13453,6 @@
             <param name="networkObject">NetworkObject reference, if found</param>
             <returns>True if object was found.</returns>
         </member>
-        <member name="M:Fusion.NetworkRunner.TryFindSceneObject(Fusion.NetworkObjectTypeId,Fusion.NetworkObject@)">
-            <summary>
-            Try to find an Network Scene Object based on its TypeId.
-            </summary>
-            <param name="networkObjectTypeId">Object NetworkType ID to look forward</param>
-            <param name="networkObject">Scene NetworkObject reference, if found</param>
-            <returns>True if object was found.</returns>
-        </member>
         <member name="M:Fusion.NetworkRunner.TryFindBehaviour(Fusion.NetworkBehaviourId,Fusion.NetworkBehaviour@)">
             <summary>
             Get the <see cref="T:Fusion.NetworkBehaviour"/> instance for this <see cref="T:Fusion.NetworkRunner"/> from a <see cref="T:Fusion.NetworkBehaviourId"/>.
@@ -13702,7 +13683,8 @@
         </member>
         <member name="M:Fusion.NetworkRunner.SetSimulateMultiPeerPhysics(System.Boolean)">
             <summary>
-            Set the value for simulating physics scenes when using multi-peer. Restores the default physics simulation settings if false, overrides the default if true. (2D: SimulationMode2D.Script | 3D: AutoSimulation = false)
+            Set the value for simulating physics scenes when using multi-peer.
+            NOTE: The physics scenes will only be simulated if AutoSimulate is enabled for Physics3D and SimulationMode is set to FixedUpdate for Physics2D in the project settings.
             </summary>
             <param name="value">The value to set. True to simulate physics scenes, false otherwise.</param>
         </member>
@@ -14700,6 +14682,13 @@
             Allow the use of Client-Server modes in WebGL builds. This is not recommended, as it can lead to degraded performance.
             Client-Server modes are not supported in WebGL builds by default, this setting allows its usage despite the limitations.
             Read more about the limitations of WebGL builds in the Fusion documentation at https://doc.photonengine.com/fusion/v2/fusion-intro.
+            </summary>
+        </member>
+        <member name="F:Fusion.NetworkProjectConfig.ClientsRecordFrameAndPacketTimingTraces">
+            <summary>
+            When this setting is enabled, each client will record its frame and packet timing information to a local file (one file per session).
+            Timing issues depend on many external factors, which makes them difficult to intentionally reproduce. But if an issue can be captured once,
+            its trace can be used to simulate and troubleshoot it more effectively.
             </summary>
         </member>
         <member name="F:Fusion.NetworkProjectConfig.PrefabTable">
@@ -16767,21 +16756,21 @@
             <param name="player">Host Player</param>
             <returns>True if the Host Player was found, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsInterestedIn(Fusion.NetworkObject,Fusion.PlayerRef)">
+        <member name="M:Fusion.Simulation.IsInterestedIn(Fusion.NetworkObjectMeta,Fusion.PlayerRef)">
             <summary>
-            Check if a NetworkObject is interested by a specific Player
+            Check if a NetworkObjectMeta is interested by a specific Player
             </summary>
-            <param name="obj">NetworkObject to check</param>
+            <param name="meta">NetworkObjectMeta to check</param>
             <param name="player">Player to check</param>
-            <returns>True if the Player is interested in the NetworkObject, false otherwise</returns>
+            <returns>True if the Player is interested in the NetworkObjectMeta, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsInputAuthority(Fusion.NetworkObject,Fusion.PlayerRef)">
+        <member name="M:Fusion.Simulation.IsInputAuthority(Fusion.NetworkObjectMeta,Fusion.PlayerRef)">
             <summary>
-            Check if a Player is the Input Authority over an NetworkObject
+            Check if a Player is the Input Authority over an NetworkObjectMeta
             </summary>
-            <param name="networkObject">NetworkObject to check</param>
+            <param name="meta">NetworkObjectMeta to check</param>
             <param name="playerRef">Player to check</param>
-            <returns>True if the Player is the Input Authority over the NetworkObject, false otherwise</returns>
+            <returns>True if the Player is the Input Authority over the NetworkObjectMeta, false otherwise</returns>
         </member>
         <member name="M:Fusion.Simulation.IsStateAuthority(Fusion.PlayerRef,Fusion.PlayerRef)">
             <summary>
@@ -16791,62 +16780,33 @@
             <param name="playerRef">Player to check</param>
             <returns>True if the Player is the State Authority, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsStateAuthority(Fusion.NetworkObject,Fusion.PlayerRef)">
-            <summary>
-            Check if a Player is the State Authority over a NetworkObject
-            </summary>
-            <param name="networkObject">NetworkObject to check</param>
-            <param name="playerRef">Player to check</param>
-            <returns>True if the Player is the State Authority, false otherwise</returns>
-        </member>
         <member name="M:Fusion.Simulation.IsStateAuthority(Fusion.NetworkObjectMeta,Fusion.PlayerRef)">
             <summary>
-            Check if a Player is the State Authority over a NetworkObject
+            Check if a Player is the State Authority over a NetworkObjectMeta
             </summary>
-            <param name="networkObject">NetworkObject to check</param>
+            <param name="meta">NetworkObjectMeta to check</param>
             <param name="playerRef">Player to check</param>
             <returns>True if the Player is the State Authority, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsLocalSimulationStateOrInputSource(Fusion.NetworkObject)">
+        <member name="M:Fusion.Simulation.IsLocalSimulationInputAuthority(Fusion.NetworkObjectHeader@)">
             <summary>
-            Check if the Local Player is the State Authority or Input Authority over a NetworkObject
+            Check if the Local Player is the Input Authority
             </summary>
-            <param name="obj">NetworkObject to check</param>
-            <returns>True if the Player is the State Authority or Input Authority, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Simulation.IsLocalSimulationInputAuthority(Fusion.NetworkObject)">
-            <summary>
-            Check if the Local Player is the Input Authority over a NetworkObject
-            </summary>
-            <param name="obj">NetworkObject to check</param>
+            <param name="obj">Object's input authority</param>
             <returns>True if the Player is the Input Authority, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsLocalSimulationStateAuthority(Fusion.NetworkObject)">
+        <member name="M:Fusion.Simulation.IsLocalSimulationStateAuthority(Fusion.NetworkObjectHeader@)">
             <summary>
-            Check if the Local Player is the State Authority over a NetworkObject
+            Check if the Local Player is the State Authority
             </summary>
-            <param name="obj">NetworkObject to check</param>
+            <param name="obj">Object's input authority</param>
             <returns>True if the Player is the State Authority, false otherwise</returns>
         </member>
-        <member name="M:Fusion.Simulation.IsLocalSimulationStateAuthority(Fusion.NetworkId)">
+        <member name="M:Fusion.Simulation.GetStateAuthority(Fusion.PlayerRef)">
             <summary>
-            Check if a Player is the State Authority over a NetworkObject by NetworkId
+            Get the State Authority PlayerRef for a NetworkObjectMeta
             </summary>
-            <param name="id">NetworkId of the NetworkObject to check</param>
-            <returns>True if the Player is the State Authority, false otherwise</returns>
-        </member>
-        <member name="M:Fusion.Simulation.GetInputAuthority(Fusion.NetworkObject)">
-            <summary>
-            Get the Input Authority PlayerRef for a NetworkObject
-            </summary>
-            <param name="networkObject">NetworkObject to check</param>
-            <returns>PlayerRef of the Input Authority for the NetworkObject</returns>
-        </member>
-        <member name="M:Fusion.Simulation.GetStateAuthority(Fusion.NetworkObject)">
-            <summary>
-            Get the State Authority PlayerRef for a NetworkObject
-            </summary>
-            <param name="networkObject">NetworkObject to check</param>
+            <param name="objectStateAuthority">Player to check</param>
             <returns>PlayerRef of the State Authority for the NetworkObject</returns>
         </member>
         <member name="M:Fusion.Simulation.GetPlayerConnectionToken(Fusion.PlayerRef)">
@@ -16913,6 +16873,11 @@
         <member name="P:Fusion.Simulation.Objects">
             <summary> Returns a map of all objects in the simulation.</summary>
         </member>
+        <member name="M:Fusion.Simulation.GetLocalAuthorityMask(Fusion.NetworkObjectHeader@)">
+            <summary>
+            Gets a bitmask of <see cref="T:Fusion.AuthorityMasks"/> flags, representing the current local authority over this <see cref="T:Fusion.NetworkObjectMeta"/>.
+            </summary>
+        </member>
         <member name="M:Fusion.Simulation.SendMessageInternal(Fusion.SimulationMessage*,Fusion.Sockets.NetConnection*)">
             <summary>
             Enqueue a <see cref="T:Fusion.SimulationMessage"/> on the Out Message List for a specific <see cref="T:Fusion.Sockets.NetConnection"/>
@@ -16931,7 +16896,7 @@
             Dispose Host Migration data
             </summary>
         </member>
-        <member name="M:Fusion.Simulation.Server.ProcessHostMigrationData(System.Byte[],System.Collections.Generic.Dictionary{Fusion.NetworkId,Fusion.NetworkObjectHeaderSnapshot},Fusion.Allocator*)">
+        <member name="M:Fusion.Simulation.Server.ProcessHostMigrationData(System.Byte[],System.Collections.Generic.Dictionary{Fusion.NetworkId,Fusion.NetworkObjectHeaderSnapshot},Fusion.Allocator)">
             <summary>
             Process the serialized data from the bytebuffer into a organized Dictionary of NetIDs=NO Snapshots
             </summary>
@@ -17683,49 +17648,14 @@
             <param name="message"><see cref="T:Fusion.SimulationMessage"/> to copy</param>
             <returns>Copy of the <see cref="T:Fusion.SimulationMessage"/></returns>
         </member>
-        <member name="M:Fusion.SimulationMessage.WriteNetworkedObjectRef(Fusion.SimulationMessage*,Fusion.NetworkId)">
-            <summary>
-            Write a NetworkId to a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to write to</param>
-            <param name="value">NetworkId to write</param>
-        </member>
-        <member name="M:Fusion.SimulationMessage.ReadNetworkedObjectRef(Fusion.SimulationMessage*)">
-            <summary>
-            Read a NetworkId from a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to read from</param>
-            <returns>NetworkId read</returns>
-        </member>
-        <member name="M:Fusion.SimulationMessage.WriteVector3(Fusion.SimulationMessage*,UnityEngine.Vector3)">
-            <summary>
-            Write a Vector3 to a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to write to</param>
-            <param name="value">Vector3 to write</param>
-        </member>
-        <member name="M:Fusion.SimulationMessage.ReadVector3(Fusion.SimulationMessage*)">
-            <summary>
-            Read a Vector3 from a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to read from</param>
-            <returns>Vector3 read</returns>
-        </member>
-        <member name="M:Fusion.SimulationMessage.WriteInt(Fusion.SimulationMessage*,System.Int32)">
-            <summary>
-            Write a int to a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to write to</param>
-            <param name="value">int to write</param>
-        </member>
-        <member name="M:Fusion.SimulationMessage.ReadInt(Fusion.SimulationMessage*)">
-            <summary>
-            Read a int from a <see cref="T:Fusion.SimulationMessage"/>
-            </summary>
-            <param name="message">SimulationMessage to read from</param>
-            <returns>int read</returns>
-        </member>
         <member name="M:Fusion.SimulationMessage.GetData(Fusion.SimulationMessage*)">
+            <summary>
+            Get the byte pointer content of a <see cref="T:Fusion.SimulationMessage"/>
+            </summary>
+            <param name="message">SimulationMessage to get the byte pointer of</param>
+            <returns>Byte pointer of the <see cref="T:Fusion.SimulationMessage"/></returns>
+        </member>
+        <member name="M:Fusion.SimulationMessage.GetRawData(Fusion.SimulationMessage*)">
             <summary>
             Get the byte pointer content of a <see cref="T:Fusion.SimulationMessage"/>
             </summary>

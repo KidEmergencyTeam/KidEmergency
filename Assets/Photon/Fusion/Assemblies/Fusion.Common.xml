@@ -217,6 +217,16 @@
             <param name="columnSeparator">The string to use as a column separator. Default is a space.</param>
             <returns>A string representing the hexadecimal values of the 32-bit unsigned integers in the buffer.</returns>
         </member>
+        <member name="M:Fusion.BinUtils.WordsToHex(System.ReadOnlySpan{System.Int32},System.Int32,System.String,System.String)">
+            <summary>
+            Converts a buffer of 32-bit integers to a hexadecimal string representation.
+            </summary>
+        </member>
+        <member name="M:Fusion.BinUtils.WordsToHex(System.ReadOnlySpan{System.UInt32},System.Int32,System.String,System.String)">
+            <summary>
+            Converts a buffer of 32-bit unsigned integers to a hexadecimal string representation.
+            </summary>
+        </member>
         <member name="M:Fusion.BinUtils.HexToBytes(System.String,System.Byte*,System.Int32)">
             <summary>
             Converts a hexadecimal string to a byte array.
@@ -243,6 +253,56 @@
             <param name="columns">The number of columns to format the output. Default is 16.</param>
             <returns>A string representing the hexadecimal values of the bytes in the array.</returns>
         </member>
+        <member name="M:Fusion.BinUtils.BytesToHex(System.ReadOnlySpan{System.Byte},System.Int32)">
+            <summary>
+            Converts a byte array to its hexadecimal string representation.
+            </summary>
+            <param name="buffer">The byte array to convert.</param>
+            <param name="columns">The number of columns to format the output. Default is 16.</param>
+            <returns>A string representing the hexadecimal values of the bytes in the array.</returns>
+        </member>
+        <member name="M:Fusion.BinUtils.Read``1(System.Span{System.Byte})">
+            <summary>
+            Reads a value of type T from the given byte span.
+            </summary>
+            <typeparam name="T">The type of the value to read.</typeparam>
+            <param name="source">The span of bytes to read from.</param>
+            <returns>The value of type T read from the span.</returns>
+        </member>
+        <member name="M:Fusion.BinUtils.Read``1(System.Span{System.Int32})">
+            <summary>
+            Reads a value of type T from the given int span.
+            </summary>
+            <typeparam name="T">The type of the value to read.</typeparam>
+            <param name="source">The span of ints to read from.</param>
+            <returns>The value of type T read from the span.</returns>
+        </member>
+        <member name="M:Fusion.BinUtils.AsRef``1(System.Span{System.Byte})">
+            <summary>
+            Returns a managed pointer to a value of type T.
+            </summary>
+        </member>
+        <member name="M:Fusion.BinUtils.AsRef``1(System.Span{System.Int32})">
+            <summary>
+            Returns a managed pointer to a value of type T.
+            </summary>
+        </member>
+        <member name="M:Fusion.BinUtils.AsPointer``1(System.Span{System.Byte})">
+            <summary>
+            Returns a pointer to a value of type T from the given byte span.
+            </summary>
+            <typeparam name="T">The type of the value to point to.</typeparam>
+            <param name="source">The span of bytes to get the pointer from.</param>
+            <returns>A pointer to the value of type T.</returns>
+        </member>
+        <member name="M:Fusion.BinUtils.AsPointer``1(System.Span{System.Int32})">
+            <summary>
+            Returns a pointer to a value of type T from the given int span.
+            </summary>
+            <typeparam name="T">The type of the value to point to.</typeparam>
+            <param name="source">The span of ints to get the pointer from.</param>
+            <returns>A pointer to the value of type T.</returns>
+        </member>
         <member name="M:Fusion.CompressionUtils.Compress(System.Byte[])">
             <summary>
             Compress the byte array uisng GZip
@@ -268,6 +328,13 @@
             </summary>
             <param name="data">A pointer to the data to compute the checksum for.</param>
             <param name="length">The length of the data.</param>
+            <returns>The computed CRC64 checksum.</returns>
+        </member>
+        <member name="M:Fusion.CRC64.Compute(System.ReadOnlySpan{System.Int32})">
+            <summary>
+            Computes the CRC64 checksum for the given data.
+            </summary>
+            <param name="data">A pointer to the data to compute the checksum for.</param>
             <returns>The computed CRC64 checksum.</returns>
         </member>
         <member name="M:Fusion.CRC64.Compute(System.UInt64,System.Byte*,System.Int32,System.Int32)">
@@ -2148,6 +2215,15 @@
             <param name="fi">The field information.</param>
             <returns>The offset of the specified field in bytes.</returns>
         </member>
+        <member name="M:Fusion.Native.Free(System.Void*@)">
+            <inheritdoc cref="M:Fusion.Native.Free(System.Void*)"/>
+        </member>
+        <member name="M:Fusion.Native.Free``1(``0*@)">
+            <inheritdoc cref="M:Fusion.Native.Free(System.Void*)"/>
+        </member>
+        <member name="M:Fusion.Native.Free``1(``0**@)">
+            <inheritdoc cref="M:Fusion.Native.Free(System.Void*)"/>
+        </member>
         <member name="M:Fusion.Native.MallocAndClear(System.Int32)">
             <summary>
             Allocates and clears a block of memory.
@@ -2472,6 +2548,13 @@
             <param name="obj">The reference to the object.</param>
             <returns>A pointer to the object.</returns>
         </member>
+        <member name="M:Fusion.Native.ValidateBlockSentinels(System.IntPtr,System.Int32)">
+            <summary>
+            Validates the block sentinels to ensure memory integrity.
+            </summary>
+            <param name="memory">The pointer to the memory block.</param>
+            <param name="size">The size of the memory block.</param>
+        </member>
         <member name="M:Fusion.Native.MallocAndClearBlock(System.Int32,System.Int32,System.Void*@,System.Void*@,System.Int32)">
             <summary>
             Allocates a block of memory and clears it.
@@ -2746,6 +2829,61 @@
         <member name="M:Fusion.RuntimeUnityFlagsSetup.Reset">
             <summary>
             Resets all runtime flags to their default values.
+            </summary>
+        </member>
+        <member name="T:Fusion.Unsafe">
+            <summary>
+            Provides substitution for missing System.Runtime.CompilerServices.Unsafe
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.As``2(``0@)">
+            <summary>
+            Casts the given object to the specified type.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.AsPointer``1(``0@)">
+            <summary>
+            Returns an unmanaged pointer corresponding to the original source pointer.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.AsRef``1(System.Void*)">
+            <summary>
+            Returns a managed pointer to a value of type T.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.AsRef``1(``0@)">
+            <summary>
+            Returns a managed pointer to a value of type T.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.Read``1(System.Void*)">
+            <summary>
+            Writes a value of type T to the given location.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.ReadUnaligned``1(System.Void*)">
+            <summary>
+            Writes a value of type T to the given location without assuming architecture dependent alignment of the destination address.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.ReadUnaligned``1(System.Byte@)">
+            <summary>
+            Writes a value of type T to the given location without assuming architecture dependent alignment of the destination address.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.Write``1(System.Void*,``0)">
+            <summary>
+            Writes a value of type T to the given location.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.WriteUnaligned``1(System.Void*,``0)">
+            <summary>
+            Writes a value of type T to the given location without assuming architecture dependent alignment of the destination address.
+            </summary>
+        </member>
+        <member name="M:Fusion.Unsafe.WriteUnaligned``1(System.Byte@,``0)">
+            <summary>
+            Writes a value of type T to the given location without assuming architecture dependent alignment of the destination address.
             </summary>
         </member>
         <member name="T:Fusion.UTF32Tools">

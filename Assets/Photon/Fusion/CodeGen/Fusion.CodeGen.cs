@@ -1360,11 +1360,12 @@ namespace Fusion.CodeGen {
 
           // get data for messages
           il.Append(Ldloc(message));
-          il.Append(Call(asm.SimulationMessage.GetMethod(nameof(SimulationMessage.GetData), 1)));
+          il.Append(Ldc_I4(SimulationMessage.SIZE));
+          il.Append(Add());
           il.Append(Stloc(ctx.DataVariable));
 
           // create RpcHeader
-          // il.Append(Ldloc(data));
+          il.Append(Ldloc(ctx.DataVariable));
 
           if (rpc.IsStatic) {
             il.Append(Ldstr(rpc.ToString()));
@@ -1383,13 +1384,8 @@ namespace Fusion.CodeGen {
             il.Append(Call(asm.RpcHeader.GetMethod(nameof(RpcHeader.Create), 3)));
           }
 
-          il.Append(Ldloc(ctx.DataVariable));
-          il.Append(Call(asm.RpcHeader.GetMethod(nameof(RpcHeader.Write))));
-          // no need to align this
-          //il.AppendMacro(AlignToWordSize());
-          //il.Append(Stobj(asm.RpcHeader.Reference));
-
-          //il.Append(Ldc_I4(RpcHeader.SIZE));
+          il.Append(Stobj(asm.RpcHeader.Reference));
+          il.Append(Ldc_I4(RpcHeader.SIZE));
           il.Append(Stloc(ctx.OffsetVariable));
 
           // write parameters
@@ -1557,12 +1553,11 @@ namespace Fusion.CodeGen {
 
           // grab data from message and store in local
           il.Append(Ldarg_1());
-          il.Append(Call(asm.SimulationMessage.GetMethod(nameof(SimulationMessage.GetData), 1)));
+          il.Append(Ldc_I4(SimulationMessage.SIZE));
+          il.Append(Add());
           il.Append(Stloc(ctx.DataVariable));
 
-          il.Append(Ldloc(ctx.DataVariable));
-          il.Append(Call(asm.RpcHeader.GetMethod(nameof(RpcHeader.ReadSize))));
-          il.AppendMacro(ctx.AlignToWordSize());
+          il.Append(Ldc_I4(RpcHeader.SIZE));
           il.Append(Stloc(ctx.OffsetVariable));
 
           for (int i = 0; i < parameters.Length; ++i) {
