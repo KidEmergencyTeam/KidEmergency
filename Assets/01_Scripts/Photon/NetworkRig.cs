@@ -19,6 +19,11 @@ public class NetworkRig : NetworkBehaviour
         networkTransform = GetComponent<NetworkTransform>();
     }
 
+    private void Start()
+    {
+        ConnectionManager.instance.networkRig = this;
+    }
+
     public override void Spawned()
     {
         base.Spawned();
