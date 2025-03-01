@@ -44,6 +44,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 
 	private async void Start()
 	{
+		ConnectionManager.instance.hardwareRig = this;
 		await FindRunner();
 		if (_runner)
 		{
