@@ -9,14 +9,14 @@ using UnityEngine.SceneManagement;
 
 public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    private static ConnectionManager _instance;
+    public static ConnectionManager instance;
     
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     [SerializeField] private NetworkRunner _runnerPrefab;
     [SerializeField] private Transform _spawnTransform;
     
-    private HardwareRig _hardwareRig;
-    private NetworkRunner _networkRunner;
+    public HardwareRig hardwareRig;
+    public NetworkRig networkRig;
     
     private NetworkRunner _instanceRunner;
     
@@ -29,16 +29,16 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Awake()
     {
-        if (_instance == null)
+        if (instance == null)
         {
-            _instance = this;
+            instance = this;
 
-            _instance._connectionToken = ConnectionTokenUtils.NewToken();
-            _instance._playersMap = new Dictionary<int, NetworkObject>();
-            _instance._pendingTokens = new List<int>();
+            instance._connectionToken = ConnectionTokenUtils.NewToken();
+            instance._playersMap = new Dictionary<int, NetworkObject>();
+            instance._pendingTokens = new List<int>();
         }
 
-        if (_instance != this)
+        if (instance != this)
         {
             Destroy(gameObject);
         }
@@ -104,7 +104,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     
     private async void StartGame(GameMode mode, HostMigrationToken hostMigrationToken = null)
     {
-        if (_networkRunner == null)
+        if (_instanceRunner == null)
         {
             _instanceRunner = GetRunner("Runner");
         }
@@ -156,6 +156,10 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
 
+        if (networkRig.IsLocalNetworkRig)
+        {
+            networkRig.hardwareRig = hardwareRig;
+        }
         _watch.Restart();
         Debug.Log("호스트 마이그레이션: 게임 상태 복원 완료");
     }
