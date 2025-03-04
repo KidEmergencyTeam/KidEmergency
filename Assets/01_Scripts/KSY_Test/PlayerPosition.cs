@@ -16,30 +16,42 @@ public class PlayerPosition : MonoBehaviour
 {
     public List<PlayerEntry> playerEntries = new List<PlayerEntry>();
 
-    private void Start()
+    private void Update()
     {
-        // 설정한 초기 위치에서 플레이어 불러오기
-        SetInitialPositionsOnce();
+        // 빈 슬롯이 있으면 플레이어 검색
+        if (HasEmptySlot())
+        {
+            FillPlayersFromTag();
+        }
     }
 
-    public void SetInitialPositionsOnce()
+    // 모든 슬롯이 채워져 있는지 확인
+    private bool HasEmptySlot()
     {
         foreach (PlayerEntry entry in playerEntries)
         {
-            if (entry.player != null)
+            if (entry.player == null)
             {
-                entry.player.transform.position = entry.initialPosition;
+                return true;
             }
-            else
-            {
-                Debug.LogWarning($"초기 슬롯에 플레이어가 등록되어 있지 않습니다. (초기 위치: {entry.initialPosition})");
-            }
+        }
+        return false;
+    }
+
+    // 태그가 플레이어인 오브젝트를 찾아 빈 슬롯에 추가
+    private void FillPlayersFromTag()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in players)
+        {
+            AddPlayer(player);
         }
     }
 
     // 플레이어 추가
     public void AddPlayer(GameObject newPlayer)
     {
+        // 플레이어 유효성 체크
         if (newPlayer == null)
         {
             Debug.LogWarning("추가하려는 플레이어가 null입니다.");
@@ -49,22 +61,21 @@ public class PlayerPosition : MonoBehaviour
         // 이미 등록된 플레이어인지 확인
         if (playerEntries.Exists(entry => entry.player == newPlayer))
         {
-            Debug.LogWarning($"이미 리스트에 포함된 플레이어입니다: {newPlayer.name}");
             return;
         }
 
-        // null인 슬롯(비어있는 슬롯) 찾기
+        // null인 슬롯 찾기
         PlayerEntry freeEntry = playerEntries.Find(entry => entry.player == null);
         if (freeEntry != null)
         {
-            // 비어있는 슬롯을 재활용
+            // 비어있는 슬롯이 있으면 플레이어 추가
             freeEntry.player = newPlayer;
             newPlayer.transform.position = freeEntry.initialPosition;
-            Debug.Log($"플레이어 추가됨 (재활용된 슬롯): {newPlayer.name}");
+            Debug.Log($"플레이어 추가됨: {newPlayer.name}");
         }
         else
         {
-            // 슬롯이 없으므로 플레이어 추가 불가 -> 인원 제한
+            // 비어있는 슬롯이 없으면 플레이어 추가 불가 -> 인원 제한
             Debug.LogWarning($"슬롯 부족: 플레이어 추가 불가 ({newPlayer.name})");
         }
     }
