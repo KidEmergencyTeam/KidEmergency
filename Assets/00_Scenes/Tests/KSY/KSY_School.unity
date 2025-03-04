@@ -7630,6 +7630,37 @@ MonoBehaviour:
   m_TargetRotation: {fileID: 866173473}
   m_RayInteractor: {fileID: 1714040878}
   m_RotationSmoothingSpeed: 12
+--- !u!1 &438553257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 438553258}
+  m_Layer: 0
+  m_Name: '===== '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &438553258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438553257}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &455423953
 GameObject:
   m_ObjectHideFlags: 0
@@ -8489,16 +8520,8 @@ MonoBehaviour:
   playerTag: Player
   WaitStateText: {fileID: 0}
   WaitStateTextTag: WaitState
-  sceneSpawnInfos:
-  - sceneName: KSY_School
-    spawnPosition: {x: 3, y: 0, z: -1.5}
-  - sceneName: KSY_School 1
-    spawnPosition: {x: 3, y: 0, z: -1.5}
-  disableSceneGroups:
-  - sceneName: KSY_School
-    objectsToDisable:
-    - {fileID: 1691508482}
-    - {fileID: 325804046}
+  currentSceneSpawnPosition: {x: 3, y: 0, z: -1.5}
+  nextSceneName: KSY_School 1
   gameStartDelay: 2
 --- !u!4 &574299642
 Transform:
@@ -11375,7 +11398,7 @@ Transform:
   m_GameObject: {fileID: 864765518}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4533885, y: -20.542868, z: 18.399784}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12313,7 +12336,7 @@ Transform:
   m_GameObject: {fileID: 947621500}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4533885, y: -20.542868, z: 18.399784}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12518,7 +12541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &960039179
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12589,7 +12612,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1297478841}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -28219,4 +28242,5 @@ SceneRoots:
   - {fileID: 960039179}
   - {fileID: 1998075327}
   - {fileID: 574299642}
+  - {fileID: 438553258}
   - {fileID: 1048071658}
