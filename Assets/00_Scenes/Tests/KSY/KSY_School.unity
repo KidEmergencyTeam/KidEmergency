@@ -8516,11 +8516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1490af6f79c82844186677672abf8591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  playerTag: Player
-  WaitStateText: {fileID: 0}
-  WaitStateTextTag: WaitState
-  currentSceneSpawnPosition: {x: 3, y: 0, z: -1.5}
+  WaitStateText: {fileID: 1790125164}
   nextSceneName: KSY_School 1
   gameStartDelay: 2
 --- !u!4 &574299642
@@ -10511,6 +10507,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 742324493}
   m_CullTransparentMesh: 1
+--- !u!1 &765756187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765756188}
+  m_Layer: 0
+  m_Name: =====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &765756188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765756187}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &775340732
 GameObject:
   m_ObjectHideFlags: 0
@@ -21984,6 +22011,52 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 197ea69f555c1894295e72c82306aab8, type: 3}
+--- !u!1 &1729316795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1729316797}
+  - component: {fileID: 1729316796}
+  m_Layer: 0
+  m_Name: PlayerPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1729316796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729316795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f76f94c4f642b4dbd4edf04aa53f81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1048071657}
+  targetPosition: {x: 3, y: 0, z: -1.5}
+--- !u!4 &1729316797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729316795}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.486897, y: -4.035347, z: 0.13855763}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1732256784
 GameObject:
   m_ObjectHideFlags: 0
@@ -22177,7 +22250,7 @@ GameObject:
   - component: {fileID: 1790125165}
   - component: {fileID: 1790125164}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: Text (TMP)
   m_TagString: WaitState
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28237,10 +28310,12 @@ SceneRoots:
   - {fileID: 847783063}
   - {fileID: 947621501}
   - {fileID: 1802611834}
-  - {fileID: 1333296216}
   - {fileID: 864765519}
   - {fileID: 960039179}
+  - {fileID: 1333296216}
+  - {fileID: 765756188}
   - {fileID: 1998075327}
+  - {fileID: 1729316797}
   - {fileID: 574299642}
   - {fileID: 438553258}
   - {fileID: 1048071658}
