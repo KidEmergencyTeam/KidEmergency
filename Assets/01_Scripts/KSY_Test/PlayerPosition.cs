@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; 
 
-// 플레이어와 초기 위치 정보를 함께 저장
 [System.Serializable]
 public class PlayerEntry
 {
@@ -38,11 +38,16 @@ public class PlayerPosition : MonoBehaviour
         return false;
     }
 
-    // 태그가 플레이어인 오브젝트를 찾아 빈 슬롯에 추가
+    // 플레이어 찾기 및 추가
     private void FillPlayersFromTag()
     {
+        // 태그가 "Player"인 오브젝트들을 찾음
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in players)
+        // Hierarchy에 배치된 순서대로 정렬
+        var sortedPlayers = players.OrderBy(p => p.transform.GetSiblingIndex()).ToArray();
+
+        // 정렬된 순서대로 빈 슬롯에 플레이어를 추가
+        foreach (GameObject player in sortedPlayers)
         {
             AddPlayer(player);
         }
