@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.SceneManagement;
@@ -12,7 +13,7 @@ public class AutoAttach : MonoBehaviour
 
     private XRGrabInteractable grabInteractable;
 
-    // AttachZone 안에 있는지 여부 (OnTriggerEnter/Exit로 업데이트)
+    // AttachPoint 안에 있는지 여부 (OnTriggerEnter/Exit로 업데이트)
     private bool isInAttachZone = false;
 
     // 현재 attachPoint에 부착되어 있는지 여부
@@ -20,6 +21,9 @@ public class AutoAttach : MonoBehaviour
 
     // 부착 전 Rigidbody의 kinematic 상태 저장
     private bool originalKinematic;
+
+    // 충돌한 AttachPoint의 원래 색상을 저장하기 위한 Dictionary
+    private Dictionary<GameObject, Color> originalColors = new Dictionary<GameObject, Color>();
 
     private void Awake()
     {
@@ -75,19 +79,35 @@ public class AutoAttach : MonoBehaviour
         }
     }
 
-    // AttachZone에 진입 시 true로 설정
+    // AttachPoint에 진입 시 true로 설정 및 색상 변경 (검은색)
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("AttachZone"))
+        if (other.CompareTag("AttachPoint"))
         {
             isInAttachZone = true;
-            Debug.Log("AttachZone에 진입했습니다.");
+            Debug.Log("AttachPoint에 진입했습니다.");
+
+            Renderer rend = other.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                // 원래 색상이 저장되지 않았다면 저장합니다.
+                if (!originalColors.ContainsKey(other.gameObject))
+                {
+                    originalColors.Add(other.gameObject, rend.material.color);
+                }
+                rend.material.color = Color.black;
+            }
+            else
+            {
+                Debug.LogWarning("AttachPoint 오브젝트에 Renderer가 없습니다.");
+            }
         }
     }
 
+    // AttachPoint를 벗어날 때 원래 색상으로 복구
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("AttachZone"))
+        if (other.CompareTag("AttachPoint"))
         {
             if (grabInteractable != null && (grabInteractable.isSelected || isAttached))
             {
@@ -95,8 +115,19 @@ public class AutoAttach : MonoBehaviour
                 return;
             }
 
-            Debug.Log("AttachZone을 벗어났습니다.");
+            Debug.Log("AttachPoint를 벗어났습니다.");
             isInAttachZone = false;
+
+            Renderer rend = other.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                // 저장된 원래 색상이 있다면 복구합니다.
+                if (originalColors.ContainsKey(other.gameObject))
+                {
+                    rend.material.color = originalColors[other.gameObject];
+                    originalColors.Remove(other.gameObject);
+                }
+            }
         }
     }
 
@@ -127,7 +158,7 @@ public class AutoAttach : MonoBehaviour
         }
     }
 
-    // AttachZone 내에서 놓이면 attachPoint 위치로 부착(자식 설정)
+    // AttachPoint 내에서 놓이면 attachPoint 위치로 부착(자식 설정)
     private void Attach()
     {
         if (attachPoint == null)
@@ -155,7 +186,7 @@ public class AutoAttach : MonoBehaviour
         if (isAttached)
             return;
 
-        Debug.Log("AttachZone 내에 놓여 attachPoint에 부착합니다.");
+        Debug.Log("AttachPoint 내에 놓여 attachPoint에 부착합니다.");
 
         // attachPoint 영역에 배치할 때는 Throw On Detach 기능을 비활성화
         if (grabInteractable != null)
@@ -207,7 +238,7 @@ public class AutoAttach : MonoBehaviour
         isAttached = false;
     }
 
-    // AttachZone 밖에서 놓이면 씬의 최상위 계층으로 이동
+    // AttachPoint 밖에서 놓이면 씬의 최상위 계층으로 이동
     private void DetachToSceneRoot()
     {
         if (isAttached)
@@ -225,6 +256,6 @@ public class AutoAttach : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        Debug.Log("AttachZone 밖에 놓여, 상속 관계를 해제하였습니다.");
+        Debug.Log("AttachPoint 밖에 놓여, 상속 관계를 해제하였습니다.");
     }
 }

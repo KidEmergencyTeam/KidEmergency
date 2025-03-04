@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 // 대기 상태에서 준비 완료되면 다음 씬으로 전환 시켜주는 스크립트
-public class WaitStateManager : MonoBehaviour
+public class WaitState : MonoBehaviour
 {
     [Header("대기 상태 표시")]
     public TextMeshProUGUI WaitStateText;
@@ -55,7 +55,7 @@ public class WaitStateManager : MonoBehaviour
                     RegisterReady();
                 }
             }
-            
+
             // 컨트롤러가 존재하면 그랩 버튼으로 준비 처리
             else
             {
