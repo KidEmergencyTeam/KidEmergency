@@ -11,7 +11,7 @@ public class OptionUI : OutlineHighlight
     public Color highlightColor; // 강조할 문자 색상
 
     private Animator _anim;
-    private Dialog.DialogChoice _myChoice;
+    private DialogData.DialogChoice _myChoice;
     private Button _button;
     
     protected override void Awake()
@@ -22,7 +22,7 @@ public class OptionUI : OutlineHighlight
         _button.onClick.AddListener(OptionClicked);
     }
     
-    public void SetChoice(Dialog.DialogChoice choice)
+    public void SetChoice(DialogData.DialogChoice choice)
     {
         _myChoice = choice;
         highlightText = choice.highlightText;

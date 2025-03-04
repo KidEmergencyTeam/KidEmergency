@@ -1,18 +1,19 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {    
     public ActionType currentAction;
-    public Dialog beforeDialog;
-    public Dialog currentDialog;
+    public DialogData beforeDialog;
+    public DialogData currentDialog;
 
     public GameObject testPrefab;
     public GameObject testPrefab2;
     public GameObject testPrefab3;
 
-    public event Action OnActionComplete; // 다이얼로그 UI로 상태변경하는 이벤트
+    public event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
     private void Start()
     {
@@ -96,17 +97,17 @@ public class ActionManager : SingletonManager<ActionManager>
         SceneManager.LoadScene(beforeDialog.nextScene);
     }
     
-    private void Test()
+    private void Test() // 삭제 예정
     {
         Instantiate(testPrefab);
     }
 
-    private void Test2()
+    private void Test2() // 삭제 예정
     {
         Instantiate(testPrefab2);
     }
 
-    private void Test3()
+    private void Test3() // 삭제 예정
     {
         Instantiate(testPrefab3);
     }

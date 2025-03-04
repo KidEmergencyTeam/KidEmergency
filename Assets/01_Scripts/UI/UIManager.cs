@@ -12,7 +12,7 @@ public class UIManager : SingletonManager<UIManager>
         {
             if (i < ActionManager.Instance.currentDialog.choices.Length)
             {
-                Dialog.DialogChoice choice = ActionManager.Instance.currentDialog.choices[i];
+                DialogData.DialogChoice choice = ActionManager.Instance.currentDialog.choices[i];
                 optionUI[i].optionText.text = choice.optionText;
                 optionUI[i].optionImage.sprite = choice.optionSprite;
                 optionUI[i].SetChoice(choice);
