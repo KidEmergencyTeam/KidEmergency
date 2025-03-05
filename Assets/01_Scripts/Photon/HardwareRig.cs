@@ -89,8 +89,6 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
 		var rigInput = new RigInput();
-		rigInput.playAreaPosition = transform.position;
-		rigInput.playAreaRotation = transform.rotation;
 		
 		rigInput.headPosition = headset.transform.position;
 		rigInput.headRotation = headset.transform.rotation;
