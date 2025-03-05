@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class MenuUI : OutlineHighlight
 {
-    [HideInInspector] public TextMeshProUGUI text;
-    [HideInInspector] public GameObject activeImage;
+    public TextMeshProUGUI text;
+    public GameObject activeImage;
     [HideInInspector] public Color originalColor;
     private string _menuName;
     private Button _button;
@@ -14,8 +14,6 @@ public class MenuUI : OutlineHighlight
     protected override void Awake()
     {
         base.Awake();
-        text = GetComponentInChildren<TextMeshProUGUI>();
-        activeImage = this.transform.GetChild(1).gameObject;
         originalColor = text.color;
         activeImage.SetActive(false);
         _menuName = this.transform.name;
