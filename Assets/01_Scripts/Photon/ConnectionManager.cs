@@ -17,6 +17,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
     
     public HardwareRig hardwareRig;
     public NetworkRig networkRig;
+    public HardwareHandAnimation hardwareHandAnimation;
     
     private NetworkRunner _instanceRunner;
     
