@@ -1,10 +1,12 @@
 using Fusion;
 using UnityEngine;
 
+
 [DefaultExecutionOrder(NetworkRig.ExecutionOrder)]
 public class NetworkRig : NetworkBehaviour
 {
     public const int ExecutionOrder = 100;
+    
     public HardwareRig hardwareRig;
     public NetworkHand leftHand;
     public NetworkHand rightHand;
@@ -41,6 +43,7 @@ public class NetworkRig : NetworkBehaviour
         {
             transform.position = input.playAreaPosition;
             transform.rotation = input.playAreaRotation;
+            
             leftHand.transform.position = input.leftHandPosition;
             leftHand.transform.rotation = input.leftHandRotation;
             rightHand.transform.position = input.rightHandPosition;
@@ -55,7 +58,7 @@ public class NetworkRig : NetworkBehaviour
         base.Render();
         if (IsLocalNetworkRig)
         {
-            transform.position = hardwareRig.transform.position;
+            transform.position = hardwareRig.headset.transform.position - new Vector3(0, 0.5f, 0.1f);
             transform.rotation = hardwareRig.transform.rotation;
             leftHand.transform.position = hardwareRig.leftController.transform.position;
             leftHand.transform.rotation = hardwareRig.leftController.transform.rotation;
