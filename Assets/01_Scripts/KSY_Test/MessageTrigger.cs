@@ -7,8 +7,8 @@ using TMPro;
 // 모드를 열거형으로 나타냄
 public enum InteractionMode
 {
-    화재모드_초급,
-    화재모드_고급
+    FireModeBeginner,
+    FireModeAdvanced
 }
 
 // 메시지, 지연 시간, 색상, 패널 및 텍스트를 묶어 관리
@@ -31,8 +31,8 @@ public class MessageTrigger : MonoBehaviour
     [Header("모드별 설정")]
     public List<InteractionSetting> interactionSettings;
 
-    // 현재 모드 (기본값은 화재모드_초급)
-    public InteractionMode currentMode = InteractionMode.화재모드_초급;
+    // 현재 모드 (기본값은 FireModeBeginner)
+    public InteractionMode currentMode = InteractionMode.FireModeBeginner;
 
     // 렌더러 컴포넌트 및 원래 색상
     private Renderer objRenderer;

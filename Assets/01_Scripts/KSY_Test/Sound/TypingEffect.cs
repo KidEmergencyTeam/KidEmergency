@@ -17,18 +17,23 @@ public class MultilineString
 
 public class TypingEffect : MonoBehaviour
 {
+    // 싱글톤 인스턴스
+    public static TypingEffect Instance { get; private set; }
+
     [Header("타이핑 설정")]
     public List<MultilineString> typingContents = new List<MultilineString>();
 
     [Header("타이핑 표시")]
     public TextMeshProUGUI typingText;
+
+    [TagSelector]
     public string typingTextTag;
 
     [Header("타이핑 공통 속도")]
-    public float commonTypingSpeed;
+    public float commonTypingSpeed = 0.05f;
 
     [Header("타이핑 텍스트 삭제 대기 시간")]
-    public float clearDelay;
+    public float clearDelay = 1f;
 
     // 타이핑 전/후 대기 시간
     private float sentenceDelay = 0.5f;
@@ -36,6 +41,19 @@ public class TypingEffect : MonoBehaviour
     // 타이핑 진행 여부 (외부에서는 읽기 전용으로 접근)
     private bool isTyping = false;
     public bool IsTyping { get { return isTyping; } }
+
+    private void Awake()
+    {
+        // 이미 인스턴스가 존재한다면 중복 생성 방지
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        // 씬 전환 시에도 파괴되지 않도록 설정
+        DontDestroyOnLoad(gameObject);
+    }
 
     void OnEnable()
     {
@@ -98,7 +116,7 @@ public class TypingEffect : MonoBehaviour
     {
         if (clip != null)
         {
-            // SoundManager는 별도 구현되어 있어야 합니다.
+            // 싱글톤으로 구현된 SoundManager를 통해 오디오 재생
             SoundManager.Instance.PlaySFX(clip.name, gameObject);
         }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 [Serializable]
-public class ChoiceUIItem
+public class ChoiceUI
 {
     public GameObject panel;      
     public List<Button> buttons;   
@@ -16,14 +16,14 @@ public class ScenarioManager : MonoBehaviour
 {
     public static ScenarioManager Instance { get; private set; }
 
-    [Header("typingEffect")]
+    [Header("스크립트")]
     public TypingEffect typingEffect;         
 
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
     [Header("선택지")]
-    public List<ChoiceUIItem> choiceUIItems;  
+    public List<ChoiceUI> choiceUI;  
 
     [Header("씬 이름")]
     public List<string> sceneNames; // [0] 복도, [1] 계단/엘리베이터, [2] 운동장 등
@@ -54,9 +54,9 @@ public class ScenarioManager : MonoBehaviour
             Debug.LogError("TypingEffect가 할당되지 않았습니다.");
             return;
         }
-        if (choiceUIItems == null || choiceUIItems.Count < 3)
+        if (choiceUI == null || choiceUI.Count < 3)
         {
-            Debug.LogError("ChoiceUIItems 리스트에 최소 3개 이상의 항목이 필요합니다.");
+            Debug.LogError("ChoiceUI 리스트에 최소 3개 이상의 항목이 필요합니다.");
             return;
         }
         if (sceneNames == null || sceneNames.Count < 3)
@@ -66,17 +66,17 @@ public class ScenarioManager : MonoBehaviour
         }
 
         // 모든 선택지 패널 비활성화
-        foreach (var item in choiceUIItems)
+        foreach (var item in choiceUI)
         {
             if (item.panel != null) item.panel.SetActive(false);
         }
 
         // 각 선택지 패널의 버튼에 리스너 연결
-        for (int i = 0; i < choiceUIItems.Count; i++)
+        for (int i = 0; i < choiceUI.Count; i++)
         {
-            foreach (Button btn in choiceUIItems[i].buttons)
+            foreach (Button btn in choiceUI[i].buttons)
             {
-                int choiceNumber = choiceUIItems[i].buttons.IndexOf(btn) + 1;
+                int choiceNumber = choiceUI[i].buttons.IndexOf(btn) + 1;
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() => OnChoiceSelected(choiceNumber));
             }
@@ -467,14 +467,14 @@ public class ScenarioManager : MonoBehaviour
     // 선택지 UI 표시/숨김
     void ShowChoiceUI(int index, bool show)
     {
-        if (index < 0 || index >= choiceUIItems.Count)
+        if (index < 0 || index >= choiceUI.Count)
         {
-            Debug.LogError($"유효하지 않은 ChoiceUIItems 인덱스: {index}");
+            Debug.LogError($"유효하지 않은 ChoiceUI 인덱스: {index}");
             return;
         }
         activeChoiceUIIndex = show ? index : -1;
-        if (choiceUIItems[index].panel != null)
-            choiceUIItems[index].panel.SetActive(show);
+        if (choiceUI[index].panel != null)
+            choiceUI[index].panel.SetActive(show);
     }
 
     public void OnChoiceSelected(int choice)
@@ -482,7 +482,7 @@ public class ScenarioManager : MonoBehaviour
         userChoice = choice;
         if (activeChoiceUIIndex != -1)
         {
-            choiceUIItems[activeChoiceUIIndex].panel.SetActive(false);
+            choiceUI[activeChoiceUIIndex].panel.SetActive(false);
             activeChoiceUIIndex = -1;
         }
     }
