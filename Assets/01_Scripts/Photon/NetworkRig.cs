@@ -41,10 +41,10 @@ public class NetworkRig : NetworkBehaviour
         
         if (GetInput<RigInput>(out var input))
         {
-            transform.position = input.playAreaPosition;
+            transform.position = input.headPosition - new Vector3(0,0.5f,0.1f);
             transform.rotation = input.playAreaRotation;
             
-            leftHand.transform.position = input.leftHandPosition;
+            leftHand.transform.position = input.leftHandPosition;   
             leftHand.transform.rotation = input.leftHandRotation;
             rightHand.transform.position = input.rightHandPosition;
             rightHand.transform.rotation = input.rightHandRotation;
