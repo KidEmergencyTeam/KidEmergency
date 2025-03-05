@@ -183,9 +183,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPrefab:
-    RawGuidValue: 35612dd0b76b32f4c9ce89e1ed73ea11
+    RawGuidValue: 7e19094680d2ed248bae375670c4cc4d
   _runnerPrefab: {fileID: 1337792984508482766, guid: 98952b8f2f713ad4da53a24387648a93, type: 3}
   _spawnTransform: {fileID: 366289903}
+  hardwareRig: {fileID: 0}
+  networkRig: {fileID: 0}
 --- !u!4 &427953575
 Transform:
   m_ObjectHideFlags: 0
@@ -428,9 +430,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Complete XR Origin Set Up Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5132781624373352962, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
+      propertyPath: m_CameraYOffset
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5892315622153215149, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
       propertyPath: SortKey
       value: 2581115906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948396945732367033, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
+      propertyPath: near clip plane
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8376381445122781234, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -472,7 +482,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8741914955460115514, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1438048885396760419, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
+    - {fileID: 753199413336232102, guid: 6ace3cfc87d98ec41aeef3ee4207e64a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
