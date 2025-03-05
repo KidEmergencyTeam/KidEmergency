@@ -1,32 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-public class HandAnimation : MonoBehaviour
+public class HandAnimation : NetworkBehaviour
 {
     public InputActionProperty leftPinch;
     public InputActionProperty leftGrip;
-
     public InputActionProperty rightPinch;
     public InputActionProperty rightGrip;
 
+    private float _leftTriggerValue;
+    private float _leftGripValue;
+    private float _rightTriggerValue;
+    private float _rightGripValue;
+
     public Animator animator;
 
-    void Update()
+    public override void Render()
     {
-        float leftTriggerValue = leftPinch.action.ReadValue<float>();
-        animator.SetFloat("Left Trigger", leftTriggerValue);
+        UpdateAnimations();
+    }
+    
+    private void UpdateAnimations()
+    {
+        _leftTriggerValue = leftPinch.action.ReadValue<float>();
+        animator.SetFloat("Left Trigger", _leftTriggerValue);
 
-        float leftGripValue = leftGrip.action.ReadValue<float>();
-        animator.SetFloat("Left Grip", leftGripValue);
+        _leftGripValue = leftGrip.action.ReadValue<float>();
+        animator.SetFloat("Left Grip", _leftGripValue);
 
 
-        float rightTriggerValue = rightPinch.action.ReadValue<float>();
-        animator.SetFloat("Right Trigger", rightTriggerValue);
+        _rightTriggerValue = rightPinch.action.ReadValue<float>();
+        animator.SetFloat("Right Trigger", _rightTriggerValue);
 
-        float rightGripValue = rightGrip.action.ReadValue<float>();
-        animator.SetFloat("Right Grip", rightGripValue);
+        _rightGripValue = rightGrip.action.ReadValue<float>();
+        animator.SetFloat("Right Grip", _rightGripValue);
     }
 }
