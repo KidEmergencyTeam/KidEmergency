@@ -584,7 +584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &21462949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6875,39 +6875,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 396080156}
-  - component: {fileID: 396080155}
+  - component: {fileID: 396080157}
   m_Layer: 0
-  m_Name: ChoiceController
+  m_Name: ChoiceVoteManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &396080155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 396080154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da5f0124b4445654983cacc069bd9702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  choiceUI:
-  - panel: {fileID: 87128382}
-    buttons:
-    - {fileID: 48347765}
-    - {fileID: 607916486}
-  - panel: {fileID: 1997855025}
-    buttons:
-    - {fileID: 1043807239}
-    - {fileID: 1620475324}
-  - panel: {fileID: 1528041626}
-    buttons:
-    - {fileID: 1405016632}
-    - {fileID: 1446391258}
 --- !u!4 &396080156
 Transform:
   m_ObjectHideFlags: 0
@@ -6923,6 +6898,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &396080157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396080154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e96b060e304684094e452778733a17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choicePanels:
+  - panel: {fileID: 87128382}
+    buttons:
+    - {fileID: 48347765}
+    - {fileID: 607916486}
+    voteCountTexts:
+    - {fileID: 250822247}
+    - {fileID: 861379015}
+    tieChoiceIndex: 2
+  - panel: {fileID: 1997855025}
+    buttons:
+    - {fileID: 1043807239}
+    - {fileID: 1620475324}
+    voteCountTexts:
+    - {fileID: 1744963912}
+    - {fileID: 1368403767}
+    tieChoiceIndex: 1
+  - panel: {fileID: 1528041626}
+    buttons:
+    - {fileID: 1405016632}
+    - {fileID: 1446391258}
+    voteCountTexts:
+    - {fileID: 1084489693}
+    - {fileID: 714008534}
+    tieChoiceIndex: 1
 --- !u!1 &409016161
 GameObject:
   m_ObjectHideFlags: 0
@@ -9661,52 +9673,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607916484}
   m_CullTransparentMesh: 1
---- !u!1 &646563499
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 646563501}
-  - component: {fileID: 646563500}
-  m_Layer: 0
-  m_Name: MajorityVoteController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &646563500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 646563499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21a0cec014ef2234a8d58f6de9eed53a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  voteTextA: {fileID: 250822247}
-  voteTextB: {fileID: 861379015}
---- !u!4 &646563501
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 646563499}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.800215, y: 12.503481, z: -6.4035883}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &657023000
 GameObject:
   m_ObjectHideFlags: 0
@@ -24933,7 +24899,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1676212388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25276,7 +25242,6 @@ MonoBehaviour:
   - Hallway
   - Elevator
   - Schoolyard
-  choiceController: {fileID: 396080155}
 --- !u!4 &1689636362
 Transform:
   m_ObjectHideFlags: 0
@@ -29042,7 +29007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2136982403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31572,7 +31537,6 @@ SceneRoots:
   - {fileID: 21462955}
   - {fileID: 926830676}
   - {fileID: 396080156}
-  - {fileID: 646563501}
   - {fileID: 1689636362}
   - {fileID: 1941334384}
   - {fileID: 818283458}
