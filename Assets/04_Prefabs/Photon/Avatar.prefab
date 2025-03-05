@@ -11106,11 +11106,12 @@ GameObject:
   - component: {fileID: 2883127810430026971}
   - component: {fileID: 7406185607861128480}
   - component: {fileID: 2808682832307382207}
-  - component: {fileID: 167045064784527347}
   - component: {fileID: 8468728636941062095}
   - component: {fileID: 8169701152153119505}
   - component: {fileID: 8454921474362913178}
   - component: {fileID: 2194168670472509243}
+  - component: {fileID: 3603206799396343789}
+  - component: {fileID: 6641997493004980241}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -11311,67 +11312,6 @@ MonoBehaviour:
   - m_Rig: {fileID: 4767802721898059603}
     m_Active: 1
   m_Effectors: []
---- !u!114 &167045064784527347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8678368508462613463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a82ed36db4d497b4ead79ca35d261021, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 42ff4a76-c0ef-430b-a280-82280e7df48e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  leftGrip:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Grip
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 2d41baf3-24a0-4ee2-89eb-a42d5f42d874
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec18a641-ad79-4944-8c22-a45c8b051082
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightGrip:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Grip
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 862c0e81-3441-4bea-8864-dd12ee728ba2
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  animator: {fileID: 2883127810430026971}
 --- !u!114 &8468728636941062095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11409,6 +11349,8 @@ MonoBehaviour:
   - {fileID: 8468728636941062095}
   - {fileID: 8454921474362913178}
   - {fileID: 2194168670472509243}
+  - {fileID: 3603206799396343789}
+  - {fileID: 6641997493004980241}
   - {fileID: 6018029970962202996}
   - {fileID: 152211379246371496}
   - {fileID: 1393758705505597904}
@@ -11445,6 +11387,82 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
+--- !u!114 &3603206799396343789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8678368508462613463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e296002e96e9e1438c50336de157daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftPinch:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Left Pinch
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 71beda63-325d-4aed-87a2-e273b8c8d7ca
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  leftGrip:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Left Grip
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b052648f-a385-4d5f-a8c6-f059c34badd9
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rightPinch:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Right Pinch
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 97aa629c-2138-4838-96d4-50dfab4d7e4a
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  rightGrip:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Right Grip
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b81537c2-deda-46fa-9667-7383f120630d
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -1758520528963094988, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  runnerExpectations: 2
+--- !u!114 &6641997493004980241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8678368508462613463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0809ec202303f489b5ad82a4b4e021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hardwareHandAnimation: {fileID: 3603206799396343789}
+  animator: {fileID: 2883127810430026971}
+  networkTransform: {fileID: 0}
 --- !u!1 &8705881860646780532
 GameObject:
   m_ObjectHideFlags: 0
