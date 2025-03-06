@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public class Player : NetworkBehaviour
+public class NetworkPlayer : NetworkBehaviour
 {
     [Networked] public int Token {get;set;}
 }
