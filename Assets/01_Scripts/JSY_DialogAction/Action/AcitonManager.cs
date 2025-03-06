@@ -66,7 +66,7 @@ public class ActionManager : SingletonManager<ActionManager>
                 Invoke("ActionCompleted", 2f);
                 break;
             
-            case ActionType.HighlightBag:
+            case ActionType.HighlightObject:
                 break;
             
             case ActionType.FixingBag:
