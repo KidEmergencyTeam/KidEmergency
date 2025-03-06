@@ -376,8 +376,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5454384359927231502}
   - component: {fileID: 5132781624373352962}
-  - component: {fileID: 1438048885396760419}
-  - component: {fileID: 753199413336232102}
   - component: {fileID: 71544870844092845}
   - component: {fileID: 4753682647165400279}
   - component: {fileID: 457595589398870300}
@@ -422,47 +420,6 @@ MonoBehaviour:
   m_CameraFloorOffsetObject: {fileID: 2221561763011612774}
   m_RequestedTrackingOriginMode: 0
   m_CameraYOffset: 1.36144
---- !u!143 &1438048885396760419
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 463893465798113356}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.36144
-  m_Radius: 0.1
-  m_SlopeLimit: 45
-  m_StepOffset: 0.5
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.76072, z: 0}
---- !u!114 &753199413336232102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 463893465798113356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af6bf904e410ee8479f9093d8830d1f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_LocomotionProvider: {fileID: 4488029758445570900}
-  m_MinHeight: 0
-  m_MaxHeight: Infinity
 --- !u!114 &71544870844092845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,6 +491,7 @@ MonoBehaviour:
   headset: {fileID: 2814110685314869299}
   leftController: {fileID: 8149553182822181998}
   rightController: {fileID: 2608987127680324365}
+  runnerExpectations: 2
 --- !u!1 &598842898616547652
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,6 +2217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   side: 1
   networkTransform: {fileID: 0}
+  handPose: 0
 --- !u!1 &4114748992170343937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3279,6 +3238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   side: 0
   networkTransform: {fileID: 0}
+  handPose: 0
 --- !u!1 &5073563374123356808
 GameObject:
   m_ObjectHideFlags: 0
