@@ -9,12 +9,17 @@ public class HandAnimation : NetworkBehaviour
     public InputActionProperty rightPinch;
     public InputActionProperty rightGrip;
 
-    private float _leftTriggerValue;
-    private float _leftGripValue;
-    private float _rightTriggerValue;
-    private float _rightGripValue;
+    [Networked] public float leftTriggerValue { get; set; }
+    [Networked] public float leftGripValue { get; set; }
+    [Networked] public float rightTriggerValue { get; set; }
+    [Networked] public float rightGripValue { get; set; }
 
     public Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     public override void Render()
     {
@@ -23,17 +28,17 @@ public class HandAnimation : NetworkBehaviour
     
     private void UpdateAnimations()
     {
-        _leftTriggerValue = leftPinch.action.ReadValue<float>();
-        animator.SetFloat("Left Trigger", _leftTriggerValue);
+        leftTriggerValue = leftPinch.action.ReadValue<float>();
+        animator.SetFloat("Left Trigger", leftTriggerValue);
 
-        _leftGripValue = leftGrip.action.ReadValue<float>();
-        animator.SetFloat("Left Grip", _leftGripValue);
+        leftGripValue = leftGrip.action.ReadValue<float>();
+        animator.SetFloat("Left Grip", leftGripValue);
 
 
-        _rightTriggerValue = rightPinch.action.ReadValue<float>();
-        animator.SetFloat("Right Trigger", _rightTriggerValue);
+        rightTriggerValue = rightPinch.action.ReadValue<float>();
+        animator.SetFloat("Right Trigger", rightTriggerValue);
 
-        _rightGripValue = rightGrip.action.ReadValue<float>();
-        animator.SetFloat("Right Grip", _rightGripValue);
+        rightGripValue = rightGrip.action.ReadValue<float>();
+        animator.SetFloat("Right Grip", rightGripValue);
     }
 }
