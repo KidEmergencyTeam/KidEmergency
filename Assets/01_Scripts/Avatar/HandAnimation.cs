@@ -4,15 +4,15 @@ using UnityEngine.InputSystem;
 
 public class HandAnimation : NetworkBehaviour
 {
-    [Networked] public InputActionProperty leftPinch { get; set; }
-    [Networked] public InputActionProperty leftGrip { get; set; }
-    [Networked] public InputActionProperty rightPinch { get; set; }
-    [Networked] public InputActionProperty rightGrip { get; set; }
-
-    public float leftTriggerValue;
-    public float leftGripValue;
-    public float rightTriggerValue;
-    public float rightGripValue;
+    [Networked] public float leftTriggerValue{ get; set; }
+    [Networked] public float leftGripValue{ get; set; }
+    [Networked] public float rightTriggerValue{ get; set; }
+    [Networked] public float rightGripValue{ get; set; }
+    
+    public InputActionProperty leftPinch;
+    public InputActionProperty leftGrip;
+    public InputActionProperty rightPinch;
+    public InputActionProperty rightGrip;
 
     public Animator animator;
 
