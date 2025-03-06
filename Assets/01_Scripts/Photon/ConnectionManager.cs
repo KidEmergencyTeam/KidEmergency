@@ -139,7 +139,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
                         networkObject.CopyStateFrom(resumeNO);
                     });
 
-                if (newNetworkObject.TryGetComponent<Player>(out var player))
+                if (newNetworkObject.TryGetComponent<NetworkPlayer>(out var player))
                 {
                     var token = player.Token;
                     if (_playersMap.TryGetValue(token, out var oldPlayer))
@@ -224,7 +224,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
                 _spawnTransform.position,
                 Quaternion.identity,
                 player,
-                (r, obj) => obj.GetComponent<Player>().Token = playerToken
+                (r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
             );
             
             _playersMap[playerToken] = playerObject;
@@ -243,7 +243,7 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             if (runner.IsServer)
             {
-                var token = networkPlayerObject.GetComponent<Player>().Token;
+                var token = networkPlayerObject.GetComponent<NetworkPlayer>().Token;
                 _playersMap.Remove(token);
                 runner.Despawn(networkPlayerObject);
                 runner.PushHostMigrationSnapshot();
