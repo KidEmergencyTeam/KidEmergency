@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 // 플레이어 컨트롤러 (현재 상태를 업데이트 및 완료 처리)
@@ -36,17 +35,16 @@ public class PlayerController : MonoBehaviour
 
 	public void CompleteCurrentAction()
 	{
-		Debug.Log(1);
-		Debug.Log(
-			$"StateMachine null? {ModeController.Instance.StateMachine == null}");
-		Debug.Log(
-			$"StateMachine finished? {ModeController.Instance.StateMachine.IsFinished()}");
-		// 아래가 true여야 하는 것 아닌가?
 		if (ModeController.Instance?.StateMachine != null &&
-		    !ModeController.Instance.StateMachine.IsFinished())
+		    ModeController.Instance.StateMachine.IsFinished())
 		{
-			Debug.Log(2);
-			ModeController.Instance.MoveToNextState();
+			_currentState = PlayerState.None;
+			ModeController.Instance.StateMachine.MoveToNextState();
 		}
+	}
+
+	public void ChangeStateToNone()
+	{
+		_currentState = PlayerState.None;
 	}
 }
