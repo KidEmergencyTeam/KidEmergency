@@ -8310,6 +8310,7 @@ GameObject:
   - component: {fileID: 482967299}
   - component: {fileID: 482967298}
   - component: {fileID: 482967297}
+  - component: {fileID: 482967300}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -8419,6 +8420,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482967295}
   m_CullTransparentMesh: 1
+--- !u!114 &482967300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482967295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71841685d91af8c488c97581bcb96b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayText: {fileID: 1790125164}
+  button: {fileID: 482967297}
 --- !u!1 &486655463
 GameObject:
   m_ObjectHideFlags: 0
@@ -15454,7 +15469,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1254744129}
-  - component: {fileID: 1254744130}
   m_Layer: 0
   m_Name: TextButton
   m_TagString: Untagged
@@ -15477,20 +15491,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1254744130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254744127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71841685d91af8c488c97581bcb96b98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayText: {fileID: 1790125164}
-  Button: {fileID: 482967297}
 --- !u!1 &1256468500
 GameObject:
   m_ObjectHideFlags: 0
@@ -23293,7 +23293,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
