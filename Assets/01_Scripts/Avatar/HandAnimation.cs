@@ -4,15 +4,15 @@ using UnityEngine.InputSystem;
 
 public class HandAnimation : NetworkBehaviour
 {
-    public InputActionProperty leftPinch;
-    public InputActionProperty leftGrip;
-    public InputActionProperty rightPinch;
-    public InputActionProperty rightGrip;
+    [Networked] public InputActionProperty leftPinch { get; set; }
+    [Networked] public InputActionProperty leftGrip { get; set; }
+    [Networked] public InputActionProperty rightPinch { get; set; }
+    [Networked] public InputActionProperty rightGrip { get; set; }
 
-    [Networked] public float leftTriggerValue { get; set; }
-    [Networked] public float leftGripValue { get; set; }
-    [Networked] public float rightTriggerValue { get; set; }
-    [Networked] public float rightGripValue { get; set; }
+    public float leftTriggerValue;
+    public float leftGripValue;
+    public float rightTriggerValue;
+    public float rightGripValue;
 
     public Animator animator;
 
@@ -25,20 +25,25 @@ public class HandAnimation : NetworkBehaviour
     {
         UpdateAnimations();
     }
-    
+
+    public override void FixedUpdateNetwork()
+    {
+        base.FixedUpdateNetwork();
+
+        if (Object.HasInputAuthority)
+        {
+            leftTriggerValue = leftPinch.action.ReadValue<float>();
+            leftGripValue = leftGrip.action.ReadValue<float>();
+            rightTriggerValue = rightPinch.action.ReadValue<float>();
+            rightGripValue = rightGrip.action.ReadValue<float>();
+        }
+    }
+
     private void UpdateAnimations()
     {
-        leftTriggerValue = leftPinch.action.ReadValue<float>();
         animator.SetFloat("Left Trigger", leftTriggerValue);
-
-        leftGripValue = leftGrip.action.ReadValue<float>();
         animator.SetFloat("Left Grip", leftGripValue);
-
-
-        rightTriggerValue = rightPinch.action.ReadValue<float>();
         animator.SetFloat("Right Trigger", rightTriggerValue);
-
-        rightGripValue = rightGrip.action.ReadValue<float>();
         animator.SetFloat("Right Grip", rightGripValue);
     }
 }
