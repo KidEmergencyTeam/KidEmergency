@@ -42,6 +42,7 @@ public class HandAnimation : NetworkBehaviour
             command.leftGripValue = leftGrip.action.ReadValue<float>();
             command.rightTriggerValue = rightPinch.action.ReadValue<float>();
             command.rightGripValue = rightGrip.action.ReadValue<float>();
+            handCommand = command;
         }
     }
 
