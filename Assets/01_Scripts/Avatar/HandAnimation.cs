@@ -1,56 +1,32 @@
-using Fusion;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public struct HandCommand : INetworkStruct
-{
-    public float leftTriggerValue;
-    public float leftGripValue;
-    public float rightTriggerValue;
-    public float rightGripValue;
-}
 
-public class HandAnimation : NetworkBehaviour
+public class HandAnimation : MonoBehaviour
 {
     public InputActionProperty leftPinch;
     public InputActionProperty leftGrip;
+
     public InputActionProperty rightPinch;
     public InputActionProperty rightGrip;
 
     public Animator animator;
-    
-    [Networked] public HandCommand handCommand { get; set; }
 
-    private void Awake()
+    void Update()
     {
-        animator = GetComponent<Animator>();
-    }
+        float leftTriggerValue = leftPinch.action.ReadValue<float>();
+        animator.SetFloat("Left Trigger", leftTriggerValue);
 
-    public override void Render()
-    {
-        UpdateAnimations();
-    }
+        float leftGripValue = leftGrip.action.ReadValue<float>();
+        animator.SetFloat("Left Grip", leftGripValue);
 
-    public override void FixedUpdateNetwork()
-    {
-        base.FixedUpdateNetwork();
 
-        if (Object.HasInputAuthority)
-        {
-            HandCommand command = handCommand;
-            command.leftTriggerValue = leftPinch.action.ReadValue<float>();
-            command.leftGripValue = leftGrip.action.ReadValue<float>();
-            command.rightTriggerValue = rightPinch.action.ReadValue<float>();
-            command.rightGripValue = rightGrip.action.ReadValue<float>();
-            handCommand = command;
-        }
-    }
+        float rightTriggerValue = rightPinch.action.ReadValue<float>();
+        animator.SetFloat("Right Trigger", rightTriggerValue);
 
-    private void UpdateAnimations()
-    {
-        animator.SetFloat("Left Trigger", handCommand.leftTriggerValue);
-        animator.SetFloat("Left Grip", handCommand.leftGripValue);
-        animator.SetFloat("Right Trigger", handCommand.rightTriggerValue);
-        animator.SetFloat("Right Grip", handCommand.rightGripValue);
+        float rightGripValue = rightGrip.action.ReadValue<float>();
+        animator.SetFloat("Right Grip", rightGripValue);
     }
 }
