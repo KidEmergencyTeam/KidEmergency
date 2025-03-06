@@ -21,7 +21,9 @@ public class OptionUI : OutlineHighlight
         _button = GetComponent<Button>();
         _button.onClick.AddListener(OptionClicked);
     }
-    
+
+    #region 장소영 옵션 선택
+
     public void SetChoice(DialogData.DialogChoice choice)
     {
         _myChoice = choice;
@@ -31,16 +33,18 @@ public class OptionUI : OutlineHighlight
     
     private void OptionClicked()
     {
-    if (_myChoice != null)
-    {
-        ActionManager.Instance.currentDialog = _myChoice.nextOptionDialog;
-        ActionManager.Instance.currentAction = _myChoice.choiceOptionNextActionType;
+        if (_myChoice != null)
+        {
+            ActionManager.Instance.currentDialog = _myChoice.nextOptionDialog;
+            ActionManager.Instance.currentAction = _myChoice.choiceOptionNextActionType;
         
-        UIManager.Instance.CloseAllOptions();
+            UIManager.Instance.CloseAllOptions();
         
-        ActionManager.Instance.UpdateAction();
+            ActionManager.Instance.UpdateAction();
+        }
     }
-    }
+
+    #endregion
 
     private void HighlightSetting()
     {
@@ -59,7 +63,7 @@ public class OptionUI : OutlineHighlight
         }
     }
 
-    private void StartAnimation()
+    private void StartAnimation() // OptionClicked 메서드에 넣을 예정
     {
         if (true) // 옵션 선택지에 따라
         {
