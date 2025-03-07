@@ -18,6 +18,7 @@ public class ScenarioManager : MonoBehaviour
     [Header("씬 이름")]
     public List<string> sceneNames; 
 
+    // 현재 시나리오 스텝을 나타냄
     private int currentStep = 1;
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
 
@@ -145,24 +146,24 @@ public class ScenarioManager : MonoBehaviour
         if (selected == 1)
             currentStep = 8 - 1; // 다음 loop에서 currentStep++ => 8
         else
-            currentStep = 11 - 1;
+            currentStep = 11 - 1; // currentStep = 10; 형태가 아닌 currentStep = 11 - 1; 형태로 처리한 이유: 가독성
     }
 
-    IEnumerator Step8() { yield return null; }
+    IEnumerator Step8() { yield return null; } // 선택지 1번 선택
     IEnumerator Step9() { yield return PlayAndWait(5); }
     IEnumerator Step10()
     {
         yield return PlayAndWait(6);
-        currentStep = 13 - 1;
+        currentStep = 13 - 1; // 현재 스텝을 12로 정정 -> 따라서 6번 대사 이후 스텝 13번부터 시작
     }
-    IEnumerator Step11() { yield return null; }
+    IEnumerator Step11() { yield return null; } // 선택지 2번 선택
     IEnumerator Step12()
     {
         yield return PlayAndWait(7);
         currentStep = 13 - 1;
     }
-    IEnumerator Step13() { yield return PlayAndWait(8); }
-    IEnumerator Step14() { yield return null; }
+    IEnumerator Step13() { yield return PlayAndWait(8); } 
+    IEnumerator Step14() { yield return null; } // 여기서 2줄 정렬
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
