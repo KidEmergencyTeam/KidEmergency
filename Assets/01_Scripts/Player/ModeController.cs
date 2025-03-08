@@ -18,12 +18,6 @@ public class ModeController : SingletonManager<ModeController>
 		Debug.Log($"[ModeController] 상태 변경: {newState}");
 	}
 
-	public void MoveToNextState()
-	{
-		Debug.Log(3);
-		StateMachine?.MoveToNextState();
-	}
-
 	public void ChangeMode(string modeKey)
 	{
 		_modeKey = modeKey;

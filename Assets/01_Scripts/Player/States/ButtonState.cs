@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtonState : State
@@ -14,9 +12,10 @@ public class ButtonState : State
 	public override void Execute(PlayerController player)
 	{
 		_loop++;
+		Debug.Log("Button state...");
 		if (_loop > 100)
 		{
-			player.CompleteCurrentAction();
+			player.ChangeStateToNone();
 		}
 	}
 
