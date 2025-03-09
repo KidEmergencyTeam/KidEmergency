@@ -16,6 +16,10 @@ public class ModeController : SingletonManager<ModeController>
 	private void HandleStateChanged(PlayerState newState)
 	{
 		Debug.Log($"[ModeController] 상태 변경: {newState}");
+		if (newState == PlayerState.None)
+		{
+			Debug.Log("현재 상태가 None 입니다.");
+		}
 	}
 
 	public void ChangeMode(string modeKey)
