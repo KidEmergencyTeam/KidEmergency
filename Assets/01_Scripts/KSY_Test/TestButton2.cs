@@ -21,6 +21,11 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 레이가 버튼 위에 있는지 여부
     private bool isRayHovering = false;
 
+    // OnButtonClick() 호출 여부를 인스펙터에 표시하기 위한 불변수
+    [Header("디버그 (호출 여부)")]
+    [SerializeField]
+    private bool buttonClicked = false;
+
     void Start()
     {
         // 버튼에 이벤트 등록
@@ -36,22 +41,17 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void OnEnable()
     {
-        // XRI Default Input Actions 할당되어 있는지 확인
+        // XRI Default Input Actions가 할당되어 있는지 확인
         if (inputActionAsset != null)
         {
             // XRI Default Input Actions에서
             // selectActionName에 해당하는 액션을 찾음.
-            // 해당 액션이 없으면 LogError 출력
             selectAction = inputActionAsset.FindAction(selectActionName, true);
 
-            // selectActionName에 해당하는 액션을 찾았을 경우
             if (selectAction != null)
             {
-                // selectAction이 수행되었을 때
-                // OnSelectPerformed 함수를 호출하도록 이벤트 구독
+                // selectAction 수행 시 OnSelectPerformed 호출
                 selectAction.performed += OnSelectPerformed;
-
-                // selectAction을 활성화
                 selectAction.Enable();
             }
             else
@@ -67,21 +67,14 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void OnDisable()
     {
-        // selectAction이 null이 아닌 경우에만
-        // 이벤트 구독 해제 및 비활성화 처리
         if (selectAction != null)
         {
-            // OnSelectPerformed 이벤트 구독 해제
             selectAction.performed -= OnSelectPerformed;
-            // selectAction을 비활성화
             selectAction.Disable();
         }
     }
 
-    // 레이가 버튼 위에 있는 경우
-    // XR 컨트롤러 그립 입력이 발생하면
-    // 1.button.onClick.Invoke()를 호출
-    // 2.버튼 클릭 이벤트를 실행
+    // 레이가 버튼 위에 있을 때 XR 컨트롤러의 Grip 입력이 발생하면 버튼 클릭 처리
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
         if (isRayHovering)
@@ -90,21 +83,21 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 레이가 버튼 위에 있을 경우
     public void OnPointerEnter(PointerEventData eventData)
     {
         isRayHovering = true;
     }
 
-    // 레이가 버튼 위에 없을 경우
     public void OnPointerExit(PointerEventData eventData)
     {
         isRayHovering = false;
     }
 
-    // 버튼 클릭 이벤트 
+    // 버튼 클릭 이벤트
     public void OnButtonClick()
     {
+        // OnButtonClick()이 호출되면 buttonClicked 변수를 true로 변경
+        buttonClicked = true;
         Debug.Log("[TestButton2] OnButtonClick() 호출됨.");
     }
 }
