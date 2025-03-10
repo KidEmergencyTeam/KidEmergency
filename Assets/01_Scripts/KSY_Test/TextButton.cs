@@ -33,7 +33,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             Debug.LogError("[TextButton] Button이 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
 
-        if (displayText = null)
+        if (displayText == null)
         {
             Debug.LogError("[TextButton] displayText가 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
