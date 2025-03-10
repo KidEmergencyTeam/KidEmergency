@@ -14,10 +14,10 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    [Header("좌측 Select: XRI LeftHand Interaction/Select)")]
+    [Header("좌측 Select: XRI LeftHand Interaction/Select")]
     public string leftSelectActionName = "XRI LeftHand Interaction/Select";
 
-    [Header("우측 Select: XRI RightHand Interaction/Select)")]
+    [Header("우측 Select: XRI RightHand Interaction/Select")]
     public string rightSelectActionName = "XRI RightHand Interaction/Select";
 
     // 좌측 및 우측 Select 액션 저장

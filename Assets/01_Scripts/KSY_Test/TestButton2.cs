@@ -4,8 +4,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-// [수정] 우측 컨트롤러 그립 입력 -> 버튼 클릭 안되는 거 해결
-// 단일 Select 저장 후 입력을 처리하여 버튼 클릭 이벤트를 발생 -> 좌측 및 우측 Select 저장 후 입력을 각각 처리하여 버튼 클릭 이벤트를 발생 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("버튼")]
@@ -14,10 +12,10 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    [Header("좌측 Select: XRI LeftHand Interaction/Select)")]
+    [Header("좌측 Select: XRI LeftHand Interaction/Select")]
     public string leftSelectActionName = "XRI LeftHand Interaction/Select";
 
-    [Header("우측 Select: XRI RightHand Interaction/Select)")]
+    [Header("우측 Select: XRI RightHand Interaction/Select")]
     public string rightSelectActionName = "XRI RightHand Interaction/Select";
 
     // 좌측 및 우측 Select 액션 저장
