@@ -6,20 +6,32 @@ using UnityEngine.Serialization;
 public class DialogData : ScriptableObject
 {
     [TextArea]
-    public string[] dialogs; // 관련 대사
+    [Tooltip("대사")]
+    public string[] dialogs;
     
     [Serializable]
     public class DialogChoice
     {
-        public string optionText;        // 선택지 텍스트
-        public string highlightText;     // 강조할 텍스트
-        public Sprite optionSprite;      // 선택지 이미지
-        public DialogData nextOptionDialog;    // 선택 시 다음 대화
-        public ActionType choiceOptionNextActionType;    // 선택 시 실행할 액션 타입
+        [Tooltip("선택지 텍스트 설정")]
+        public string optionText;
+        [Tooltip("강조할 텍스트 설정")]
+        public string highlightText; 
+        [Tooltip("선택지 이미지 설정")]
+        public Sprite optionSprite; 
+        [Tooltip("선택 후 다음 대화(Dialog Data) 설정")]
+        public DialogData nextOptionDialog; 
+        [Tooltip("선택 후 실행할 액션(Action Type) 설정")]
+        public ActionType choiceOptionNextActionType;    
     }
     
-    public DialogChoice[] choices; // 대화 후 선택지들
-    public string nextScene; // 로드할 씬 이름
-    public DialogData nextDialog; // 선택지 없을 때 다음 대화
-    public ActionType nextActionType; // 선택지 없을 때 실행할 다음 액션
+    [Tooltip("대화가 끝난 후 실행될 선택지 설정(없으면 비워두세요)")]
+    public DialogChoice[] choices;
+    [Tooltip("대화가 끝난 후 강조될 오브젝트들(없으면 비워두세요)")]
+    public GameObject[] objects;
+    [Tooltip("대화가 끝난 후 로드할 씬 이름 설정(없으면 비워두세요)")]
+    public string nextScene; 
+    [Tooltip("대화가 끝난 후 실행할 다음 대화(Dialog Data) 설정(선택지가 있으면 비워두세요)")]
+    public DialogData nextDialog;
+    [Tooltip("대화가 끝난 후 실행할 다음 액션(Action Type) 설정(선택지가 있으면 비워두세요)")]
+    public ActionType nextActionType;
 }

@@ -1,19 +1,22 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {    
     public ActionType currentAction;
     public DialogData beforeDialog;
     public DialogData currentDialog;
-
-    public GameObject testPrefab;
-    public GameObject testPrefab2;
-    public GameObject testPrefab3;
-
-    public event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
+    
+    [Header("액션")]
+    public EarthquakeAction earthquakeAction;
+    public UnderTheDeskAction underTheDeskAction;
+    public PlaceObjectAction placeObjectAction;
+    public HighlightObjectAction highlightObjectAction;
+    public FixingBagAction fixingBagAction;
+    
+    private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
     private void Start()
     {
@@ -35,11 +38,19 @@ public class ActionManager : SingletonManager<ActionManager>
                 break;
             
             case ActionType.ShowDialog:
-                StartCoroutine(DialogManager.Instance.ShowDialog());
+                if (currentDialog.dialogs != null)
+                {
+                    StartCoroutine(DialogManager.Instance.ShowDialog());
+
+                }
+                else
+                {
+                    print("현재 SO에 저장된 다이얼로그가 없음~");
+                }
                 break;
             
             case ActionType.ShowOption:
-                SetNewOption();
+                SetOption();
                 if (currentDialog.nextDialog != null)
                 {
                     OnActionComplete?.Invoke();
@@ -47,41 +58,62 @@ public class ActionManager : SingletonManager<ActionManager>
                 break;
             
             case ActionType.ChangeScene:
-                SetChangeScene();
+                ChangeScene();
                 Invoke("ActionCompleted", 2f);
                 break;
             
             case ActionType.Earthquake:
-                Test();
-                Invoke("ActionCompleted", 2f);
+                if (earthquakeAction != null)
+                {
+                    earthquakeAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(earthquakeAction));
+                }
                 break;
             
             case ActionType.UnderTheDesk:
-                Test2();
-                Invoke("ActionCompleted", 2f);
+                if (underTheDeskAction != null)
+                {
+                    underTheDeskAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(underTheDeskAction));
+                }
                 break;
             
             case ActionType.PlaceObject:
-                Test3();
-                Invoke("ActionCompleted", 2f);
+                if (placeObjectAction != null)
+                {
+                    placeObjectAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(placeObjectAction));
+                }
                 break;
             
             case ActionType.HighlightObject:
+                if (highlightObjectAction != null)
+                {
+                    print("현재 상태: HighlightObject");
+                    highlightObjectAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(highlightObjectAction));
+                }
                 break;
             
             case ActionType.FixingBag:
+                if (fixingBagAction != null)
+                {
+                    fixingBagAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(fixingBagAction));
+                }
                 break;
         }
         
-        // Invoke의 time은 액션의 시간에 따라 변경되어야 함
     }
 
-    private void ActionCompleted()
+    private IEnumerator WaitForActionComplete(IActionEffect effect)
     {
+        yield return new WaitUntil(() => effect.IsActionComplete);
+        print("이제 대사창 띄움~");
         OnActionComplete?.Invoke();
     }
-
-    private void SetNewOption()
+    
+    private void SetOption()
     {
         for (int i = 0; i < currentDialog.choices.Length; i++)
         {
@@ -92,24 +124,8 @@ public class ActionManager : SingletonManager<ActionManager>
         }
     }
 
-    private void SetChangeScene()
+    private void ChangeScene()
     {
         SceneManager.LoadScene(beforeDialog.nextScene);
     }
-    
-    private void Test() // 삭제 예정
-    {
-        Instantiate(testPrefab);
-    }
-
-    private void Test2() // 삭제 예정
-    {
-        Instantiate(testPrefab2);
-    }
-
-    private void Test3() // 삭제 예정
-    {
-        Instantiate(testPrefab3);
-    }
-
 }
