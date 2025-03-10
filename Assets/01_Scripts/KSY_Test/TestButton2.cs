@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
+// [수정] 우측 컨트롤러 그립 입력 -> 버튼 클릭 안되는 거 해결
+// 단일 Select 저장 후 입력을 처리하여 버튼 클릭 이벤트를 발생 -> 좌측 및 우측 Select 저장 후 입력을 각각 처리하여 버튼 클릭 이벤트를 발생 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("버튼")]
@@ -12,18 +14,20 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    // Select를 기본값으로 사용
-    [Header("XRI Default Input Actions 내에서 Select(Grip) 액션의 이름")]
-    public string selectActionName = "Select";
+    [Header("좌측 Select: XRI LeftHand Interaction/Select)")]
+    public string leftSelectActionName = "XRI LeftHand Interaction/Select";
 
-    // Select 액션을 저장
-    private InputAction selectAction;
+    [Header("우측 Select: XRI RightHand Interaction/Select)")]
+    public string rightSelectActionName = "XRI RightHand Interaction/Select";
+
+    // 좌측 및 우측 Select 액션 저장
+    private InputAction leftSelectAction;
+    private InputAction rightSelectAction;
 
     // 레이가 버튼 위에 있는지 여부
     private bool isRayHovering = false;
 
-    // OnButtonClick() 호출 여부를 인스펙터에 표시
-    [Header("디버그 (호출 여부)")]
+    [Header("디버그 (OnButtonClick 호출 여부)")]
     [SerializeField]
     private bool buttonClicked = false;
 
@@ -39,34 +43,52 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (inputActionAsset != null)
         {
-            selectAction = inputActionAsset.FindAction(selectActionName, true);
-
-            if (selectAction != null)
+            // 좌측 액션 구독 및 활성화
+            leftSelectAction = inputActionAsset.FindAction(leftSelectActionName, true);
+            if (leftSelectAction != null)
             {
-                selectAction.performed += OnSelectPerformed;
-                selectAction.Enable();
+                leftSelectAction.performed += OnSelectPerformed;
+                leftSelectAction.Enable();
             }
             else
             {
-                Debug.LogError("[TestButton2] '" + selectActionName + "' 액션을 찾을 수 없습니다.");
+                Debug.LogError("[TestButton2] '" + leftSelectActionName + "' 액션을 InputActionAsset에서 찾을 수 없습니다.");
+            }
+
+            // 우측 액션 구독 및 활성화
+            rightSelectAction = inputActionAsset.FindAction(rightSelectActionName, true);
+            if (rightSelectAction != null)
+            {
+                rightSelectAction.performed += OnSelectPerformed;
+                rightSelectAction.Enable();
+            }
+            else
+            {
+                Debug.LogError("[TestButton2] '" + rightSelectActionName + "' 액션을 InputActionAsset에서 찾을 수 없습니다.");
             }
         }
         else
         {
-            Debug.LogError("[TestButton2] InputActionAsset이 할당되지 않았습니다.");
+            Debug.LogError("[TestButton2] InputActionAsset이 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
     }
 
+    // 이벤트 구독
     void OnDisable()
     {
-        if (selectAction != null)
+        if (leftSelectAction != null)
         {
-            selectAction.performed -= OnSelectPerformed;
-            selectAction.Disable();
+            leftSelectAction.performed -= OnSelectPerformed;
+            leftSelectAction.Disable();
+        }
+        if (rightSelectAction != null)
+        {
+            rightSelectAction.performed -= OnSelectPerformed;
+            rightSelectAction.Disable();
         }
     }
 
-    // 레이가 버튼 위에 있을 때 XR 컨트롤러의 Grip 입력 발생 시
+    // 버튼 위에 레이가 있을 때 XR 컨트롤러의 Grip 입력이 발생하면 호출
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
         if (isRayHovering)
@@ -76,11 +98,13 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    // 버튼 위에 레이가 진입 시 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
         isRayHovering = true;
     }
 
+    // 버튼 영역을 벗어나면 호출
     public void OnPointerExit(PointerEventData eventData)
     {
         isRayHovering = false;
@@ -95,23 +119,25 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             yield break;
         }
 
-        PointerEventData pointerData = new PointerEventData(EventSystem.current);
-        pointerData.pointerPress = button.gameObject;
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            pointerPress = button.gameObject
+        };
 
-        // pointer down 이벤트를 시뮬레이션하여 눌림 효과 시작
+        // pointer down 이벤트 시뮬레이션 (버튼 눌림 효과 시작)
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
 
-        // 애니메이션 효과를 보기 위해 잠시 대기 (0.1초 정도)
+        // 애니메이션 효과를 위해 잠시 대기 (0.1초)
         yield return new WaitForSeconds(0.1f);
 
-        // pointer up 이벤트를 시뮬레이션하여 눌림 효과 종료
+        // pointer up 이벤트 시뮬레이션 (버튼 눌림 효과 종료)
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
         // 버튼 클릭 이벤트 호출
         OnButtonClick();
     }
 
-    // XR 입력 시 호출
+    // 버튼 클릭 처리
     public void OnButtonClick()
     {
         buttonClicked = true;
