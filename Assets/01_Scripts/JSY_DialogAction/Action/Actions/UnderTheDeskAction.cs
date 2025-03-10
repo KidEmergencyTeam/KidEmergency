@@ -57,7 +57,7 @@ public class UnderTheDeskAction : MonoBehaviour, IActionEffect
     private void ChangeView()
     {
         Vector3 changeCameraPos = xrCamParent.transform.position;
-        changeCameraPos.y -= 1f;
+        changeCameraPos.y -= 0.8f; // 씬에서 테스트 후 값 변경하면 됨
         xrCamParent.transform.position = changeCameraPos;
     }
     

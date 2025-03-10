@@ -1916,17 +1916,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 412265612}
-  m_LocalRotation: {x: -0, y: -0, z: -0.045744877, w: 0.99895316}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1795907501}
   m_Father: {fileID: 1983284692}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5.244}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -769, y: 381}
+  m_AnchoredPosition: {x: -770, y: 381}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &487797768
@@ -5842,7 +5842,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentAction: 0
   beforeDialog: {fileID: 0}
-  currentDialog: {fileID: 11400000, guid: 69e264fab189333429c85dc3628ec363, type: 2}
+  currentDialog: {fileID: 11400000, guid: 7bfc3696d5fa1544eaf368648813a502, type: 2}
   earthquakeAction: {fileID: 154242858}
   underTheDeskAction: {fileID: 154242854}
   placeObjectAction: {fileID: 154242855}
@@ -6555,8 +6555,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2be7690b1afa24ab54f137c913fdfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionSound: {fileID: 0}
-  affectOutlinable: 1
 --- !u!114 &1260117145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6569,51 +6567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets:
-  - IsVisible: 1
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 1597929640}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 0
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!1001 &1267344571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7589,51 +7542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets:
-  - IsVisible: 1
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 1968811604}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 1
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &1424901072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7646,8 +7554,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2be7690b1afa24ab54f137c913fdfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionSound: {fileID: 0}
-  affectOutlinable: 1
 --- !u!1 &1467326733
 GameObject:
   m_ObjectHideFlags: 0
@@ -8373,11 +8279,6 @@ Transform:
 --- !u!1 &1597929639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1943131439197230872, guid: 7d1878558e0fff6448a938be5769b1f2, type: 3}
-  m_PrefabInstance: {fileID: 1597929637}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &1597929640 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7291385969823563470, guid: 7d1878558e0fff6448a938be5769b1f2, type: 3}
   m_PrefabInstance: {fileID: 1597929637}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1597929641
@@ -9795,11 +9696,6 @@ Transform:
 --- !u!1 &1968811603 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1637947447426100225, guid: e566dba3c22bf88439fe2608cac20cd2, type: 3}
-  m_PrefabInstance: {fileID: 1968811601}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &1968811604 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7385709412105359267, guid: e566dba3c22bf88439fe2608cac20cd2, type: 3}
   m_PrefabInstance: {fileID: 1968811601}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1968811605
