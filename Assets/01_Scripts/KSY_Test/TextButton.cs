@@ -28,7 +28,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     void Start()
     {
-        if (button = null)
+        if (button == null)
         {
             Debug.LogError("[TextButton] Button이 할당되지 않았습니다. Inspector에서 확인하세요.");
         }

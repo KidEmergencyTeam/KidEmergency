@@ -29,7 +29,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void Start()
     {
-        if (button = null)
+        if (button == null)
         {
             Debug.LogError("[TestButton2] Button이 할당되지 않았습니다.");
         }
