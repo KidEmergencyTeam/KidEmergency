@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FadeInOut : MonoBehaviour
 {
-    public float fadedTime = 0.5f; // FadeIn, FadeOut 총 소요 시간
+    [SerializeField] private float fadedTime = 0.5f; // FadeIn, FadeOut 총 소요 시간
     [SerializeField] private Image fadeInoutImg; // 페이드 효과를 줄 이미지
 
     [SerializeField] private bool isFadeIn; // 페이드 인 상태 확인
@@ -17,9 +17,10 @@ public class FadeInOut : MonoBehaviour
         {
             // 초기 알파 값 설정 (완전히 보이거나 투명하게)
             Color color = fadeInoutImg.color;
-            color.a = 0f; // 완전히 불투명 (0)으로 설정
+            color.a = 1f; // 완전히 불투명 (1)으로 설정
             fadeInoutImg.color = color;
         }
+        StartCoroutine(FadeIn());
     }
 
     public IEnumerator FadeIn()
