@@ -27,14 +27,15 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
 
-    // 텍스트 기본값 -> 텍스트 기본값 복원할 때 사용
+    // 텍스트 기본값 -> 텍스트 복원 시 사용
     private string originalText;
 
     // 텍스트 복원 코루틴의 중복 실행을 방지하기 위해 사용
     private Coroutine resetCoroutine;
 
-    // 레이가 버튼 위에 있는지 여부
-    private bool isRayHovering = false;
+    // 좌측, 우측 레이가 버튼 위에 있는지 여부
+    private bool isLeftRayHovering = false;
+    private bool isRightRayHovering = false;
 
     void Start()
     {
@@ -90,7 +91,6 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 이벤트 구독
     void OnDisable()
     {
         if (leftSelectAction != null)
@@ -105,34 +105,71 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 버튼 위에 레이가 있을 때 XR 컨트롤러의 Grip 입력이 발생하면 호출
+    // XR 입력 발생 시, 해당 컨트롤러의 레이가 버튼 위에 있는지 확인 후 클릭 이벤트 처리
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
-        if (isRayHovering)
+        // 좌측 컨트롤러 입력 && 좌측 레이가 버튼 위에 있을 경우 처리
+        if (context.action == leftSelectAction && isLeftRayHovering)
         {
-            // XR 입력 시 버튼 애니메이션 효과를 시뮬레이션하고 클릭 이벤트 호출
+            Debug.Log("[TextButton] 좌측 컨트롤러 입력 감지, 좌측 레이가 버튼 위에 있음.");
             StartCoroutine(TriggerButtonAnimationAndClick());
         }
+        // 우측 컨트롤러 입력 && 우측 레이가 버튼 위에 있을 경우 처리
+        else if (context.action == rightSelectAction && isRightRayHovering)
+        {
+            Debug.Log("[TextButton] 우측 컨트롤러 입력 감지, 우측 레이가 버튼 위에 있음.");
+            StartCoroutine(TriggerButtonAnimationAndClick());
+        }
+        else
+        {
+            Debug.Log("[TextButton] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
+        }
     }
 
-    // 버튼 위에 Ray가 진입할 때 호출
+    // 버튼 위에 레이가 진입하면, PointerEventData.pointerId를 통해 좌측/우측 구분
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isRayHovering = true;
-        Debug.Log("[TextButton] Ray가 버튼 위에 진입함: " + eventData.pointerEnter);
+        Debug.Log("[TextButton] Pointer Enter: pointerId " + eventData.pointerId);
+
+        // 좌측: pointerId 2 또는 9
+        if (eventData.pointerId == 2 || eventData.pointerId == 9)
+        {
+            isLeftRayHovering = true;
+            Debug.Log("[TextButton] 좌측 레이 진입");
+        }
+        // 우측: pointerId 5 또는 3
+        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        {
+            isRightRayHovering = true;
+            Debug.Log("[TextButton] 우측 레이 진입");
+        }
     }
 
-    // 버튼 영역을 벗어나면 일정 시간 후 원래 텍스트로 복원
+    // 버튼 영역을 벗어나면 해당 컨트롤러의 hovering 상태 업데이트
     public void OnPointerExit(PointerEventData eventData)
     {
-        isRayHovering = false;
-        Debug.Log("[TextButton] Ray가 버튼 영역에서 벗어남: " + eventData.pointerEnter);
+        Debug.Log("[TextButton] Pointer Exit: pointerId " + eventData.pointerId);
 
-        if (resetCoroutine != null)
+        if (eventData.pointerId == 2 || eventData.pointerId == 9)
         {
-            StopCoroutine(resetCoroutine);
+            isLeftRayHovering = false;
+            Debug.Log("[TextButton] 좌측 레이 벗어남");
         }
-        resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
+        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        {
+            isRightRayHovering = false;
+            Debug.Log("[TextButton] 우측 레이 벗어남");
+        }
+
+        // 두 레이 모두 버튼 위에 없으면 원래 텍스트 복원 코루틴 실행
+        if (!isLeftRayHovering && !isRightRayHovering)
+        {
+            if (resetCoroutine != null)
+            {
+                StopCoroutine(resetCoroutine);
+            }
+            resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
+        }
     }
 
     // XR 입력 시 버튼 애니메이션 및 클릭 처리
