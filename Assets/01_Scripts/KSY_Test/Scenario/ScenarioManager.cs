@@ -10,14 +10,15 @@ public class ScenarioManager : MonoBehaviour
 
     // typingEffect.cs에서 대사 출력 관리
     [Header("스크립트")]
-    public TypingEffect typingEffect; 
+    public TypingEffect typingEffect;
 
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
     [Header("씬 이름")]
-    public List<string> sceneNames; 
+    public List<string> sceneNames;
 
+    // 현재 시나리오 스텝을 나타냄
     private int currentStep = 1;
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
 
@@ -153,20 +154,59 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step10()
     {
         yield return PlayAndWait(6);
-        currentStep = 13 - 1;
+        currentStep = 13 - 1; // 현재 스텝을 12로 정정 -> 따라서 6번 대사 이후 스텝 13번부터 시작
     }
     IEnumerator Step11() { yield return null; }
     IEnumerator Step12()
     {
-        yield return PlayAndWait(7);
-        currentStep = 13 - 1;
+        yield return PlayAndWait(7); 
+        currentStep = 13 - 1; // 현재 스텝을 12로 정정 -> 따라서 6번 대사 이후 스텝 13번부터 시작
     }
     IEnumerator Step13() { yield return PlayAndWait(8); }
-    IEnumerator Step14() { yield return null; }
+
+    // 스텝14에서 플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
+    // PlayerPosition.cs -> destinationPositions 리스트에 담긴 플레이어 수만큼 이동이 완료되면
+    // 다음 스텝으로 이동
+    IEnumerator Step14() 
+    {
+        // PlayerPosition 컴포넌트를 씬에서 찾음
+        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
+        if (playerPosition == null)
+        {
+            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // destinationPositions 리스트에 등록된 값이 있는지 확인
+        if (playerPosition.destinationPositions == null || playerPosition.destinationPositions.Count == 0)
+        {
+            Debug.LogError("destinationPositions 리스트가 비어있습니다.");
+            yield break;
+        }
+
+        // 예시로 첫 번째 목적지를 가져옴
+        Destination destination = playerPosition.destinationPositions[0];
+
+        // 태그 "Player"를 가진 플레이어를 찾음
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("플레이어를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 플레이어가 목표 위치와 회전에 도달할 때까지 부드럽게 이동
+        yield return StartCoroutine(MovePlayerToDestination(player, destination));
+
+        // 도착 후 다음 스텝 진행
+        yield return null;
+    }
+
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
         ChangeScene(0); // 교실 -> 복도 (sceneNames[0])
+        yield return null;
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
     IEnumerator Step17() { yield return PlayAndWait(11); }
@@ -208,44 +248,23 @@ public class ScenarioManager : MonoBehaviour
         ChangeScene(1); // 복도 -> 계단/엘리베이터 (sceneNames[1])
     }
     IEnumerator Step29() { yield return PlayAndWait(19); }
-    IEnumerator Step30()
-    {
-        yield return PlayAndWait(20);
-
-        int selected = 0;
-        // 2번 패널(예: 계단 vs 엘리베이터)
-        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, r => {
-            selected = r;
-        }));
-
-        if (selected == 1)
-            currentStep = 31 - 1;
-        else
-            currentStep = 33 - 1;
-    }
+    IEnumerator Step30() { yield return PlayAndWait(20); }
     IEnumerator Step31() { yield return null; }
-    IEnumerator Step32()
-    {
-        yield return PlayAndWait(21);
-        currentStep = 35 - 1;
-    }
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35 - 1; }
     IEnumerator Step33() { yield return null; }
-    IEnumerator Step34()
-    {
-        yield return PlayAndWait(22);
-        currentStep = 35 - 1;
-    }
+    IEnumerator Step34() { yield return PlayAndWait(22); currentStep = 35 - 1; }
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
         ChangeScene(2); // 계단/엘리베이터 -> 운동장 (sceneNames[2])
+        yield return null;
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
     IEnumerator Step37() { yield return PlayAndWait(25); }
 
     #endregion
 
-    // 씬 전환 함수
+    // 씬 전환 
     void ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
@@ -257,5 +276,22 @@ public class ScenarioManager : MonoBehaviour
         {
             Debug.LogError($"유효하지 않은 씬 인덱스: {sceneIndex}");
         }
+    }
+
+    // 플레이어를 목적지로 부드럽게 이동 (목표 위치와 회전 적용)
+    IEnumerator MovePlayerToDestination(GameObject player, Destination destination)
+    {
+        // 플레이어가 문까지 이동하는 속도
+        float speed = 3f; 
+
+        // 목적지 위치에 도달할 때까지 부드럽게 이동
+        while (Vector3.Distance(player.transform.position, destination.position) > 0.1f)
+        {
+            player.transform.position = Vector3.MoveTowards(player.transform.position, destination.position, speed * Time.deltaTime);
+            yield return null;
+        }
+        // 최종 위치와 회전 적용
+        player.transform.position = destination.position;
+        player.transform.rotation = Quaternion.Euler(destination.rotation);
     }
 }
