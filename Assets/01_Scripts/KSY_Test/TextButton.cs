@@ -1,57 +1,39 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems; // IPointerEnterHandler, IPointerExitHandler 사용
+using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections;
-using UnityEngine.InputSystem; // 새로운 XR Input System 사용
+using UnityEngine.InputSystem; 
 
 public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
-    public TextMeshProUGUI displayText;
     public Button button;
+    public TextMeshProUGUI displayText;
 
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    // InputActionAsset -> Select 불러오기, 기본값임
     [Header("XRI Default Input Actions 내에서 Select(Grip) 액션의 이름")]
     public string selectActionName = "Select";
 
     private InputAction selectAction;
-
-    // 원래 텍스트 및 코루틴 관리 변수
     private string originalText;
     private Coroutine resetCoroutine;
-
-    // XR Ray Interactor가 버튼 위에 있는지 여부 (디버그용)
     private bool isRayHovering = false;
 
-    // OnButtonClick() 호출 여부를 인스펙터에서 확인하기 위한 변수
     [Header("디버그 (호출 여부)")]
     [SerializeField]
     private bool buttonClicked = false;
 
     void Start()
     {
-        // Button 할당 확인 및 OnClick 이벤트 등록
-        if (button != null)
-        {
-            Debug.Log("[TextButton] Button 할당됨: " + button.name);
-            button.onClick.AddListener(OnButtonClick);
-        }
-        else
+        if (button = null)
         {
             Debug.LogError("[TextButton] Button이 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
 
-        // displayText 할당 확인 및 원래 텍스트 저장
-        if (displayText != null)
-        {
-            Debug.Log("[TextButton] displayText 할당됨: " + displayText.name);
-            originalText = displayText.text;
-        }
-        else
+        if (displayText = null)
         {
             Debug.LogError("[TextButton] displayText가 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
@@ -61,7 +43,6 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (inputActionAsset != null)
         {
-            // inputActionAsset에서 selectActionName에 해당하는 액션을 찾음 -> 그립 버튼 처리를 위한 개념
             selectAction = inputActionAsset.FindAction(selectActionName, true);
             if (selectAction != null)
             {
@@ -89,32 +70,32 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // XR Input System의 Select(Grip) 액션이 수행되었을 때 호출
+    // XR 입력(그립 버튼) 수행 시 호출
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
         Debug.Log("[TextButton] Select(Grip) 액션 performed. isRayHovering: " + isRayHovering);
         if (isRayHovering)
         {
             Debug.Log("[TextButton] Grip 버튼 입력 및 Ray Hovering 상태, 버튼 클릭 처리");
-            // UI Button의 OnClick 이벤트 호출
-            button.onClick.Invoke();
+
+            // XR 입력 시 버튼 애니메이션 효과를 시뮬레이션 후 클릭 처리
+            StartCoroutine(TriggerButtonAnimationAndClick());
         }
     }
 
-    // XR Ray Interactor가 버튼 위로 진입 시 호출 (IPointerEnterHandler)
+    // 버튼 위에 Ray가 진입 시 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
         isRayHovering = true;
         Debug.Log("[TextButton] Ray가 버튼 위에 진입함: " + eventData.pointerEnter);
     }
 
-    // XR Ray Interactor가 버튼 영역에서 벗어날 때 호출 (IPointerExitHandler)
+    // 버튼 영역을 벗어나면 일정 시간 후 원래 텍스트로 복원
     public void OnPointerExit(PointerEventData eventData)
     {
         isRayHovering = false;
         Debug.Log("[TextButton] Ray가 버튼 영역에서 벗어남: " + eventData.pointerEnter);
 
-        // 버튼 영역에서 벗어나면 일정 시간 후 원래 텍스트 복원 및 buttonClicked 리셋
         if (resetCoroutine != null)
         {
             StopCoroutine(resetCoroutine);
@@ -122,12 +103,33 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
     }
 
-    // UI Button의 OnClick 이벤트에 의해 호출
+    // XR 입력 시 버튼 애니메이션 및 클릭 처리
+    private IEnumerator TriggerButtonAnimationAndClick()
+    {
+        // 포인터 이벤트 데이터 생성 
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            pointerPress = button.gameObject
+        };
+
+        // pointer down 이벤트 시뮬레이션 (버튼 눌림 애니메이션 시작)
+        ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
+
+        // 눌림 효과를 보여주기 위해 잠시 대기 (예: 0.1초)
+        yield return new WaitForSeconds(0.1f);
+
+        // pointer up 이벤트 시뮬레이션 (버튼 눌림 애니메이션 종료)
+        ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
+
+        // 버튼 클릭 처리
+        OnButtonClick();
+    }
+
+    // XR 입력 시 호출
     public void OnButtonClick()
     {
-        // 버튼 클릭 시 호출 여부를 나타내는 변수 true로 변경
         buttonClicked = true;
-        Debug.Log("[TextButton] OnButtonClick() 호출됨 (UI Button 클릭 이벤트).");
+        Debug.Log("[TextButton] OnButtonClick() 호출됨 (XR 입력에 의한 호출).");
 
         if (displayText != null)
         {
@@ -146,7 +148,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 2초 후 원래 텍스트로 복원하고 buttonClicked를 false로 리셋하는 코루틴
+    // 2초 후 원래 텍스트로 복원하는 코루틴
     IEnumerator ResetTextAndButtonCoroutine()
     {
         yield return new WaitForSeconds(2f);
