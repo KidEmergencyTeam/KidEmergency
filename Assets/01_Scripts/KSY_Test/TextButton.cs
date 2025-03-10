@@ -20,6 +20,9 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("우측 Select: XRI RightHand Interaction/Select")]
     public string rightSelectActionName = "XRI RightHand Interaction/Select";
 
+    [Header("디버그 (호출 여부)")]
+    public bool buttonClicked = false;
+
     // 좌측 및 우측 Select 액션 저장
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
@@ -32,10 +35,6 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     // 레이가 버튼 위에 있는지 여부
     private bool isRayHovering = false;
-
-    [Header("디버그 (호출 여부)")]
-    [SerializeField]
-    private bool buttonClicked = false;
 
     void Start()
     {
