@@ -117,18 +117,19 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             yield break;
         }
 
+        // 포인터 이벤트 데이터 생성
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
             pointerPress = button.gameObject
         };
 
-        // pointer down 이벤트 시뮬레이션 (버튼 눌림 효과 시작)
+        // 버튼 누름 효과 시작
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
 
         // 애니메이션 효과를 위해 잠시 대기 (0.1초)
         yield return new WaitForSeconds(0.1f);
 
-        // pointer up 이벤트 시뮬레이션 (버튼 눌림 효과 종료)
+        // 버튼 누름 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
         // 버튼 클릭 이벤트 호출

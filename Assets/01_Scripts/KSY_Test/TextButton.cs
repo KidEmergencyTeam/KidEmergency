@@ -136,9 +136,15 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
     }
 
-    // XR 입력 시 버튼 애니메이션 및 클릭 효과 시뮬레이션
+    // XR 입력 시 버튼 애니메이션 및 클릭 처리
     private IEnumerator TriggerButtonAnimationAndClick()
     {
+        if (EventSystem.current == null)
+        {
+            Debug.LogError("[TextButton] EventSystem.current가 null입니다.");
+            yield break;
+        }
+
         // 포인터 이벤트 데이터 생성
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
@@ -147,10 +153,14 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         // 버튼 누름 효과 시작
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
+
+        // 애니메이션 효과를 위해 잠시 대기 (0.1초)
         yield return new WaitForSeconds(0.1f);
+
         // 버튼 누름 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
+        // 버튼 클릭 이벤트 호출
         OnButtonClick();
     }
 
