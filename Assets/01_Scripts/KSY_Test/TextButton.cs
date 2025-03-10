@@ -8,17 +8,17 @@ using UnityEngine.InputSystem; // 새로운 XR Input System 사용
 public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
-    public TextMeshProUGUI displayText;  
-    public Button button;                
+    public TextMeshProUGUI displayText;
+    public Button button;
 
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
     // InputActionAsset -> Select 불러오기, 기본값임
     [Header("XRI Default Input Actions 내에서 Select(Grip) 액션의 이름")]
-    public string selectActionName = "Select";   
-    
-    private InputAction selectAction;             
+    public string selectActionName = "Select";
+
+    private InputAction selectAction;
 
     // 원래 텍스트 및 코루틴 관리 변수
     private string originalText;
@@ -26,6 +26,11 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     // XR Ray Interactor가 버튼 위에 있는지 여부 (디버그용)
     private bool isRayHovering = false;
+
+    // OnButtonClick() 호출 여부를 인스펙터에서 확인하기 위한 변수
+    [Header("디버그 (호출 여부)")]
+    [SerializeField]
+    private bool buttonClicked = false;
 
     void Start()
     {
@@ -109,18 +114,21 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         isRayHovering = false;
         Debug.Log("[TextButton] Ray가 버튼 영역에서 벗어남: " + eventData.pointerEnter);
 
-        // 버튼 영역에서 벗어나면 일정 시간 후 원래 텍스트 복원
+        // 버튼 영역에서 벗어나면 일정 시간 후 원래 텍스트 복원 및 buttonClicked 리셋
         if (resetCoroutine != null)
         {
             StopCoroutine(resetCoroutine);
         }
-        resetCoroutine = StartCoroutine(ResetTextCoroutine());
+        resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
     }
 
     // UI Button의 OnClick 이벤트에 의해 호출
     public void OnButtonClick()
     {
+        // 버튼 클릭 시 호출 여부를 나타내는 변수 true로 변경
+        buttonClicked = true;
         Debug.Log("[TextButton] OnButtonClick() 호출됨 (UI Button 클릭 이벤트).");
+
         if (displayText != null)
         {
             displayText.text = "버튼 클릭 처리 완료!";
@@ -130,7 +138,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 StopCoroutine(resetCoroutine);
             }
-            resetCoroutine = StartCoroutine(ResetTextCoroutine());
+            resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
         }
         else
         {
@@ -138,8 +146,8 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 2초 후 원래 텍스트로 복원하는 코루틴
-    IEnumerator ResetTextCoroutine()
+    // 2초 후 원래 텍스트로 복원하고 buttonClicked를 false로 리셋하는 코루틴
+    IEnumerator ResetTextAndButtonCoroutine()
     {
         yield return new WaitForSeconds(2f);
         if (displayText != null)
@@ -147,6 +155,8 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             displayText.text = originalText;
             Debug.Log("[TextButton] displayText 원래 텍스트로 복원됨: " + originalText);
         }
+        buttonClicked = false;
+        Debug.Log("[TextButton] buttonClicked 값이 false로 설정됨.");
         resetCoroutine = null;
     }
 }
