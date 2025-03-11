@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
+// 선택지 버튼 처리 관련 스크립트
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("버튼")]
@@ -25,8 +26,9 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
 
-    // 레이가 버튼 위에 있는지 여부
-    private bool isRayHovering = false;
+    // 좌측, 우측 레이가 버튼 위에 있는지 여부
+    private bool isLeftRayHovering = false;
+    private bool isRightRayHovering = false;
 
     void Start()
     {
@@ -36,16 +38,18 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    // 이벤트 구독
     void OnEnable()
     {
         if (inputActionAsset != null)
         {
-            // 좌측 액션 구독 및 활성화
+            // 좌측 액션 구독 및 활성화 
             leftSelectAction = inputActionAsset.FindAction(leftSelectActionName, true);
             if (leftSelectAction != null)
             {
                 leftSelectAction.performed += OnSelectPerformed;
                 leftSelectAction.Enable();
+                Debug.Log("[TextButton2] '" + leftSelectActionName + "' 액션 구독 및 활성화됨.");
             }
             else
             {
@@ -58,6 +62,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 rightSelectAction.performed += OnSelectPerformed;
                 rightSelectAction.Enable();
+                Debug.Log("[TextButton2] '" + rightSelectActionName + "' 액션 구독 및 활성화됨.");
             }
             else
             {
@@ -70,7 +75,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 이벤트 구독
+    // 이벤트 구독 해제
     void OnDisable()
     {
         if (leftSelectAction != null)
@@ -85,26 +90,57 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 버튼 위에 레이가 있을 때 XR 컨트롤러의 Grip 입력이 발생하면 호출
+    // 버튼 위에 레이가 있을 때, 해당 컨트롤러의 입력이 발생하면 처리
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
-        if (isRayHovering)
+        // 좌측 레이가 버튼 위에 있고 좌측 입력이 발생하거나,
+        // 우측 레이가 버튼 위에 있고 우측 입력이 발생할 경우
+        if ((context.action == leftSelectAction && isLeftRayHovering) ||
+            (context.action == rightSelectAction && isRightRayHovering))
         {
-            // XR 입력 시 버튼 애니메이션 효과를 시뮬레이션하고 클릭 이벤트 호출
+            // XR입력 시 버튼 애니메이션 효과를 적용하고 버튼 이벤트 호출
             StartCoroutine(TriggerButtonAnimationAndClick());
+        }
+        else
+        {
+            Debug.Log("[TestButton2] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
         }
     }
 
-    // 버튼 위에 레이가 진입 시 호출
+    // 버튼 위에 레이가 진입하면, PointerEventData.pointerId를 통해 좌측/우측 구분
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isRayHovering = true;
+        Debug.Log("[TestButton2] Pointer Enter: pointerId " + eventData.pointerId);
+
+        // 좌측: pointerId 2 또는 9
+        if (eventData.pointerId == 2 || eventData.pointerId == 9)
+        {
+            isLeftRayHovering = true;
+            Debug.Log("[TestButton2] 좌측 레이 진입");
+        }
+        // 우측: pointerId 5 또는 3
+        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        {
+            isRightRayHovering = true;
+            Debug.Log("[TestButton2] 우측 레이 진입");
+        }
     }
 
-    // 버튼 영역을 벗어나면 호출
+    // 버튼 영역을 벗어나면 해당 컨트롤러의 hovering 상태 업데이트
     public void OnPointerExit(PointerEventData eventData)
     {
-        isRayHovering = false;
+        Debug.Log("[TestButton2] Pointer Exit: pointerId " + eventData.pointerId);
+
+        if (eventData.pointerId == 2 || eventData.pointerId == 9)
+        {
+            isLeftRayHovering = false;
+            Debug.Log("[TestButton2] 좌측 레이 벗어남");
+        }
+        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        {
+            isRightRayHovering = false;
+            Debug.Log("[TestButton2] 우측 레이 벗어남");
+        }
     }
 
     // XR 입력 시 버튼 애니메이션 및 클릭 처리
@@ -138,6 +174,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 처리
     public void OnButtonClick()
     {
+        // 버튼 클릭 시, ChoiceVoteManager.cs(선택지 선택 관련 스크립트) 내에서 선택지 처리를 진행함
+        // 따라서 TestButton2.cs에서는 버튼 클릭 시 이벤트만 불러오면 됨.
         buttonClicked = true;
         Debug.Log("[TestButton2] OnButtonClick() 호출됨.");
     }
