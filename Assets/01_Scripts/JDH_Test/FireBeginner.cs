@@ -85,6 +85,8 @@ public class FireBeginner : MonoBehaviour
                 //피난 유도선 테두리 강조
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 thirdDialog.gameObject.SetActive(true);
+                //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인
+                
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 SceneManager.LoadScene("JDH3");
                 break;
