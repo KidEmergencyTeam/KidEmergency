@@ -23,6 +23,9 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("디버그 (호출 여부)")]
     public bool buttonClicked = false;
 
+    [Header("포인터 ID 관리 스크립트")]
+    public PlayerPointerId pointerId;
+
     // 좌측 및 우측 Select 액션 저장
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
@@ -32,9 +35,6 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     // 텍스트 복원 코루틴의 중복 실행을 방지하기 위해 사용
     private Coroutine resetCoroutine;
-
-    // 플레이어 오브젝트의 pointerId 값을 확인하기 위해 참조
-    private PlayerPointerId pointerId;
 
     // 좌측, 우측 레이가 버튼 위에 있는지 여부
     private bool isLeftRayHovering = false;
@@ -51,17 +51,16 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             Debug.LogError("[TextButton] displayText가 할당되지 않았습니다. Inspector에서 확인하세요.");
         }
+
+        if (pointerId == null)
+        {
+            Debug.LogError("[TestButton2] PlayerPointerId가 할당되지 않았습니다.");
+        }
+
         else
         {
             // 원래 텍스트 값을 저장
             originalText = displayText.text;
-        }
-
-        // 씬 내에서 PlayerPointerId 스크립트를 찾아 할당
-        pointerId = FindObjectOfType<PlayerPointerId>();
-        if (pointerId == null)
-        {
-            Debug.LogError("[TextButton] PlayerPointerId 찾을 수 없습니다. 플레이어 오브젝트에 해당 스크립트를 추가하세요.");
         }
     }
 
@@ -166,17 +165,20 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else
         {
-            Debug.LogWarning("[TextButton] pointerConfig가 할당되지 않음");
+            Debug.LogWarning("[TextButton] PlayerPointerId가 할당되지 않음");
         }
     }
 
     // 버튼 영역을 벗어나면 해당 컨트롤러의 hovering 상태 업데이트
     public void OnPointerExit(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 영역을 벗어나면, Id 값 디버그 출력
         Debug.Log("[TextButton] Pointer Exit: pointerId " + eventData.pointerId);
 
+        // pointerId 있으면 실행
         if (pointerId != null)
         {
+            // 좌측 포인터 ID 배열에 포함되어 있는지 확인
             foreach (int id in pointerId.leftPointerIds)
             {
                 if (eventData.pointerId == id)
@@ -186,6 +188,8 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                     break;
                 }
             }
+
+            // 우측 포인터 ID 배열에 포함되어 있는지 확인
             foreach (int id in pointerId.rightPointerIds)
             {
                 if (eventData.pointerId == id)
@@ -198,7 +202,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else
         {
-            Debug.LogWarning("[TextButton] pointerConfig가 할당되지 않음");
+            Debug.LogWarning("[TextButton] PlayerPointerId가 할당되지 않음");
         }
 
         // 두 레이 모두 버튼 위에 없으면 원래 텍스트 복원 코루틴 실행
