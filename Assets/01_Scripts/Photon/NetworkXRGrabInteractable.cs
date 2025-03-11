@@ -31,12 +31,12 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (!Runner.IsServer && !networkObject.HasStateAuthority)
 		{
-			networkObject.RequestStateAuthority(); // 플레이어가 잡으면 네트워크 권한 요청
+			networkObject.RequestStateAuthority();
 		}
 
 		isGrabbed = true;
 		grabberTransform = args.interactorObject.transform;
-		rb.isKinematic = true; // XRGrabInteractable 특성상 kinematic 설정 필요
+		rb.isKinematic = true;
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
@@ -48,13 +48,26 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 
 		isGrabbed = false;
 		grabberTransform = null;
-		rb.isKinematic = false; // 물리 활성화
+		rb.isKinematic = false;
 	}
 
 	private void FixedUpdate()
 	{
-		if (isGrabbed && grabberTransform != null && networkObject.HasStateAuthority)
+		Debug.Log(
+			$"isGrabbed: {isGrabbed}, grabberTransform: {grabberTransform}, HasStateAuthority: {networkObject.HasStateAuthority}");
+
+		if (isGrabbed && grabberTransform != null)
 		{
+			if (!networkObject.HasStateAuthority)
+			{
+				Debug.LogError("권한이 없습니다!"); // 권한이 없을 때 에러 로그 출력
+				return;
+			}
+
+			// 로그 추가: grabberTransform의 위치와 회전 출력
+			Debug.Log(
+				$"Grabber Position: {grabberTransform.position}, Rotation: {grabberTransform.rotation}");
+
 			// 네트워크 상에서 Rigidbody를 이동시키도록 처리
 			rb.MovePosition(grabberTransform.position);
 			rb.MoveRotation(grabberTransform.rotation);
