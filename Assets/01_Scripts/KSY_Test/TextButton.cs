@@ -43,6 +43,22 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     void Start()
     {
+        // 씬에서 태그가 "Player"인 오브젝트를 찾아 pointerIds 리스트에 할당
+        if (pointerIds == null || pointerIds.Count == 0)
+        {
+            pointerIds = new List<PlayerPointerId>();
+            GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in playerObjects)
+            {
+                PlayerPointerId pointer = player.GetComponent<PlayerPointerId>();
+                if (pointer != null)
+                {
+                    pointerIds.Add(pointer);
+                }
+            }
+            Debug.Log("[TextButton] Player 태그의 오브젝트에서 PlayerPointerId 컴포넌트를 자동으로 할당하였습니다.");
+        }
+
         if (button == null)
         {
             Debug.LogError("[TextButton] Button이 할당되지 않았습니다. Inspector에서 확인하세요.");
@@ -221,6 +237,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // XR 입력 시 버튼 애니메이션 및 클릭 처리
     private IEnumerator TriggerButtonAnimationAndClick()
     {
+        // EventSystem이 존재하는지 확인
         if (EventSystem.current == null)
         {
             Debug.LogError("[TextButton] EventSystem.current가 null입니다.");
