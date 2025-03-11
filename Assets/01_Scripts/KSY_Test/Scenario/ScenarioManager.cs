@@ -164,11 +164,17 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step13() { yield return PlayAndWait(8); }
 
-    // 스텝14에서 플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
-    // PlayerPosition.cs -> destinationPositions 리스트에 담긴 플레이어 수만큼 이동이 완료되면
-    // 다음 스텝으로 이동
+    // 대사가 출력되고 나서 
+    // 손수건 오브젝트 활성화
+    // 완료되면 스텝14로 이동
+
     IEnumerator Step14() 
     {
+        // 1.손수건 잡기
+        // 2.플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
+        // PlayerPosition.cs -> destinationPositions 리스트에 담긴 플레이어 수만큼 이동이 완료되면
+        // 다음 스텝으로 이동
+
         // PlayerPosition 컴포넌트를 씬에서 찾음
         PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
         if (playerPosition == null)
