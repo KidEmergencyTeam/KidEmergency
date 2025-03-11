@@ -26,7 +26,7 @@ public class FireBeginner : MonoBehaviour
     [SerializeField] private Image RightImg;
     [SerializeField] private Sprite leftChangeImg;
     [SerializeField] private Sprite rightChangeImg;
-    [SerializeField] private TextMeshProUGUI exampleText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
     [Header("진행상황 체크 변수")]
     public bool isFirstStepRdy;
