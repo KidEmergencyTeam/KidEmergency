@@ -1,5 +1,10 @@
 using UnityEngine;
 
+// 컨트롤러의 레이가 버튼을 향했을 때,
+// 처리되는 값을
+// 좌측으로 처리할 건지 우측으로 처리할 건지 구분해주는 스크립트
+// 좋은 방법은 아니라고 생각
+
 public class PlayerPointerId : MonoBehaviour
 {
     // 좌측 포인터 ID 열거형
@@ -17,7 +22,6 @@ public class PlayerPointerId : MonoBehaviour
         LeftPointer8,
         LeftPointer9,
         LeftPointer10,
-
 
         // 필요한 만큼 추가 가능
     }
