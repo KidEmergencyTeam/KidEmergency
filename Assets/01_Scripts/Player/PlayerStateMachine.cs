@@ -68,14 +68,17 @@ public class PlayerStateMachine
 			case PlayerState.Hold:
 				_currentState = new HoldState();
 				break;
-			case PlayerState.Walk:
-				_currentState = new WalkState();
-				break;
 			case PlayerState.Push:
 				_currentState = new PushState();
 				break;
 			case PlayerState.Bow:
 				_currentState = new BowState();
+				break;
+			case PlayerState.Down:
+				_currentState = new DownState();
+				break;
+			case PlayerState.Up:
+				_currentState = new UpState();
 				break;
 		}
 	}

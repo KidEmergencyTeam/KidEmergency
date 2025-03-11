@@ -7,9 +7,10 @@ public enum PlayerState
 	Button,
 	Pick,
 	Hold,
-	Walk,
 	Push,
-	Bow
+	Bow,
+	Down,
+	Up
 }
 
 // 특정 시나리오별 플레이어 상태 흐름을 저장하는 데이터 클래스
@@ -19,21 +20,32 @@ public static class ModeStateData
 		new Dictionary<string, List<PlayerState>>
 		{
 			{
-				"FireKinder",
-				new List<PlayerState>
+				"Test", new List<PlayerState>
 				{
-					PlayerState.None, PlayerState.Button, PlayerState.Pick,
-					PlayerState.Hold, PlayerState.Walk, PlayerState.Button,
-					PlayerState.Bow, PlayerState.Button
+					PlayerState.None, PlayerState.Bow, PlayerState.Button
 				}
 			},
 			{
-				"FireSchool",
-				new List<PlayerState>
+				"FireKinder", new List<PlayerState>
 				{
 					PlayerState.None, PlayerState.Button, PlayerState.Pick,
-					PlayerState.Hold, PlayerState.Walk, PlayerState.Push, PlayerState.Bow,
+					PlayerState.Hold, PlayerState.Button, PlayerState.Bow,
+					PlayerState.Button
+				}
+			},
+			{
+				"FireSchool", new List<PlayerState>
+				{
+					PlayerState.None, PlayerState.Button, PlayerState.Pick,
+					PlayerState.Hold, PlayerState.Push, PlayerState.Bow,
 					PlayerState.Button, PlayerState.Button
+				}
+			},
+			{
+				"EarthKinder", new List<PlayerState>
+				{
+					PlayerState.None, PlayerState.Button, PlayerState.Down,
+					PlayerState.Up, PlayerState.Pick, PlayerState.Hold
 				}
 			}
 		};
