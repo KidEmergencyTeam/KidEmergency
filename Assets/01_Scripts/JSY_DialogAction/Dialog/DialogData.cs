@@ -21,7 +21,9 @@ public class DialogData : ScriptableObject
         [Tooltip("선택 후 다음 대화(Dialog Data) 설정")]
         public DialogData nextOptionDialog; 
         [Tooltip("선택 후 실행할 액션(Action Type) 설정")]
-        public ActionType choiceOptionNextActionType;    
+        public ActionType choiceOptionNextActionType;
+        [Tooltip("이 선택지가 정답인지")]
+        public bool isAnswer;
     }
     
     [Tooltip("대화가 끝난 후 실행될 선택지 설정(없으면 비워두세요)")]
