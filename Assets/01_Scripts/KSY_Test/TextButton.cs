@@ -55,6 +55,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
+    // 이벤트 구독
     void OnEnable()
     {
         if (inputActionAsset != null)
@@ -91,6 +92,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
+    // 이벤트 구독 해제
     void OnDisable()
     {
         if (leftSelectAction != null)
@@ -105,24 +107,20 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // XR 입력 발생 시, 해당 컨트롤러의 레이가 버튼 위에 있는지 확인 후 클릭 이벤트 처리
+    // 버튼 위에 레이가 있을 때, 해당 컨트롤러의 입력이 발생하면 처리
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
-        // 좌측 컨트롤러 입력 && 좌측 레이가 버튼 위에 있을 경우 처리
-        if (context.action == leftSelectAction && isLeftRayHovering)
+        // 좌측 레이가 버튼 위에 있고 좌측 입력이 발생하거나,
+        // 우측 레이가 버튼 위에 있고 우측 입력이 발생할 경우
+        if ((context.action == leftSelectAction && isLeftRayHovering) ||
+            (context.action == rightSelectAction && isRightRayHovering))
         {
-            Debug.Log("[TextButton] 좌측 컨트롤러 입력 감지, 좌측 레이가 버튼 위에 있음.");
-            StartCoroutine(TriggerButtonAnimationAndClick());
-        }
-        // 우측 컨트롤러 입력 && 우측 레이가 버튼 위에 있을 경우 처리
-        else if (context.action == rightSelectAction && isRightRayHovering)
-        {
-            Debug.Log("[TextButton] 우측 컨트롤러 입력 감지, 우측 레이가 버튼 위에 있음.");
+            // XR입력 시 버튼 애니메이션 효과를 적용하고 버튼 이벤트 호출
             StartCoroutine(TriggerButtonAnimationAndClick());
         }
         else
         {
-            Debug.Log("[TextButton] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
+            Debug.Log("[TestButton2] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
         }
     }
 
