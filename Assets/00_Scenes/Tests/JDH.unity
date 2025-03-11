@@ -3885,6 +3885,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 327445258}
+  - component: {fileID: 327445259}
   m_Layer: 0
   m_Name: SecondDialog
   m_TagString: Untagged
@@ -3907,6 +3908,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1601429998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &327445259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327445257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c06dd9e1a40ee4980c06e4f1edfb16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speakers:
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  dialogs:
+  - dialogIndex: 0
+    Name: "\uC138\uD2F0"
+    dialogue: "\uC5B4? \uB2E4\uB978 \uAD50\uC2E4\uC5D0 \uBD88\uC774 \uB09C\uAC70\uAC19\uC544
+      \uC9C0\uAE08\uBD80\uD130 \uB300\uD53C \uC900\uBE44\uB97C \uD558\uC790"
+  - dialogIndex: 1
+    Name: "\uC138\uD2F0"
+    dialogue: "\uD639\uC2DC \uBAB8\uC744 \uC6C0\uC9C1\uC774\uAE30 \uC5B4\uB824\uC6B4\uAC70
+      \uAC19\uC73C\uBA74 \uB098\uB098 \uC120\uC0DD\uB2D8\uD55C\uD14C \uAF2D! \uB9D0\uD574\uC918"
+  - dialogIndex: 2
+    Name: "\uC138\uD2F0"
+    dialogue: "\uB0B4\uAC00 \uCC45\uC0C1 \uC704\uC5D0 \uC816\uC740 \uC190\uC218\uAC74\uC744
+      \uC62C\uB824 \uB1A8\uC5B4"
+  - dialogIndex: 3
+    Name: "\uC138\uD2F0"
+    dialogue: "\uC190\uC218\uAC74\uC73C\uB85C \uCF54\uC640 \uC785\uC744 \uAC00\uB9AC\uACE0
+      \uBB38\uC55E\uC73C\uB85C \uC904\uC744 \uC11C\uC11C \uC785\uC744 \uAC00\uB824\uC918!"
+  isAutoStart: 1
+  typingSpeed: 0.1
+  dialogDelay: 2
+  isDialogsEnd: 0
 --- !u!1 &331756251
 GameObject:
   m_ObjectHideFlags: 0
@@ -8127,7 +8174,7 @@ MonoBehaviour:
   - {fileID: 1617812778}
   - {fileID: 1582297355}
   fadeInOutImg: {fileID: 1636215198}
-  okBtn: {fileID: 0}
+  okBtn: {fileID: 833531086}
   exampleUi: {fileID: 927232435}
   Handkerchief: {fileID: 2518169980483839766, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
   HandkerchiefSpawnPos: {fileID: 1425986809}
@@ -8138,9 +8185,9 @@ MonoBehaviour:
   descriptionText: {fileID: 518355756}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
-  firstDialog: {fileID: 0}
-  secondDialog: {fileID: 0}
-  thirdDialog: {fileID: 0}
+  firstDialog: {fileID: 1321544152}
+  secondDialog: {fileID: 327445259}
+  thirdDialog: {fileID: 761118860}
 --- !u!1 &696992932
 GameObject:
   m_ObjectHideFlags: 0
@@ -8496,6 +8543,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753348668}
   m_CullTransparentMesh: 0
+--- !u!1 &761118858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 761118859}
+  - component: {fileID: 761118860}
+  m_Layer: 0
+  m_Name: thirdDialog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &761118859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761118858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1601429998}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &761118860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761118858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c06dd9e1a40ee4980c06e4f1edfb16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speakers:
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  - dialogImage: {fileID: 1111980732}
+    textName: {fileID: 1697149980}
+    textDialogue: {fileID: 1686035128}
+  dialogs:
+  - dialogIndex: 0
+    Name: "\uC138\uD2F0"
+    dialogue: "\uBAA8\uB450 \uC9C8\uC11C\uC788\uAC8C \uC904\uC744 \uC130\uB2C8? \uCF54\uB791
+      \uC785\uC740 \uC798 \uAC00\uB838\uACE0?"
+  - dialogIndex: 1
+    Name: "\uC138\uD2F0"
+    dialogue: "\uB9CC\uC57D\uC5D0 \uC190\uC218\uAC74\uC774 \uC5C6\uB2E4\uBA74 \uC190\uC774\uB098
+      \uC637\uC73C\uB85C \uCF54\uB791 \uC785\uC744 \uB9C9\uACE0 \uB300\uD53C\uD574\uB3C4
+      \uB418\uB2C8\uAE4C \uAD1C\uCC2E\uC544!"
+  - dialogIndex: 2
+    Name: "\uC138\uD2F0"
+    dialogue: "\uBC16\uC73C\uB85C \uB098\uAC08\uB54C\uB294 \uC785\uACFC \uCF54\uB97C
+      \uAC00\uB9AC\uACE0 \uBAB8\uC744 \uC219\uC5EC\uC11C \uC774\uB3D9\uD574\uC57C\uD574"
+  - dialogIndex: 3
+    Name: "\uC138\uD2F0"
+    dialogue: "\uC548 \uADF8\uB7EC\uBA74 \uB098\uC05C \uC5F0\uAE30\uB97C \uB9C8\uC154\uC11C
+      \uBAB8\uC774 \uC544\uD50C \uC218\uB3C4 \uC788\uC5B4"
+  - dialogIndex: 3
+    Name: "\uC138\uD2F0"
+    dialogue: "\uADF8\uB7FC \uC774\uC81C \uBC16\uC73C\uB85C \uB098\uAC00\uBCFC\uAE4C?"
+  isAutoStart: 1
+  typingSpeed: 0.1
+  dialogDelay: 2
+  isDialogsEnd: 0
 --- !u!1 &761651263
 GameObject:
   m_ObjectHideFlags: 0
@@ -9557,7 +9689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 927232436}
   m_Layer: 5
-  m_Name: Example_UI
+  m_Name: Example_Desc_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15314,7 +15446,7 @@ MonoBehaviour:
       \uC6B8\uC74C\uC774 \uB098\uB3C4 \uAFB9 \uCC38\uC544\uBCF4\uC790~"
   - dialogIndex: 3
     Name: "\uC138\uD2F0"
-    dialogue: "\uADF8\uB7FC \uC2DC\uC791~"
+    dialogue: "\uADF8\uB7FC \uC2DC\uC791\uD560\uAED8!"
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2
@@ -21542,6 +21674,7 @@ Transform:
   m_Children:
   - {fileID: 1321544151}
   - {fileID: 327445258}
+  - {fileID: 761118859}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1603753115

@@ -15,7 +15,7 @@ public class FireBeginner : MonoBehaviour
     public GameObject[] NPC;
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
-    public GameObject exampleUi;
+    public GameObject exampleDescUi;
     public GameObject Handkerchief;
 
     [Header("상호작용 혹은 위치 이동 지점")]
