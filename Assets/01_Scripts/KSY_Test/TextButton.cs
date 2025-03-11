@@ -33,6 +33,9 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // 텍스트 복원 코루틴의 중복 실행을 방지하기 위해 사용
     private Coroutine resetCoroutine;
 
+    // 플레이어 오브젝트의 pointerId 값을 확인하기 위해 참조
+    private PlayerPointerId pointerId;
+
     // 좌측, 우측 레이가 버튼 위에 있는지 여부
     private bool isLeftRayHovering = false;
     private bool isRightRayHovering = false;
@@ -52,6 +55,13 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             // 원래 텍스트 값을 저장
             originalText = displayText.text;
+        }
+
+        // 씬 내에서 PlayerPointerId 스크립트를 찾아 할당
+        pointerId = FindObjectOfType<PlayerPointerId>();
+        if (pointerId == null)
+        {
+            Debug.LogError("[TextButton] PlayerPointerId 찾을 수 없습니다. 플레이어 오브젝트에 해당 스크립트를 추가하세요.");
         }
     }
 
@@ -120,27 +130,43 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else
         {
-            Debug.Log("[TestButton2] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
+            Debug.Log("[TextButton] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
         }
     }
 
-    // 버튼 위에 레이가 진입하면, PointerEventData.pointerId를 통해 좌측/우측 구분
-    // eventData.pointerId: 이벤트가 발생한 포인터를 식별하는 역할
+    // 버튼 위에 레이가 진입하면, 포인터 ID를 확인하여 좌측/우측 구분
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 진입하면, Id 값 디버그 출력
         Debug.Log("[TextButton] Pointer Enter: pointerId " + eventData.pointerId);
 
-        // 좌측: pointerId 2 또는 9
-        if (eventData.pointerId == 2 || eventData.pointerId == 9)
+        // pointerId 있으면 실행
+        if (pointerId != null)
         {
-            isLeftRayHovering = true;
-            Debug.Log("[TextButton] 좌측 레이 진입");
+            // 좌측 포인터 ID 배열에 포함되어 있는지 확인
+            foreach (int id in pointerId.leftPointerIds)
+            {
+                if (eventData.pointerId == id)
+                {
+                    isLeftRayHovering = true;
+                    Debug.Log("[TextButton] 좌측 레이 진입");
+                    break;
+                }
+            }
+            // 우측 포인터 ID 배열에 포함되어 있는지 확인
+            foreach (int id in pointerId.rightPointerIds)
+            {
+                if (eventData.pointerId == id)
+                {
+                    isRightRayHovering = true;
+                    Debug.Log("[TextButton] 우측 레이 진입");
+                    break;
+                }
+            }
         }
-        // 우측: pointerId 5 또는 3
-        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        else
         {
-            isRightRayHovering = true;
-            Debug.Log("[TextButton] 우측 레이 진입");
+            Debug.LogWarning("[TextButton] pointerConfig가 할당되지 않음");
         }
     }
 
@@ -149,15 +175,30 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         Debug.Log("[TextButton] Pointer Exit: pointerId " + eventData.pointerId);
 
-        if (eventData.pointerId == 2 || eventData.pointerId == 9)
+        if (pointerId != null)
         {
-            isLeftRayHovering = false;
-            Debug.Log("[TextButton] 좌측 레이 벗어남");
+            foreach (int id in pointerId.leftPointerIds)
+            {
+                if (eventData.pointerId == id)
+                {
+                    isLeftRayHovering = false;
+                    Debug.Log("[TextButton] 좌측 레이 벗어남");
+                    break;
+                }
+            }
+            foreach (int id in pointerId.rightPointerIds)
+            {
+                if (eventData.pointerId == id)
+                {
+                    isRightRayHovering = false;
+                    Debug.Log("[TextButton] 우측 레이 벗어남");
+                    break;
+                }
+            }
         }
-        else if (eventData.pointerId == 5 || eventData.pointerId == 3)
+        else
         {
-            isRightRayHovering = false;
-            Debug.Log("[TextButton] 우측 레이 벗어남");
+            Debug.LogWarning("[TextButton] pointerConfig가 할당되지 않음");
         }
 
         // 두 레이 모두 버튼 위에 없으면 원래 텍스트 복원 코루틴 실행
