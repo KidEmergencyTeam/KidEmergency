@@ -17,10 +17,9 @@ public class FadeInOut : MonoBehaviour
         {
             // 초기 알파 값 설정 (완전히 보이거나 투명하게)
             Color color = fadeInoutImg.color;
-            color.a = 1f; // 완전히 불투명 (1)으로 설정
+            color.a = 0f; // 완전히 투명 (0)으로 설정
             fadeInoutImg.color = color;
         }
-        StartCoroutine(FadeIn());
     }
 
     public IEnumerator FadeIn()
