@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// 빈슬롯에 플레이어를 추가하여 
+// 초기 위치에 플레이어를 배치 또는
+// 시나리오 도중 
+// 특정 위치로 플레이어를 배치 시키는 스크립트
 [System.Serializable]
 public class PlayerEntry
 {
