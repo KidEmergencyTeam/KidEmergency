@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HighlightObjectAction : MonoBehaviour, IActionEffect
@@ -9,14 +8,31 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     
     public void StartAction()
     {
-        throw new System.NotImplementedException();
+        _isComplete = false;
+        SetHighlightEffect(ActionManager.Instance.currentDialog);
+        _isComplete = true;
     }
 
-    private void SetObject(DialogData dialogData)
+    private void SetHighlightEffect(DialogData dialogData)
     {
-        for (int i = 0; i < dialogData.objects.Length; i++)
+        DeleteAllHighlightEffects();
+        
+        if (dialogData.objects != null)
         {
-            // dialogData.objects[i].AddComponent
+            foreach (GameObject obj in dialogData.objects)
+            {
+                if (obj != null)
+                {
+
+                }
+            }
         }
+    }
+
+    private void DeleteAllHighlightEffects()
+    {
+        // GameObject[] outlineObj = 게임오브젝ㅌ.파인드오브젝트오브ㅏ입<아웃라인에셋>
+        // foreach(GameObjcet obj in GameObject outlineObj)
+        // Destroy(obj) ?
     }
 }

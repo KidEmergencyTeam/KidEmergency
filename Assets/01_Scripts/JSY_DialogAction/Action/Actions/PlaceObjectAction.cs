@@ -1,31 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlaceObjectAction : MonoBehaviour, IActionEffect
 {
-    public GameObject bag;
-    public GameObject pencilCase;
-    public GameObject textbook;
+    private bool _isComplete = false;
+    public bool IsActionComplete => _isComplete;
     
-    private bool isComplete = false;
-    public bool IsActionComplete => isComplete;
     public void StartAction()
     {
-       SetObject();
-       isComplete = false;
+        _isComplete = false;
+        SetObjects(ActionManager.Instance.currentDialog);
+        _isComplete = true;
     }
 
-    public void StopAction()
+    private void SetObjects(DialogData dialogData)
     {
-        isComplete = true;
-    }
-
-
-    private void SetObject()
-    {
-        Instantiate(bag);
-        Instantiate(pencilCase);
-        Instantiate(textbook);
+        if (dialogData.objects != null)
+        {
+            foreach (GameObject prefab in dialogData.objects)
+            {
+                if (prefab != null)
+                {
+                    Instantiate(prefab);
+                }
+            }
+        }
     }
 }
