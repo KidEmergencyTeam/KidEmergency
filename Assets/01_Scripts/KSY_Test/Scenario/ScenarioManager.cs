@@ -85,7 +85,8 @@ public class ScenarioManager : MonoBehaviour
             { 34, Step34 },
             { 35, Step35 },
             { 36, Step36 },
-            { 37, Step37 }
+            { 37, Step37 },
+            { 38, Step38 },
         };
 
         // 시나리오 시작
@@ -267,6 +268,7 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
     IEnumerator Step37() { yield return PlayAndWait(25); }
+    IEnumerator Step38() { yield return PlayAndWait(26); }
 
     #endregion
 
