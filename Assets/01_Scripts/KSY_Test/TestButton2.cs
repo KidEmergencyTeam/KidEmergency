@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -22,7 +23,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public bool buttonClicked = false;
 
     [Header("포인터 ID 관리 스크립트")]
-    public PlayerPointerId pointerId;
+    // 단일 PlayerPointerId 대신 여러 개의 PlayerPointerId를 받을 수 있도록 리스트 사용
+    public List<PlayerPointerId> pointerIds;
 
     // 좌측 및 우측 Select 액션 저장
     private InputAction leftSelectAction;
@@ -39,9 +41,9 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Debug.LogError("[TestButton2] Button이 할당되지 않았습니다.");
         }
 
-        if (pointerId == null)
+        if (pointerIds == null || pointerIds.Count == 0)
         {
-            Debug.LogError("[TestButton2] PlayerPointerId가 할당되지 않았습니다.");
+            Debug.LogError("[TestButton2] PlayerPointerId 리스트가 할당되지 않았거나 비어있습니다.");
         }
     }
 
@@ -105,7 +107,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if ((context.action == leftSelectAction && isLeftRayHovering) ||
             (context.action == rightSelectAction && isRightRayHovering))
         {
-            // XR입력 시 버튼 애니메이션 효과를 적용하고 버튼 이벤트 호출
+            // XR 입력 시 버튼 애니메이션 효과를 적용하고 버튼 이벤트 호출
             StartCoroutine(TriggerButtonAnimationAndClick());
         }
         else
@@ -114,79 +116,86 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 버튼 위에 레이가 진입하면, 포인터 ID를 확인하여 좌측/우측 구분
+    // 버튼 위에 레이가 진입하면, 리스트에 등록된 각 PlayerPointerId를 확인하여 좌측/우측 구분
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // 버튼 위에 레이가 진입하면, Id 값 디버그 출력
+        // 단순하게 버튼 위에 레이가 진입하면, Id 값 디버그 출력 -> 세세하게 x
         Debug.Log("[TestButton2] Pointer Enter: pointerId " + eventData.pointerId);
 
-        // pointerId 있으면 실행
-        if (pointerId != null)
+        // pointerIds 리스트가 null이 아니고 하나 이상의 요소를 포함하고 있을 경우 실행
+        if (pointerIds != null && pointerIds.Count > 0)
         {
-            // 좌측 포인터 ID 배열에 포함되어 있는지 확인
-            foreach (int id in pointerId.leftPointerIds)
+            // pointerIds 리스트에 있는 각 PlayerPointerId 객체를 순회하며 처리
+            foreach (var pointer in pointerIds)
             {
-                if (eventData.pointerId == id)
+                // 좌측 포인터 ID 배열에 포함되어 있는지 확인
+                foreach (int id in pointer.leftPointerIds)
                 {
-                    isLeftRayHovering = true;
-                    Debug.Log("[TestButton2] 좌측 레이 진입");
-                    break;
+                    if (eventData.pointerId == id)
+                    {
+                        isLeftRayHovering = true;
+                        Debug.Log("[TestButton2] 좌측 레이 진입");
+                        break;
+                    }
                 }
-            }
 
-            // 우측 포인터 ID 배열에 포함되어 있는지 확인
-            foreach (int id in pointerId.rightPointerIds)
-            {
-                if (eventData.pointerId == id)
+                // 우측 포인터 ID 배열에 포함되어 있는지 확인
+                foreach (int id in pointer.rightPointerIds)
                 {
-                    isRightRayHovering = true;
-                    Debug.Log("[TestButton2] 우측 레이 진입");
-                    break;
+                    if (eventData.pointerId == id)
+                    {
+                        isRightRayHovering = true;
+                        Debug.Log("[TestButton2] 우측 레이 진입");
+                        break;
+                    }
                 }
             }
         }
         else
         {
-            Debug.LogWarning("[TextButton] PlayerPointerId가 할당되지 않음");
+            Debug.LogWarning("[TestButton2] PlayerPointerId 리스트가 할당되지 않았거나 비어있음");
         }
     }
 
     // 버튼 영역을 벗어나면 해당 컨트롤러의 hovering 상태 업데이트
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 버튼 위에 레이가 영역을 벗어나면, Id 값 디버그 출력
+        // 단순하게 버튼 위에 레이가 영역을 벗어나면, Id 값 디버그 출력 -> 세세하게 x
         Debug.Log("[TestButton2] Pointer Exit: pointerId " + eventData.pointerId);
 
-        // pointerId 있으면 실행
-        if (pointerId == null)
+        // pointerIds 리스트가 null이 아니고 하나 이상의 요소를 포함하고 있을 경우 실행
+        if (pointerIds != null && pointerIds.Count > 0)
         {
-            // 좌측 포인터 ID 배열에 포함되어 있는지 확인
-            foreach (int id in pointerId.leftPointerIds)
+            // pointerIds 리스트에 있는 각 PlayerPointerId 객체를 순회하며 처리
+            foreach (var pointer in pointerIds)
             {
-                if (eventData.pointerId == id)
+                // 좌측 포인터 ID 배열에 포함되어 있는지 확인
+                foreach (int id in pointer.leftPointerIds)
                 {
-                    isLeftRayHovering = false;
-                    Debug.Log("[TestButton2] 좌측 레이 벗어남");
-                    break;
+                    if (eventData.pointerId == id)
+                    {
+                        isLeftRayHovering = false;
+                        Debug.Log("[TestButton2] 좌측 레이 벗어남");
+                        break;
+                    }
                 }
-            }
 
-            // 우측 포인터 ID 배열에 포함되어 있는지 확인
-            foreach (int id in pointerId.rightPointerIds)
-            {
-                if (eventData.pointerId == id)
+                // 우측 포인터 ID 배열에 포함되어 있는지 확인
+                foreach (int id in pointer.rightPointerIds)
                 {
-                    isRightRayHovering = false;
-                    Debug.Log("[TestButton2] 우측 레이 벗어남");
-                    break;
+                    if (eventData.pointerId == id)
+                    {
+                        isRightRayHovering = false;
+                        Debug.Log("[TestButton2] 우측 레이 벗어남");
+                        break;
+                    }
                 }
             }
         }
         else
         {
-            Debug.LogWarning("[TestButton2] PlayerPointerId가 할당되지 않음");
+            Debug.LogWarning("[TestButton2] PlayerPointerId 리스트가 할당되지 않았거나 비어있음");
         }
-        
     }
 
     // XR 입력 시 버튼 애니메이션 및 클릭 처리
