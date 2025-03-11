@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 	private PlayerState _currentState;
+	public bool isHolding = false;
+	public bool isBowing = false;
 
 	private void Start()
 	{

@@ -19,8 +19,13 @@ public static class ModeStateData
 		new Dictionary<string, List<PlayerState>>
 		{
 			{
-				"FireKinder",
-				new List<PlayerState>
+				"Test", new List<PlayerState>
+				{
+					PlayerState.None, PlayerState.Bow, PlayerState.Button
+				}
+			},
+			{
+				"FireKinder", new List<PlayerState>
 				{
 					PlayerState.None, PlayerState.Button, PlayerState.Pick,
 					PlayerState.Hold, PlayerState.Walk, PlayerState.Button,
@@ -28,8 +33,7 @@ public static class ModeStateData
 				}
 			},
 			{
-				"FireSchool",
-				new List<PlayerState>
+				"FireSchool", new List<PlayerState>
 				{
 					PlayerState.None, PlayerState.Button, PlayerState.Pick,
 					PlayerState.Hold, PlayerState.Walk, PlayerState.Push, PlayerState.Bow,
