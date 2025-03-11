@@ -68,7 +68,7 @@ public class PlayerReady : MonoBehaviour
         }
     }
 
-    // 플레이어 준비 완료 처리 및 불 함수 실행
+    // 플레이어 준비 완료 처리
     void RegisterReady()
     {
         if (IsReady)
@@ -77,10 +77,7 @@ public class PlayerReady : MonoBehaviour
         IsReady = true;
         Debug.Log(gameObject.name + " 준비 완료!");
 
-        // 여기서 불 함수를 실행할 수 있습니다.
-        // 예를 들어, 불 효과 애니메이션을 재생하거나 불 이펙트를 활성화하는 코드를 넣을 수 있음
-
-        // 준비 완료 이벤트 발생
+        // 준비 완료 
         onPlayerReady?.Invoke();
     }
 }
