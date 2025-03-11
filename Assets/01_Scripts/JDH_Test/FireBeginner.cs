@@ -56,7 +56,7 @@ public class FireBeginner : MonoBehaviour
                 LeftImg.sprite = leftChangeImg;
                 RightImg.sprite = rightChangeImg;
                 yield return new WaitUntil(() => isFirstStepRdy == true);
-                exampleUi.SetActive(true);
+                exampleDescUi.SetActive(true);
 
                 //책상에 손수건 생성
                 GameObject HandkerchiefObj = Instantiate(Handkerchief, HandkerchiefSpawnPos.position, Quaternion.identity);
