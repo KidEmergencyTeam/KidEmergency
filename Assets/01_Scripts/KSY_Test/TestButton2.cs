@@ -108,6 +108,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     // 버튼 위에 레이가 진입하면, PointerEventData.pointerId를 통해 좌측/우측 구분
+    // eventData.pointerId: 이벤트가 발생한 포인터를 식별하는 역할
     public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("[TestButton2] Pointer Enter: pointerId " + eventData.pointerId);
