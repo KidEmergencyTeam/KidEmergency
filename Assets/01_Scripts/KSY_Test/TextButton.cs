@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
-using System.Collections;
 using UnityEngine.InputSystem;
+using System.Collections;
+using TMPro;
 
 public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
