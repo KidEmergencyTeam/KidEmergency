@@ -3,8 +3,10 @@ using Fusion;
 using Fusion.Addons.Physics;
 using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(XRGrabInteractable), typeof(NetworkObject), typeof(Rigidbody))]
+[RequireComponent(typeof(XRGrabInteractable))]
 [RequireComponent(typeof(NetworkRigidbody3D))]
+[RequireComponent(typeof(NetworkObject))]
+[RequireComponent(typeof(Rigidbody))]
 public class NetworkedXRGrabInteractable : NetworkBehaviour
 {
 	private XRGrabInteractable grabInteractable;
