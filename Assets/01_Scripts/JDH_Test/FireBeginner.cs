@@ -61,7 +61,7 @@ public class FireBeginner : MonoBehaviour
                 //책상에 손수건 생성
                 GameObject HandkerchiefObj = Instantiate(Handkerchief, HandkerchiefSpawnPos.position, Quaternion.identity);
                 //손으로 손수건 잡으면 왼손에 고정
-
+                Debug.Log(":)");
                 //유저 입 주변에 손수건 접촉 시 입과 코를 가린 것으로 판정
 
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
