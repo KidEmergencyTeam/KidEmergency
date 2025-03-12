@@ -61,11 +61,8 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (_isGrabbed)
 		{
-			if (HasStateAuthority)
-			{
-				transform.position = Pos;
-				transform.rotation = Rot;
-			}
+			transform.position = Pos;
+			transform.rotation = Rot;
 		}
 	}
 }
