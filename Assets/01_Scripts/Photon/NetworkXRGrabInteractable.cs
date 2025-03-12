@@ -1,6 +1,7 @@
 using UnityEngine;
 using Fusion;
 using Fusion.Addons.Physics;
+using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(XRGrabInteractable))]
@@ -11,12 +12,12 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 {
 	[Networked] public Vector3 Pos { get; set; }
 	[Networked] public Quaternion Rot { get; set; }
+	[Networked] public NetworkBool IsGrabbed { get; set; } = false;
 
 	private XRGrabInteractable _grabInteractable;
 	private NetworkObject _networkObject;
 	private Rigidbody _rb;
 	private NetworkRigidbody3D _networkRb;
-	private bool _isGrabbed = false;
 	private GameObject _grabber;
 
 	private void Awake()
@@ -32,7 +33,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 
 	private void OnGrab(SelectEnterEventArgs args)
 	{
-		_isGrabbed = true;
+		IsGrabbed = true;
 		_rb.isKinematic = true;
 		_grabber = args.interactor.gameObject;
 		print($"{_grabber.name} is grabbed");
@@ -41,13 +42,13 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private void OnRelease(SelectExitEventArgs args)
 	{
 		_rb.isKinematic = false;
-		_isGrabbed = false;
+		IsGrabbed = false;
 		_grabber = null;
 	}
 
 	public override void FixedUpdateNetwork()
 	{
-		if (_isGrabbed)
+		if (IsGrabbed)
 		{
 			if (_grabber)
 			{
@@ -59,7 +60,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 
 	public override void Render()
 	{
-		if (_isGrabbed)
+		if (IsGrabbed)
 		{
 			transform.position = Pos;
 			transform.rotation = Rot;
