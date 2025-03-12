@@ -16,12 +16,10 @@ public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public void OnPointerEnter(PointerEventData eventData)
     { 
         outline.color = Color.green;
-        print("버튼 클릭 가능한 범위에 들어옴~");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         outline.color = _originalOutlineColor;
-        print("버튼 클릭 가능한 범위 벗어남~");
     }
 }

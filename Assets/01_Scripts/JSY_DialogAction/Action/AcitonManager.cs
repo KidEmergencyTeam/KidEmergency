@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {    
@@ -10,8 +11,10 @@ public class ActionManager : SingletonManager<ActionManager>
     public DialogData currentDialog;
     
     [Header("액션")]
-    public EarthquakeAction earthquakeAction;
-    public UnderTheDeskAction underTheDeskAction;
+    public ShowOptionAction showOptionAction;
+    public ChangeSceneAction changeSceneAction;
+    public EarthquakeAction earthquakeAction; 
+    public ChangeViewAction changeViewAction;
     public PlaceObjectAction placeObjectAction;
     public HighlightObjectAction highlightObjectAction;
     public FixingBagAction fixingBagAction;
@@ -50,16 +53,19 @@ public class ActionManager : SingletonManager<ActionManager>
                 break;
             
             case ActionType.ShowOption:
-                SetOption();
-                if (currentDialog.nextDialog != null)
+                if (showOptionAction != null)
                 {
-                    OnActionComplete?.Invoke();
+                    showOptionAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(showOptionAction));
                 }
                 break;
             
             case ActionType.ChangeScene:
-                ChangeScene();
-                Invoke("ActionCompleted", 2f);
+                if (changeSceneAction != null)
+                {
+                    changeSceneAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(changeSceneAction));
+                }
                 break;
             
             case ActionType.Earthquake:
@@ -70,11 +76,11 @@ public class ActionManager : SingletonManager<ActionManager>
                 }
                 break;
             
-            case ActionType.UnderTheDesk:
-                if (underTheDeskAction != null)
+            case ActionType.ChangeView:
+                if (changeViewAction != null)
                 {
-                    underTheDeskAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(underTheDeskAction));
+                    changeViewAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(changeViewAction));
                 }
                 break;
             
@@ -109,23 +115,19 @@ public class ActionManager : SingletonManager<ActionManager>
     private IEnumerator WaitForActionComplete(IActionEffect effect)
     {
         yield return new WaitUntil(() => effect.IsActionComplete);
-        print("이제 대사창 띄움~");
-        OnActionComplete?.Invoke();
-    }
-    
-    private void SetOption()
-    {
-        for (int i = 0; i < currentDialog.choices.Length; i++)
+        if (currentDialog.dialogs != null)
         {
-            if (UIManager.Instance.optionUI[i])
-            {
-                UIManager.Instance.SetOptionUI();
-            }
+            print("액션 끝 이제 대사창 띄움~");
+            Invoke("ActionEventComplete", 1f);
+        }
+        else
+        {
+            print("현재 다이얼로그에 대사가 없음");
         }
     }
 
-    private void ChangeScene()
+    private void ActionEventComplete()
     {
-        SceneManager.LoadScene(beforeDialog.nextScene);
+        OnActionComplete?.Invoke();
     }
 }
