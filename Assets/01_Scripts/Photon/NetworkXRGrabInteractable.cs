@@ -1,7 +1,6 @@
 using UnityEngine;
 using Fusion;
 using Fusion.Addons.Physics;
-using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(XRGrabInteractable))]
@@ -35,7 +34,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		IsGrabbed = true;
 		_rb.isKinematic = true;
-		_grabber = args.interactor.gameObject;
+		_grabber = args.interactorObject.transform.gameObject;
 		print($"{_grabber.name} is grabbed");
 	}
 
@@ -54,16 +53,14 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 			{
 				Pos = transform.position;
 				Rot = transform.rotation;
+				print(
+					$"Position: {_networkObject.transform.position}, Rotation: {_networkObject.transform.rotation}");
+				print($"Position: {Pos}, Rotation: {Rot}");
 			}
 		}
 	}
 
 	public override void Render()
 	{
-		if (IsGrabbed)
-		{
-			transform.position = Pos;
-			transform.rotation = Rot;
-		}
 	}
 }
