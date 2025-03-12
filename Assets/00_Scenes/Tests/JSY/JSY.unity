@@ -768,6 +768,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 154242853}
+  - component: {fileID: 154242860}
+  - component: {fileID: 154242859}
   - component: {fileID: 154242858}
   - component: {fileID: 154242856}
   - component: {fileID: 154242855}
@@ -822,9 +824,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a63a094774720440b39e307f0c756b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bag: {fileID: 8806578472060376272, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
-  pencilCase: {fileID: 7606364618781336797, guid: 3e6d395ede9391b43a2b2763ea998e4a, type: 3}
-  textbook: {fileID: 392699434499584645, guid: b435cddc98d712a4f82a00bd5918dcc9, type: 3}
 --- !u!114 &154242856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,6 +868,30 @@ MonoBehaviour:
   objectShakeDuration: 4.5
   rbObjects: []
   lightObject: {fileID: 776687966}
+--- !u!114 &154242859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154242852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd328306a9095b4d9b6c855aa5a2f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &154242860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154242852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2bf80370676fc44895fc220fea424d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &164887616
 GameObject:
   m_ObjectHideFlags: 0
@@ -5997,8 +6020,10 @@ MonoBehaviour:
   currentAction: 0
   beforeDialog: {fileID: 0}
   currentDialog: {fileID: 11400000, guid: 7bfc3696d5fa1544eaf368648813a502, type: 2}
+  showOptionAction: {fileID: 154242860}
+  changeSceneAction: {fileID: 154242859}
   earthquakeAction: {fileID: 154242858}
-  underTheDeskAction: {fileID: 154242854}
+  changeViewAction: {fileID: 154242854}
   placeObjectAction: {fileID: 154242855}
   highlightObjectAction: {fileID: 154242856}
   fixingBagAction: {fileID: 154242857}
