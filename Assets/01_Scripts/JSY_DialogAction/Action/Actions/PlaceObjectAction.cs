@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlaceObjectAction : MonoBehaviour, IActionEffect
@@ -8,7 +9,7 @@ public class PlaceObjectAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        SetObjects(ActionManager.Instance.currentDialog);
+        SetObjects(ActionManager.Instance.beforeDialog);
         _isComplete = true;
     }
 
@@ -25,4 +26,5 @@ public class PlaceObjectAction : MonoBehaviour, IActionEffect
             }
         }
     }
+    
 }

@@ -10,7 +10,7 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     {
         _isComplete = false;
         SetHighlightEffect(ActionManager.Instance.currentDialog);
-        _isComplete = true;
+        _isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
     }
 
     private void SetHighlightEffect(DialogData dialogData)
@@ -23,7 +23,7 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
             {
                 if (obj != null)
                 {
-
+                    print("아무튼 오브젝트 강조 됨");
                 }
             }
         }

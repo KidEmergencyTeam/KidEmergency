@@ -32,14 +32,14 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         while (shakeDuration > 0 || objectShakeDuration > 0)
         {
-            TestEQ();
+            EarthquakeStart();
             yield return null;
         }
         
         isComplete = true;
     }
 
-    private void TestEQ()
+    private void EarthquakeStart()
     {
         if (shakeDuration > 0 && cameraParent != null)
         {

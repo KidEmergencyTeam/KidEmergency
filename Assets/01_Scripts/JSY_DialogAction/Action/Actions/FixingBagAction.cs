@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class FixingBagAction : MonoBehaviour, IActionEffect
 {
+    private bool isComplete = false;
+    public bool IsActionComplete => isComplete;
+
     public void StartAction()
     {
-        throw new System.NotImplementedException();
+        isComplete = false;
+        TestAction();
+        isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
     }
 
-    public void StopAction()
+
+    private void TestAction()
     {
-        throw new System.NotImplementedException();
+        print("가방 고정됨");
     }
-
-    public bool IsActionComplete { get; }
 }
