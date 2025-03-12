@@ -17,7 +17,9 @@ public class FireBeginner : MonoBehaviour
     public bool isEarthquake;
 
     [Header("NPC 및 상호작용 오브젝트")]
-    public GameObject[] NPC;
+    public GameObject player;   //싱글 플레이어 위치
+    public GameObject seti;
+    public GameObject[] NPC;    //멀티 플레이어 위치
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
     public GameObject exampleDescUi;
@@ -28,6 +30,9 @@ public class FireBeginner : MonoBehaviour
     public Transform playerMovPos;
     public Transform setiMovPos;
     public Transform[] npcMovPos;
+
+    [Header("사용하는 파티클")]
+    public ParticleSystem smokeParticle;
 
     [Header("ExampleUI 변경 이미지 관련 변수")]
     [SerializeField] private Image LeftImg;
@@ -74,6 +79,7 @@ public class FireBeginner : MonoBehaviour
 
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
                 Debug.Log("플레이어 NPC 위치 이동");
+                TeleportCharacters();
                 //왼손이 지정한 범위에서 떨어질 경우 손수건이 떨어진 판정(경고 UI 출력: 손수건으로 입과 코를 가려줘!)   
 
                 //플레이어와 NPC가 이동하고 입과 코를 가린 것으로 판정되면
@@ -109,5 +115,30 @@ public class FireBeginner : MonoBehaviour
                 break;
 
         }
+    }
+    void TeleportCharacters()
+    {
+        // 플레이어 즉시 이동
+        if (playerMovPos != null)
+        {
+            player.transform.position = playerMovPos.position;
+        }
+
+        // 세티 즉시 이동
+        if (setiMovPos != null)
+        {
+            seti.transform.position = setiMovPos.position;
+        }
+
+        // NPC 즉시 이동
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcMovPos.Length > i && npcMovPos[i] != null)
+            {
+                NPC[i].transform.position = npcMovPos[i].position;
+            }
+        }
+
+        Debug.Log("플레이어 및 NPC 텔레포트 완료");
     }
 }
