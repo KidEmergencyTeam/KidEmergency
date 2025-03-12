@@ -17,7 +17,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private Rigidbody _rb;
 	private NetworkRigidbody3D _networkRb;
 	private bool _isGrabbed = false;
-	private NetworkObject _grabber;
+	private GameObject _grabber;
 
 	private void Awake()
 	{
@@ -34,7 +34,8 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		_isGrabbed = true;
 		_rb.isKinematic = true;
-		_grabber = args.interactor.GetComponent<NetworkObject>();
+		_grabber = args.interactor.gameObject;
+		print($"{_grabber.name} is grabbed");
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
@@ -48,7 +49,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (_isGrabbed)
 		{
-			if (_grabber.HasInputAuthority)
+			if (_grabber)
 			{
 				Pos = transform.position;
 				Rot = transform.rotation;
