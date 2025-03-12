@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnderTheDeskAction : MonoBehaviour, IActionEffect
+public class ChangeViewAction : MonoBehaviour, IActionEffect
 {
     public float fadeDuration = 2f;
     public Image fadeEffect;
@@ -15,10 +15,10 @@ public class UnderTheDeskAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        AllAction();
+        ViewChange();
     }
     
-    private void AllAction()
+    private void ViewChange()
     {
         _currentCoroutine = StartCoroutine(Fade(0,1,fadeDuration)); 
         StartCoroutine(WaitForAction());
@@ -27,7 +27,7 @@ public class UnderTheDeskAction : MonoBehaviour, IActionEffect
     private IEnumerator WaitForAction()
     {
         yield return _currentCoroutine;
-        ChangeView();
+        SetView(ActionManager.Instance.beforeDialog.viewValue);
         _currentCoroutine = StartCoroutine(Fade(1,0,fadeDuration));
         _isComplete = true;
     }
@@ -52,10 +52,10 @@ public class UnderTheDeskAction : MonoBehaviour, IActionEffect
         _currentCoroutine = null;
     }
     
-    private void ChangeView()
+    private void SetView(float value)
     {
         Vector3 changeCameraPos = xrCamParent.transform.position;
-        changeCameraPos.y -= 0.8f; // 씬에서 테스트 후 값 변경하면 됨
+        changeCameraPos.y += value; // 씬에서 테스트 후 값 변경하면 됨
         xrCamParent.transform.position = changeCameraPos;
     }
     
