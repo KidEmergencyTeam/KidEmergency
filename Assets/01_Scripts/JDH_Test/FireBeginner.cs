@@ -11,6 +11,11 @@ public class FireBeginner : MonoBehaviour
 
     [Header("장소 상태")]
     public PLACE place;
+
+    [Header("화재인지 지진인지 확인하는 변수")]
+    public bool isFireBeginner;
+    public bool isEarthquake;
+
     [Header("NPC 및 상호작용 오브젝트")]
     public GameObject[] NPC;
     public FadeInOut fadeInOutImg;
@@ -20,6 +25,9 @@ public class FireBeginner : MonoBehaviour
 
     [Header("상호작용 혹은 위치 이동 지점")]
     public Transform HandkerchiefSpawnPos;
+    public Transform playerMovPos;
+    public Transform setiMovPos;
+    public Transform[] npcMovPos;
 
     [Header("ExampleUI 변경 이미지 관련 변수")]
     [SerializeField] private Image LeftImg;
@@ -61,11 +69,11 @@ public class FireBeginner : MonoBehaviour
                 //책상에 손수건 생성
                 GameObject HandkerchiefObj = Instantiate(Handkerchief, HandkerchiefSpawnPos.position, Quaternion.identity);
                 //손으로 손수건 잡으면 왼손에 고정
-                Debug.Log(":)");
+                Debug.Log("손수건 고정 완료");
                 //유저 입 주변에 손수건 접촉 시 입과 코를 가린 것으로 판정
 
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
-
+                Debug.Log("플레이어 NPC 위치 이동");
                 //왼손이 지정한 범위에서 떨어질 경우 손수건이 떨어진 판정(경고 UI 출력: 손수건으로 입과 코를 가려줘!)   
 
                 //플레이어와 NPC가 이동하고 입과 코를 가린 것으로 판정되면
