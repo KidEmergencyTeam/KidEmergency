@@ -9,6 +9,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Rigidbody))]
 public class NetworkedXRGrabInteractable : NetworkBehaviour
 {
+	[Networked] public Vector3 Pos { get; set; }
+	[Networked] public Quaternion Rot { get; set; }
+
 	private XRGrabInteractable _grabInteractable;
 	private NetworkObject _networkObject;
 	private Rigidbody _rb;
@@ -43,8 +46,22 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 
 	public override void FixedUpdateNetwork()
 	{
-		if (_isGrabbed && _grabber.HasInputAuthority)
+		if (_isGrabbed)
 		{
+			if (_grabber.HasInputAuthority)
+			{
+				Pos = transform.position;
+				Rot = transform.rotation;
+			}
+		}
+	}
+
+	public override void Render()
+	{
+		if (HasStateAuthority)
+		{
+			transform.position = Pos;
+			transform.rotation = Rot;
 		}
 	}
 }
