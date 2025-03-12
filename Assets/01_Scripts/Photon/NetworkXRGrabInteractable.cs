@@ -9,68 +9,42 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Rigidbody))]
 public class NetworkedXRGrabInteractable : NetworkBehaviour
 {
-	private XRGrabInteractable grabInteractable;
-	private NetworkObject networkObject;
-	private Rigidbody rb;
-	private NetworkRigidbody3D networkRb;
-	private Transform grabberTransform;
-	private bool isGrabbed = false;
+	private XRGrabInteractable _grabInteractable;
+	private NetworkObject _networkObject;
+	private Rigidbody _rb;
+	private NetworkRigidbody3D _networkRb;
+	private bool _isGrabbed = false;
+	private NetworkObject _grabber;
 
 	private void Awake()
 	{
-		grabInteractable = GetComponent<XRGrabInteractable>();
-		networkObject = GetComponent<NetworkObject>();
-		rb = GetComponent<Rigidbody>();
-		networkRb = GetComponent<NetworkRigidbody3D>();
+		_grabInteractable = GetComponent<XRGrabInteractable>();
+		_networkObject = GetComponent<NetworkObject>();
+		_rb = GetComponent<Rigidbody>();
+		_networkRb = GetComponent<NetworkRigidbody3D>();
 
-		grabInteractable.selectEntered.AddListener(OnGrab);
-		grabInteractable.selectExited.AddListener(OnRelease);
+		_grabInteractable.selectEntered.AddListener(OnGrab);
+		_grabInteractable.selectExited.AddListener(OnRelease);
 	}
 
 	private void OnGrab(SelectEnterEventArgs args)
 	{
-		if (!Runner.IsServer && !networkObject.HasStateAuthority)
-		{
-			networkObject.RequestStateAuthority();
-		}
-
-		isGrabbed = true;
-		grabberTransform = args.interactorObject.transform;
-		rb.isKinematic = true;
+		_isGrabbed = true;
+		_rb.isKinematic = true;
+		_grabber = args.interactor.GetComponent<NetworkObject>();
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
 	{
-		if (networkObject.HasStateAuthority)
-		{
-			networkObject.ReleaseStateAuthority();
-		}
-
-		isGrabbed = false;
-		grabberTransform = null;
-		rb.isKinematic = false;
+		_rb.isKinematic = false;
+		_isGrabbed = false;
+		_grabber = null;
 	}
 
-	private void FixedUpdate()
+	public override void FixedUpdateNetwork()
 	{
-		Debug.Log(
-			$"isGrabbed: {isGrabbed}, grabberTransform: {grabberTransform}, HasStateAuthority: {networkObject.HasStateAuthority}");
-
-		if (isGrabbed && grabberTransform != null)
+		if (_isGrabbed && _grabber.HasInputAuthority)
 		{
-			if (!networkObject.HasStateAuthority)
-			{
-				Debug.LogError("권한이 없습니다!"); // 권한이 없을 때 에러 로그 출력
-				return;
-			}
-
-			// 로그 추가: grabberTransform의 위치와 회전 출력
-			Debug.Log(
-				$"Grabber Position: {grabberTransform.position}, Rotation: {grabberTransform.rotation}");
-
-			// 네트워크 상에서 Rigidbody를 이동시키도록 처리
-			rb.MovePosition(grabberTransform.position);
-			rb.MoveRotation(grabberTransform.rotation);
 		}
 	}
 }
