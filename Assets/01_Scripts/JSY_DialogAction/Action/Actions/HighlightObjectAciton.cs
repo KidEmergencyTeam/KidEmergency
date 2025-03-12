@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Linq;
+using EPOOutline;
 using UnityEngine;
 
 public class HighlightObjectAction : MonoBehaviour, IActionEffect
@@ -9,30 +11,42 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        SetHighlightEffect(ActionManager.Instance.currentDialog);
-        _isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
+        StartCoroutine(SetHighlightEffect(ActionManager.Instance.beforeDialog));
     }
 
-    private void SetHighlightEffect(DialogData dialogData)
+    private IEnumerator SetHighlightEffect(DialogData dialogData)
     {
         DeleteAllHighlightEffects();
         
-        if (dialogData.objects != null)
+        for (int i = 0; i < dialogData.objectsNames.Length; i++)
         {
-            foreach (GameObject obj in dialogData.objects)
-            {
-                if (obj != null)
-                {
-                    print("아무튼 오브젝트 강조 됨");
-                }
-            }
+            GameObject outlineEffect = GameObject.Find(dialogData.objectsNames[i]);
+            Outlinable outlinable = outlineEffect.AddComponent<Outlinable>(); 
+            outlinable.AddAllChildRenderersToRenderingList();
+            outlineEffect.AddComponent<OutlineObjectController>();
+            
+            yield return null;
         }
+
+        print($"{dialogData.objectsNames.Length}개의 오브젝트 강조됨");
+        _isComplete = true;
     }
 
+    // if (dialogData.objectsNames != null)
+    // {
+    //     for (int i = 0; i < dialogData.objectsNames.Length; i++)
+    //     {
+    //         GameObject outlineEffect = GameObject.Find(dialogData.objectsNames[i]);
+    //         outlineEffect.AddComponent<Outlinable>();
+    //     }
+    //     print($"{dialogData.objectsNames.Length}개의 오브젝트 강조됨");
+    // }
     private void DeleteAllHighlightEffects()
     {
-        // GameObject[] outlineObj = 게임오브젝ㅌ.파인드오브젝트오브ㅏ입<아웃라인에셋>
-        // foreach(GameObjcet obj in GameObject outlineObj)
-        // Destroy(obj) ?
+        Outlinable[] outlinables = FindObjectsOfType<Outlinable>();
+        foreach (Outlinable outline in outlinables)
+        {
+            Destroy(outline);
+        }
     }
-}
+} 
