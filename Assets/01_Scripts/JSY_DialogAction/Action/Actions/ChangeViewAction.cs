@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class ChangeViewAction : MonoBehaviour, IActionEffect
 {
+    // 멀티 모드일 시 스폰 위치에 따라 시점 변경되므로 스크립트 내용도 변경돼야함
+    
     public float fadeDuration = 1.5f;
     public Image fadeEffect;
     public GameObject xrCamParent;

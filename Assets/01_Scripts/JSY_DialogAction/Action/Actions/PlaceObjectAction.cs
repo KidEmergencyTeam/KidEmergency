@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlaceObjectAction : MonoBehaviour, IActionEffect
 {
+    // 오브젝트 미리 배치되면 삭제될 액션타입임.
     private bool _isComplete = false;
     public bool IsActionComplete => _isComplete;
     
