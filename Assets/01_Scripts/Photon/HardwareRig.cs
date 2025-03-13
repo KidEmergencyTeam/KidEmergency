@@ -25,8 +25,9 @@ public struct RigInput : INetworkInput
 
 public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 {
-	[Header("VR References")]
-	public HardwareHeadset headset;
+	public NetworkRig networkRig;
+
+	[Header("VR References")] public HardwareHeadset headset;
 	public HardwareHand leftController;
 	public HardwareHand rightController;
 
@@ -36,11 +37,12 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 		PresetRunner,
 		DetectRunner
 	}
+
 	public RunnerExpectations runnerExpectations = RunnerExpectations.DetectRunner;
-	
+
 	private NetworkRunner _runner;
-	
-	bool searchingForRunner  = false;
+
+	bool searchingForRunner = false;
 
 	private async void Start()
 	{
@@ -54,7 +56,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 
 	public async Task<NetworkRunner> FindRunner()
 	{
-		while(searchingForRunner) await Task.Delay(10);
+		while (searchingForRunner) await Task.Delay(10);
 		searchingForRunner = true;
 		if (_runner == null && runnerExpectations != RunnerExpectations.NoRunner)
 		{
@@ -72,7 +74,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 				{
 					if (NetworkRunner.Instances.Count > 0)
 					{
-						_runner = NetworkRunner.Instances[0]; 
+						_runner = NetworkRunner.Instances[0];
 					}
 
 					if (_runner == null)
@@ -82,6 +84,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 				}
 			}
 		}
+
 		searchingForRunner = false;
 		return _runner;
 	}
@@ -89,7 +92,7 @@ public class HardwareRig : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
 		var rigInput = new RigInput();
-		
+
 		rigInput.headPosition = headset.transform.position;
 		rigInput.headRotation = headset.transform.rotation;
 		rigInput.leftHandPosition = leftController.transform.position;
