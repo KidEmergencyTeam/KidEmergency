@@ -313,6 +313,8 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 Debug.Log($"[TextButton] 플레이어 {mapping.userId} / 우측 레이 벗어남");
             }
         }
+
+        // 조건에 따라 텍스트 복원 코루틴 실행
         if (AreAllPointersNotHovering())
         {
             if (resetCoroutine != null)
@@ -321,7 +323,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 모든 플레이어에 대해 레이가가 버튼 위에 있지 않은지 확인
+    // 모든 플레이어에 대해 레이가가 버튼 위에 있지 않은지 확인 -> 목적: 레이가 버튼 위에 없으면 텍스트 복원 
     private bool AreAllPointersNotHovering()
     {
         foreach (var state in leftHoverStates.Values)
