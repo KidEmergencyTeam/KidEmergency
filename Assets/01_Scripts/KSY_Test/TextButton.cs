@@ -6,6 +6,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 
+// Select 액션 타입 열거형 정의
+public enum XRActionType
+{
+    LeftHandInteractionSelect,
+    RightHandInteractionSelect
+}
+
 public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
@@ -15,14 +22,9 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    [Header("좌측 Select: XRI LeftHand Interaction/Select")]
-    public string leftSelectActionName = "XRI LeftHand Interaction/Select";
-
-    [Header("우측 Select: XRI RightHand Interaction/Select")]
-    public string rightSelectActionName = "XRI RightHand Interaction/Select";
-
-    [Header("디버그 (호출 여부)")]
-    public bool buttonClicked = false;
+    [Header("Select 액션 타입")]
+    public XRActionType leftSelectActionType = XRActionType.LeftHandInteractionSelect;
+    public XRActionType rightSelectActionType = XRActionType.RightHandInteractionSelect;
 
     [Header("포인터 ID 관리 스크립트")]
     public List<PlayerPointerId> pointerIds;
@@ -31,19 +33,23 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
 
-    // 텍스트 기본값 -> 텍스트 복원 시 사용
-    private string originalText;
+    // 각 플레이어별로 버튼 위에 레이가 위치하고 있는지 여부를 저장하는 딕셔너리
+    private Dictionary<int, bool> leftHoverStates = new Dictionary<int, bool>();
+    private Dictionary<int, bool> rightHoverStates = new Dictionary<int, bool>();
+
+    // 동시 입력 처리를 위한 클릭 처리 상태 플래그
+    private Dictionary<int, bool> isProcessingClick = new Dictionary<int, bool>();
+
+    // 포인터ID -> (userId, isLeft) 매핑 (반복문 최적화)
+    private Dictionary<int, (int userId, bool isLeft)> pointerMapping = new Dictionary<int, (int, bool)>();
 
     // 텍스트 복원 코루틴의 중복 실행을 방지하기 위해 사용
+    private string originalText;
     private Coroutine resetCoroutine;
-
-    // 좌측, 우측 레이가 버튼 위에 있는지 여부
-    private bool isLeftRayHovering = false;
-    private bool isRightRayHovering = false;
 
     void Start()
     {
-        // 씬에서 태그가 "Player"인 오브젝트를 찾아 pointerIds 리스트에 할당
+        // pointerIds가 null이거나 비어있다면, "Player" 태그의 오브젝트들을 검색하여 초기화
         if (pointerIds == null || pointerIds.Count == 0)
         {
             pointerIds = new List<PlayerPointerId>();
@@ -56,61 +62,77 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                     pointerIds.Add(pointer);
                 }
             }
-            Debug.Log("[TextButton] Player 태그의 오브젝트에서 PlayerPointerId 컴포넌트를 자동으로 할당하였습니다.");
+            Debug.Log("[TextButton] Player 태그의 오브젝트에서 PlayerPointerId.cs를 할당하였습니다.");
         }
 
-        if (button == null)
+        // 인스펙터에서 할당된 경우에도 딕셔너리 초기화 보완
+        foreach (var pointer in pointerIds)
         {
-            Debug.LogError("[TextButton] Button이 할당되지 않았습니다. Inspector에서 확인하세요.");
+            if (!leftHoverStates.ContainsKey(pointer.userId))
+                leftHoverStates[pointer.userId] = false;
+            if (!rightHoverStates.ContainsKey(pointer.userId))
+                rightHoverStates[pointer.userId] = false;
+            if (!isProcessingClick.ContainsKey(pointer.userId))
+                isProcessingClick[pointer.userId] = false;
+
+            // 반복문 최적화를 위한 pointerMapping 등록
+            foreach (int id in pointer.leftPointerIds)
+            {
+                if (!pointerMapping.ContainsKey(id))
+                    pointerMapping.Add(id, (pointer.userId, true));
+            }
+            foreach (int id in pointer.rightPointerIds)
+            {
+                if (!pointerMapping.ContainsKey(id))
+                    pointerMapping.Add(id, (pointer.userId, false));
+            }
         }
 
-        if (displayText == null)
+        // displayText의 원래 텍스트 저장
+        if (displayText != null)
         {
-            Debug.LogError("[TextButton] displayText가 할당되지 않았습니다. Inspector에서 확인하세요.");
+            originalText = displayText.text;
         }
-
-        // 원래 텍스트 값을 저장
-        originalText = displayText.text;
     }
 
-    // 이벤트 구독
     void OnEnable()
     {
         if (inputActionAsset != null)
         {
             // 좌측 액션 구독 및 활성화
-            leftSelectAction = inputActionAsset.FindAction(leftSelectActionName, true);
+            string leftActionName = GetActionName(leftSelectActionType);
+            leftSelectAction = inputActionAsset.FindAction(leftActionName, true);
             if (leftSelectAction != null)
             {
                 leftSelectAction.performed += OnSelectPerformed;
                 leftSelectAction.Enable();
-                Debug.Log("[TextButton] '" + leftSelectActionName + "' 액션 구독 및 활성화됨.");
+                Debug.Log("[TextButton] '" + leftActionName + "' 액션 구독 및 활성화됨.");
             }
             else
             {
-                Debug.LogError("[TextButton] '" + leftSelectActionName + "' 액션을 InputActionAsset에서 찾을 수 없습니다.");
+                Debug.LogError("[TextButton] '" + leftActionName + "' 액션을 찾을 수 없습니다.");
             }
 
             // 우측 액션 구독 및 활성화
-            rightSelectAction = inputActionAsset.FindAction(rightSelectActionName, true);
+            string rightActionName = GetActionName(rightSelectActionType);
+            rightSelectAction = inputActionAsset.FindAction(rightActionName, true);
             if (rightSelectAction != null)
             {
                 rightSelectAction.performed += OnSelectPerformed;
                 rightSelectAction.Enable();
-                Debug.Log("[TextButton] '" + rightSelectActionName + "' 액션 구독 및 활성화됨.");
+                Debug.Log("[TextButton] '" + rightActionName + "' 액션 구독 및 활성화됨.");
             }
             else
             {
-                Debug.LogError("[TextButton] '" + rightSelectActionName + "' 액션을 InputActionAsset에서 찾을 수 없습니다.");
+                Debug.LogError("[TextButton] '" + rightActionName + "' 액션을 찾을 수 없습니다.");
             }
         }
         else
         {
-            Debug.LogError("[TextButton] InputActionAsset이 할당되지 않았습니다. Inspector에서 확인하세요.");
+            Debug.LogError("[TextButton] InputActionAsset이 할당되지 않았습니다.");
         }
     }
 
-    // 이벤트 구독 해제
     void OnDisable()
     {
         if (leftSelectAction != null)
@@ -125,176 +147,149 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 버튼 위에 레이가 있을 때, 해당 컨트롤러의 입력이 발생하면 처리
+    // 열거형에 따른 액션 이름 반환 메서드
+    private string GetActionName(XRActionType actionType)
+    {
+        switch (actionType)
+        {
+            case XRActionType.LeftHandInteractionSelect:
+                return "XRI LeftHand Interaction/Select";
+            case XRActionType.RightHandInteractionSelect:
+                return "XRI RightHand Interaction/Select";
+            default:
+                return "";
+        }
+    }
+
+    // Select 액션 발생 시, 각 플레이어별 Hover 상태와 동시 입력 처리를 확인하여 버튼 클릭을 처리합니다.
     private void OnSelectPerformed(InputAction.CallbackContext context)
     {
-        // 좌측 레이가 버튼 위에 있고 좌측 입력이 발생하거나,
-        // 우측 레이가 버튼 위에 있고 우측 입력이 발생할 경우
-        if ((context.action == leftSelectAction && isLeftRayHovering) ||
-            (context.action == rightSelectAction && isRightRayHovering))
+        bool processed = false;
+        foreach (var pointer in pointerIds)
         {
-            // XR입력 시 버튼 애니메이션 효과를 적용하고 버튼 이벤트 호출
-            StartCoroutine(TriggerButtonAnimationAndClick());
+            bool leftHover = leftHoverStates.ContainsKey(pointer.userId) ? leftHoverStates[pointer.userId] : false;
+            bool rightHover = rightHoverStates.ContainsKey(pointer.userId) ? rightHoverStates[pointer.userId] : false;
+
+            if ((context.action == leftSelectAction && leftHover) ||
+                (context.action == rightSelectAction && rightHover))
+            {
+                // 동시 입력 방지: 이미 클릭 처리 중이면 건너뜁니다.
+                if (isProcessingClick[pointer.userId])
+                {
+                    Debug.Log($"[TextButton] 플레이어 {pointer.userId}의 입력이 이미 처리 중입니다.");
+                    continue;
+                }
+                Debug.Log($"[TextButton] 플레이어 {pointer.userId}의 입력 처리");
+                isProcessingClick[pointer.userId] = true;
+                StartCoroutine(TriggerButtonAnimationAndClickForUser(pointer.userId));
+                processed = true;
+            }
         }
-        else
+        if (!processed)
         {
             Debug.Log("[TextButton] 해당 컨트롤러의 레이가 버튼 위에 있지 않음.");
         }
     }
 
-    // 버튼 위에 레이가 진입하면, 리스트에 등록된 모든 PlayerPointerId를 확인하여 좌측/우측 구분
-    public void OnPointerEnter(PointerEventData eventData)
+    // 버튼 클릭 애니메이션 및 클릭 이벤트 처리 코루틴
+    private IEnumerator TriggerButtonAnimationAndClickForUser(int userId)
     {
-        // 단순하게 버튼 위에 레이가 진입하면, Id 값 디버그 출력 -> 세세하게 x
-        Debug.Log("[TextButton] Pointer Enter: pointerId " + eventData.pointerId);
-
-        // pointerIds 리스트가 null이 아니고 하나 이상의 요소를 포함하고 있을 경우 실행
-        if (pointerIds != null && pointerIds.Count > 0)
-        {
-            // pointerIds 리스트에 있는 각 PlayerPointerId 객체를 순회하며 처리
-            foreach (var pointer in pointerIds)
-            {
-                // 좌측 포인터 ID 배열에 포함되어 있는지 확인
-                foreach (int id in pointer.leftPointerIds)
-                {
-                    if (eventData.pointerId == id)
-                    {
-                        isLeftRayHovering = true;
-                        Debug.Log("[TextButton] 좌측 레이 진입");
-                        break;
-                    }
-                }
-
-                // 우측 포인터 ID 배열에 포함되어 있는지 확인
-                foreach (int id in pointer.rightPointerIds)
-                {
-                    if (eventData.pointerId == id)
-                    {
-                        isRightRayHovering = true;
-                        Debug.Log("[TextButton] 우측 레이 진입");
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[TextButton] PlayerPointerId 리스트가 할당되지 않았거나 비어있음");
-        }
-    }
-
-    // 버튼 영역을 벗어나면 해당 컨트롤러의 hovering 상태 업데이트
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        // 단순하게 버튼 위에 레이가 영역을 벗어나면, Id 값 디버그 출력 -> 세세하게 x
-        Debug.Log("[TextButton] Pointer Exit: pointerId " + eventData.pointerId);
-
-        // pointerIds 리스트가 null이 아니고 하나 이상의 요소를 포함하고 있을 경우 실행
-        if (pointerIds != null && pointerIds.Count > 0)
-        {
-            // pointerIds 리스트에 있는 각 PlayerPointerId 객체를 순회하며 처리
-            foreach (var pointer in pointerIds)
-            {
-                // 좌측 포인터 ID 배열에 포함되어 있는지 확인
-                foreach (int id in pointer.leftPointerIds)
-                {
-                    if (eventData.pointerId == id)
-                    {
-                        isLeftRayHovering = false;
-                        Debug.Log("[TextButton] 좌측 레이 벗어남");
-                        break;
-                    }
-                }
-
-                // 우측 포인터 ID 배열에 포함되어 있는지 확인
-                foreach (int id in pointer.rightPointerIds)
-                {
-                    if (eventData.pointerId == id)
-                    {
-                        isRightRayHovering = false;
-                        Debug.Log("[TextButton] 우측 레이 벗어남");
-                        break;
-                    }
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("[TextButton] PlayerPointerId 리스트가 할당되지 않았거나 비어있음");
-        }
-
-        // 두 레이 모두 버튼 위에 없으면 원래 텍스트 복원 코루틴 실행
-        if (!isLeftRayHovering && !isRightRayHovering)
-        {
-            if (resetCoroutine != null)
-            {
-                StopCoroutine(resetCoroutine);
-            }
-            resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
-        }
-    }
-
-    // XR 입력 시 버튼 애니메이션 및 클릭 처리
-    private IEnumerator TriggerButtonAnimationAndClick()
-    {
-        // EventSystem이 존재하는지 확인
         if (EventSystem.current == null)
         {
             Debug.LogError("[TextButton] EventSystem.current가 null입니다.");
             yield break;
         }
 
-        // 포인터 이벤트 데이터 생성
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
             pointerPress = button.gameObject
         };
 
-        // 버튼 누름 효과 시작
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
-
-        // 애니메이션 효과를 위해 잠시 대기 (0.1초)
         yield return new WaitForSeconds(0.1f);
-
-        // 버튼 누름 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
-        // 버튼 클릭 이벤트 호출
-        OnButtonClick();
+        OnButtonClickForUser(userId);
+        isProcessingClick[userId] = false; // 처리 완료 후 플래그 해제
     }
 
-    // 버튼 클릭 처리
-    public void OnButtonClick()
+    // 개별 플레이어의 버튼 클릭 이벤트 처리
+    public void OnButtonClickForUser(int userId)
     {
-        buttonClicked = true;
-        Debug.Log("[TextButton] OnButtonClick() 호출됨.");
-
+        Debug.Log($"[TextButton] 플레이어 {userId}의 버튼 클릭 이벤트 처리됨.");
         if (displayText != null)
         {
-            displayText.text = "버튼 클릭 처리 완료!";
-
-            if (resetCoroutine != null)
-            {
-                StopCoroutine(resetCoroutine);
-            }
-            resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
-        }
-        else
-        {
-            Debug.LogError("[TextButton] displayText가 null입니다.");
+            displayText.text = $"플레이어 {userId}의 버튼 클릭 처리 완료!";
         }
     }
 
-    // 일정 시간 후 원래 텍스트로 복원하는 코루틴
-    IEnumerator ResetTextAndButtonCoroutine()
+    // pointerMapping을 사용한 포인터 진입 처리 (반복문 최적화)
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("[TextButton] Pointer Enter: pointerId " + eventData.pointerId);
+        if (pointerMapping.TryGetValue(eventData.pointerId, out var mapping))
+        {
+            if (mapping.isLeft)
+            {
+                leftHoverStates[mapping.userId] = true;
+                Debug.Log($"[TextButton] 플레이어 {mapping.userId}의 좌측 레이 진입");
+            }
+            else
+            {
+                rightHoverStates[mapping.userId] = true;
+                Debug.Log($"[TextButton] 플레이어 {mapping.userId}의 우측 레이 진입");
+            }
+        }
+    }
+
+    // pointerMapping을 사용한 포인터 종료 처리 (반복문 최적화)
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("[TextButton] Pointer Exit: pointerId " + eventData.pointerId);
+        if (pointerMapping.TryGetValue(eventData.pointerId, out var mapping))
+        {
+            if (mapping.isLeft)
+            {
+                leftHoverStates[mapping.userId] = false;
+                Debug.Log($"[TextButton] 플레이어 {mapping.userId} / 좌측 레이 벗어남");
+            }
+            else
+            {
+                rightHoverStates[mapping.userId] = false;
+                Debug.Log($"[TextButton] 플레이어 {mapping.userId} / 우측 레이 벗어남");
+            }
+        }
+        if (AreAllPointersNotHovering())
+        {
+            if (resetCoroutine != null)
+                StopCoroutine(resetCoroutine);
+            resetCoroutine = StartCoroutine(ResetTextAndButtonCoroutine());
+        }
+    }
+
+    // 모든 플레이어에 대해 좌측, 우측 모두 Hover 상태가 false인지 확인
+    private bool AreAllPointersNotHovering()
+    {
+        foreach (var state in leftHoverStates.Values)
+        {
+            if (state)
+                return false;
+        }
+        foreach (var state in rightHoverStates.Values)
+        {
+            if (state)
+                return false;
+        }
+        return true;
+    }
+
+    // 일정 시간 후 텍스트를 원래 텍스트로 복원하는 코루틴
+    private IEnumerator ResetTextAndButtonCoroutine()
     {
         yield return new WaitForSeconds(2f);
         if (displayText != null)
         {
             displayText.text = originalText;
         }
-
-        buttonClicked = false;
-        resetCoroutine = null;
     }
 }
