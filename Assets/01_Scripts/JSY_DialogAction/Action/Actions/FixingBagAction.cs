@@ -11,7 +11,7 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     {
         _isComplete = false;
         TestAction();
-        _isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
+        // _isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
     }
 
 

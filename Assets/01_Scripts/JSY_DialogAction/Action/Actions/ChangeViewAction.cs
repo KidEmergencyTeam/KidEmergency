@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ChangeViewAction : MonoBehaviour, IActionEffect
 {
-    public float fadeDuration = 2f;
+    public float fadeDuration = 1.5f;
     public Image fadeEffect;
     public GameObject xrCamParent;
     

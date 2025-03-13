@@ -851,7 +851,6 @@ MonoBehaviour:
   decreaseFactor: 1
   earthquakeForce: 9
   objectShakeDuration: 4.5
-  rbObjects: []
   lightObject: {fileID: 776687966}
 --- !u!114 &154242859
 MonoBehaviour:
@@ -2442,7 +2441,7 @@ GameObject:
   - component: {fileID: 586102159}
   m_Layer: 0
   m_Name: Test_Table
-  m_TagString: Untagged
+  m_TagString: BaseObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2531,7 +2530,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ea4a6acde4ff27548a7f8f334574c375, type: 3}
 --- !u!54 &586102157
@@ -2542,7 +2541,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 586102152}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2557,7 +2556,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -11345,6 +11344,10 @@ PrefabInstance:
     - target: {fileID: 875604153364551842, guid: 29adc16b7773abc41a6c17c822670d0a, type: 3}
       propertyPath: m_Name
       value: DialogSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 5400758933802314121, guid: 29adc16b7773abc41a6c17c822670d0a, type: 3}
+      propertyPath: m_lineSpacing
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5423022478277115908, guid: 29adc16b7773abc41a6c17c822670d0a, type: 3}
       propertyPath: m_Pivot.x
