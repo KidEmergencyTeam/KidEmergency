@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ShowOptionAction : MonoBehaviour, IActionEffect
 {
-    private bool isComplete;
-    public bool IsActionComplete => isComplete;
+    private bool _isComplete;
+    public bool IsActionComplete => _isComplete;
 
     public void StartAction()
     {
-        isComplete = false;
+        _isComplete = false;
         SetOption();
     }
     
@@ -24,6 +24,6 @@ public class ShowOptionAction : MonoBehaviour, IActionEffect
 
     public void CompleteAction()
     {
-        isComplete = true;
+        _isComplete = true;
     }
 }

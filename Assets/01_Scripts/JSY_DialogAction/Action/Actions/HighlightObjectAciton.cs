@@ -31,16 +31,7 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
         print($"{dialogData.objectsNames.Length}개의 오브젝트 강조됨");
         _isComplete = true;
     }
-
-    // if (dialogData.objectsNames != null)
-    // {
-    //     for (int i = 0; i < dialogData.objectsNames.Length; i++)
-    //     {
-    //         GameObject outlineEffect = GameObject.Find(dialogData.objectsNames[i]);
-    //         outlineEffect.AddComponent<Outlinable>();
-    //     }
-    //     print($"{dialogData.objectsNames.Length}개의 오브젝트 강조됨");
-    // }
+    
     private void DeleteAllHighlightEffects()
     {
         Outlinable[] outlinables = FindObjectsOfType<Outlinable>();

@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class ChangeSceneAction : MonoBehaviour, IActionEffect
 {
-    private bool isComplete;
-    public bool IsActionComplete => isComplete;
+    private bool _isComplete;
+    public bool IsActionComplete => _isComplete;
 
     public void StartAction()
     {
-        isComplete = false;
+        _isComplete = false;
         StartCoroutine(ChangeScene());
     }
     
@@ -22,7 +22,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
         }
 
         yield return new WaitForSeconds(0.5f);
-        isComplete = true;
+        _isComplete = true;
     }
     
     

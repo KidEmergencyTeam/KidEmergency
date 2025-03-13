@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class FixingBagAction : MonoBehaviour, IActionEffect
 {
-    private bool isComplete = false;
-    public bool IsActionComplete => isComplete;
+    private bool _isComplete = false;
+    public bool IsActionComplete => _isComplete;
 
     public void StartAction()
     {
-        isComplete = false;
+        _isComplete = false;
         TestAction();
-        isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
+        _isComplete = true; // 테스트용. 기능 제대로 구현하면 이동 예정
     }
 
 

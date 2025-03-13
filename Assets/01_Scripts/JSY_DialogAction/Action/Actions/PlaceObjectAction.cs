@@ -11,7 +11,6 @@ public class PlaceObjectAction : MonoBehaviour, IActionEffect
     {
         _isComplete = false;
         StartCoroutine(SetObjects(ActionManager.Instance.beforeDialog));
-        _isComplete = true;
     }
 
     private IEnumerator SetObjects(DialogData dialogData)
