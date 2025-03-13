@@ -77,9 +77,14 @@ public class FireBeginner : MonoBehaviour
                 Debug.Log("손수건 고정 완료");
                 //유저 입 주변에 손수건 접촉 시 입과 코를 가린 것으로 판정
 
+                //FadeIn, Out으로 이동하는 모습을 안보여준다.
+                StartCoroutine(fadeInOutImg.FadeOut());
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
                 Debug.Log("플레이어 NPC 위치 이동");
                 TeleportCharacters();
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                StartCoroutine(fadeInOutImg.FadeIn());
+
                 //왼손이 지정한 범위에서 떨어질 경우 손수건이 떨어진 판정(경고 UI 출력: 손수건으로 입과 코를 가려줘!)   
 
                 //플레이어와 NPC가 이동하고 입과 코를 가린 것으로 판정되면
@@ -107,6 +112,7 @@ public class FireBeginner : MonoBehaviour
 
             case PLACE.STAIRS_ELEVATOR:
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 SceneManager.LoadScene("JDH4");
                 break;
 

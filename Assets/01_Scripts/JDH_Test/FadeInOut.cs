@@ -8,8 +8,8 @@ public class FadeInOut : MonoBehaviour
     [SerializeField] private float fadedTime = 0.5f; // FadeIn, FadeOut 총 소요 시간
     [SerializeField] private Image fadeInoutImg; // 페이드 효과를 줄 이미지
 
-    [SerializeField] private bool isFadeIn; // 페이드 인 상태 확인
-    [SerializeField] private bool isFadeOut; // 페이드 아웃 상태 확인
+    public bool isFadeIn; // 페이드 인 상태 확인
+    public bool isFadeOut; // 페이드 아웃 상태 확인
 
     void Start()
     {
