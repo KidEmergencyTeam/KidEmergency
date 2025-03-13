@@ -9,8 +9,23 @@ public class TargetFollower : MonoBehaviour
 	{
 		public Transform target; // 따라갈 대상
 		public Transform follower; // 따라가는 오브젝트
-		public bool followPosition = true;
-		public bool followRotation = true;
+		[Header("Position")] public bool isFollowPos = true;
+		public Vector3 posOffset;
+		[Header("Rotation")] public bool isFollowRot = true;
+		public Vector3 rotOffset;
+
+		public void Follow()
+		{
+			if (isFollowPos)
+			{
+				follower.position = target.TransformPoint(posOffset);
+			}
+
+			if (isFollowRot)
+			{
+				follower.rotation = target.rotation * Quaternion.Euler(rotOffset);
+			}
+		}
 	}
 
 	public List<FollowTarget> followTargets = new List<FollowTarget>();
@@ -25,11 +40,7 @@ public class TargetFollower : MonoBehaviour
 				continue;
 			}
 
-			if (followTarget.followPosition)
-				followTarget.follower.position = followTarget.target.position;
-
-			if (followTarget.followRotation)
-				followTarget.follower.rotation = followTarget.target.rotation;
+			followTarget.Follow();
 		}
 	}
 }
