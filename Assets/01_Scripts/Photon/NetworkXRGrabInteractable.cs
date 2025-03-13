@@ -17,7 +17,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private NetworkObject _networkObject;
 	private Rigidbody _rb;
 	private NetworkRigidbody3D _networkRb;
-	private GameObject _grabber;
+	private GameObject _currentGrabber;
 
 	private void Awake()
 	{
@@ -34,33 +34,37 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		IsGrabbed = true;
 		_rb.isKinematic = true;
-		_grabber = args.interactorObject.transform.gameObject;
-		print($"{_grabber.name} is grabbed");
+		_currentGrabber = args.interactorObject.transform.gameObject;
+		print($"{_currentGrabber.name} is grabbed");
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
 	{
 		_rb.isKinematic = false;
 		IsGrabbed = false;
-		_grabber = null;
+		_currentGrabber = null;
 	}
 
 	public override void FixedUpdateNetwork()
 	{
-		if (IsGrabbed)
-		{
-			if (_grabber)
-			{
-				Pos = transform.position;
-				Rot = transform.rotation;
-				print(
-					$"Position: {_networkObject.transform.position}, Rotation: {_networkObject.transform.rotation}");
-				print($"Position: {Pos}, Rotation: {Rot}");
-			}
-		}
+		if (!Object.HasStateAuthority) return;
+
+		if (!IsGrabbed) return;
+
+		Follow(transform, _currentGrabber.transform);
 	}
 
 	public override void Render()
 	{
+		if (IsGrabbed)
+		{
+			Follow(transform, _currentGrabber.transform);
+		}
+	}
+
+	public void Follow(Transform followingTransform, Transform follwedTransform)
+	{
+		followingTransform.position = follwedTransform.position;
+		followingTransform.rotation = follwedTransform.rotation;
 	}
 }
