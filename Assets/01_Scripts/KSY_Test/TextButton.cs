@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 
 // Select 액션 타입 열거형 정의
-public enum XRActionType
+public enum XRActionTypeTest
 {
     LeftHandInteractionSelect,
     RightHandInteractionSelect
@@ -23,8 +23,8 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public InputActionAsset inputActionAsset;
 
     [Header("Select 액션 타입")]
-    public XRActionType leftSelectActionType = XRActionType.LeftHandInteractionSelect;
-    public XRActionType rightSelectActionType = XRActionType.RightHandInteractionSelect;
+    public XRActionTypeTest leftSelectActionType = XRActionTypeTest.LeftHandInteractionSelect;
+    public XRActionTypeTest rightSelectActionType = XRActionTypeTest.RightHandInteractionSelect;
 
     [Header("포인터 ID 관리 스크립트")]
     public List<PlayerPointerId> pointerIds;
@@ -203,13 +203,13 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     // 열거형에 따른 액션 이름 반환
-    private string GetActionName(XRActionType actionType)
+    private string GetActionName(XRActionTypeTest actionType)
     {
         switch (actionType)
         {
-            case XRActionType.LeftHandInteractionSelect:
+            case XRActionTypeTest.LeftHandInteractionSelect:
                 return "XRI LeftHand Interaction/Select";
-            case XRActionType.RightHandInteractionSelect:
+            case XRActionTypeTest.RightHandInteractionSelect:
                 return "XRI RightHand Interaction/Select";
             default:
                 return "";
