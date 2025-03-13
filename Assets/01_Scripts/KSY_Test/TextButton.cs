@@ -116,7 +116,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                     if (!isProcessingClick.ContainsKey(pointer.userId))
                         isProcessingClick[pointer.userId] = false;
 
-                    // 새 플레이어에 대한 pointerMapping 등록 (최적화)
+                    // 새 플레이어의 포인터 ID 등록 (좌측/우측 구분)
                     foreach (int id in pointer.leftPointerIds)
                     {
                         if (!pointerMapping.ContainsKey(id))
@@ -133,7 +133,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
     }
 
-    // 플레이어가 게임 도중 제거될 때 딕셔너리에서 유효하지 않은 키 제거
+    // 딕셔너리에서 유효하지 않은 userId 제거
     private void RemoveInvalidEntries(Dictionary<int, bool> dict, HashSet<int> validUserIds)
     {
         List<int> keysToRemove = new List<int>();
@@ -228,6 +228,7 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             bool leftHover = leftHoverStates.ContainsKey(pointer.userId) ? leftHoverStates[pointer.userId] : false;
             bool rightHover = rightHoverStates.ContainsKey(pointer.userId) ? rightHoverStates[pointer.userId] : false;
 
+            // 좌측 혹은 우측 액션에 대해 레이가 버튼 위에 있을 경우 처리
             if ((context.action == leftSelectAction && leftHover) ||
                 (context.action == rightSelectAction && rightHover))
             {
