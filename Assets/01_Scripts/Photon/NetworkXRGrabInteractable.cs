@@ -17,9 +17,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private NetworkObject _networkObject;
 	private Rigidbody _rb;
 	private NetworkRigidbody3D _networkRb;
-	private GameObject _currentGrabber;
-	private HardwareRig _hardwareRig;
-	private NetworkObject _playerNO;
+	private GameObject _currentInteractor;
 
 	private void Awake()
 	{
@@ -37,10 +35,9 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 		Runner.SetIsSimulated(Object, true);
 		IsGrabbed = true;
 		_rb.isKinematic = true;
-		_currentGrabber = args.interactorObject.transform.gameObject;
-		_hardwareRig = _currentGrabber.GetComponentInParent<HardwareRig>();
-		_playerNO = _hardwareRig.networkRig.GetComponent<NetworkObject>();
-		_networkObject.AssignInputAuthority(_playerNO.InputAuthority);
+		_currentInteractor = args.interactorObject.transform.gameObject;
+		Object.AssignInputAuthority(_currentInteractor
+			.GetComponentInParent<NetworkObject>().InputAuthority);
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
@@ -48,23 +45,22 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 		Runner.SetIsSimulated(Object, false);
 		_rb.isKinematic = false;
 		IsGrabbed = false;
-		_currentGrabber = null;
-		_hardwareRig = null;
-		_networkObject.RemoveInputAuthority();
+		_currentInteractor = null;
+		Object.RemoveInputAuthority();
 	}
 
 	public override void FixedUpdateNetwork()
 	{
 		if (!IsGrabbed) return;
 
-		Follow(transform, _currentGrabber.transform);
+		Follow(transform, _currentInteractor.transform);
 	}
 
 	public override void Render()
 	{
 		if (IsGrabbed)
 		{
-			Follow(transform, _currentGrabber.transform);
+			Follow(transform, _currentInteractor.transform);
 		}
 	}
 
