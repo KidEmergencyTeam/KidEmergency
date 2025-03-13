@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class HighlightObjectAction : MonoBehaviour, IActionEffect
 {
@@ -23,7 +24,16 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
             GameObject outlineEffect = GameObject.Find(dialogData.objectsNames[i]);
             Outlinable outlinable = outlineEffect.AddComponent<Outlinable>(); 
             outlinable.AddAllChildRenderersToRenderingList();
-            outlineEffect.AddComponent<OutlineObjectController>();
+            
+            if (outlineEffect.CompareTag("BaseObject"))
+            {
+                outlineEffect.AddComponent<BaseOutlineObject>();
+            }
+            else if (outlineEffect.CompareTag("GrabObject"))
+            {
+                outlineEffect.AddComponent<GrabOutlineObject>();
+                outlineEffect.AddComponent<XRGrabInteractable>();
+            }
             
             yield return null;
         }
