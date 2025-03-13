@@ -10,21 +10,22 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     public float decreaseFactor = 1.0f; // 흔들림 감소 속도
     public float earthquakeForce = 2f;  // 지진의 힘
     public float objectShakeDuration = 4f; // 물체 흔들림 지속 시간
-    public Rigidbody[] rbObjects;  // 흔들릴 물체들
     public Light lightObject;
+
+    private Rigidbody[] _rbObjects;  // 흔들릴 물체들
+    private bool _isComplete = false;
     
-    private bool isComplete = false;
-    public bool IsActionComplete => isComplete;
+    public bool IsActionComplete => _isComplete;
     
     private void Start()
     {
-        rbObjects = FindObjectsOfType<Rigidbody>();  
+        _rbObjects = FindObjectsOfType<Rigidbody>();  
     }
 
     public void StartAction()
     {
         print("액션 시작");
-        isComplete = false;
+        _isComplete = false;
         StartCoroutine(EarthquakeRoutine());
     }
 
@@ -32,14 +33,14 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         while (shakeDuration > 0 || objectShakeDuration > 0)
         {
-            TestEQ();
+            EarthquakeStart();
             yield return null;
         }
         
-        isComplete = true;
+        _isComplete = true;
     }
 
-    private void TestEQ()
+    private void EarthquakeStart()
     {
         if (shakeDuration > 0 && cameraParent != null)
         {
@@ -58,7 +59,7 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
 
         if (objectShakeDuration > 0)
         {
-            foreach (Rigidbody rb in rbObjects)
+            foreach (Rigidbody rb in _rbObjects)
             {
                 Vector3 randomDirection = new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, .5f));
                 rb.AddForce(randomDirection * (earthquakeForce * 0.1f), ForceMode.Impulse);

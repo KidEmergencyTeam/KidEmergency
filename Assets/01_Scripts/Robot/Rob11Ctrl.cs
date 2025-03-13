@@ -6,11 +6,6 @@ using UnityEngine.EventSystems;
 public class Rob11Ctrl : MonoBehaviour
 {
     public float speed = 1.0f;
-    public float run = 0;
-    public float velocity = 0;
-    public float fallSpeed = 10f;
-    public float gravity = 20f;
-    float runVelocity = 1f;
 
     public GameObject MouthEmo, MouthSpeech;
 
@@ -25,17 +20,12 @@ public class Rob11Ctrl : MonoBehaviour
     int N = 2;             
 
     private string animationName = "YourAnimationName";
-    private bool battleIsActive = false;
-    private bool isPushing = false;
     public string pushableTag = "Pushable";
-    private bool isFalling = false;
-    private Vector3 moveDirection;
 
 
     int emo_i = 0;
 
     Animator anim;
-    CharacterController controller;
 
     /*
      * Emotions list with ID
@@ -50,85 +40,15 @@ public class Rob11Ctrl : MonoBehaviour
          8.Cry
          9.Love
      */
-
-    public int GetNextNumber(int N)
-    {
-        int result = currentNumber;
-        currentNumber = (currentNumber + 1) % (N + 1); // Increase and reset if exceeds N
-        Debug.Log(result);
-        return result;
-    }
-
+    
     void Start()
     {
         anim = GetComponent<Animator>();
-        controller = GetComponent<CharacterController>();
         anim.SetFloat("speedMultiplier", speed);
     }
 
     void Update()
     {
-        anim.SetFloat("Side", Input.GetAxis("Horizontal"));
-        anim.SetFloat("Speed", Input.GetAxis("Vertical"));
-
-        if (Input.GetKey(KeyCode.LeftShift) && (run < 1))
-        {
-
-            run += Time.deltaTime * runVelocity;
-            anim.SetFloat("run", run);
-        }
-        else
-        {
-            if (run > 0)
-            {
-                run -= Time.deltaTime * runVelocity;
-            }
-            anim.SetFloat("run", run);
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightBracket))
-        {
-            emo_i++;
-            if (emo_i == 10) { emo_i = 0; }
-            setEmotion(emo_i);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftBracket))
-        {
-            emo_i--;
-            if (emo_i == 0) { emo_i = 10; }
-            setEmotion(emo_i - 1);
-        }
-
-      
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            anim.SetBool("Jump", true);
-            anim.SetInteger("vary", GetNextNumber(2));
-        }
-//-------------------------------- DEATH and falling --------------------------------------
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            isFalling = true;
-            anim.SetBool("FallFront", true);
-            setEmotion(5);
-        }
-
-        if (isFalling)
-        {
-            moveDirection.y -= gravity * Time.deltaTime;
-            controller.Move(moveDirection * Time.deltaTime);
-        }
-
-
-        if (isFalling && controller.isGrounded)
-        {
-            isFalling = false;
-            moveDirection.y = 0;
-            anim.SetBool("GroundHit", true);
-            setEmotion(0);
-        }
-
-
 //---------------------------------------- EMOTIONS -----------------
 
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -193,62 +113,13 @@ public class Rob11Ctrl : MonoBehaviour
             setEmotion(1);
             StartCoroutine(PlayAnimationMultipleTimes());
         }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            anim.SetBool("Talk", true);
-            ToggleObjectActiveState();
-            setEmotion(0);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            anim.SetBool("Pointing", true);
-            //anim.SetInteger("vary", Random.Range(0, 2));//random value
-            anim.SetInteger("vary", GetNextNumber(3));
-            setEmotion(0);
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            anim.SetBool("Hit", true);
-            // anim.SetInteger("vary", Random.Range(0, 2));  //random value
-            anim.SetInteger("vary", GetNextNumber(3));
-            setEmotion(0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            anim.SetBool("StrafeLeft", true);
-        }
-        if (Input.GetKeyUp(KeyCode.Q))
-        {
-            anim.SetBool("StrafeLeft", false);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            anim.SetBool("StrafeRight", true);
-        }
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            anim.SetBool("StrafeRight", false);
-        }
-
-
     }
 
     public void setEmotion(int emoNumber)
-    {
-        if (battleIsActive)
-        {
-            emoNumber = 7;
-        }
-            robotColorManager.ChangeBodyColor(emoNumber);
-            emotionChanger.SetEmotionEyes(emoNumber);
-            emotionChanger.SetEmotionMouth(emoNumber);
-    }
-
-    public void Speech3End()
-    {
-        ToggleObjectActiveState();
-        Debug.Log("Anitions is ended!");
+    { 
+        robotColorManager.ChangeBodyColor(emoNumber); 
+        emotionChanger.SetEmotionEyes(emoNumber); 
+        emotionChanger.SetEmotionMouth(emoNumber);
     }
 
     IEnumerator PlayAnimationMultipleTimes()
@@ -258,28 +129,14 @@ public class Rob11Ctrl : MonoBehaviour
             anim.SetBool(animationName, true);
             yield return new WaitForSeconds(playCount);
         }
+        
         anim.SetBool(animationName, false);
         robotColorManager.isRainbowCycles = false;
         anim.SetBool("reset", true);
         resetEmo();
         Debug.Log("Animation Done");
     }
-
-    void ToggleObjectActiveState()
-    {
-        if ((MouthEmo != null) && (MouthSpeech != null))
-        {
-            bool isActive = MouthEmo.activeSelf;  
-            bool isActiveS = MouthSpeech.activeSelf;
-            MouthEmo.SetActive(!isActive); 
-            MouthSpeech.SetActive(!isActiveS);
-        }
-        else
-        {
-            Debug.LogError("Target Object �� ��������!");
-        }
-    }
-
+    
     void resetEmo()
     {
         setEmotion(0);

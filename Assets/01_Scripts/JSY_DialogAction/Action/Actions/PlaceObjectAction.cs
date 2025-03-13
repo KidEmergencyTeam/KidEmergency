@@ -1,31 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlaceObjectAction : MonoBehaviour, IActionEffect
 {
-    public GameObject bag;
-    public GameObject pencilCase;
-    public GameObject textbook;
+    // 오브젝트 미리 배치되면 삭제될 액션타입임.
+    private bool _isComplete = false;
+    public bool IsActionComplete => _isComplete;
     
-    private bool isComplete = false;
-    public bool IsActionComplete => isComplete;
     public void StartAction()
     {
-       SetObject();
-       isComplete = false;
+        _isComplete = false;
+        _isComplete = true; 
+        // StartCoroutine(SetObjects(ActionManager.Instance.beforeDialog));
     }
 
-    public void StopAction()
-    {
-        isComplete = true;
-    }
-
-
-    private void SetObject()
-    {
-        Instantiate(bag);
-        Instantiate(pencilCase);
-        Instantiate(textbook);
-    }
+    // private IEnumerator SetObjects(DialogData dialogData)
+    // {
+    //     if (dialogData.objects != null && dialogData.objectsNames != null)
+    //     {
+    //         for (int i = 0; i < dialogData.objects.Length && i < dialogData.objectsNames.Length; i++)
+    //         {
+    //             GameObject clone = Instantiate(dialogData.objects[i]);
+    //             clone.name = dialogData.objectsNames[i];
+    //             yield return null;
+    //         }
+    //         
+    //         _isComplete = true;
+    //     }
+    //
+    //     else
+    //     {
+    //         print("SO에 오브젝트나 오브젝트 이름이 없음");
+    //     }
+    // }
+    
 }
