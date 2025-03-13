@@ -9,292 +9,351 @@ using UnityEngine.SceneManagement;
 
 public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public static ConnectionManager instance;
-    
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
-    [SerializeField] private NetworkRunner _runnerPrefab;
-    [SerializeField] private Transform _spawnTransform;
-    
-    public HardwareRig hardwareRig;
-    public NetworkRig networkRig;
-    
-    private NetworkRunner _instanceRunner;
-    
-    private byte[] _connectionToken;
-    private Dictionary<int, NetworkObject> _playersMap = new Dictionary<int, NetworkObject>();
-    private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
-    private List<int> _pendingTokens = new List<int>();
-    private System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
-    private const float _cleanupTime = 5000f; // 5초
+	public static ConnectionManager instance;
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
+	[SerializeField] private NetworkPrefabRef _playerPrefab;
+	[SerializeField] private NetworkRunner _runnerPrefab;
+	[SerializeField] private Transform _spawnTransform;
 
-            instance._connectionToken = ConnectionTokenUtils.NewToken();
-            instance._playersMap = new Dictionary<int, NetworkObject>();
-            instance._pendingTokens = new List<int>();
-        }
+	public HardwareRig hardwareRig;
+	public NetworkRig networkRig;
 
-        if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-    }
+	private NetworkRunner _instanceRunner;
 
-    private void Start()
-    {
-        StartGame(GameMode.AutoHostOrClient);
-    }
+	private byte[] _connectionToken;
 
-    private void Update()
-    {
-        if (_instanceRunner == null) return;
+	private Dictionary<int, NetworkObject> _playersMap =
+		new Dictionary<int, NetworkObject>();
 
-        // 재접속 대기 시간 초과 체크
-        if (_instanceRunner.IsServer && _watch.IsRunning && _watch.ElapsedMilliseconds > _cleanupTime)
-        {
-            _watch.Stop();
-            _watch.Reset();
+	private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers =
+		new Dictionary<PlayerRef, NetworkObject>();
 
-            lock (_pendingTokens)
-            {
-                foreach (var token in _pendingTokens.ToList())
-                {
-                    if (_playersMap.TryGetValue(token, out var playerObject))
-                    {
-                        Debug.Log($"시간 초과로 플레이어 제거: {token}");
-                        _playersMap.Remove(token);
-                        _instanceRunner.Despawn(playerObject);
-                    }
-                }
+	private List<int> _pendingTokens = new List<int>();
+	private System.Diagnostics.Stopwatch _watch = new System.Diagnostics.Stopwatch();
+	private const float _cleanupTime = 5000f; // 5초
 
-                if (_pendingTokens.Count > 0)
-                {
-                    PushNewSnapshot(_instanceRunner);
-                }
-                _pendingTokens.Clear();
-            }
-        }
-    }
+	private void Awake()
+	{
+		if (instance == null)
+		{
+			instance = this;
 
-    async void PushNewSnapshot(NetworkRunner runner)
-    {
-        Log.Debug("PushNewSnapshot");
+			instance._connectionToken = ConnectionTokenUtils.NewToken();
+			instance._playersMap = new Dictionary<int, NetworkObject>();
+			instance._pendingTokens = new List<int>();
+		}
 
-        bool result = await runner.PushHostMigrationSnapshot();
-        Log.Debug($"PushNewSnapshot : {result}");
-    }
-    
-    private NetworkRunner GetRunner(string runnerId)
-    {
-        var runner = Instantiate(_runnerPrefab);
-        runner.name = runnerId;
-        runner.ProvideInput = true;
-        runner.AddCallbacks(this);
-        
-        return runner;
-    }
-    
-    private async void StartGame(GameMode mode, HostMigrationToken hostMigrationToken = null)
-    {
-        if (_instanceRunner == null)
-        {
-            _instanceRunner = GetRunner("Runner");
-        }
+		if (instance != this)
+		{
+			Destroy(gameObject);
+		}
+		else
+		{
+			DontDestroyOnLoad(gameObject);
+		}
+	}
 
-        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
-    
-        await _instanceRunner.StartGame(new StartGameArgs()
-        {
-            GameMode = mode,
-            SessionName = "TestRoom",
-            Scene = scene,
-            SceneManager = gameObject.AddComponent<SceneNOSolver>(), 
-            ConnectionToken = _connectionToken,
-            HostMigrationToken = hostMigrationToken,
-            HostMigrationResume = hostMigrationToken != null ? HostMigrationResumeMethod : null
-        });
-    }
+	private void Start()
+	{
+		StartGame(GameMode.AutoHostOrClient);
+	}
 
-    private void HostMigrationResumeMethod(NetworkRunner runner)
-    {
-        Debug.Log("호스트 마이그레이션: 게임 상태 복원 시작");
+	private void Update()
+	{
+		if (_instanceRunner == null) return;
 
-        foreach (var resumeNO in runner.GetResumeSnapshotNetworkObjects())
-        {
-            if (resumeNO.TryGetBehaviour<NetworkTransform>(out var netTransform))
-            {
-                var newNetworkObject = runner.Spawn(resumeNO,
-                    position: netTransform.transform.position,
-                    rotation: netTransform.transform.rotation,
-                    onBeforeSpawned: (innerRunner, networkObject) =>
-                    {
-                        networkObject.CopyStateFrom(resumeNO);
-                    });
+		// 재접속 대기 시간 초과 체크
+		if (_instanceRunner.IsServer && _watch.IsRunning &&
+		    _watch.ElapsedMilliseconds > _cleanupTime)
+		{
+			_watch.Stop();
+			_watch.Reset();
 
-                if (newNetworkObject.TryGetComponent<NetworkPlayer>(out var player))
-                {
-                    var token = player.Token;
-                    if (_playersMap.TryGetValue(token, out var oldPlayer))
-                    {
-                        runner.Despawn(oldPlayer);
-                    }
+			lock (_pendingTokens)
+			{
+				foreach (var token in _pendingTokens.ToList())
+				{
+					if (_playersMap.TryGetValue(token, out var playerObject))
+					{
+						Debug.Log($"시간 초과로 플레이어 제거: {token}");
+						_playersMap.Remove(token);
+						_instanceRunner.Despawn(playerObject);
+					}
+				}
 
-                    _playersMap[token] = newNetworkObject;
-                    lock (_pendingTokens)
-                    {
-                        _pendingTokens.Add(token);
-                    }
-                }
-            }
-        }
+				if (_pendingTokens.Count > 0)
+				{
+					PushNewSnapshot(_instanceRunner);
+				}
 
-        if (networkRig.IsLocalNetworkRig)
-        {
-            networkRig.hardwareRig = hardwareRig;
-        }
-        _watch.Restart();
-        Debug.Log("호스트 마이그레이션: 게임 상태 복원 완료");
-    }
-   
-    private int GetPlayerToken(NetworkRunner runner, PlayerRef player)
-    {
-        if (runner.LocalPlayer == player)
-        {
-            return ConnectionTokenUtils.HashToken(_connectionToken);
-        }
+				_pendingTokens.Clear();
+			}
+		}
+	}
 
-        var token = runner.GetPlayerConnectionToken(player);
-        if (token != null)
-        {
-            return ConnectionTokenUtils.HashToken(token);
-        }
+	async void PushNewSnapshot(NetworkRunner runner)
+	{
+		Log.Debug("PushNewSnapshot");
 
-        throw new InvalidOperationException("플레이어 토큰을 찾을 수 없습니다.");
-    }
+		bool result = await runner.PushHostMigrationSnapshot();
+		Log.Debug($"PushNewSnapshot : {result}");
+	}
 
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
-    {
-        _playersMap.Clear();
-        _spawnedPlayers.Clear();
-        lock (_pendingTokens)
-        {
-            _pendingTokens.Clear();
-        }
+	private NetworkRunner GetRunner(string runnerId)
+	{
+		var runner = Instantiate(_runnerPrefab);
+		runner.name = runnerId;
+		runner.ProvideInput = true;
+		runner.AddCallbacks(this);
 
-        if (Application.isPlaying && shutdownReason != ShutdownReason.HostMigration)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
+		return runner;
+	}
 
-    #region Callbacks
-    public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
-    {
-        if (!runner.IsServer) return;
+	private async void StartGame(GameMode mode,
+		HostMigrationToken hostMigrationToken = null)
+	{
+		if (_instanceRunner == null)
+		{
+			_instanceRunner = GetRunner("Runner");
+		}
 
-        var playerToken = GetPlayerToken(runner, player);
-        
-        // 재접속한 플레이어 처리
-        if (_playersMap.TryGetValue(playerToken, out var existingPlayer))
-        {
-            Debug.Log($"재접속한 플레이어: {playerToken}");
-            existingPlayer.AssignInputAuthority(player);
-            _spawnedPlayers[player] = existingPlayer;
-            
-            lock (_pendingTokens)
-            {
-                if (_pendingTokens.Contains(playerToken))
-                {
-                    _pendingTokens.Remove(playerToken);
-                }
-            }
-        }
-        else
-        {
-            Debug.Log($"새로운 플레이어: {playerToken}");
-            NetworkObject playerObject = runner.Spawn(_playerPrefab, 
-                _spawnTransform.position,
-                Quaternion.identity,
-                player,
-                (r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
-            );
-            
-            _playersMap[playerToken] = playerObject;
-            _spawnedPlayers[player] = playerObject;
-        }
-        
-        if (runner.IsServer)
-        {
-            runner.PushHostMigrationSnapshot();
-        }
-    }
+		var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
 
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
-    {
-        if (_spawnedPlayers.TryGetValue(player, out NetworkObject networkPlayerObject))
-        {
-            if (runner.IsServer)
-            {
-                var token = networkPlayerObject.GetComponent<NetworkPlayer>().Token;
-                _playersMap.Remove(token);
-                runner.Despawn(networkPlayerObject);
-                runner.PushHostMigrationSnapshot();
-            }
-            _spawnedPlayers.Remove(player);
-        }
-    } 
-    
-    public async void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
-    {
-        Debug.Log("호스트 마이그레이션 시작");
-        
-        await runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
-        
-        var completedLoad = new TaskCompletionSource<bool>();
-        var sceneAsync = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        sceneAsync.completed += (op) => completedLoad.SetResult(true);
-        await completedLoad.Task;
-        
-        StartGame(hostMigrationToken.GameMode, hostMigrationToken);
-    }
-    
-    public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
-    {
-        runner.Shutdown();
-    }
-    
-    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress,
-        NetConnectFailedReason reason)
-    {
-        runner.Shutdown();
-    }
+		await _instanceRunner.StartGame(new StartGameArgs()
+		{
+			GameMode = mode,
+			SessionName = "TestRoom",
+			Scene = scene,
+			SceneManager = gameObject.AddComponent<NetworkSceneManager>(),
+			ConnectionToken = _connectionToken,
+			HostMigrationToken = hostMigrationToken,
+			HostMigrationResume =
+				hostMigrationToken != null ? HostMigrationResumeMethod : null
+		});
+	}
 
-    #endregion
+	private void HostMigrationResumeMethod(NetworkRunner runner)
+	{
+		Debug.Log("호스트 마이그레이션: 게임 상태 복원 시작");
 
-    #region Unuse Callbacks
-    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-    public void OnSceneLoadDone(NetworkRunner runner) { }
-    public void OnSceneLoadStart(NetworkRunner runner) { }
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
-    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
+		foreach (var resumeNO in runner.GetResumeSnapshotNetworkObjects())
+		{
+			if (resumeNO.TryGetBehaviour<NetworkTransform>(out var netTransform))
+			{
+				var newNetworkObject = runner.Spawn(resumeNO,
+					position: netTransform.transform.position,
+					rotation: netTransform.transform.rotation,
+					onBeforeSpawned: (innerRunner, networkObject) =>
+					{
+						networkObject.CopyStateFrom(resumeNO);
+					});
 
-    public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key,
-        ArraySegment<byte> data) { }
-    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key,
-        float progress) { }
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
-    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-    public void OnConnectedToServer(NetworkRunner runner) { }
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
-    #endregion
+				if (newNetworkObject.TryGetComponent<NetworkPlayer>(out var player))
+				{
+					var token = player.Token;
+					if (_playersMap.TryGetValue(token, out var oldPlayer))
+					{
+						runner.Despawn(oldPlayer);
+					}
+
+					_playersMap[token] = newNetworkObject;
+					lock (_pendingTokens)
+					{
+						_pendingTokens.Add(token);
+					}
+				}
+			}
+		}
+
+		if (networkRig.IsLocalNetworkRig)
+		{
+			networkRig.hardwareRig = hardwareRig;
+		}
+
+		_watch.Restart();
+		Debug.Log("호스트 마이그레이션: 게임 상태 복원 완료");
+	}
+
+	private int GetPlayerToken(NetworkRunner runner, PlayerRef player)
+	{
+		if (runner.LocalPlayer == player)
+		{
+			return ConnectionTokenUtils.HashToken(_connectionToken);
+		}
+
+		var token = runner.GetPlayerConnectionToken(player);
+		if (token != null)
+		{
+			return ConnectionTokenUtils.HashToken(token);
+		}
+
+		throw new InvalidOperationException("플레이어 토큰을 찾을 수 없습니다.");
+	}
+
+	public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+	{
+		_playersMap.Clear();
+		_spawnedPlayers.Clear();
+		lock (_pendingTokens)
+		{
+			_pendingTokens.Clear();
+		}
+
+		if (Application.isPlaying && shutdownReason != ShutdownReason.HostMigration)
+		{
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
+	}
+
+	#region Callbacks
+
+	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+	{
+		if (!runner.IsServer) return;
+
+		var playerToken = GetPlayerToken(runner, player);
+
+		// 재접속한 플레이어 처리
+		if (_playersMap.TryGetValue(playerToken, out var existingPlayer))
+		{
+			Debug.Log($"재접속한 플레이어: {playerToken}");
+			existingPlayer.AssignInputAuthority(player);
+			_spawnedPlayers[player] = existingPlayer;
+
+			lock (_pendingTokens)
+			{
+				if (_pendingTokens.Contains(playerToken))
+				{
+					_pendingTokens.Remove(playerToken);
+				}
+			}
+		}
+		else
+		{
+			Debug.Log($"새로운 플레이어: {playerToken}");
+			NetworkObject playerObject = runner.Spawn(_playerPrefab,
+				_spawnTransform.position,
+				Quaternion.identity,
+				player,
+				(r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
+			);
+
+			_playersMap[playerToken] = playerObject;
+			_spawnedPlayers[player] = playerObject;
+		}
+
+		if (runner.IsServer)
+		{
+			runner.PushHostMigrationSnapshot();
+		}
+	}
+
+	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+	{
+		if (_spawnedPlayers.TryGetValue(player, out NetworkObject networkPlayerObject))
+		{
+			if (runner.IsServer)
+			{
+				var token = networkPlayerObject.GetComponent<NetworkPlayer>().Token;
+				_playersMap.Remove(token);
+				runner.Despawn(networkPlayerObject);
+				runner.PushHostMigrationSnapshot();
+			}
+
+			_spawnedPlayers.Remove(player);
+		}
+	}
+
+	public async void OnHostMigration(NetworkRunner runner,
+		HostMigrationToken hostMigrationToken)
+	{
+		Debug.Log("호스트 마이그레이션 시작");
+
+		await runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
+
+		var completedLoad = new TaskCompletionSource<bool>();
+		var sceneAsync =
+			SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+		sceneAsync.completed += (op) => completedLoad.SetResult(true);
+		await completedLoad.Task;
+
+		StartGame(hostMigrationToken.GameMode, hostMigrationToken);
+	}
+
+	public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+	{
+		runner.Shutdown();
+	}
+
+	public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress,
+		NetConnectFailedReason reason)
+	{
+		runner.Shutdown();
+	}
+
+	#endregion
+
+	#region Unuse Callbacks
+
+	public void OnCustomAuthenticationResponse(NetworkRunner runner,
+		Dictionary<string, object> data)
+	{
+	}
+
+	public void OnSceneLoadDone(NetworkRunner runner)
+	{
+	}
+
+	public void OnSceneLoadStart(NetworkRunner runner)
+	{
+	}
+
+	public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+	{
+	}
+
+	public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj,
+		PlayerRef player)
+	{
+	}
+
+	public void OnConnectRequest(NetworkRunner runner,
+		NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+	{
+	}
+
+	public void OnUserSimulationMessage(NetworkRunner runner,
+		SimulationMessagePtr message)
+	{
+	}
+
+	public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player,
+		ReliableKey key,
+		ArraySegment<byte> data)
+	{
+	}
+
+	public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player,
+		ReliableKey key,
+		float progress)
+	{
+	}
+
+	public void OnInput(NetworkRunner runner, NetworkInput input)
+	{
+	}
+
+	public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
+	{
+	}
+
+	public void OnConnectedToServer(NetworkRunner runner)
+	{
+	}
+
+	public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+	{
+	}
+
+	#endregion
 }
