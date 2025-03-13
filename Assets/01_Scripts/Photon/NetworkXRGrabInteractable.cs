@@ -13,7 +13,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 
 	private XRGrabInteractable _grabInteractable;
 	private Rigidbody _rb;
-	private GameObject _currentInteractor;
+	private Transform _currentInteractor;
 
 	private void Awake()
 	{
@@ -30,9 +30,11 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 		{
 			if (!Object.HasInputAuthority)
 			{
+				_currentInteractor = args.interactorObject.transform;
 				Object.AssignInputAuthority(Object.InputAuthority);
 			}
 
+			IsGrabbed = true;
 			_rb.isKinematic = true;
 		}
 	}
@@ -41,8 +43,9 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (Object.HasInputAuthority)
 		{
+			_currentInteractor = null;
 			Object.RemoveInputAuthority();
-
+			IsGrabbed = false;
 			_rb.isKinematic = false;
 		}
 	}
@@ -51,14 +54,14 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (!IsGrabbed) return;
 
-		Follow(transform, _currentInteractor.transform);
+		Follow(transform, _currentInteractor);
 	}
 
 	public override void Render()
 	{
 		if (IsGrabbed)
 		{
-			Follow(transform, _currentInteractor.transform);
+			Follow(transform, _currentInteractor);
 		}
 	}
 
