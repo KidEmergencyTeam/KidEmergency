@@ -19,26 +19,30 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     {
         DeleteAllHighlightEffects();
         
-        for (int i = 0; i < dialogData.objectsNames.Length; i++)
+        for (int i = 0; i < dialogData.objectsName.Length; i++)
         {
-            GameObject outlineEffect = GameObject.Find(dialogData.objectsNames[i]);
-            Outlinable outlinable = outlineEffect.AddComponent<Outlinable>(); 
-            outlinable.AddAllChildRenderersToRenderingList();
+            GameObject outlineEffect = GameObject.Find(dialogData.objectsName[i]);
             
-            if (outlineEffect.CompareTag("BaseObject"))
+            for (int j = 0; j < outlineEffect.transform.childCount; j++)
             {
-                outlineEffect.AddComponent<BaseOutlineObject>();
-            }
-            else if (outlineEffect.CompareTag("GrabObject"))
-            {
-                outlineEffect.AddComponent<GrabOutlineObject>();
-                outlineEffect.AddComponent<XRGrabInteractable>();
+                GameObject obj = outlineEffect.transform.GetChild(j).gameObject;
+                Outlinable outlinable = obj.AddComponent<Outlinable>();
+                outlinable.AddAllChildRenderersToRenderingList();
+                
+                if (obj.CompareTag("BaseObject"))
+                {
+                    obj.AddComponent<BaseOutlineObject>();
+                }
+                else if (obj.CompareTag("GrabObject"))
+                {
+                    obj.AddComponent<GrabOutlineObject>();
+                    obj.AddComponent<XRGrabInteractable>();
+                }
             }
             
             yield return null;
         }
 
-        print($"{dialogData.objectsNames.Length}개의 오브젝트 강조됨");
         _isComplete = true;
     }
     
