@@ -1,12 +1,17 @@
 using UnityEngine;
 
-// 컨트롤러의 레이가 버튼을 향했을 때,
-// 처리되는 값을
-// 좌측으로 처리할 건지 우측으로 처리할 건지 구분해주는 스크립트
-// 좋은 방법은 아니라고 생각
-
+// 각 플레이어별 포인터 ID 관리 및 사용자 구분
 public class PlayerPointerId : MonoBehaviour
 {
+    // 플레이어 구분을 위해 사용
+    [Header("플레이어 ID")]
+    public int userId; 
+
+    // 포인터 ID를 토대로 
+    // 해당 값이 좌측인지 우측인지를 
+    // 명시적으로 구분
+    // 예) 레이가 버튼위에 있을때 출력 되는 값이 1 -> 좌측으로 명시 또는 우측으로 명시
+
     // 좌측 포인터 ID 열거형
     public enum LeftPointerId
     {
@@ -22,7 +27,6 @@ public class PlayerPointerId : MonoBehaviour
         LeftPointer8,
         LeftPointer9,
         LeftPointer10,
-
         // 필요한 만큼 추가 가능
     }
 
@@ -41,7 +45,6 @@ public class PlayerPointerId : MonoBehaviour
         RightPointer8,
         RightPointer9,
         RightPointer10,
-
         // 필요한 만큼 추가 가능
     }
 
