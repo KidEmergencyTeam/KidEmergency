@@ -70,7 +70,9 @@ public class TextButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             lastCheckTime = Time.time;
 
-            // 1. pointerIds 리스트에서 null이거나, GameObject가 비활성화된 플레이어 제거
+            // 1. pointerIds 리스트에 할당된 pointer.cs가 null 상태이거나
+            // 해당 플레이어의 게임 오브젝트가 비활성화된 경우
+            // 리스트에서 제거
             pointerIds.RemoveAll(pointer => pointer == null || (pointer.gameObject != null && !pointer.gameObject.activeInHierarchy));
 
             // 2. 현재 유효한 플레이어의 userId 목록 생성
