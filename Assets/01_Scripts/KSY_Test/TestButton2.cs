@@ -13,7 +13,7 @@ public enum XRActionType
 }
 
 // 개별적으로 플레이어 및 입력을 구분하여 버튼 클릭 시 이벤트를 호출하는 스크립트  
-// 따라서 버튼 이벤트는 따로 스크립트에서 처리하면 됨
+// 따라서 버튼 이벤트는 따로 스크립트를 만들어서 처리하면 됨
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("버튼")]
