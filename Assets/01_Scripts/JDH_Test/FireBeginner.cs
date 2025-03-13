@@ -55,6 +55,7 @@ public class FireBeginner : MonoBehaviour
     {
         switch (place)
         {
+            //교실
             case PLACE.CLASSROOM:
                 //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -93,11 +94,14 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => isSecondStepRdy == true);
                 thirdDialog.gameObject.SetActive(true);
 
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 SceneManager.LoadScene("JDH2");
                 break;
 
+                //복도
             case PLACE.HALLWAY:
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 secondDialog.gameObject.SetActive(true);
@@ -105,17 +109,29 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 thirdDialog.gameObject.SetActive(true);
                 //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인
-                
+
+
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 SceneManager.LoadScene("JDH3");
                 break;
 
+            //계단, 엘레베이터
             case PLACE.STAIRS_ELEVATOR:
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                //버튼 클릭 대기
+
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH4");
                 break;
 
+            //유치원 밖
             case PLACE.OUTSIDE:
                 //마무리 대사만 출력 후 종료
                 break;
