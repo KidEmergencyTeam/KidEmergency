@@ -21,20 +21,25 @@ public class WaitStateManager : MonoBehaviour
     [Header("페이드 효과")]
     public FadeInOut fadeInOut;
 
-    // 대기 중인 플레이어들의 PlayerReady 컴포넌트를 저장할 리스트
+    // 대기 중인 플레이어들의 PlayerReady.cs를 저장할 리스트
     // 목적: 리스트에 포함된 PlayerReady.cs 수만큼 대기 인원 처리 -> 인원 표시 및 준비 상태 받아서 씬 전환
     private List<PlayerReady> playerReadyList = new List<PlayerReady>();
 
     void Start()
     {
-        // 태그가 "Player"인 모든 오브젝트에서 PlayerReady 컴포넌트 찾기
+        // 태그가 "Player"인 모든 오브젝트에서 PlayerReady.cs 찾기
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in players)
         {
+            // PlayerReady.cs 가져오기
             PlayerReady pr = player.GetComponent<PlayerReady>();
+
+            // PlayerReady.cs 존재하면,
             if (pr != null)
             {
+                // 리스트에 추가
                 playerReadyList.Add(pr);
+
                 // 플레이어가 준비되었을 때 콜백 등록
                 pr.onPlayerReady += OnPlayerReady;
             }
