@@ -85,7 +85,8 @@ public class ScenarioManager : MonoBehaviour
             { 34, Step34 },
             { 35, Step35 },
             { 36, Step36 },
-            { 37, Step37 }
+            { 37, Step37 },
+            { 38, Step38 },
         };
 
         // 시나리오 시작
@@ -165,13 +166,13 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step13() { yield return PlayAndWait(8); }
 
     // 대사가 출력되고 나서 
-    // 손수건 오브젝트 활성화
+    // 1.손수건 오브젝트 활성화
+    // 2.손수건 잡기
     // 완료되면 스텝14로 이동
 
     IEnumerator Step14() 
     {
-        // 1.손수건 잡기
-        // 2.플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
+        // 플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
         // PlayerPosition.cs -> destinationPositions 리스트에 담긴 플레이어 수만큼 이동이 완료되면
         // 다음 스텝으로 이동
 
@@ -267,6 +268,7 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
     IEnumerator Step37() { yield return PlayAndWait(25); }
+    IEnumerator Step38() { yield return PlayAndWait(26); }
 
     #endregion
 

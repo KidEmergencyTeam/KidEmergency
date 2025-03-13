@@ -5077,7 +5077,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &99454639
 Transform:
   m_ObjectHideFlags: 0
@@ -14298,13 +14298,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 420406009}
+  - component: {fileID: 420406011}
+  - component: {fileID: 420406010}
   m_Layer: 0
   m_Name: XR Interaction Hands Setup
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &420406009
 Transform:
   m_ObjectHideFlags: 0
@@ -14323,6 +14325,32 @@ Transform:
   - {fileID: 317014784}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &420406010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420406008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff667bc7b60575c488c8f03baf32fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftPointerIds: 08000000
+  rightPointerIds: 02000000
+--- !u!114 &420406011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420406008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c784f1851505d884e9d7ba346cf41094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &423243418
 GameObject:
   m_ObjectHideFlags: 0
@@ -24802,7 +24830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &763107596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58580,6 +58608,63 @@ Transform:
   - {fileID: 62550165}
   m_Father: {fileID: 2107034870}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1821391845
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.897
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.305
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.64278764
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.76604444
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195322143722525746, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518169980483839766, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
+      propertyPath: m_Name
+      value: Carpet2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6d05b9c6f1a84414ca2b2a2d4851d8d7, type: 3}
 --- !u!1 &1825798028
 GameObject:
   m_ObjectHideFlags: 0
@@ -61160,103 +61245,104 @@ MonoBehaviour:
       \uBC18\uAC00\uC6CC \uC624\uB298\uC740 \uD559\uAD50\uC5D0\uC11C \uD654\uC7AC\uAC00
       \uC77C\uC5B4\uB0AC\uC744 \uB54C\uC758 \uB300\uCC98 \uBC29\uBC95\uC744 \uC54C\uC544\uBCFC
       \uAC70\uC57C"
-    typingSound: {fileID: 8300000, guid: 5d65a7ad5da1c694eb10032ad4c75130, type: 3}
+    typingSound: {fileID: 8300000, guid: d0f6f64a229cea94e863c57ac3aef104, type: 3}
   - typingText: "\uD6C8\uB828\uC774 \uC2DC\uC791\uB418\uBA74 \uD070 \uC18C\uB9AC\uAC00
       \uB0A0 \uC218\uB3C4 \uC788\uC73C\uB2C8 \uC8FC\uC758\uD574 \uC918"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: d58b445862e74934bb26b0dc2467f401, type: 3}
   - typingText: "\uBCF5\uB3C4\uB97C \uBD10! \uD654\uC7AC\uAC00 \uBC1C\uC0DD\uD55C
       \uAC70 \uAC19\uC544! \uBAA8\uB450 \uC9C4\uC815\uD558\uACE0 \uC548\uC804\uD558\uAC8C
       \uD0C8\uCD9C\uD574 \uBCF4\uC790"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: b70430f88def8f94a9802660ae6f5e10, type: 3}
   - typingText: "\uBA3C\uC800 \uC5F0\uAE30\uAC00 \uB9CE\uC774 \uB098\uB294 \uAC70
       \uAC19\uC73C\uB2C8\uAE4C \uBAA8\uB450 \uC785\uACFC \uCF54\uB97C \uAC00\uB9AC\uACE0
       \uC774\uB3D9\uD558\uC790!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 6a793c6b3cf22494482f50c8f1463718, type: 3}
   - typingText: "\uBB34\uC5C7\uC73C\uB85C \uC785\uACFC \uCF54\uB97C \uAC00\uB9B4\uB798?"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 096a80082626637488b8430df4d55dab, type: 3}
   - typingText: "\uC548\uB3FC! \uC5F0\uAE30\uAC00 \uB9CE\uC774 \uB098\uB294 \uD654\uC7AC
       \uBC1C\uC0DD \uC2DC \uB9E8\uC190\uC73C\uB85C \uC785\uACFC \uCF54\uB97C \uAC00\uB9AC\uBA74
       \uC704\uD5D8\uD574!!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 53ba193db01e3e74d92f3a30970eb407, type: 3}
   - typingText: "\uC8FC\uBCC0\uC5D0 \uC190\uC218\uAC74\uC774\uB098 \uCC9C \uB4F1\uC774
       \uC788\uB2E4\uBA74 \uC0AC\uC6A9\uD558\uACE0 \uB9CC\uC57D \uC544\uBB34\uAC83\uB3C4
       \uC5C6\uB2E4\uBA74 \uC637\uC73C\uB85C\uB77C\uB3C4 \uC785\uACFC \uCF54\uB97C
       \uAC00\uB9AC\uB294 \uAC8C \uC88B\uC544"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 2d8c14a68323be94e8e98d00adf0f7c2, type: 3}
   - typingText: "\uC798\uD588\uC5B4!! \uC8FC\uBCC0\uC5D0 \uC190\uC218\uAC74\uC774\uB098
       \uCC9C\uB4F1\uC774 \uC788\uB2E4\uBA74 \uC0AC\uC6A9\uD558\uACE0 \uB9CC\uC57D
       \uC544\uBB34\uAC83\uB3C4 \uC5C6\uB2E4\uBA74 \uC637\uC73C\uB85C\uB77C\uB3C4
       \uC785\uACFC \uCF54\uB97C \uAC00\uB9AC\uB294 \uAC8C \uC88B\uC544"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
-  - typingText: "\uBAA8\uB450 \uCC45\uC0C1 \uC704\uC5D0 \uC788\uB294 \uC190\uC218\uAC74\uC744
-      \uC0AC\uC6A9\uD574\uC11C \uC785\uACFC \uCF54\uB97C \uAC00\uB9AC\uACE0 \uAD50\uC2E4
-      \uBB38 \uC55E\uC5D0 2\uC904\uB85C \uC11C \uC918!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 319dd70ef2741b34eaa45cb3eafa9c25, type: 3}
+  - typingText: "\uBAA8\uB450 \uC785\uACFC \uCF54\uB97C \uAC00\uB9AC\uACE0 \uAD50\uC2E4
+      \uBB38 \uC55E\uC5D0 2\uC904\uB85C \uC11C\uC918!!"
+    typingSound: {fileID: 8300000, guid: 86a496212deca7e47b8fc11d0a83c331, type: 3}
   - typingText: "\uC88B\uC558\uC5B4 \uBCF5\uB3C4\uB85C \uB098\uAC00\uBA74 \uBA3C\uC800
       \uB9E8 \uC55E\uC5D0 \uC788\uB294 \uC0AC\uB78C\uC774 \uD654\uC7AC \uACBD\uBCF4
       \uBCA8 \uBC84\uD2BC\uC744 \uB20C\uB7EC\uC918!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: d952fef5601569a4286f14d30055ee9d, type: 3}
   - typingText: "\uC790 \uBCF5\uB3C4\uB85C \uB098\uC654\uC5B4! \uC5F0\uAE30\uAC00
       \uC880 \uCC28 \uC788\uC73C\uB2C8\uAE4C \uCF54\uC640 \uC785\uC744 \uACC4\uC18D
       \uB9C9\uACE0 \uC788\uC5B4\uC57C \uD574!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 0f8bd485f1917c041834e64e291c862d, type: 3}
   - typingText: "\uBA3C\uC800 \uC81C\uC77C \uC55E\uC5D0 \uC788\uB294 \uC0AC\uB78C\uC774
       \uD654\uC7AC \uACBD\uBCF4 \uBCA8\uC744 \uB20C\uB7EC\uC918"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: e2575756d87aaa4408ac21edf20a5b80, type: 3}
   - typingText: "\uC798\uD588\uC5B4! \uD654\uC7AC\uAC00 \uC77C\uC5B4\uB098\uBA74
       \uAC00\uC7A5 \uBA3C\uC800 \uC81C\uC77C \uAC00\uAE4C\uC774 \uC788\uB294 \uD654\uC7AC
       \uACBD\uBCF4 \uBCA8\uC744 \uB204\uB978 \uD6C4 \uB300\uD53C\uD574 \uC918"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: eced92f31eb53f4479ef0c2fd42e8e6c, type: 3}
   - typingText: "\uC73C\uC544...\uC5F0\uAE30\uAC00 \uC810\uC810 \uB354 \uC9D9\uC5B4\uC9C0\uACE0
       \uC788\uC5B4 "
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 2aed383d9c72cb842a32ada1397102ae, type: 3}
   - typingText: "\uB300\uD53C\uD560 \uB54C\uB294 \uCF54\uC640 \uC785\uC744 \uB9C9\uC558\uC5B4\uB3C4
       \uBAB8\uC744 \uC219\uC774\uACE0 \uC774\uB3D9\uD574\uC57C \uD574 \uBAA8\uB450
       \uBAB8\uC744 \uC219\uC5EC\uC918!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 6be31d483f583d74a865ee27d55e2117, type: 3}
   - typingText: "\uC790 \uBAB8\uC744 \uC219\uC774\uACE0 \uCC9C\uCC9C\uD788 \uC774\uB3D9\uD574\uBCF4\uC790
       \uD558\uC9C0\uB9CC \uC5F0\uAE30\uAC00 \uC9D9\uC5B4\uC11C \uAE38\uC774 \uC798
       \uC548 \uBCF4\uC5EC\u2026\uC774\uB7F4 \uB54C\uB294 \uC5B4\uB5A1\uD574\uC57C
       \uD560\uAE4C?"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 436fb8eee11830a4bbd29b7edfbbfe54, type: 3}
   - typingText: "\uB9DE\uC558\uC5B4! \uB300\uB2E8\uD55C\uB370? \uC5F0\uAE30\uB85C
       \uC778\uD574\uC11C \uC55E\uC774 \uC798 \uC548 \uBCF4\uC77C\uB54C\uB294 \uD53C\uB09C
       \uC720\uB3C4\uC120\uC744 \uB530\uB77C\uC11C \uCE68\uCC29\uD558\uAC8C \uC774\uB3D9\uD574\uC57C
       \uD574 "
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 30da9c9148bf9604e811a0ec54b9f421, type: 3}
   - typingText: "\uADF8\uB7EC\uBA74 \uC548 \uB3FC! \uD654\uC7AC\uAC00 \uC77C\uC5B4\uB0AC\uC744
       \uB54C\uB294 \uC54C\uACE0 \uC788\uB294 \uAE38\uC774\uB77C\uB3C4 \uC5F0\uAE30\uC5D0
       \uC758\uD574\uC11C \uC548\uBCF4\uC77C \uC218\uB3C4 \uC788\uC73C\uB2C8\uAE4C
       \uC720\uB3C4\uC120\uC744 \uB530\uB77C\uC11C \uCE68\uCC29\uD558\uAC8C \uC774\uB3D9\uD574\uC918"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: d5ba6b69b387d5d4e99ff4494beb8490, type: 3}
   - typingText: "\uC790, \uADF8\uB7EC\uBA74 \uCE68\uCC29\uD558\uAC8C \uC6C0\uC9C1\uC5EC\uBCF4\uC790!!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 28f60f44563aeab4f8cc1dccbe965bab, type: 3}
   - typingText: "\uD734 \uBC8C\uC368 \uC5EC\uAE30\uAE4C\uC9C0 \uC654\uC5B4! \uC774\uC81C
       \uB0B4\uB824\uAC00\uAE30\uB9CC \uD558\uBA74 \uB05D\uC774\uC57C"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 10e3991894259044dbd7372e705a842e, type: 3}
   - typingText: "\uACC4\uB2E8\uACFC \uC5D8\uB9AC\uBCA0\uC774\uD130\uAC00 \uC788\uC5B4,
       \uC5B4\uB5BB\uAC8C \uB0B4\uB824\uAC08\uAE4C??"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 9e9339518cbf0484ebb7dcb38013f8b6, type: 3}
   - typingText: "\uB9DE\uC558\uC5B4! \uD654\uC7AC \uB300\uD53C\uB97C \uD560 \uB54C\uB294
       \uC5D8\uB9AC\uBCA0\uC774\uD130 \uBCF4\uB2E4 \uACC4\uB2E8\uC774 \uB354 \uC548\uC804\uD574
       \uC5D8\uB9AC\uBCA0\uC774\uD130\uB294 \uD654\uC7AC \uC2DC \uACE0\uC7A5 \uB0A0
       \uC218\uB3C4 \uC788\uC5B4!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 3fe3c5df5563ff146a3f886c099af2e4, type: 3}
   - typingText: "\uC548\uB3FC! \uD654\uC7AC \uC2DC\uC5D0\uB294 \uC5D8\uB9AC\uBCA0\uC774\uD130\uB97C
       \uD0C0\uACE0 \uB300\uD53C\uD588\uB2E4\uAC00 \uC5D8\uB9AC\uBCA0\uC774\uD130
       \uC548\uC5D0 \uAC07\uD790 \uC218\uB3C4 \uC788\uC5B4! \uACC4\uB2E8\uC73C\uB85C
       \uBE60\uB974\uAC8C \uD53C\uB09C\uD558\uB294 \uAC8C \uC548\uC804\uD574"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: f9219c346ea0b8c4b93f8d655eed79d4, type: 3}
   - typingText: "\uACC4\uB2E8\uC73C\uB85C \uCE68\uCC29\uD558\uAC8C \uB0B4\uB824\uAC00\uC790,
       \uC5EC\uAE30\uB9CC \uB0B4\uB824\uAC00\uBA74 \uB098\uAC08 \uC218 \uC788\uC5B4!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 7fc325c6239748e459f26997e71ad075, type: 3}
   - typingText: "\uC640! \uC548\uC804\uD558\uAC8C \uBAA8\uB450 \uBE60\uC838\uB098\uC654\uC5B4
       \uC815\uB9D0 \uB300\uB2E8\uD574!!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: e34514cbab3a6ed43986b1a624a9d099, type: 3}
   - typingText: "\uAC19\uC740 \uC0AC\uAC74\uC774 \uC77C\uC5B4\uB098\uB3C4 \uC624\uB298\uCC98\uB7FC\uB9CC
       \uD558\uBA74 \uC548\uC804\uD558\uAC8C \uB300\uD53C\uD560 \uC218 \uC788\uC744
       \uAC70\uC57C!"
-    typingSound: {fileID: 8300000, guid: a69920147eaf5c84f8313251f1a00f11, type: 3}
+    typingSound: {fileID: 8300000, guid: 3062297e4e5cbc8468940606d9d8e7cc, type: 3}
+  - typingText: "\uADF8\uB7FC \uBAA8\uB450 \uB2E4\uC74C\uC5D0\uBD10!"
+    typingSound: {fileID: 8300000, guid: ae673ca0cd1fcbd4dabe397acb86f45c, type: 3}
   typingText: {fileID: 0}
   typingTextTag: Typing
   commonTypingSpeed: 0.14
@@ -68302,3 +68388,4 @@ SceneRoots:
   - {fileID: 420406009}
   - {fileID: 99454639}
   - {fileID: 334455706}
+  - {fileID: 1821391845}
