@@ -3861,6 +3861,7 @@ GameObject:
   m_Component:
   - component: {fileID: 122533668}
   - component: {fileID: 122533667}
+  - component: {fileID: 122533669}
   m_Layer: 0
   m_Name: XR Interaction Hands Setup (3) - main
   m_TagString: Player
@@ -3898,6 +3899,21 @@ Transform:
   - {fileID: 551669809}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &122533669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 122533666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff667bc7b60575c488c8f03baf32fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userId: 1
+  leftPointerIds: 09000000
+  rightPointerIds: 05000000
 --- !u!1 &126209792
 GameObject:
   m_ObjectHideFlags: 0
@@ -3990,6 +4006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff667bc7b60575c488c8f03baf32fea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userId: 0
   leftPointerIds: 04000000
   rightPointerIds: 07000000
 --- !u!1 &138557652
@@ -12367,11 +12384,9 @@ MonoBehaviour:
   button: {fileID: 482967297}
   displayText: {fileID: 1790125164}
   inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  leftSelectActionName: XRI LeftHand Interaction/Select
-  rightSelectActionName: XRI RightHand Interaction/Select
-  buttonClicked: 0
-  pointerIds:
-  - {fileID: 0}
+  leftSelectActionType: 0
+  rightSelectActionType: 1
+  pointerIds: []
 --- !u!1 &488082814
 GameObject:
   m_ObjectHideFlags: 0
@@ -16196,9 +16211,8 @@ MonoBehaviour:
   button: {fileID: 666483045}
   displayText: {fileID: 69487941}
   inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  leftSelectActionName: XRI LeftHand Interaction/Select
-  rightSelectActionName: XRI RightHand Interaction/Select
-  buttonClicked: 0
+  leftSelectActionType: 0
+  rightSelectActionType: 1
   pointerIds: []
 --- !u!114 &666483045
 MonoBehaviour:
@@ -23915,6 +23929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1048071658}
   - component: {fileID: 1048071659}
+  - component: {fileID: 1048071660}
   m_Layer: 0
   m_Name: XR Interaction Hands Setup (1)
   m_TagString: Player
@@ -23949,6 +23964,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c784f1851505d884e9d7ba346cf41094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1048071660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048071657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff667bc7b60575c488c8f03baf32fea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  userId: 2
+  leftPointerIds: 00000000
+  rightPointerIds: 01000000
 --- !u!1 &1049996606
 GameObject:
   m_ObjectHideFlags: 0
@@ -63002,7 +63032,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -63868,7 +63898,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -67088,6 +67118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff667bc7b60575c488c8f03baf32fea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userId: 0
   leftPointerIds: 01000000
   rightPointerIds: 03000000
 --- !u!137 &8638557134202741615
