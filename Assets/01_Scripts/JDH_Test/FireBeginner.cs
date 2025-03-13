@@ -11,8 +11,15 @@ public class FireBeginner : MonoBehaviour
 
     [Header("장소 상태")]
     public PLACE place;
+
+    [Header("화재인지 지진인지 확인하는 변수")]
+    public bool isFireBeginner;
+    public bool isEarthquake;
+
     [Header("NPC 및 상호작용 오브젝트")]
-    public GameObject[] NPC;
+    public GameObject player;   //싱글 플레이어 위치
+    public GameObject seti;
+    public GameObject[] NPC;    //멀티 플레이어 위치
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
     public GameObject exampleDescUi;
@@ -20,6 +27,12 @@ public class FireBeginner : MonoBehaviour
 
     [Header("상호작용 혹은 위치 이동 지점")]
     public Transform HandkerchiefSpawnPos;
+    public Transform playerMovPos;
+    public Transform setiMovPos;
+    public Transform[] npcMovPos;
+
+    [Header("사용하는 파티클")]
+    public ParticleSystem smokeParticle;
 
     [Header("ExampleUI 변경 이미지 관련 변수")]
     [SerializeField] private Image LeftImg;
@@ -42,6 +55,7 @@ public class FireBeginner : MonoBehaviour
     {
         switch (place)
         {
+            //교실
             case PLACE.CLASSROOM:
                 //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -61,10 +75,16 @@ public class FireBeginner : MonoBehaviour
                 //책상에 손수건 생성
                 GameObject HandkerchiefObj = Instantiate(Handkerchief, HandkerchiefSpawnPos.position, Quaternion.identity);
                 //손으로 손수건 잡으면 왼손에 고정
-                Debug.Log(":)");
+                Debug.Log("손수건 고정 완료");
                 //유저 입 주변에 손수건 접촉 시 입과 코를 가린 것으로 판정
 
+                //FadeIn, Out으로 이동하는 모습을 안보여준다.
+                StartCoroutine(fadeInOutImg.FadeOut());
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
+                Debug.Log("플레이어 NPC 위치 이동");
+                TeleportCharacters();
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                StartCoroutine(fadeInOutImg.FadeIn());
 
                 //왼손이 지정한 범위에서 떨어질 경우 손수건이 떨어진 판정(경고 UI 출력: 손수건으로 입과 코를 가려줘!)   
 
@@ -74,11 +94,14 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => isSecondStepRdy == true);
                 thirdDialog.gameObject.SetActive(true);
 
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 SceneManager.LoadScene("JDH2");
                 break;
 
+                //복도
             case PLACE.HALLWAY:
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 secondDialog.gameObject.SetActive(true);
@@ -86,20 +109,58 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 thirdDialog.gameObject.SetActive(true);
                 //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인
-                
+
+
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
                 SceneManager.LoadScene("JDH3");
                 break;
 
+            //계단, 엘레베이터
             case PLACE.STAIRS_ELEVATOR:
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                //버튼 클릭 대기
+
+                //Fade Out 진행 된 후 Scene 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH4");
                 break;
 
+            //유치원 밖
             case PLACE.OUTSIDE:
                 //마무리 대사만 출력 후 종료
                 break;
 
         }
+    }
+    void TeleportCharacters()
+    {
+        // 플레이어 즉시 이동
+        if (playerMovPos != null)
+        {
+            player.transform.position = playerMovPos.position;
+        }
+
+        // 세티 즉시 이동
+        if (setiMovPos != null)
+        {
+            seti.transform.position = setiMovPos.position;
+        }
+
+        // NPC 즉시 이동
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcMovPos.Length > i && npcMovPos[i] != null)
+            {
+                NPC[i].transform.position = npcMovPos[i].position;
+            }
+        }
+
+        Debug.Log("플레이어 및 NPC 텔레포트 완료");
     }
 }
