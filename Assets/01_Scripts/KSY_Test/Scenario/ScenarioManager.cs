@@ -225,8 +225,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
-        ChangeScene(0);
-        yield return null;
+        yield return StartCoroutine(ChangeScene(0));
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
     IEnumerator Step17() { yield return PlayAndWait(11); }
@@ -263,7 +262,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
-        ChangeScene(1);
+        yield return StartCoroutine(ChangeScene(1));
     }
     IEnumerator Step29() { yield return PlayAndWait(19); }
     IEnumerator Step30() { yield return PlayAndWait(20); }
@@ -274,7 +273,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
-        ChangeScene(2);
+        yield return StartCoroutine(ChangeScene(2));
         yield return null;
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
@@ -283,13 +282,17 @@ public class ScenarioManager : MonoBehaviour
 
     #endregion
 
-    // 씬 전환 메서드
-    void ChangeScene(int sceneIndex)
+    // 비동기 씬 전환 메서드
+    IEnumerator ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
-            SceneManager.LoadScene(sceneNames[sceneIndex]);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
         else
         {
