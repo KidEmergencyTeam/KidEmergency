@@ -99,7 +99,7 @@ public class ScenarioManager : MonoBehaviour
     // 시나리오 전체를 순차적으로 실행
     IEnumerator RunScenario()
     {
-        while (currentStep <= 37)
+        while (currentStep <= 38)
         {
             if (scenarioSteps.ContainsKey(currentStep))
             {
