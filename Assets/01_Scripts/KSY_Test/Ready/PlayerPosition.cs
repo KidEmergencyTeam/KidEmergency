@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// 빈슬롯에 플레이어를 추가하여 
+// 빈 슬롯에 플레이어를 추가하여 
 // 초기 위치에 플레이어를 배치 또는
 // 시나리오 도중 
 // 특정 위치로 플레이어를 배치 시키는 스크립트
@@ -14,6 +14,9 @@ public class PlayerEntry
 
     // 플레이어의 초기 위치
     public Vector3 initialPosition;
+
+    // 플레이어의 초기 로테이션 
+    public Vector3 initialRotation;
 }
 
 // Step14 등에서 사용할 플레이어의 이동 목적지를 리스트로 정의 -> 학교 고급에서 문 앞으로 정렬
@@ -72,7 +75,7 @@ public class PlayerPosition : MonoBehaviour
         }
     }
 
-    // 플레이어 추가 및 초기 위치로 배치
+    // 플레이어 추가 및 초기 위치와 로테이션 값으로 배치
     public void AddPlayer(GameObject newPlayer)
     {
         if (newPlayer == null)
@@ -91,6 +94,7 @@ public class PlayerPosition : MonoBehaviour
         {
             freeEntry.player = newPlayer;
             newPlayer.transform.position = freeEntry.initialPosition;
+            newPlayer.transform.rotation = Quaternion.Euler(freeEntry.initialRotation);
             Debug.Log($"플레이어 추가됨: {newPlayer.name}");
         }
         else
