@@ -24,14 +24,14 @@ public class MouthDetector : MonoBehaviour
         // 충돌한 오브젝트가 handkerTag를 가지고 있는지 검사
         if (other.CompareTag(handkerTag))
         {
-            // 충돌한 오브젝트의 XRGrabInteractable 컴포넌트를 가져옴(없어도 진행 가능)
+            // 충돌한 오브젝트의 XRGrabInteractable.cs를 가져오기
             XRGrabInteractable grab = other.GetComponent<XRGrabInteractable>();
             if (grab != null)
             {
                 lastGrabInteractable = grab;
             }
 
-            // 충돌 확인되면 코루틴 실행
+            // 충돌 시 코루틴 실행
             triggered = true;
             StartCoroutine(HandleHandkerGrab());
         }
