@@ -127,9 +127,9 @@ public class NetworkGrabbable : NetworkBehaviour
 		if (Runner.IsServer || Runner.IsSharedModeMasterClient)
 		{
 			if (m_DebugLog)
-				Debug.Log($"[{name}] RPC_RequestObjectOwnership from {RPC.Source}");
+				Debug.Log($"[{name}] RPC_RequestObjectOwnership from {Runner.LocalPlayer}");
 			
-			Object.AssignInputAuthority(RPC.Source);
+			Object.AssignInputAuthority(Runner.LocalPlayer);
 		}
 	}
 
