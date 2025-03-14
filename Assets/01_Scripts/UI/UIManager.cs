@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : SingletonManager<UIManager>
 {
     public OptionUI[] optionUI;
     public DialogUI dialogUI;
+    public WarningUI warningUI;
 
     #region Option
     public void SetOptionUI()
@@ -33,4 +35,10 @@ public class UIManager : SingletonManager<UIManager>
     
 
     #endregion
+
+    public void SetWarningUI(Sprite image, string text)
+    {
+        warningUI.warningImage.sprite = image;
+        warningUI.warningText.text = text;
+    }
 }
