@@ -12,6 +12,11 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
         _isComplete = false;
         StartCoroutine(ChangeScene());
     }
+
+    public void StartMultiModeAction()
+    {
+        
+    }
     
     private IEnumerator ChangeScene()
     {
