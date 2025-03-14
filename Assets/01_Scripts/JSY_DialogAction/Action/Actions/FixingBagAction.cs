@@ -1,19 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Unity.Properties;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.Serialization;
 using XRController = UnityEngine.XR.Interaction.Toolkit.XRController;
 
 public class FixingBagAction : MonoBehaviour, IActionEffect
 {
     private bool _isComplete = false;
     [SerializeField] private GameObject[] _bag;
-    private GameObject _xrParent;
-    private Vector3 _fixPos;
+    [SerializeField] GameObject _xrParent;
     public bool IsActionComplete => _isComplete;
 
     private void Start()
@@ -25,39 +18,44 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        StartCoroutine(TestAction());
+        // StartCoroutine(TestAction());
+        _isComplete = true;
     }
 
     public void StartMultiModeAction()
     {
-        _isComplete = false;
+        _isComplete = false;        
     }
 
-    private IEnumerator TestAction()
-    {
-        // 멀티일 시 고유한 뭔가(ex. ID)를 찾은 뒤에 GetComponentInChildren으로 진행 예정
-        Vector3 originPos = FindObjectOfType<XRController>().transform.localPosition;
-        originPos.y += 0.5f;
-        _fixPos = originPos;
-
-        while (!_isComplete)
-        {
-            for (int i = 0; i < _bag.Length; i++)
-            {
-                if (Vector3.Distance(_bag[i].transform.position, _fixPos) < 0.1f)
-                {
-                    _bag[i].transform.position = _fixPos;
-                    _bag[i].transform.SetParent(_xrParent.transform);
-
-                    Rigidbody rb = _bag[i].GetComponent<Rigidbody>();
-                    rb.isKinematic = true;
-                }
-            }
-            
-            yield return null;
-        }
-        
-        print("가방 고정됨");
-        _isComplete = true;
-    }
+    // private IEnumerator TestAction()
+    // {
+    //     // Transform headTransform = _xrParent.transform.GetChild(0);
+    //     //
+    //     // while (!_isComplete)
+    //     // {
+    //     //     Vector3 currentHeadPos = headTransform.position;
+    //     //     Vector3 targetPos = currentHeadPos + Vector3.up * 0.5f;  // 값은 씬에서 테스트 해보고 결정
+    //     //     
+    //     //     for (int i = 0; i < _bag.Length; i++)
+    //     //     {
+    //     //         if (Vector3.Distance(_bag[i].transform.position, targetPos) < 0.1f)
+    //     //         {
+    //     //             _bag[i].transform.SetParent(_xrParent.transform);
+    //     //             
+    //     //             _isComplete = true;
+    //     //             break;
+    //     //         }
+    //     //
+    //     //         else
+    //     //         {
+    //     //             UIManager.Instance.SetWarningUI(warningSprite,warningText);
+    //     //             UIManager.Instance.OpenWarningUI();
+    //     //         }
+    //     //     }
+    //     //     
+    //     //     yield return null;
+    //     // }
+    //     
+    //     print("가방 고정됨");
+    // }
 }
