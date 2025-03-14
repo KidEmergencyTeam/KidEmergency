@@ -21,25 +21,30 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private void OnGrab(SelectEnterEventArgs args)
 	{
 		isGrabbed = true;
+		Rpc_RequestGrab(Runner.LocalPlayer);
 	}
 
 	private void OnRelease(SelectExitEventArgs args)
 	{
 		isGrabbed = false;
+		Rpc_RequestRelease();
 	}
 
-	public override void FixedUpdateNetwork()
+	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+	public void Rpc_RequestGrab(PlayerRef player)
 	{
-		if (isGrabbed)
+		if (Object.HasStateAuthority)
 		{
-			Pos = transform.position;
-			Rot = transform.rotation;
+			Object.AssignInputAuthority(player);
 		}
 	}
 
-	public override void Render()
+	[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+	public void Rpc_RequestRelease()
 	{
-		transform.position = Pos;
-		transform.rotation = Rot;
+		if (Object.HasStateAuthority)
+		{
+			Object.RemoveInputAuthority();
+		}
 	}
 }
