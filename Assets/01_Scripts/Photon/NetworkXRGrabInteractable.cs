@@ -43,11 +43,11 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 		IsGrabbed = false;
 		GrabbedBy = PlayerRef.None;
 
-		// 네트워크 트랜스폼 설정
-		if (_networkTransform != null)
-		{
-			_networkTransform.InterpolationDataSource = InterpolationDataSources.Snapshots;
-		}
+		// 네트워크 트랜스폼 설정 - 버전에 따라 다를 수 있으므로 주석 처리
+		// if (_networkTransform != null)
+		// {
+		//     _networkTransform.InterpolationDataSource = InterpolationDataSources.Snapshots;
+		// }
 	}
 
 	private void OnGrab(SelectEnterEventArgs args)
@@ -55,7 +55,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 		_selectingInteractor = args.interactorObject;
 
 		// 로컬 플레이어가 그랩했을 때만 RPC 호출
-		if (Runner.LocalPlayer.IsValid)
+		if (Runner.LocalPlayer != PlayerRef.None)
 		{
 			Rpc_RequestGrab(Runner.LocalPlayer);
 		}
@@ -64,7 +64,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	private void OnRelease(SelectExitEventArgs args)
 	{
 		// 로컬 플레이어가 릴리즈했을 때만 RPC 호출
-		if (Runner.LocalPlayer.IsValid && Runner.LocalPlayer == GrabbedBy)
+		if (Runner.LocalPlayer != PlayerRef.None && Runner.LocalPlayer == GrabbedBy)
 		{
 			Rpc_RequestRelease(Runner.LocalPlayer);
 		}
