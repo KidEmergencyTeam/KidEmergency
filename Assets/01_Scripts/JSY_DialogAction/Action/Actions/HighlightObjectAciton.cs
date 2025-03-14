@@ -1,6 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
+using EPOOutline;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class HighlightObjectAction : MonoBehaviour, IActionEffect
 {
@@ -9,14 +11,47 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     
     public void StartAction()
     {
-        throw new System.NotImplementedException();
+        _isComplete = false;
+        StartCoroutine(SetHighlightEffect(ActionManager.Instance.beforeDialog));
     }
 
-    private void SetObject(DialogData dialogData)
+    private IEnumerator SetHighlightEffect(DialogData dialogData)
     {
-        for (int i = 0; i < dialogData.objects.Length; i++)
+        DeleteAllHighlightEffects();
+        
+        for (int i = 0; i < dialogData.objectsName.Length; i++)
         {
-            // dialogData.objects[i].AddComponent
+            GameObject outlineEffect = GameObject.Find(dialogData.objectsName[i]);
+            
+            for (int j = 0; j < outlineEffect.transform.childCount; j++)
+            {
+                GameObject obj = outlineEffect.transform.GetChild(j).gameObject;
+                Outlinable outlinable = obj.AddComponent<Outlinable>();
+                outlinable.AddAllChildRenderersToRenderingList();
+                
+                if (obj.CompareTag("BaseObject"))
+                {
+                    obj.AddComponent<BaseOutlineObject>();
+                }
+                else if (obj.CompareTag("GrabObject"))
+                {
+                    obj.AddComponent<GrabOutlineObject>();
+                    obj.AddComponent<XRGrabInteractable>();
+                }
+            }
+            
+            yield return null;
+        }
+
+        _isComplete = true;
+    }
+    
+    private void DeleteAllHighlightEffects()
+    {
+        Outlinable[] outlinables = FindObjectsOfType<Outlinable>();
+        foreach (Outlinable outline in outlinables)
+        {
+            Destroy(outline);
         }
     }
-}
+} 
