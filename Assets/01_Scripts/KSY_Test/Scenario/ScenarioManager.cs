@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ScenarioManager : MonoBehaviour
 {
     public static ScenarioManager Instance { get; private set; }
 
-    // typingEffect.cs에서 대사 출력 관리
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
@@ -18,9 +18,12 @@ public class ScenarioManager : MonoBehaviour
     [Header("씬 이름")]
     public List<string> sceneNames;
 
-    // 현재 시나리오 스텝을 나타냄
+    // 현재 시나리오 스텝 번호
     private int currentStep = 1;
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
+
+    // 충돌 여부 플래그 (Step13에서 대기)
+    private bool handkerGrabbed = false;
 
     private void Awake()
     {
@@ -86,14 +89,14 @@ public class ScenarioManager : MonoBehaviour
             { 35, Step35 },
             { 36, Step36 },
             { 37, Step37 },
-            { 38, Step38 },
+            { 38, Step38 }
         };
 
-        // 시나리오 시작
+        // 시나리오 실행 시작
         StartCoroutine(RunScenario());
     }
 
-    // 시나리오 전체를 순차 실행
+    // 시나리오 전체를 순차적으로 실행
     IEnumerator RunScenario()
     {
         while (currentStep <= 37)
@@ -111,14 +114,14 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 대사 출력 + 타이핑 끝날 때까지 대기
-    IEnumerator PlayAndWait(int index)
+    // 대사 출력 및 타이핑 효과 완료까지 대기
+    public IEnumerator PlayAndWait(int index)
     {
         typingEffect.PlayTypingAtIndex(index);
         yield return new WaitUntil(() => !typingEffect.IsTyping);
     }
 
-    #region 시나리오 스텝 예시
+    #region 시나리오 스텝
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
@@ -139,80 +142,90 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step7()
     {
         int selected = 0;
-        // ChoiceVoteManager에서 0번 패널(예: 손 vs 손수건) 투표
         yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, (result) => {
             selected = result;
         }));
 
         if (selected == 1)
-            currentStep = 8 - 1; // 다음 loop에서 currentStep++ => 8
+            currentStep = 8 - 1;
         else
             currentStep = 11 - 1;
     }
-
     IEnumerator Step8() { yield return null; }
     IEnumerator Step9() { yield return PlayAndWait(5); }
     IEnumerator Step10()
     {
         yield return PlayAndWait(6);
-        currentStep = 13 - 1; // 현재 스텝을 12로 정정 -> 따라서 6번 대사 이후 스텝 13번부터 시작
+        currentStep = 13 - 1;
     }
     IEnumerator Step11() { yield return null; }
     IEnumerator Step12()
     {
-        yield return PlayAndWait(7); 
-        currentStep = 13 - 1; // 현재 스텝을 12로 정정 -> 따라서 6번 대사 이후 스텝 13번부터 시작
+        yield return PlayAndWait(7);
+        currentStep = 13 - 1;
     }
-    IEnumerator Step13() { yield return PlayAndWait(8); }
-
-    // 대사가 출력되고 나서 
-    // 1.손수건 오브젝트 활성화
-    // 2.손수건 잡기
-    // 완료되면 스텝14로 이동
-
-    IEnumerator Step14() 
+    IEnumerator Step13()
     {
-        // 플레이어가 페이드 효과를 통해 문 앞으로 이동하고 -> 페이드 효과는 아직 반영 x
-        // PlayerPosition.cs -> destinationPositions 리스트에 담긴 플레이어 수만큼 이동이 완료되면
-        // 다음 스텝으로 이동
+        yield return PlayAndWait(8);
 
-        // PlayerPosition 컴포넌트를 씬에서 찾음
+        // 비활성화된 손수건 오브젝트도 찾기
+        GameObject handker = FindInactiveObjectWithTag("Handker");
+        if (handker != null)
+        {
+            // 손수건 활성화
+            handker.SetActive(true);
+            Debug.Log("손수건 오브젝트가 활성화되었습니다.");
+        }
+        else
+        {
+            Debug.LogError("손수건 오브젝트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // XRGrabInteractable 컴포넌트 가져오기
+        XRGrabInteractable grab = handker.GetComponent<XRGrabInteractable>();
+        if (grab == null)
+        {
+            Debug.LogError("손수건 오브젝트에 XRGrabInteractable 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 손수건 충돌 여부 플래그 초기화
+        handkerGrabbed = false;
+        Debug.Log("손수건을 잡고 입에 가져다주세요");
+
+        // HandkerGrabbed()가 호출될 때까지 대기
+        yield return new WaitUntil(() => handkerGrabbed);
+        Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
+    }
+    IEnumerator Step14()
+    {
+        // 예시: 플레이어 이동 처리 등 추가 로직 구현 가능
         PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
         if (playerPosition == null)
         {
             Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
-
-        // destinationPositions 리스트에 등록된 값이 있는지 확인
         if (playerPosition.destinationPositions == null || playerPosition.destinationPositions.Count == 0)
         {
             Debug.LogError("destinationPositions 리스트가 비어있습니다.");
             yield break;
         }
-
-        // 예시로 첫 번째 목적지를 가져옴
         Destination destination = playerPosition.destinationPositions[0];
-
-        // 태그 "Player"를 가진 플레이어를 찾음
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
             Debug.LogError("플레이어를 찾을 수 없습니다.");
             yield break;
         }
-
-        // 플레이어가 목표 위치와 회전에 도달할 때까지 부드럽게 이동
         yield return StartCoroutine(MovePlayerToDestination(player, destination));
-
-        // 도착 후 다음 스텝 진행
         yield return null;
     }
-
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
-        ChangeScene(0); // 교실 -> 복도 (sceneNames[0])
+        ChangeScene(0);
         yield return null;
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
@@ -223,7 +236,6 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step21() { yield return PlayAndWait(14); }
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
-
     // 24. 피난유도선(1) vs 익숙한 길(2)
     IEnumerator Step24()
     {
@@ -237,7 +249,6 @@ public class ScenarioManager : MonoBehaviour
         else
             currentStep = 26 - 1;
     }
-
     IEnumerator Step25()
     {
         yield return PlayAndWait(16);
@@ -252,7 +263,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
-        ChangeScene(1); // 복도 -> 계단/엘리베이터 (sceneNames[1])
+        ChangeScene(1);
     }
     IEnumerator Step29() { yield return PlayAndWait(19); }
     IEnumerator Step30() { yield return PlayAndWait(20); }
@@ -263,7 +274,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
-        ChangeScene(2); // 계단/엘리베이터 -> 운동장 (sceneNames[2])
+        ChangeScene(2);
         yield return null;
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
@@ -272,7 +283,7 @@ public class ScenarioManager : MonoBehaviour
 
     #endregion
 
-    // 씬 전환 
+    // 씬 전환 메서드
     void ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
@@ -286,20 +297,39 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 플레이어를 목적지로 부드럽게 이동 (목표 위치와 회전 적용)
+    // 플레이어를 목적지로 부드럽게 이동 (위치 및 회전 적용)
     IEnumerator MovePlayerToDestination(GameObject player, Destination destination)
     {
-        // 플레이어가 문까지 이동하는 속도
-        float speed = 3f; 
-
-        // 목적지 위치에 도달할 때까지 부드럽게 이동
+        float speed = 3f;
         while (Vector3.Distance(player.transform.position, destination.position) > 0.1f)
         {
             player.transform.position = Vector3.MoveTowards(player.transform.position, destination.position, speed * Time.deltaTime);
             yield return null;
         }
-        // 최종 위치와 회전 적용
         player.transform.position = destination.position;
         player.transform.rotation = Quaternion.Euler(destination.rotation);
+    }
+
+    // 비활성화된 오브젝트도 검색할 수 있는 커스텀 함수
+    private GameObject FindInactiveObjectWithTag(string tag)
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
+            if (obj.CompareTag(tag))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    // MouthDetector로부터 손수건과 충돌이 감지되면 호출
+    public void HandkerGrabbed()
+    {
+        Debug.Log("ScenarioManager: 손수건과 충돌이 감지");
+        handkerGrabbed = true;
+        // 추가 로직 구현 가능
     }
 }
