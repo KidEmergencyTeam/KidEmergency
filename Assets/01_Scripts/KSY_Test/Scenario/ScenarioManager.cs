@@ -213,8 +213,6 @@ public class ScenarioManager : MonoBehaviour
             Debug.LogError("destinationPositions 리스트가 비어있습니다.");
             yield break;
         }
-        // 약간의 딜레이를 주어 Update()에서 플레이어 할당이 완료되도록 함
-        yield return new WaitForSeconds(0.1f);
 
         // 할당된 모든 플레이어를 목적지 위치와 회전값으로 이동
         playerPosition.ApplyStep14Positions();
@@ -223,6 +221,8 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
+        // 1초 대기 후 씬 전환
+        yield return new WaitForSeconds(1); 
         yield return StartCoroutine(ChangeScene(0));
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
