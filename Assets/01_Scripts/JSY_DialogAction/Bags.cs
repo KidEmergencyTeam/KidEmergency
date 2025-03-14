@@ -18,10 +18,11 @@ public class Bags : MonoBehaviour
     }
     private void Update()
     {
-        string groundScene = SceneManager.GetActiveScene().name;
-        if (groundScene == "JSY_SchoolGround")
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "JSY_SchoolGround")
         {
             Destroy(this.gameObject);
+            // 플레이어 컨트롤러로 상태도 바꾸기
         }
     }
 
@@ -29,7 +30,7 @@ public class Bags : MonoBehaviour
     {
         while (true)
         {
-            if (Vector3.Distance(this.transform.position, camParent.transform.position) > interactableRange)
+            if (IsProtect())
             {
                 UIManager.Instance.SetWarningUI(warningSprite, warningText);
                 UIManager.Instance.OpenWarningUI();
@@ -39,6 +40,19 @@ public class Bags : MonoBehaviour
             {
                 UIManager.Instance.CloseWarningUI();
             }
+        }
+    }
+
+    public bool IsProtect()
+    {
+        if (Vector3.Distance(this.transform.position, camParent.transform.position) > interactableRange)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
         }
     }
 }

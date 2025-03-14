@@ -95,7 +95,6 @@ public class ActionManager : SingletonManager<ActionManager>
             case ActionType.HighlightObject:
                 if (highlightObjectAction != null)
                 {
-                    print("현재 상태: HighlightObject");
                     highlightObjectAction.StartAction();
                     StartCoroutine(WaitForActionComplete(highlightObjectAction));
                 }

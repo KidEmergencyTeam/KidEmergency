@@ -18,13 +18,28 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        // StartCoroutine(TestAction());
-        _isComplete = true;
+        StartCoroutine(TestAction());
+        // _isComplete = true;
     }
 
     public void StartMultiModeAction()
     {
         _isComplete = false;        
+    }
+
+    private IEnumerator TestAction()
+    {
+        Bags bag = FindObjectOfType<Bags>();
+        while (!_isComplete)
+        {
+            bag.BagInteraction();
+            if (bag.IsProtect())
+            {
+                _isComplete = true;
+            }
+            
+            yield return null;
+        }
     }
 
     // private IEnumerator TestAction()
