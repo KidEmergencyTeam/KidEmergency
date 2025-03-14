@@ -25,7 +25,7 @@ public class UIManager : SingletonManager<UIManager>
         }
     }
 
-    public void CloseAllOptions()
+    public void CloseAllOptionUI()
     {
         for (int i = 0; i < optionUI.Length; i++)
         {
@@ -36,9 +36,24 @@ public class UIManager : SingletonManager<UIManager>
 
     #endregion
 
+    #region 경고 UI
+
+    public void OpenWarningUI()
+    {
+        warningUI.gameObject.SetActive(true);
+    }
+    
     public void SetWarningUI(Sprite image, string text)
     {
         warningUI.warningImage.sprite = image;
         warningUI.warningText.text = text;
     }
+
+    public void CloseWarningUI()
+    {
+        warningUI.gameObject.SetActive(false);
+    }
+    
+    #endregion
+
 }

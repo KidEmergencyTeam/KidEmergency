@@ -35,7 +35,7 @@ public class OptionUI : OutlineHighlight
     {
         if (_myChoice != null)
         {
-            UIManager.Instance.CloseAllOptions();
+            UIManager.Instance.CloseAllOptionUI();
 
             ActionManager.Instance.currentDialog = _myChoice.nextOptionDialog;
             ActionManager.Instance.currentAction = _myChoice.choiceOptionNextActionType;
