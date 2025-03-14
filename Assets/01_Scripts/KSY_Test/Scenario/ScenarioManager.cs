@@ -298,19 +298,6 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 플레이어를 목적지로 부드럽게 이동 
-    IEnumerator MovePlayerToDestination(GameObject player, Destination destination)
-    {
-        float speed = 3f;
-        while (Vector3.Distance(player.transform.position, destination.position) > 0.1f)
-        {
-            player.transform.position = Vector3.MoveTowards(player.transform.position, destination.position, speed * Time.deltaTime);
-            yield return null;
-        }
-        player.transform.position = destination.position;
-        player.transform.rotation = Quaternion.Euler(destination.rotation);
-    }
-
     // 비활성화된 손수건 오브젝트 검색
     private GameObject FindInactiveObjectWithTag(string tag)
     {
