@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MouthDetector : MonoBehaviour
@@ -8,47 +7,41 @@ public class MouthDetector : MonoBehaviour
     [Header("손수건 태그")]
     public string handkerTag = "Handker";
 
-    [Header("전환할 씬 이름")]
-    public string nextScene = "NextScene";
-
     [Header("인식 범위 (미터 단위)")]
     public float detectionRadius = 0.2f;
 
     [Header("손수건 XRGrabInteractable / 자동 처리됨")]
-    public XRGrabInteractable lastGrabbedInteractable;
+    public XRGrabInteractable lastGrabInteractable;
 
-    // 충돌 여부 체크
+    // 이미 충돌한 경우 중복 처리를 막기 위한 플래그
     private bool triggered = false;
 
-    // 입 오브젝트에 부착된 Collider는 Trigger로 설정되어 있어야 합니다.
+    // 입 오브젝트에 부착된 Collider는 Trigger로 설정
     private void OnTriggerEnter(Collider other)
     {
         if (triggered) return;
 
-        // 충돌한 오브젝트가 Handker 태그를 가지고 있는지 검사
+        // 충돌한 오브젝트가 handkerTag를 가지고 있는지 검사
         if (other.CompareTag(handkerTag))
         {
-            // 충돌한 오브젝트에서 XRGrabInteractable.cs를 가져와 잡힌 상태인지 확인
+            // 충돌한 오브젝트의 XRGrabInteractable 컴포넌트를 가져옴(없어도 진행 가능)
             XRGrabInteractable grab = other.GetComponent<XRGrabInteractable>();
             if (grab != null)
             {
-                // 가져온 XRGrabInteractable.cs를 lastGrabbedInteractable 필드에 저장 (인스펙터에서 확인 가능)
-                lastGrabbedInteractable = grab;
-
-                if (grab.isSelected)
-                {
-                    triggered = true;
-                    StartCoroutine(Transition());
-                }
+                lastGrabInteractable = grab;
             }
+
+            // 충돌 확인되면 코루틴 실행
+            triggered = true;
+            StartCoroutine(HandleHandkerGrab());
         }
     }
 
-    private IEnumerator Transition()
+    // 손수건과 충돌이 감지되면 즉시 ScenarioManager.cs에 전달
+    private IEnumerator HandleHandkerGrab()
     {
-        Debug.Log("손수건이 잡힌 상태에서 입에 접촉했습니다. 씬 전환 시작...");
-        yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(nextScene);
+        ScenarioManager.Instance.HandkerGrabbed();
+        yield break;
     }
 
     // Scene에서 인식 범위 시각화
