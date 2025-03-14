@@ -32,9 +32,6 @@ public class TypingEffect : MonoBehaviour
     [Header("타이핑 공통 속도")]
     public float commonTypingSpeed = 0.05f;
 
-    [Header("타이핑 텍스트 삭제 대기 시간")]
-    public float clearDelay = 1f;
-
     // 타이핑 전/후 대기 시간
     private float sentenceDelay = 0.5f;
 
@@ -106,9 +103,6 @@ public class TypingEffect : MonoBehaviour
         isTyping = true;
         yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound));
         yield return new WaitForSeconds(sentenceDelay);
-        yield return new WaitForSeconds(clearDelay);
-        if (typingText != null)
-            typingText.text = "";
         isTyping = false;
     }
 
