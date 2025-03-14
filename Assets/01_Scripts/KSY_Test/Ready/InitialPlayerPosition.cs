@@ -11,7 +11,7 @@ public class PlayerEntry
     // 플레이어의 초기 위치
     public Vector3 initialPosition;
 
-    // 플레이어의 초기 로테이션
+    // 플레이어의 초기 위치에서 적용할 로테이션
     public Vector3 initialRotation;
 }
 
@@ -63,11 +63,13 @@ public class InitialPlayerPosition : MonoBehaviour
             return;
         }
 
+        // 이미 해당 플레이어가 할당되어 있다면 무시
         if (playerEntries.Exists(entry => entry.player == newPlayer))
         {
             return;
         }
 
+        // 빈 슬롯 찾기
         PlayerEntry freeEntry = playerEntries.Find(entry => entry.player == null);
         if (freeEntry != null)
         {
