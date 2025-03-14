@@ -198,13 +198,14 @@ public class ScenarioManager : MonoBehaviour
         yield return new WaitUntil(() => handkerGrabbed);
         Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
     }
+    // Step14에서는 Step14PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 목적지로 이동
     IEnumerator Step14()
     {
-        // 예시: 플레이어 이동 처리 등 추가 로직 구현 가능
+        // Step14PlayerPosition.cs 가져오기
         Step14PlayerPosition playerPosition = FindObjectOfType<Step14PlayerPosition>();
         if (playerPosition == null)
         {
-            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("Step14PlayerPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         if (playerPosition.destinationPositions == null || playerPosition.destinationPositions.Count == 0)
@@ -212,14 +213,11 @@ public class ScenarioManager : MonoBehaviour
             Debug.LogError("destinationPositions 리스트가 비어있습니다.");
             yield break;
         }
-        Destination destination = playerPosition.destinationPositions[0];
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
-        {
-            Debug.LogError("플레이어를 찾을 수 없습니다.");
-            yield break;
-        }
-        yield return StartCoroutine(MovePlayerToDestination(player, destination));
+        // 약간의 딜레이를 주어 Update()에서 플레이어 할당이 완료되도록 함
+        yield return new WaitForSeconds(0.1f);
+
+        // 할당된 모든 플레이어를 목적지 위치와 회전값으로 이동
+        playerPosition.ApplyStep14Positions();
         yield return null;
     }
     IEnumerator Step15()
@@ -282,7 +280,7 @@ public class ScenarioManager : MonoBehaviour
 
     #endregion
 
-    // 비동기 씬 전환 메서드
+    // 비동기 씬 전환 메서드 -> 동기에 비해 씬 전환이 매끄러움
     IEnumerator ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
@@ -300,7 +298,7 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 플레이어를 목적지로 부드럽게 이동 (위치 및 회전 적용)
+    // 플레이어를 목적지로 부드럽게 이동 
     IEnumerator MovePlayerToDestination(GameObject player, Destination destination)
     {
         float speed = 3f;
@@ -313,7 +311,7 @@ public class ScenarioManager : MonoBehaviour
         player.transform.rotation = Quaternion.Euler(destination.rotation);
     }
 
-    // 비활성화된 오브젝트도 검색할 수 있는 커스텀 함수
+    // 비활성화된 손수건 오브젝트 검색
     private GameObject FindInactiveObjectWithTag(string tag)
     {
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();

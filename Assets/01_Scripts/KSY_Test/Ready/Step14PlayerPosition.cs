@@ -11,7 +11,7 @@ public class Destination
     // 이동 목적지 위치
     public Vector3 position;
 
-    // 이동 목적지에서 적용할 로테이션
+    // 이동 목적지에서 적용할 로테이션 
     public Vector3 rotation;
 }
 
@@ -54,7 +54,7 @@ public class Step14PlayerPosition : MonoBehaviour
         }
     }
 
-    // 플레이어 추가 및 목적지의 위치와 로테이션 값으로 배치
+    // 플레이어 추가 및 초기 위치와 로테이션 값으로 배치
     public void AddPlayer(GameObject newPlayer)
     {
         if (newPlayer == null)
@@ -69,18 +69,32 @@ public class Step14PlayerPosition : MonoBehaviour
             return;
         }
 
-        // 빈 슬롯 찾기 
+        // 빈 슬롯 찾기
         Destination freeEntry = destinationPositions.Find(entry => entry.player == null);
         if (freeEntry != null)
         {
             freeEntry.player = newPlayer;
             newPlayer.transform.position = freeEntry.position;
             newPlayer.transform.rotation = Quaternion.Euler(freeEntry.rotation);
-            Debug.Log($"플레이어 추가됨: {newPlayer.name}");
+            Debug.Log($"플레이어 할당됨: {newPlayer.name}");
         }
         else
         {
             Debug.LogWarning($"슬롯 부족: 플레이어 추가 불가 ({newPlayer.name})");
         }
+    }
+
+    // ScenarioManager.cs에서 호출하면 할당된 모든 플레이어를 각 슬롯의 위치와 회전으로 이동
+    public void ApplyStep14Positions()
+    {
+        foreach (Destination dest in destinationPositions)
+        {
+            if (dest.player != null)
+            {
+                dest.player.transform.position = dest.position;
+                dest.player.transform.rotation = Quaternion.Euler(dest.rotation);
+            }
+        }
+        Debug.Log("스텝14 위치 적용 완료");
     }
 }
