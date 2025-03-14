@@ -201,7 +201,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step14()
     {
         // 예시: 플레이어 이동 처리 등 추가 로직 구현 가능
-        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
+        Step14PlayerPosition playerPosition = FindObjectOfType<Step14PlayerPosition>();
         if (playerPosition == null)
         {
             Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
