@@ -19,7 +19,6 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     {
         _isComplete = false;
         StartCoroutine(TestAction());
-        // _isComplete = true;
     }
 
     public void StartMultiModeAction()

@@ -9,7 +9,8 @@ public class Bags : MonoBehaviour
     [SerializeField] private Sprite warningSprite;
     [SerializeField] private string warningText;
     [SerializeField] private GameObject camParent;
-    private float interactableRange;
+    private float interactableRange = 0.5f;
+    private string sceneName;
 
 
     public void BagInteraction()
@@ -18,7 +19,7 @@ public class Bags : MonoBehaviour
     }
     private void Update()
     {
-        string sceneName = SceneManager.GetActiveScene().name;
+        sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == "JSY_SchoolGround")
         {
             Destroy(this.gameObject);
@@ -28,7 +29,10 @@ public class Bags : MonoBehaviour
 
     private IEnumerator ProtectHead()
     {
-        while (true)
+        // 씬을 옮겨도 destroy 되지 않게
+        this.gameObject.transform.SetParent(camParent.transform);
+        
+        while (sceneName != "JSY_SchoolGround")
         {
             if (IsProtect())
             {
@@ -40,6 +44,8 @@ public class Bags : MonoBehaviour
             {
                 UIManager.Instance.CloseWarningUI();
             }
+            
+            yield return null;
         }
     }
 
