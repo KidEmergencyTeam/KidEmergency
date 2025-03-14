@@ -35,6 +35,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (Object.HasStateAuthority)
 		{
+			print("Requesting Grab");
 			Object.AssignInputAuthority(player);
 		}
 	}
@@ -44,6 +45,7 @@ public class NetworkedXRGrabInteractable : NetworkBehaviour
 	{
 		if (Object.HasStateAuthority)
 		{
+			print("Requesting Release");
 			Object.RemoveInputAuthority();
 		}
 	}
