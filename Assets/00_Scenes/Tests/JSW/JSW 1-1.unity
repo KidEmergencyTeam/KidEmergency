@@ -483,7 +483,6 @@ GameObject:
   - component: {fileID: 1498222773}
   - component: {fileID: 1498222771}
   - component: {fileID: 1498222779}
-  - component: {fileID: 1498222780}
   m_Layer: 0
   m_Name: PhysicsCube
   m_TagString: Untagged
@@ -509,7 +508,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1498222779}
-  - {fileID: 1498222780}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &1498222773
 MonoBehaviour:
@@ -788,30 +786,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92efdb6e592aa9d44be233d744bcd881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrabbed: 0
---- !u!114 &1498222780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1498222770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 1
-  _interpolationTarget: {fileID: 0}
-  UsePreciseRotation: 0
-  UseRenderSleepThresholds: 1
-  RenderThresholds:
-    UseEnergy: 1
-    Position: 0.01
-    Rotation: 0.01
-    Scale: 0.01
+  _IsGrabbed: 0
+  _NetworkPosition: {x: 0, y: 0, z: 0}
+  _NetworkRotation: {x: 0, y: 0, z: 0, w: 0}
+  _NetworkVelocity: {x: 0, y: 0, z: 0}
+  _NetworkAngularVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &2139888915
 GameObject:
   m_ObjectHideFlags: 0
