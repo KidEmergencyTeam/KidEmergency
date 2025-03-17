@@ -51,7 +51,7 @@ public class Bags : MonoBehaviour
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, camParent.transform.position) > interactableRange)
+        if (Vector3.Distance(this.transform.position, camParent.transform.position) < interactableRange)
         {
             return true;
         }
