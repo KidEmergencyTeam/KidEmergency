@@ -7,6 +7,7 @@ public enum ActionType
     Earthquake, // 지진 시작
     ChangeView, // 시점 변경
     HighlightObject, // 오브젝트 강조
+    HoldingLeg, // 책상 다리 잡기
     PlaceObject, // 오브젝트 배치
     FixingBag // 가방 고정
 }

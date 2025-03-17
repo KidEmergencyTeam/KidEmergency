@@ -18,6 +18,7 @@ public class ActionManager : SingletonManager<ActionManager>
     public PlaceObjectAction placeObjectAction;
     public HighlightObjectAction highlightObjectAction;
     public FixingBagAction fixingBagAction;
+    public HoldingLegAction holdingLegAction;
     
     private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
@@ -104,6 +105,13 @@ public class ActionManager : SingletonManager<ActionManager>
                 {
                     fixingBagAction.StartAction();
                     StartCoroutine(WaitForActionComplete(fixingBagAction));
+                }
+                break;
+            case ActionType.HoldingLeg:
+                if (holdingLegAction != null)
+                {
+                    holdingLegAction.StartAction();
+                    StartCoroutine(WaitForActionComplete(holdingLegAction));
                 }
                 break;
         }
