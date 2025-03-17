@@ -23,7 +23,8 @@ public class FireBeginner : MonoBehaviour
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
     public GameObject exampleDescUi;
-    public GameObject Handkerchief;
+    [SerializeField] private GameObject Handkerchief;
+    [SerializeField] private GameObject fireAlarm;
 
     [Header("상호작용 혹은 위치 이동 지점")]
     public Transform HandkerchiefSpawnPos;
@@ -62,11 +63,14 @@ public class FireBeginner : MonoBehaviour
                 //화재 경보음과 함께 두번째 시나리오 대사 출력
                 secondDialog.gameObject.SetActive(true);
                 //화재 경보음 출력
-
+                fireAlarm.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 //대사 종료 후 버튼 활성화, 버튼 누르기 전까지 대기
                 okBtn.gameObject.SetActive(true);
-
+                //if(okBtn.isHover)
+                //{
+                //    isFirstStepRdy = true;
+                //}
                 //다음 진행은 isFirstStepRdy 가 true일 때 까지 대기한다. (이미지 변경)
                 LeftImg.sprite = leftChangeImg;
                 RightImg.sprite = rightChangeImg;
