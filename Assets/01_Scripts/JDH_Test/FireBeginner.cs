@@ -1,3 +1,4 @@
+using EPOOutline;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -23,6 +24,7 @@ public class FireBeginner : MonoBehaviour
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
     public GameObject exampleDescUi;
+    [SerializeField] private GameObject emergencyExit;    //자식 오브젝트에 addcomponent를 통해 Outlinable을 부착
     [SerializeField] private GameObject Handkerchief;
     [SerializeField] private GameObject fireAlarm;
 
@@ -106,11 +108,12 @@ public class FireBeginner : MonoBehaviour
                 SceneManager.LoadScene("JDH2");
                 break;
 
-                //복도
+            //복도
             case PLACE.HALLWAY:
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 secondDialog.gameObject.SetActive(true);
                 //피난 유도선 테두리 강조
+                ActiveOutlineToChildren(emergencyExit);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 thirdDialog.gameObject.SetActive(true);
                 //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인
@@ -143,7 +146,7 @@ public class FireBeginner : MonoBehaviour
 
         }
     }
-    void TeleportCharacters()
+    private void TeleportCharacters()
     {
         // 플레이어 즉시 이동
         if (playerMovPos != null)
@@ -167,5 +170,23 @@ public class FireBeginner : MonoBehaviour
         }
 
         Debug.Log("플레이어 및 NPC 텔레포트 완료");
+    }
+
+    //자식 오브젝트에 Outlinable을 활성화
+    private void ActiveOutlineToChildren(GameObject parent)
+    {
+        if (parent == null) return;
+
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>())
+        {
+            Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+
+            if (outline == null)
+            {
+                outline = child.gameObject.AddComponent<Outlinable>();
+            }
+
+            outline.enabled = true; // Outlinable 활성화
+        }
     }
 }
