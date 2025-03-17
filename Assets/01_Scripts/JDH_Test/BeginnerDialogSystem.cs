@@ -91,6 +91,8 @@ public class BeginnerDialogSystem : MonoBehaviour
         int charIndex = 0;
         isTypingEffect = true;
 
+        PlayDialogAudio(); // 타이핑 시작과 동시에 오디오 재생
+
         while (charIndex < fullText.Length)
         {
             displayedText += fullText[charIndex];
@@ -100,7 +102,6 @@ public class BeginnerDialogSystem : MonoBehaviour
         }
 
         isTypingEffect = false;
-        PlayDialogAudio(); // 대사가 끝나면 오디오 출력
     }
 
     // 대사에 맞는 오디오를 재생하는 함수
