@@ -2,10 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-// 빈슬롯에 플레이어를 추가하여 
-// 초기 위치에 플레이어를 배치 또는
-// 시나리오 도중 
-// 특정 위치로 플레이어를 배치 시키는 스크립트
 [System.Serializable]
 public class PlayerEntry
 {
@@ -14,28 +10,15 @@ public class PlayerEntry
 
     // 플레이어의 초기 위치
     public Vector3 initialPosition;
+
+    // 플레이어의 초기 위치에서 적용할 로테이션
+    public Vector3 initialRotation;
 }
 
-// Step14 등에서 사용할 플레이어의 이동 목적지를 리스트로 정의 -> 학교 고급에서 문 앞으로 정렬
-// PlayerEntry 리스트에 배치된 순서대로 리스트에 플레이어 재배치
-// 따라서 스텝14 위치를 리스트로 정의할 때 플레이어를 묶어서 정의X 
-[System.Serializable]
-public class Destination
-{
-    // 이동 목적지 위치
-    public Vector3 position;
-
-    // 이동 목적지 로테이션 
-    public Vector3 rotation;
-}
-
-public class PlayerPosition : MonoBehaviour
+public class InitialPlayerPosition : MonoBehaviour
 {
     [Header("초기 위치")]
     public List<PlayerEntry> playerEntries = new List<PlayerEntry>();
-
-    [Header("스텝14 위치")]
-    public List<Destination> destinationPositions = new List<Destination>();
 
     private void Update()
     {
@@ -46,7 +29,7 @@ public class PlayerPosition : MonoBehaviour
         }
     }
 
-    // 빈 슬롯이 있는지 확인 (한마디로 모든 슬롯이 채워져 있지 않으면 true)
+    // 빈 슬롯이 있는지 확인 (모든 슬롯이 채워져 있지 않으면 true)
     private bool HasEmptySlot()
     {
         foreach (PlayerEntry entry in playerEntries)
@@ -56,7 +39,6 @@ public class PlayerPosition : MonoBehaviour
                 return true;
             }
         }
-        // 모든 슬롯이 채워져 있다는 뜻입니다.
         return false;
     }
 
@@ -72,7 +54,7 @@ public class PlayerPosition : MonoBehaviour
         }
     }
 
-    // 플레이어 추가 및 초기 위치로 배치
+    // 플레이어 추가 및 초기 위치와 로테이션 값으로 배치
     public void AddPlayer(GameObject newPlayer)
     {
         if (newPlayer == null)
@@ -81,16 +63,19 @@ public class PlayerPosition : MonoBehaviour
             return;
         }
 
+        // 이미 해당 플레이어가 할당되어 있다면 무시
         if (playerEntries.Exists(entry => entry.player == newPlayer))
         {
             return;
         }
 
+        // 빈 슬롯 찾기
         PlayerEntry freeEntry = playerEntries.Find(entry => entry.player == null);
         if (freeEntry != null)
         {
             freeEntry.player = newPlayer;
             newPlayer.transform.position = freeEntry.initialPosition;
+            newPlayer.transform.rotation = Quaternion.Euler(freeEntry.initialRotation);
             Debug.Log($"플레이어 추가됨: {newPlayer.name}");
         }
         else
