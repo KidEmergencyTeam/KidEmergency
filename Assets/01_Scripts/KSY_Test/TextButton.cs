@@ -112,7 +112,7 @@ public class TextButton : MonoBehaviour
         }
     }
 
-    // 좌측, 우측 입력 처리
+    // 버튼 위에 레이가 있을 경우에만 애니메이션 및 클릭 실행
     private void ProcessSelectPerformed(InputAction.CallbackContext context, string hand)
     {
         bool isHover = (hand.ToLower() == "left") ? leftHover : rightHover;
