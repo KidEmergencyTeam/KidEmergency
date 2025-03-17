@@ -10,7 +10,8 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     public float decreaseFactor = 1.0f; // 흔들림 감소 속도
     public float earthquakeForce = 2f;  // 지진의 힘
     public float objectShakeDuration = 4f; // 물체 흔들림 지속 시간
-    public Light lightObject;
+    public Light[] lightObjects;
+    public Light mainLight; // 영향을 제일 많이 주는 메인 조명
 
     private Rigidbody[] _rbObjects;  // 흔들릴 물체들
     private bool _isComplete = false;
@@ -33,11 +34,13 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         while (shakeDuration > 0 || objectShakeDuration > 0)
         {
+            RobotController.Instance.SetLookingFor();
             EarthquakeStart();
             yield return null;
         }
         
         _isComplete = true;
+        RobotController.Instance.SetLookingFor();
     }
 
     private void EarthquakeStart()
@@ -54,7 +57,11 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
             cameraParent.localPosition = Vector3.zero;
             Vector3 newPos = cameraParent.localPosition;
             Mathf.Lerp(originPos.x, newPos.x, 1);
-            lightObject.intensity = 0.6f;
+            mainLight.intensity = 0.6f;
+            for (int i = 0; i < lightObjects.Length; i++)
+            {
+                lightObjects[i].intensity = Random.Range(0.2f, 0.7f);
+            }
         }
 
         if (objectShakeDuration > 0)
@@ -73,8 +80,13 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         for (int i = 0; i < 4; i++)
         {
-            lightObject.intensity = Random.Range(0, 0.1f);
-            lightObject.intensity = Random.Range(0.8f, 1f);
+            mainLight.intensity = Random.Range(0.1f, 0.5f);
+            mainLight.intensity = Random.Range(0.7f, 1f);
+            for (int j = 0; j < lightObjects.Length; j++)
+            {
+                lightObjects[j].intensity = Random.Range(0.1f, 0.5f);
+                lightObjects[j].intensity = Random.Range(0.7f, 1f);
+            }
         }
     }
 }
