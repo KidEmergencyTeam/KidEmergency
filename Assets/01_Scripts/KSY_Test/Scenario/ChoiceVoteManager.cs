@@ -10,13 +10,12 @@ public class ChoiceVoteManager : MonoBehaviour
     // 싱글톤 인스턴스. 다른 스크립트에서는 ChoiceVoteManager.Instance로 접근 가능
     public static ChoiceVoteManager Instance { get; private set; }
 
-    // 인스펙터에서 UI 프리팹과 관련 설정을 할당
+    // 인스펙터에서 UI 패널 씬 오브젝트와 관련 설정을 할당
     [Serializable]
-    public class ChoiceUIPanelPrefab
+    public class ChoiceUIPanelSceneReference
     {
-        // 각 플레이어가 사용할 UI 패널 프리팹
-        // (프리팹이 비활성화 상태여도 Instantiate 후 활성화함)
-        public GameObject panelPrefab;
+        // 각 플레이어가 사용할 UI 패널 (씬 내에 배치된 오브젝트, 기본적으로 비활성화 상태여야 함)
+        public List<GameObject> panelInstances;
 
         // 동률 발생 시 우선할 선택.
         // 예를 들어 1이면 첫 번째 선택지, 2면 두 번째 선택지를 우선 처리
@@ -24,8 +23,8 @@ public class ChoiceVoteManager : MonoBehaviour
         public int tieChoiceIndex;
     }
 
-    [Header("선택지 패널 프리팹 목록")]
-    public List<ChoiceUIPanelPrefab> choicePanelPrefabs;
+    [Header("선택지 패널 씬 오브젝트 목록 (프리팹 사용하지 않음)")]
+    public List<ChoiceUIPanelSceneReference> choicePanelSceneReferences;
 
     [Header("선택지 처리 대기 시간")]
     public float choiceDelay = 2f;
@@ -33,10 +32,10 @@ public class ChoiceVoteManager : MonoBehaviour
     // 선택지 라벨 배열. 예를 들어 첫 번째 선택지는 "A", 두 번째 선택지는 "B"로 사용됨.
     private string[] choiceLabels = { "A", "B" };
 
-    // 인스턴스화된 UI 패널과 해당 구성요소(Button, Text 등)를 저장하는 클래스
+    // 활성화된 UI 패널과 해당 구성요소(Button, Text 등)를 저장하는 클래스
     public class InstantiatedChoicePanel
     {
-        // 생성된 UI 패널 오브젝트
+        // 활성화된 UI 패널 오브젝트 (씬 내 오브젝트)
         public GameObject panel;
         // 패널 내에 포함된 Button
         public List<Button> buttons;
@@ -46,7 +45,7 @@ public class ChoiceVoteManager : MonoBehaviour
         public int tieChoiceIndex;
     }
 
-    // 각 플레이어별로 생성된 UI 패널 인스턴스를 저장
+    // 각 플레이어별로 할당된 UI 패널 오브젝트를 저장
     private Dictionary<GameObject, InstantiatedChoicePanel> playerPanels = new Dictionary<GameObject, InstantiatedChoicePanel>();
 
     // 각 플레이어의 투표 결과 저장 
@@ -63,23 +62,23 @@ public class ChoiceVoteManager : MonoBehaviour
 
     private void Awake()
     {
-        // 싱글톤 패턴 적용 : 인스턴스가 없으면 현재 인스턴스를 할당, 이미 있으면 파괴
+        // 싱글톤 패턴 적용: 인스턴스가 없으면 현재 인스턴스를 할당, 이미 있으면 파괴
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
     }
 
-    // 모든 플레이어에게 선택지 UI 패널 프리팹을 인스턴스화하여 투표를 받고,
+    // 모든 플레이어에게 선택지 UI 패널 씬 오브젝트를 활성화하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
-    public IEnumerator ShowChoiceAndGetResult(int choicePanelPrefabIndex, Action<int> onResult)
+    public IEnumerator ShowChoiceAndGetResult(int choicePanelSceneReferenceIndex, Action<int> onResult)
     {
         // 투표 시작 전 변수 초기화
         finalVoteResult = 0;
         playerVotes.Clear();
         resultCallback = onResult;
 
-        // 태그가 플레이어인 모든 오브젝트를 찾음
+        // 태그가 "Player"인 모든 오브젝트를 찾음
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         totalPlayers = players.Length;
         if (totalPlayers == 0)
@@ -89,19 +88,19 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 프리팹 인덱스가 올바른지 검사
-        if (choicePanelPrefabIndex < 0 || choicePanelPrefabIndex >= choicePanelPrefabs.Count)
+        // 씬 오브젝트 목록 인덱스가 올바른지 검사
+        if (choicePanelSceneReferenceIndex < 0 || choicePanelSceneReferenceIndex >= choicePanelSceneReferences.Count)
         {
-            Debug.LogError("[ChoiceVoteManager] 잘못된 프리팹 인덱스: " + choicePanelPrefabIndex);
+            Debug.LogError("[ChoiceVoteManager] 잘못된 씬 오브젝트 목록 인덱스: " + choicePanelSceneReferenceIndex);
             onResult?.Invoke(1);
             yield break;
         }
 
-        // 선택한 프리팹 정보와 동률 처리 우선순위 값 가져오기
-        ChoiceUIPanelPrefab prefabInfo = choicePanelPrefabs[choicePanelPrefabIndex];
-        int tieChoiceIndex = prefabInfo.tieChoiceIndex;
+        // 선택한 씬 오브젝트 목록 정보와 동률 처리 우선순위 값 가져오기
+        ChoiceUIPanelSceneReference sceneReference = choicePanelSceneReferences[choicePanelSceneReferenceIndex];
+        int tieChoiceIndex = sceneReference.tieChoiceIndex;
 
-        // 캔버스 오브젝트 찾기 
+        // 씬 내에서 UI 패널이 배치된 캔버스 오브젝트 찾기 (패널이 캔버스의 자식이 아닐 경우 대비)
         GameObject canvas = GameObject.Find("Canvas");
         if (canvas == null)
         {
@@ -110,22 +109,37 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 각 플레이어마다 UI 패널 인스턴스 생성 및 버튼 이벤트 등록
+        // 할당된 UI 패널 씬 오브젝트의 개수가 플레이어 수보다 충분한지 확인
+        if (sceneReference.panelInstances == null || sceneReference.panelInstances.Count < totalPlayers)
+        {
+            Debug.LogError("[ChoiceVoteManager] 할당된 UI 패널의 수가 충분하지 않습니다. 필요한 패널 수: " + totalPlayers);
+            onResult?.Invoke(1);
+            yield break;
+        }
+
+        // 각 플레이어마다 씬 내 UI 패널 오브젝트를 활성화 및 초기화, 버튼 이벤트 등록
+        int panelIndex = 0;
         foreach (var player in players)
         {
-            // 프리팹을 캔버스의 자식으로 인스턴스화하고 활성화
-            GameObject panelInstance = Instantiate(prefabInfo.panelPrefab, canvas.transform);
+            GameObject panelInstance = sceneReference.panelInstances[panelIndex];
+            panelIndex++;
+
+            // 패널이 캔버스의 자식이 아닌 경우, 자식으로 설정 (필요시)
+            if (panelInstance.transform.parent != canvas.transform)
+            {
+                panelInstance.transform.SetParent(canvas.transform, false);
+            }
             panelInstance.SetActive(true);
 
-            // 새 UI 패널 객체를 만들고, 이 객체에 인스턴스화된 패널 오브젝트를 할당
+            // 새 UI 패널 객체 생성 및 초기화
             InstantiatedChoicePanel icp = new InstantiatedChoicePanel();
             icp.panel = panelInstance;
 
-            // 패널에서 계층 구조 배치 순서대로 컴포넌트를 가져옴
+            // 패널 내의 Button 및 TextMeshProUGUI 컴포넌트 가져오기
             icp.buttons = new List<Button>(panelInstance.GetComponentsInChildren<Button>());
             icp.voteCountTexts = new List<TextMeshProUGUI>(panelInstance.GetComponentsInChildren<TextMeshProUGUI>());
 
-            // tieChoiceIndex을 복사해서 인스턴스화된 UI 패널 객체의 tieChoiceIndex 필드에 저장
+            // 동률 처리 우선 순위 설정
             icp.tieChoiceIndex = tieChoiceIndex;
 
             // 투표 시작 전에 초기 텍스트 설정 ("선택지 A: 0/총 참여자수")
@@ -140,12 +154,11 @@ public class ChoiceVoteManager : MonoBehaviour
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() =>
                 {
-                    // 해당 플레이어의 투표 기록
                     Vote(player, choiceVal);
                 });
             }
 
-            // 생성된 UI 인스턴스를 플레이어별로 저장
+            // 플레이어별로 UI 패널 할당
             playerPanels[player] = icp;
         }
 
@@ -158,14 +171,14 @@ public class ChoiceVoteManager : MonoBehaviour
         // 모든 투표를 집계하여 최종 선택 결정 (동률 시 tieChoiceIndex 사용)
         finalVoteResult = CalculateMajorityWithTie(tieChoiceIndex);
 
-        // 각 플레이어의 UI 패널을 최종 업데이트 후 제거 
+        // 각 플레이어의 UI 패널을 최종 업데이트 후 비활성화
         foreach (var icp in playerPanels.Values)
         {
             // 최종 결과 반영
             UpdateVoteUI(icp);
 
-            // 패널 오브젝트를 완전히 제거
-            Destroy(icp.panel);
+            // 씬 내 오브젝트이므로 제거하지 않고 비활성화 처리
+            icp.panel.SetActive(false);
         }
         playerPanels.Clear();
 
@@ -215,7 +228,7 @@ public class ChoiceVoteManager : MonoBehaviour
         int maxCount = 0;
         List<int> topCandidates = new List<int>();
 
-        // 1.최다 득표 수와 해당 선택지를 찾음
+        // 최다 득표 수와 해당 선택지를 찾음
         foreach (var pair in voteCounts)
         {
             if (pair.Value > maxCount)
@@ -230,12 +243,11 @@ public class ChoiceVoteManager : MonoBehaviour
             }
         }
 
-        // 2.해당 선택지 반환
+        // 해당 선택지 반환
         if (topCandidates.Count == 1)
         {
             return topCandidates[0];
         }
-        // 동률 처리
         else
         {
             // 동률인 경우, tieChoiceIndex 사용
@@ -255,7 +267,7 @@ public class ChoiceVoteManager : MonoBehaviour
     {
         if (panel == null) return;
 
-        // 선택지(버튼) 개수만큼 투표 수를 저장할 배열 생성 -> 각 선택지(버튼)별로 몇 표가 들어왔는지 집계
+        // 각 선택지(버튼)별 투표 수 집계
         int[] counts = new int[panel.buttons.Count];
         foreach (var vote in playerVotes.Values)
         {
@@ -276,7 +288,7 @@ public class ChoiceVoteManager : MonoBehaviour
     }
 
     // 투표 시작 전에 UI 패널 내의 텍스트를 초기화
-    // 각 선택지는 선택지 라벨: 0/총 참여자수로 설정
+    // 각 선택지는 "선택지 라벨: 0/총 참여자수"로 설정
     private void ResetVoteTexts(InstantiatedChoicePanel panel, int total)
     {
         if (panel == null) return;
