@@ -44,7 +44,6 @@ public class ActionManager : SingletonManager<ActionManager>
                 if (currentDialog.dialogs != null)
                 {
                     StartCoroutine(DialogManager.Instance.ShowDialog());
-
                 }
                 else
                 {
@@ -116,7 +115,6 @@ public class ActionManager : SingletonManager<ActionManager>
         yield return new WaitUntil(() => effect.IsActionComplete);
         if (currentDialog.dialogs != null)
         {
-            print("액션 끝 이제 대사창 띄움~");
             Invoke("ActionEventComplete", 1f);
         }
         else
