@@ -26,6 +26,11 @@ public class RobotController : SingletonManager<RobotController>
         anim.SetFloat("speedMultiplier", speed);
     }
 
+    public void SetAnimaiton(string animName)
+    {
+        anim.SetBool(animName, true);
+    }
+    
     // ㅁuㅁ 표정 ex) 기본 표정
     public void SetBasic()
     {
@@ -35,21 +40,20 @@ public class RobotController : SingletonManager<RobotController>
     // \~/ 표정 ex) 선택지가 정답이 아닐 경우
     public void SetAngry()
     {
-        anim.SetBool("No", true);
+        SetAnimaiton("No");
         setEmotion(7);
     }
 
     // ^o^ 표정 ex) 선택지가 정답일 경우
     public void SetHappy()
     {
-        anim.SetBool("ThumbsUp", true);
+        SetAnimaiton("ThumbsUp");
         setEmotion(1);
     }
 
     // 두리번 거리는 애니메이션 + >~< 표정 ex) 지진이 발생했을 경우
     public void SetLookingFor()
     {
-        anim.SetBool("LookingFor", true);
         setEmotion(6);
     }
     

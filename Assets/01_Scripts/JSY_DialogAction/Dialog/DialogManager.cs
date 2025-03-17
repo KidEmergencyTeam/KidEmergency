@@ -27,6 +27,7 @@ public class DialogManager : SingletonManager<DialogManager>
         }
         
         UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
+        RobotController.Instance.SetBasic();
         
         if (ActionManager.Instance.currentDialog.choices.Length > 0)
         {

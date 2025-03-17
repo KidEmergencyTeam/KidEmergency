@@ -34,6 +34,7 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         while (shakeDuration > 0 || objectShakeDuration > 0)
         {
+            RobotController.Instance.SetAnimaiton("LookingFor");
             RobotController.Instance.SetLookingFor();
             EarthquakeStart();
             yield return null;
