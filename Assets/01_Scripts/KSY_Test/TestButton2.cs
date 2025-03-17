@@ -26,7 +26,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private InputAction rightSelectAction;
 
     // Pointer 이벤트로 레이의 진입 상태를 관리
-    private bool isHovered = false;
+    public bool isHovered = false;
 
     private void Awake()
     {
