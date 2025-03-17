@@ -47,7 +47,7 @@ public class RobotController : SingletonManager<RobotController>
     // ^o^ 표정 ex) 선택지가 정답일 경우
     public void SetHappy()
     {
-        SetAnimaiton("ThumbsUp");
+        SetAnimaiton("Thumb");
         setEmotion(1);
     }
 
