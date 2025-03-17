@@ -18,7 +18,7 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        StartCoroutine(TestAction());
+        StartCoroutine(Fixing());
     }
 
     public void StartMultiModeAction()
@@ -26,7 +26,7 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
         _isComplete = false;        
     }
 
-    private IEnumerator TestAction()
+    private IEnumerator Fixing()
     {
         Bags bag = FindObjectOfType<Bags>();
         while (!_isComplete)
