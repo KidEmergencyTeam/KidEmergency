@@ -66,6 +66,7 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 //대사 종료 후 버튼 활성화, 버튼 누르기 전까지 대기
                 okBtn.gameObject.SetActive(true);
+
                 //다음 진행은 isFirstStepRdy 가 true일 때 까지 대기한다. (이미지 변경)
                 LeftImg.sprite = leftChangeImg;
                 RightImg.sprite = rightChangeImg;
