@@ -10,7 +10,7 @@ public enum ButtonType
     B
 }
 
-public class TestButton2 : MonoBehaviour
+public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
     public Button button;
@@ -25,17 +25,12 @@ public class TestButton2 : MonoBehaviour
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
 
-    // 각 컨트롤러의 레이 상태
-    private bool leftHover = false;
-    private bool rightHover = false;
-
-    // 현재 hover 중인 버튼을 추적
-    private static TestButton2 currentHoveredLeft = null;
-    private static TestButton2 currentHoveredRight = null;
+    // Pointer 이벤트로 레이의 진입 상태를 관리
+    private bool isHovered = false;
 
     private void Awake()
     {
-        // onClick 이벤트 등록
+        // 버튼 이벤트 할당
         if (button != null)
         {
             button.onClick.AddListener(OnButtonClicked);
@@ -46,9 +41,9 @@ public class TestButton2 : MonoBehaviour
         }
     }
 
-    // 중간에 버튼 null 상황일 때, 버튼 이벤트 제거
     private void OnDestroy()
     {
+        // 중간에 버튼이 null 상황일 때, 이벤트 제거
         if (button != null)
         {
             button.onClick.RemoveListener(OnButtonClicked);
@@ -59,11 +54,11 @@ public class TestButton2 : MonoBehaviour
     {
         if (inputActionAsset != null)
         {
-            // 좌측 컨트롤러 Select 액션 설정
+            // 좌측 컨트롤러 Select 액션 구독 및 활성화
             leftSelectAction = inputActionAsset.FindAction("XRI LeftHand Interaction/Select", true);
             if (leftSelectAction != null)
             {
-                leftSelectAction.performed += OnLeftSelectActionPerformed;
+                leftSelectAction.performed += OnSelectActionPerformed;
                 leftSelectAction.Enable();
                 Debug.Log("[TestButton2] 좌측 컨트롤러 Select 액션 활성화");
             }
@@ -72,11 +67,11 @@ public class TestButton2 : MonoBehaviour
                 Debug.LogError("[TestButton2] 좌측 컨트롤러 Select 액션을 찾을 수 없습니다.");
             }
 
-            // 우측 컨트롤러 Select 액션 설정
+            // 우측 컨트롤러 Select 액션 구독 및 활성화
             rightSelectAction = inputActionAsset.FindAction("XRI RightHand Interaction/Select", true);
             if (rightSelectAction != null)
             {
-                rightSelectAction.performed += OnRightSelectActionPerformed;
+                rightSelectAction.performed += OnSelectActionPerformed;
                 rightSelectAction.Enable();
                 Debug.Log("[TestButton2] 우측 컨트롤러 Select 액션 활성화");
             }
@@ -95,112 +90,60 @@ public class TestButton2 : MonoBehaviour
     {
         if (leftSelectAction != null)
         {
-            leftSelectAction.performed -= OnLeftSelectActionPerformed;
+            leftSelectAction.performed -= OnSelectActionPerformed;
             leftSelectAction.Disable();
         }
         if (rightSelectAction != null)
         {
-            rightSelectAction.performed -= OnRightSelectActionPerformed;
+            rightSelectAction.performed -= OnSelectActionPerformed;
             rightSelectAction.Disable();
         }
     }
 
-    // XR Ray Interactor -> UI Hover Entered 및 Exited에서 호출 (왼쪽)
-    // UI Hover Entered -> true 체크
-    public void SetLeftHover(bool isHover)
+    // IPointerEnterHandler 구현: 레이가 버튼 영역에 있을때 호출
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        SetHover("left", isHover);
+        // 레이가 버튼 영역에 있을때
+        // isHovered 플래그를 true로 설정
+        isHovered = true;
+
+        // 어느 버튼에서 레이가 진입했는지 확인
+        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
     }
 
-    // XR Ray Interactor -> UI Hover Entered 및 Exited에서 호출 (오른쪽)
-    // UI Hover Entered -> true 체크
-    public void SetRightHover(bool isHover)
+    // IPointerExitHandler 구현: 레이가가 버튼 영역에서 벗어났을 때 호출
+    public void OnPointerExit(PointerEventData eventData)
     {
-        SetHover("right", isHover);
+        // 레이가가 버튼 영역에서 벗어났을 때
+        // isHovered 플래그를 false로 설정
+        isHovered = false;
+
+        // 어느 버튼에서 레이가 벗어났는지 확인
+        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
     }
 
-    // XR Ray Interactor -> UI Hover Entered 및 Exited에서
-    // 호출되어 버튼 위에 레이가 있는 상태를 업데이트
-    private void SetHover(string hand, bool isHover)
-    {
-        string buttonIdentifier = buttonType.ToString();
 
-        if (hand.ToLower() == "left")
+    // 좌측/우측 컨트롤러의 Select 액션 이벤트 처리 (두 액션 모두 동일하게 처리)
+    private void OnSelectActionPerformed(InputAction.CallbackContext context)
+    {
+        ProcessSelectPerformed();
+    }
+
+    // 해당 버튼이 레이가 진입 상태일 경우에만 클릭 처리
+    private void ProcessSelectPerformed()
+    {
+        if (isHovered)
         {
-            if (isHover)
-            {
-                if (currentHoveredLeft != null && currentHoveredLeft != this)
-                {
-                    Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 좌측 컨트롤러: 이미 {currentHoveredLeft.buttonType} 버튼이 hover 중.");
-                    return;
-                }
-                leftHover = true;
-                currentHoveredLeft = this;
-                Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 좌측 컨트롤러 레이 상태: {isHover}");
-            }
-            else
-            {
-                if (currentHoveredLeft == this)
-                {
-                    leftHover = false;
-                    currentHoveredLeft = null;
-                    Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 좌측 컨트롤러 레이 상태: {isHover}");
-                }
-            }
-        }
-        else if (hand.ToLower() == "right")
-        {
-            if (isHover)
-            {
-                if (currentHoveredRight != null && currentHoveredRight != this)
-                {
-                    Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 우측 컨트롤러: 이미 {currentHoveredRight.buttonType} 버튼이 hover 중.");
-                    return;
-                }
-                rightHover = true;
-                currentHoveredRight = this;
-                Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 우측 컨트롤러 레이 상태: {isHover}");
-            }
-            else
-            {
-                if (currentHoveredRight == this)
-                {
-                    rightHover = false;
-                    currentHoveredRight = null;
-                    Debug.Log($"[TestButton2] {buttonIdentifier} 버튼 - 우측 컨트롤러 레이 상태: {isHover}");
-                }
-            }
-        }
-    }
-
-    // 좌측 컨트롤러 입력 처리
-    private void OnLeftSelectActionPerformed(InputAction.CallbackContext context)
-    {
-        ProcessSelectPerformed("left");
-    }
-
-    // 우측 컨트롤러 입력 처리
-    private void OnRightSelectActionPerformed(InputAction.CallbackContext context)
-    {
-        ProcessSelectPerformed("right");
-    }
-
-    // 버튼 위에 레이가 있을 경우에만 애니메이션 및 클릭 실행
-    private void ProcessSelectPerformed(string hand)
-    {
-        bool isHover = (hand.ToLower() == "left") ? leftHover : rightHover;
-        if (isHover)
-        {
-            StartCoroutine(TriggerButtonAnimationAndClick(hand));
+            StartCoroutine(TriggerButtonAnimationAndClick());
         }
         else
         {
-            Debug.Log($"[TestButton2] {hand} 컨트롤러의 Select 입력은 감지되었으나, {buttonType} 버튼 위에 레이가 없음");
+            Debug.Log($"[TestButton2] Select 입력은 감지되었으나, {buttonType} 버튼 위에 레이가 없음");
         }
     }
 
-    // 버튼 클릭 애니메이션과 이벤트 처리
-    private IEnumerator TriggerButtonAnimationAndClick(string hand)
+    // 버튼 눌림 효과 및 이벤트 처리
+    private IEnumerator TriggerButtonAnimationAndClick()
     {
         if (EventSystem.current == null)
         {
@@ -213,20 +156,22 @@ public class TestButton2 : MonoBehaviour
             pointerPress = button.gameObject
         };
 
-        // 버튼 효과 시작 
+        // 버튼 눌림 효과 시작
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
 
-        // 버튼 효과 지속 
+        // 버튼 눌림 효과 지속 시간
         yield return new WaitForSeconds(0.1f);
 
-        // 버튼 효과 종료 
+        // 버튼 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
-        // 버튼 이벤트 즉시 실행
+        // 버튼 이벤트 실행
         button.onClick.Invoke();
     }
 
-    // 스위치문을 이용하여 버튼 타입별 이벤트 분기 처리
+    // 버튼 클릭 이벤트 처리 (스위치문으로 분기)
+    // 클릭한 버튼이 A라면 A 이벤트 호출
+    // B라면 B 이벤트 호출
     private void OnButtonClicked()
     {
         switch (buttonType)
