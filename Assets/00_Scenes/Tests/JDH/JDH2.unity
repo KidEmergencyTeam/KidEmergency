@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &10343772 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1053880369360303302, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+  m_PrefabInstance: {fileID: 1946120435}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &20713560
 GameObject:
   m_ObjectHideFlags: 0
@@ -5719,8 +5724,8 @@ MonoBehaviour:
   place: 1
   isFireBeginner: 1
   isEarthquake: 0
-  player: {fileID: 0}
-  seti: {fileID: 0}
+  player: {fileID: 10343772}
+  seti: {fileID: 1304727620}
   NPC:
   - {fileID: 0}
   - {fileID: 0}
@@ -9853,6 +9858,7 @@ MonoBehaviour:
   button: {fileID: 1678308288}
   buttonType: 0
   inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  isHovered: 0
 --- !u!114 &1678308288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11597,6 +11603,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 2817288793382554121, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.673
@@ -11796,49 +11822,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3156812962507749958, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1030250124}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2620336982639329473, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1946120438}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
 --- !u!4 &1946120436 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 3156812962507749958, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2472128130024573533, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
   m_PrefabInstance: {fileID: 1946120435}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1946120437 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2620336982639329473, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
-  m_PrefabInstance: {fileID: 1946120435}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1946120438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1946120437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bb42831ee5422f409e7f24f9e7488ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stage: 1
-  renderingStrategy: 0
-  renderingMode: 0
-  outlineLayerMask: -1
-  primaryBufferSizeMode: 0
-  primaryRendererScale: 0.75
-  primarySizeReference: 800
-  blurShift: 1
-  dilateShift: 1
-  dilateIterations: 1
-  dilateQuality: 0
-  blurIterations: 1
-  blurType: 1
 --- !u!1 &1950697710
 GameObject:
   m_ObjectHideFlags: 0
