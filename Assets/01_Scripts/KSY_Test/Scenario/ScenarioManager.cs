@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit;
+// using UnityEngine.XR.Interaction.Toolkit;
 
 public class ScenarioManager : MonoBehaviour
 {
@@ -202,24 +202,27 @@ public class ScenarioManager : MonoBehaviour
         */
         yield return null;
     }
-    // Step14에서는 Step14PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 목적지로 이동
+    // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
     IEnumerator Step14()
     {
-        // Step14PlayerPosition.cs 가져오기
-        Step14PlayerPosition playerPosition = FindObjectOfType<Step14PlayerPosition>();
+        // PlayerPosition 컴포넌트 가져오기
+        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
         if (playerPosition == null)
         {
-            Debug.LogError("Step14PlayerPosition 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-        if (playerPosition.destinationPositions == null || playerPosition.destinationPositions.Count == 0)
-        {
-            Debug.LogError("destinationPositions 리스트가 비어있습니다.");
+            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
 
-        // 할당된 모든 플레이어를 목적지 위치와 회전값으로 이동
+        // playerEntries 리스트 유효성 검사
+        if (playerPosition.playerEntries == null || playerPosition.playerEntries.Count == 0)
+        {
+            Debug.LogError("playerEntries 리스트가 비어있습니다.");
+            yield break;
+        }
+
+        // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
         playerPosition.ApplyStep14Positions();
+
         yield return null;
     }
     IEnumerator Step15()
