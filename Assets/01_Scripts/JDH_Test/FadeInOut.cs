@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeInOut : MonoBehaviour
+public class FadeInOut : SingletonManager<FadeInOut>
 {
-    [SerializeField] private float fadedTime = 0.5f; // FadeIn, FadeOut ÃÑ ¼Ò¿ä ½Ã°£
-    [SerializeField] private Image fadeInoutImg; // ÆäÀÌµå È¿°ú¸¦ ÁÙ ÀÌ¹ÌÁö
+    [SerializeField] private float fadedTime = 0.5f; // FadeIn, FadeOut ï¿½ï¿½ ï¿½Ò¿ï¿½ ï¿½Ã°ï¿½
+    [SerializeField] private Image fadeInoutImg; // ï¿½ï¿½ï¿½Ìµï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
 
-    public bool isFadeIn; // ÆäÀÌµå ÀÎ »óÅÂ È®ÀÎ
-    public bool isFadeOut; // ÆäÀÌµå ¾Æ¿ô »óÅÂ È®ÀÎ
+    public bool isFadeIn; // ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+    public bool isFadeOut; // ï¿½ï¿½ï¿½Ìµï¿½ ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 
     void Start()
     {
         if (fadeInoutImg != null)
         {
-            // ÃÊ±â ¾ËÆÄ °ª ¼³Á¤ (¿ÏÀüÈ÷ º¸ÀÌ°Å³ª Åõ¸íÇÏ°Ô)
+            // ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½)
             Color color = fadeInoutImg.color;
-            color.a = 0f; // ¿ÏÀüÈ÷ Åõ¸í (0)À¸·Î ¼³Á¤
+            color.a = 0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (0)ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             fadeInoutImg.color = color;
         }
     }
@@ -31,12 +31,12 @@ public class FadeInOut : MonoBehaviour
         while (elapsedTime < fadedTime)
         {
             elapsedTime += Time.deltaTime;
-            color.a = Mathf.Lerp(1f, 0f, elapsedTime / fadedTime); // ¾ËÆÄ °ªÀ» Á¡ÁøÀûÀ¸·Î °¨¼Ò
+            color.a = Mathf.Lerp(1f, 0f, elapsedTime / fadedTime); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             fadeInoutImg.color = color;
             yield return null;
         }
 
-        color.a = 0f; // ¿ÏÀüÈ÷ Åõ¸í
+        color.a = 0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         fadeInoutImg.color = color;
         isFadeIn = false;
     }
@@ -50,12 +50,12 @@ public class FadeInOut : MonoBehaviour
         while (elapsedTime < fadedTime)
         {
             elapsedTime += Time.deltaTime;
-            color.a = Mathf.Lerp(0f, 1f, elapsedTime / fadedTime); // ¾ËÆÄ °ªÀ» Á¡ÁøÀûÀ¸·Î Áõ°¡
+            color.a = Mathf.Lerp(0f, 1f, elapsedTime / fadedTime); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             fadeInoutImg.color = color;
             yield return null;
         }
 
-        color.a = 1f; // ¿ÏÀüÈ÷ ºÒÅõ¸í
+        color.a = 1f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         fadeInoutImg.color = color;
         isFadeOut = false;
     }
