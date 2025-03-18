@@ -25,6 +25,7 @@ public class Bags : MonoBehaviour
         if (_sceneName == "JSY_SchoolGround")
         {
             Destroy(this.gameObject);
+            UIManager.Instance.CloseWarningUI();
             // 플레이어 컨트롤러로 상태도 바꾸기
         }
     }
