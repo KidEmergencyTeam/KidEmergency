@@ -13,7 +13,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 
 	[SerializeField] private NetworkPrefabRef _playerPrefab;
 	[SerializeField] private NetworkRunner _runnerPrefab;
-	[SerializeField] private Transform _spawnTransform;
+	public GameObject networkVR;
+	public List<Transform> spawnTransforms;
 
 	public HardwareRig hardwareRig;
 	public NetworkRig networkRig;
@@ -231,8 +232,12 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 		else
 		{
 			Debug.Log($"새로운 플레이어: {playerToken}");
+			networkVR.transform.position =
+				spawnTransforms[_spawnedPlayers.Count].position;
+			networkVR.transform.rotation =
+				spawnTransforms[_spawnedPlayers.Count].rotation;
 			NetworkObject playerObject = runner.Spawn(_playerPrefab,
-				_spawnTransform.position,
+				spawnTransforms[_spawnedPlayers.Count].position,
 				Quaternion.identity,
 				player,
 				(r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
