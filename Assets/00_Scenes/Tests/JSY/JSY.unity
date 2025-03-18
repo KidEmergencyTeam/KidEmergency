@@ -1359,7 +1359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &227985916
 Transform:
   m_ObjectHideFlags: 0
@@ -1476,8 +1476,6 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 41146429981168576}
   _rightController: {fileID: 1954337241236073169}
-  _leftRay: {fileID: 1068434304311063308}
-  _rightRay: {fileID: 8389398678815008853}
   isHoldComplete: 0
 --- !u!1 &229791435 stripped
 GameObject:
@@ -7225,7 +7223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1334527724
 Transform:
   m_ObjectHideFlags: 0
@@ -7342,8 +7340,6 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 41146429981168576}
   _rightController: {fileID: 1954337241236073169}
-  _leftRay: {fileID: 1068434304311063308}
-  _rightRay: {fileID: 8389398678815008853}
   isHoldComplete: 0
 --- !u!1001 &1339121167
 PrefabInstance:
@@ -8226,7 +8222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1557315061
 Transform:
   m_ObjectHideFlags: 0
@@ -8343,8 +8339,6 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 41146429981168576}
   _rightController: {fileID: 1954337241236073169}
-  _leftRay: {fileID: 1068434304311063308}
-  _rightRay: {fileID: 8389398678815008853}
   isHoldComplete: 0
 --- !u!1 &1564964153
 GameObject:
@@ -8483,8 +8477,6 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 41146429981168576}
   _rightController: {fileID: 1954337241236073169}
-  _leftRay: {fileID: 1068434304311063308}
-  _rightRay: {fileID: 8389398678815008853}
   isHoldComplete: 0
 --- !u!1001 &1573644872
 PrefabInstance:
@@ -13008,6 +13000,7 @@ GameObject:
   - component: {fileID: 2069372357}
   - component: {fileID: 2069372356}
   - component: {fileID: 2069372355}
+  - component: {fileID: 2069372358}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -13050,6 +13043,9 @@ MonoBehaviour:
   _rightController: {fileID: 1954337241236073169}
   _leftRay: {fileID: 1068434304311063308}
   _rightRay: {fileID: 8389398678815008853}
+  _leftLine: {fileID: 7231292471220035743}
+  _rightLine: {fileID: 3467396494228472848}
+  isUIActive: 0
 --- !u!114 &2069372356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13086,6 +13082,22 @@ MonoBehaviour:
   highlightObjectAction: {fileID: 154242856}
   fixingBagAction: {fileID: 154242857}
   holdingLegAction: {fileID: 154242862}
+--- !u!114 &2069372358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069372353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3523d73d9c12e444482073816e6db1fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadedTime: 1.5
+  fadeInoutImg: {fileID: 1494532466}
+  isFadeIn: 0
+  isFadeOut: 0
 --- !u!1 &2089468764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 990e110e81de51547b9dc99c8209332a, type: 3}
@@ -24419,8 +24431,6 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 7060166978435681608}
   _rightController: {fileID: 8824765390273311833}
-  _leftRay: {fileID: 8051091804211834244}
-  _rightRay: {fileID: 1514845163224168157}
   isHoldComplete: 0
 --- !u!1 &3471767628994367683
 GameObject:
@@ -24671,6 +24681,8 @@ MonoBehaviour:
   _warningText: "\uAC00\uBC29\uC744 \uBA38\uB9AC \uC704\uB85C \uC62C\uB824 \uBA38\uB9AC\uB97C
     \uBCF4\uD638\uD558\uC138\uC694"
   _player: {fileID: 754677897363878028}
+  _rightController: {fileID: 1954337241236073169}
+  _leftController: {fileID: 41146429981168576}
 --- !u!137 &3562410048061700371
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -41002,7 +41014,6 @@ GameObject:
   - component: {fileID: 856739669925955213}
   - component: {fileID: 3242609642074965681}
   - component: {fileID: 3558460466767661682}
-  - component: {fileID: 8806578473497780792}
   m_Layer: 0
   m_Name: Bag
   m_TagString: GrabObject
@@ -41010,50 +41021,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8806578473497780792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8806578473497780791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8811412153962076606
 MonoBehaviour:
   m_ObjectHideFlags: 0
