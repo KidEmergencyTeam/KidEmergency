@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class NpcRig : MonoBehaviour
 {
-	private enum State
+	public enum State
 	{
 		None,
 		Hold,
@@ -20,7 +20,7 @@ public class NpcRig : MonoBehaviour
 		public Vector3 rightHandRot;
 	}
 
-	[SerializeField] private State _state = State.None;
+	public State _state = State.None;
 
 	public Transform player;
 	public Transform leftHandTarget;
