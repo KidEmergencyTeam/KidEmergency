@@ -5,14 +5,14 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerEntry
 {
-    // 플레이어 참조
+    [Header("플레이어")]
     public GameObject player;
 
-    // 초기 위치와 회전
+    [Header("초기 위치와 회전")]
     public Vector3 initialPosition;
     public Vector3 initialRotation;
 
-    // 스텝14에서의 위치와 회전
+    [Header("스텝14에서의 위치와 회전")]
     public Vector3 step14Position;
     public Vector3 step14Rotation;
 }
