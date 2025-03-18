@@ -28,7 +28,7 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
 
     private IEnumerator Fixing()
     {
-        Bags bag = FindObjectOfType<Bags>();
+        Bag bag = FindObjectOfType<Bag>();
         while (!_isComplete)
         {
             bag.BagInteraction();

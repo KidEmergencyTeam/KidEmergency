@@ -12,29 +12,21 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
         _isComplete = false;
         StartCoroutine(ChangeScene());
     }
-
-    public void StartMultiModeAction()
-    {
-        
-    }
     
     private IEnumerator ChangeScene()
     {
+        StartCoroutine(FadeInOut.Instance.FadeOut());
+        yield return new WaitForSeconds(1.5f);
+        
         AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene);
-
-        // 이렇게 하거나 bags 스크립트가 붙은 가방 프리팹 자체를 삭제하거나
-        // if (ActionManager.Instance.beforeDialog.nextScene == "JSY_SchoolGround")
-        // {
-        //     GameObject obj = GameObject.Find("CamParent").transform.GetChild(1).gameObject;
-        //     Destroy(obj);
-        // }
         
         while(!asyncChange.isDone)
         {
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FadeInOut.Instance.FadeIn());
+        yield return new WaitForSeconds(1.5f);
         _isComplete = true;
     }
     
