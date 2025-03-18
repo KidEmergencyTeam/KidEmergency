@@ -23,7 +23,7 @@ public class ScenarioManager : MonoBehaviour
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
 
     // 충돌 여부 플래그 (Step13에서 대기)
-    private bool handkerGrabbed = false;
+    // private bool handkerGrabbed = false;
 
     private void Awake()
     {
@@ -168,6 +168,8 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(8);
 
+        // 아래 손수건 관련 로직 주석 처리
+        /*
         // 비활성화된 손수건 오브젝트도 찾기
         GameObject handker = FindInactiveObjectWithTag("Handker");
         if (handker != null)
@@ -197,6 +199,8 @@ public class ScenarioManager : MonoBehaviour
         // HandkerGrabbed()가 호출될 때까지 대기
         yield return new WaitUntil(() => handkerGrabbed);
         Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
+        */
+        yield return null;
     }
     // Step14에서는 Step14PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 목적지로 이동
     IEnumerator Step14()
@@ -222,7 +226,7 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(9);
         // 1초 대기 후 씬 전환
-        yield return new WaitForSeconds(1); 
+        yield return new WaitForSeconds(1);
         yield return StartCoroutine(ChangeScene(0));
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
@@ -299,20 +303,21 @@ public class ScenarioManager : MonoBehaviour
     }
 
     // 비활성화된 손수건 오브젝트 검색
-    private GameObject FindInactiveObjectWithTag(string tag)
-    {
-        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-        foreach (GameObject obj in allObjects)
-        {
-            // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
-            if (obj.CompareTag(tag))
-            {
-                return obj;
-            }
-        }
-        return null;
-    }
+    //private GameObject FindInactiveObjectWithTag(string tag)
+    //{
+    //    GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+    //    foreach (GameObject obj in allObjects)
+    //    {
+    //        // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
+    //        if (obj.CompareTag(tag))
+    //        {
+    //            return obj;
+    //        }
+    //    }
+    //    return null;
+    //}
 
+    /*
     // MouthDetector로부터 손수건과 충돌이 감지되면 호출
     public void HandkerGrabbed()
     {
@@ -320,4 +325,5 @@ public class ScenarioManager : MonoBehaviour
         handkerGrabbed = true;
         // 추가 로직 구현 가능
     }
+    */
 }
