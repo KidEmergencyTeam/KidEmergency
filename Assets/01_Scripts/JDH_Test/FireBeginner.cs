@@ -76,49 +76,60 @@ public class FireBeginner : MonoBehaviour
         {
             //교실
             case PLACE.CLASSROOM:
-                fadeInOutImg.gameObject.SetActive(false);
+                //1. 시작
                 //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-                //화재 경보음과 함께 두번째 시나리오 대사 출력
+
+                //2. 화재 경보음과 함께 두번째 시나리오 대사 출력
                 secondDialog.gameObject.SetActive(true);
                 //화재 경보음 출력
                 fireAlarm.SetActive(true);
+                Debug.Log("화재 경보음이 출력됩니다.");
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-                //대사 종료 후 버튼 활성화, 버튼 누르기 전까지 대기
+                
+                //3. 대사 종료 후 버튼 활성화, 버튼 누르기 전까지 대기
                 okBtn.gameObject.SetActive(true);
-
+                Debug.Log("OK 버튼 활성화");
                 yield return new WaitUntil(() => okBtn.isHovered == true);
                 //다음 진행은 isFirstStepRdy 가 true일 때 까지 대기한다. (이미지 변경)
                 LeftImg.sprite = leftChangeImg;
                 RightImg.sprite = rightChangeImg;
                 isFirstStepRdy = true;
+                Debug.Log("설명 이미지 변경 및 첫번째 진행 조건 만족");
 
+                //4. 버튼 누르면 isFirstStepRdy가 true로 변경되며 다음 내용 진행 (설명 UI 및 손수건 생성)
                 yield return new WaitUntil(() => isFirstStepRdy == true);
                 okBtn.gameObject.SetActive(false);
                 exampleDescUi.SetActive(true);
-                //책상에 손수건 생성
-                handkerchief.gameObject.SetActive(true);
-                //손으로 손수건 잡으면 왼손에 고정 (고정할 때 까지 대기)
-                yield return new WaitUntil(() => hasHandkerchief == true);
-                Debug.Log("손수건 고정 완료");
-                //유저 입 주변에 손수건 접촉 시 입과 코를 가린 것으로 판정
+                Debug.Log("OK 버튼 비활성화 및 설명 UI 활성화");
+                //책상에 손수건 그랩 활성화
+                handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
+                Debug.Log("손수건 활성화");
+                //NPC 모습 변경
 
-                yield return new WaitUntil(() => iscoverFace == true);
+                //5. 손으로 손수건 잡으면 왼손에 고정 및 입과 코를 가린것으로 판정될 때 까지 대기(고정할 때 까지 대기) 
+                yield return new WaitUntil(() => hasHandkerchief == true && iscoverFace == true);
+                Debug.Log("손수건 고정 완료 및 입과 코를 막았습니다.");
+                exampleDescUi.SetActive(false);
+
+                //6. 모든 행동을 만족하면 플레이어와 NPC의 위치를 이동시킨다.
                 //FadeIn, Out으로 이동하는 모습을 안보여준다.
                 StartCoroutine(fadeInOutImg.FadeOut());
+                //FadeIn, Out이 종료될때까지 대기 후 이동(이동 모습을 보여주지 않기 위함)
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 // 플레이어와 NPC의 위치를 문 앞으로 이동, 세티 또한 위치 변경
                 Debug.Log("플레이어 NPC 위치 이동");
                 TeleportCharacters();
+                //이동이 완료되면 다시 화면이 밝아진다 두번째 진행 조건 만족했으므로 isSecondStepRdy = true로 변경
                 StartCoroutine(fadeInOutImg.FadeIn());
-
-                //플레이어와 NPC가 이동하고 입과 코를 가린 것으로 판정되면
                 isSecondStepRdy = true;
-                //isSecondStepRdy가 true가 되면 세번째 시나리오 대사 출력
                 yield return new WaitUntil(() => isSecondStepRdy == true);
+
+                //7. 대사 진행 이후 유저가 설명 조건에 만족하면(이동 후 입과 코를 가린 것으로 판정되면)
                 thirdDialog.gameObject.SetActive(true);
-                fadeInOutImg.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && iscoverFace == true);
                 //Fade Out 진행 된 후 Scene 이동
+                fadeInOutImg.gameObject.SetActive(true);
                 StartCoroutine(fadeInOutImg.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동
@@ -134,6 +145,7 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 thirdDialog.gameObject.SetActive(true);
                 //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인(경고 UI 출력: 손수건으로 입과 코를 가려줘!)
+                //고개를 숙이고 있는지 확인
 
 
                 //Fade Out 진행 된 후 Scene 이동
@@ -146,6 +158,7 @@ public class FireBeginner : MonoBehaviour
             //계단, 엘레베이터
             case PLACE.STAIRS_ELEVATOR:
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동(경고 UI 출력: 손수건으로 입과 코를 가려줘!)
+                //고개를 숙이고 있어야 대사가 종료된 후 마지막 씬으로 이동
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 //버튼 클릭 대기
@@ -222,7 +235,7 @@ public class FireBeginner : MonoBehaviour
         if (currentHeight < headHeightThreshold)
         {
             isHeadDown = true;
-            Debug.Log("머리를 숙였습니다! (Y값 감지)");
+            //Debug.Log("머리를 숙였습니다! (Y값 감지)");
         }
         else
         {
