@@ -5451,30 +5451,13 @@ GameObject:
   m_Component:
   - component: {fileID: 398445332}
   - component: {fileID: 398445331}
-  - component: {fileID: 398445330}
   m_Layer: 0
-  m_Name: "\uB2E4\uC74C\uC52C \uC804\uD658"
+  m_Name: "\uB2E4\uC74C \uC52C \uC804\uD658"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &398445330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398445329}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3523d73d9c12e444482073816e6db1fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadedTime: 3
-  fadeInoutImg: {fileID: 0}
-  isFadeIn: 0
-  isFadeOut: 0
 --- !u!114 &398445331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5490,7 +5473,7 @@ MonoBehaviour:
   waitStateText: {fileID: 1638359492}
   nextSceneName: 2.School
   gameStartDelay: 2
-  fadeInOut: {fileID: 398445330}
+  fadeInOut: {fileID: 1313141810}
 --- !u!4 &398445332
 Transform:
   m_ObjectHideFlags: 0
@@ -16811,6 +16794,54 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.460181, y: 0.119950645, z: 0.008654609}
     m_Extent: {x: 0.064219415, y: 0.06887672, z: 0.07470533}
   m_DirtyAABB: 0
+--- !u!1 &1313141809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1313141811}
+  - component: {fileID: 1313141810}
+  m_Layer: 0
+  m_Name: FadeInOut
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1313141810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313141809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3523d73d9c12e444482073816e6db1fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadedTime: 0.5
+  fadeInoutImg: {fileID: 0}
+  isFadeIn: 0
+  isFadeOut: 0
+--- !u!4 &1313141811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1313141809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.65477604, y: 1.2937136, z: -3.991198}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1313410609
 GameObject:
   m_ObjectHideFlags: 0
@@ -28699,6 +28730,7 @@ SceneRoots:
   - {fileID: 1296830807}
   - {fileID: 398445332}
   - {fileID: 551642794}
+  - {fileID: 1313141811}
   - {fileID: 1090670226}
   - {fileID: 317766720}
   - {fileID: 477507020}
