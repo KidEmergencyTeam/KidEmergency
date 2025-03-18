@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class Bag : MonoBehaviour
@@ -12,37 +11,50 @@ public class Bag : MonoBehaviour
     [SerializeField] private GameObject _player; 
     [SerializeField] private ActionBasedController _rightController; // 오른쪽 컨트롤러 오브젝트
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
-    
+
+    private Rigidbody rb;
     private string _sceneName;
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     public void BagInteraction()
     {
         StartCoroutine(ProtectHead());
     }
 
-    // private void Grapped()
-    // {
-    //     if (Vector3.Distance(this.transform.position, _rightController.transform.position) < 0.1f &&
-    //         _rightController.selectAction.action.ReadValue<float>() > 0)
-    //     {
-    //         this.transform.SetParent(_rightController.transform);
-    //         this.transform.position = Vector3.zero;
-    //     }
-    //     
-    //     else if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f && 
-    //              _leftController.selectAction.action.ReadValue<float>() > 0)
-    //     {
-    //         this.transform.SetParent(_leftController.transform);
-    //         this.transform.position = Vector3.zero;
-    //     }
-    // }
+    private void Grapped()
+    {
+        if (ActionManager.Instance.currentAction == ActionType.FixingBag)
+        {
+            if (Vector3.Distance(this.transform.position, _rightController.transform.position) < 0.3f &&
+                _rightController.selectAction.action.ReadValue<float>() > 0)
+            {
+                this.transform.SetParent(_rightController.transform);
+                this.transform.localPosition = Vector3.zero;
+                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
+                rb.isKinematic = true;
+                
+            }
+
+            else if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.3f &&
+                     _leftController.selectAction.action.ReadValue<float>() > 0)
+            {
+                this.transform.SetParent(_leftController.transform);
+                this.transform.localPosition = Vector3.zero;
+                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
+                rb.isKinematic = true;
+            }
+        }
+    }
     
     private void Update()
     {
         if (this.gameObject != null)
         {
-            // Grapped();
+            Grapped();
         }
         
         _sceneName = SceneManager.GetActiveScene().name;
@@ -56,7 +68,8 @@ public class Bag : MonoBehaviour
 
     private IEnumerator ProtectHead()
     {
-        this.gameObject.transform.SetParent(_player.transform);
+        // this.gameObject.transform.SetParent(_player.transform);
+        
         while (_sceneName != "JSY_SchoolGround")
         {
             if (!IsProtect())
@@ -76,7 +89,7 @@ public class Bag : MonoBehaviour
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, _player.transform.position) < 0.3f)
+        if (Vector3.Distance(this.transform.position, _player.transform.position) < 0.2f)
         {
             return true;
         }
