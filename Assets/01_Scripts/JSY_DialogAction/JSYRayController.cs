@@ -11,7 +11,7 @@ public class JSYRayController : MonoBehaviour
     [SerializeField] private XRInteractorLineVisual _leftLine;
     [SerializeField] private XRInteractorLineVisual _rightLine;
 
-    [SerializeField] private bool isUIActive = false;
+    private bool isUIActive = false;
 
     private void Start()
     {

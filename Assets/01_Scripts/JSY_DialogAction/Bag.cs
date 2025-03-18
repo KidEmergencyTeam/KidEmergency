@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class Bag : MonoBehaviour
 {
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
-    [SerializeField] private GameObject _player; 
+    [SerializeField] private GameObject _camOffset; 
     [SerializeField] private ActionBasedController _rightController; // 오른쪽 컨트롤러 오브젝트
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
 
@@ -89,7 +90,7 @@ public class Bag : MonoBehaviour
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, _player.transform.position) < 0.2f)
+        if (Vector3.Distance(this.transform.position, _camOffset.transform.position) < 0.2f)
         {
             return true;
         }
