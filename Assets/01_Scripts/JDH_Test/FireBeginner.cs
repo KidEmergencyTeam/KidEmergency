@@ -138,6 +138,7 @@ public class FireBeginner : MonoBehaviour
 
             //복도
             case PLACE.HALLWAY:
+                hasHandkerchief = true;
                 //1. 시작 대사 진행
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
