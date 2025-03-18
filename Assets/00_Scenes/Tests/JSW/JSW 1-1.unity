@@ -967,7 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d13f938a658a544bfe5b0dfef8078c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraParent: {fileID: 0}
+  cameraParent: {fileID: 1173597518}
   shakeDuration: 4
   shakeAmount: 0.01
   decreaseFactor: 1
@@ -1019,7 +1019,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDuration: 2
   fadeEffect: {fileID: 1494532466}
-  xrCamParent: {fileID: 0}
+  xrCamParent: {fileID: 1132749638}
 --- !u!1 &161820290 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de89aff51143507449a93c66057b2c5c, type: 3}
@@ -1850,6 +1850,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 67504c84481d9aa44892a2ba691a7d55, type: 3}
   m_PrefabInstance: {fileID: 380388959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &400977406 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8806578472060376272, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
+  m_PrefabInstance: {fileID: 1454192359}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &402650166
 PrefabInstance:
@@ -6072,6 +6077,16 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 67504c84481d9aa44892a2ba691a7d55, type: 3}
   m_PrefabInstance: {fileID: 1667880704}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1132749638 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2544111956694573519, guid: 7d50026f6970f004f9c87b907c20208d, type: 3}
+  m_PrefabInstance: {fileID: 2036645870}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1173597518 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 544380605951407515, guid: 7d50026f6970f004f9c87b907c20208d, type: 3}
+  m_PrefabInstance: {fileID: 2036645870}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1181751544
 GameObject:
   m_ObjectHideFlags: 0
@@ -7509,13 +7524,61 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8806578472060376272, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1454192367}
+    - targetCorrespondingSourceObject: {fileID: 8806578472060376272, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1454192366}
   m_SourcePrefab: {fileID: 100100000, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
 --- !u!4 &1454192360 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7306301570945722478, guid: a70c24de7137c0147aab25101fa089ba, type: 3}
   m_PrefabInstance: {fileID: 1454192359}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1454192366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400977406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3090189879
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1454192367}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &1454192367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400977406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
 --- !u!1001 &1461407208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12805,6 +12868,9 @@ MonoBehaviour:
   _rightController: {fileID: 2036645874}
   _leftRay: {fileID: 2036645873}
   _rightRay: {fileID: 2036645872}
+  _leftLine: {fileID: 0}
+  _rightLine: {fileID: 0}
+  isUIActive: 0
 --- !u!114 &2069372356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15091,10 +15157,7 @@ MonoBehaviour:
   _warningText: "\uCC45\uC0C1 \uB2E4\uB9AC\uB97C 5\uCD08 \uC774\uC0C1 \uC7A1\uC73C\uC138\uC694"
   _leftController: {fileID: 0}
   _rightController: {fileID: 0}
-  _leftRay: {fileID: 0}
-  _rightRay: {fileID: 0}
-  _legs: []
-  isComplete: 0
+  isHoldComplete: 0
 --- !u!222 &3481281985234433535
 CanvasRenderer:
   m_ObjectHideFlags: 0
