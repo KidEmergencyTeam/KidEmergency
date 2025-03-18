@@ -138,15 +138,21 @@ public class FireBeginner : MonoBehaviour
 
             //복도
             case PLACE.HALLWAY:
+                //1. 시작 대사 진행
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                //2. 대사 진행하며 피난 유도선 강조 
                 secondDialog.gameObject.SetActive(true);
                 //피난 유도선 테두리 강조
                 ActiveOutlineToChildren(emergencyExit);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-                thirdDialog.gameObject.SetActive(true);
-                //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인(경고 UI 출력: 손수건으로 입과 코를 가려줘!)
-                //고개를 숙이고 있는지 확인
 
+                //3. 마지막 대사 진행 후 손수건으로 입과 코를 잘 막고 있고 고개를 숙였는지 확인 후 Scene 이동
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //플레이어가 손수건을 통해 입과 코를 잘 막고있는지 확인(경고 UI 출력: 손수건으로 입과 코를 가려줘!)
+                //고개를 숙이고 입과 코를 막고 있는지 확인
+                yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true);
 
                 //Fade Out 진행 된 후 Scene 이동
                 StartCoroutine(fadeInOutImg.FadeOut());
@@ -162,7 +168,10 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 //버튼 클릭 대기
+                yield return new WaitUntil(() => okBtn.isHovered == true);
 
+                //버튼 클릭 후 손수건을 활용해 입과 코를 막고 고개를 숙이고 있는지 확인 후 Scene 이동
+                yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true);
                 //Fade Out 진행 된 후 Scene 이동
                 StartCoroutine(fadeInOutImg.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
