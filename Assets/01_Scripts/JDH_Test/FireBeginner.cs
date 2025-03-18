@@ -164,10 +164,14 @@ public class FireBeginner : MonoBehaviour
 
             //계단, 엘레베이터
             case PLACE.STAIRS_ELEVATOR:
+                //1. 대사 진행
+                hasHandkerchief = true;
                 //모든 진행이 완료되었기에 버튼 클릭 시 다음 씬으로 이동(경고 UI 출력: 손수건으로 입과 코를 가려줘!)
                 //고개를 숙이고 있어야 대사가 종료된 후 마지막 씬으로 이동
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
+                //2. 버튼 클릭 후 입과 코를 막고 있으면 Fadeout이 종료된 후 놀이터로 Scene 이동
+                okBtn.gameObject.SetActive(true);
                 //버튼 클릭 대기
                 yield return new WaitUntil(() => okBtn.isHovered == true);
 
