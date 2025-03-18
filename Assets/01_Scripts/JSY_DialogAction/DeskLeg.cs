@@ -10,7 +10,8 @@ public class DeskLeg : MonoBehaviour
     [SerializeField] private string _warningText;
     [SerializeField] private ActionBasedController _leftController;
     [SerializeField] private ActionBasedController _rightController;
-
+    [SerializeField] private GameObject[] _legs;
+    
     private float _durationTime = 0f; // 지속 시간
     private float _endTime = 5f; // 종료 시간
     public bool isHoldComplete = false;
@@ -29,8 +30,8 @@ public class DeskLeg : MonoBehaviour
     {
         bool isLeftGrapped = _leftController.selectAction.action.ReadValue<float>() > 0;
         bool isRightGrapped = _rightController.selectAction.action.ReadValue<float>() > 0;
-        bool isInteractable = Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped ||
-                                  Vector3.Distance(this.transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
+        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped &&
+                                  Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
         if (isInteractable)
         { 
             UIManager.Instance.CloseWarningUI();

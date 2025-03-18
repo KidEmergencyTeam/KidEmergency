@@ -10,7 +10,6 @@ public class Bag : MonoBehaviour
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
-    [SerializeField] private ActionBasedController _rightController; // 오른쪽 컨트롤러 오브젝트
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
 
     private Rigidbody rb;
@@ -30,17 +29,7 @@ public class Bag : MonoBehaviour
     {
         if (ActionManager.Instance.currentAction == ActionType.FixingBag)
         {
-            if (Vector3.Distance(this.transform.position, _rightController.transform.position) < 0.1f &&
-                _rightController.selectAction.action.ReadValue<float>() > 0)
-            {
-                this.transform.SetParent(_rightController.transform);
-                this.transform.localPosition = Vector3.zero;
-                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
-                rb.isKinematic = true;
-                
-            }
-
-            else if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
+            if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
                      _leftController.selectAction.action.ReadValue<float>() > 0)
             {
                 this.transform.SetParent(_leftController.transform);
