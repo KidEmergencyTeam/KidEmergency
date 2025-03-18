@@ -232,6 +232,10 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 		else
 		{
 			Debug.Log($"새로운 플레이어: {playerToken}");
+			networkVR.transform.position =
+				spawnTransforms[_spawnedPlayers.Count].position;
+			networkVR.transform.rotation =
+				spawnTransforms[_spawnedPlayers.Count].rotation;
 			NetworkObject playerObject = runner.Spawn(_playerPrefab,
 				spawnTransforms[_spawnedPlayers.Count].position,
 				Quaternion.identity,
