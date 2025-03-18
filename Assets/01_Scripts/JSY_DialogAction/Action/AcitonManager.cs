@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {    
@@ -19,7 +17,8 @@ public class ActionManager : SingletonManager<ActionManager>
     public HighlightObjectAction highlightObjectAction;
     public FixingBagAction fixingBagAction;
     public HoldingLegAction holdingLegAction;
-    
+
+    public NpcRig[] NPCs;
     private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
     private void Start()
@@ -134,5 +133,32 @@ public class ActionManager : SingletonManager<ActionManager>
     private void ActionEventComplete()
     {
         OnActionComplete?.Invoke();
+    }
+
+    public void SetNPCState(string st)
+    {
+        if (st == "None")
+        {
+            for (int i = 0; i < NPCs.Length; i++)
+            {
+                NPCs[i]._state = NpcRig.State.None;
+            }
+        }
+        
+        else if (st == "Bow")
+        {
+            for (int i = 0; i < NPCs.Length; i++)
+            {
+                NPCs[i]._state = NpcRig.State.Bow;
+            }
+        }
+        
+        else if (st == "Hold")
+        {
+            for (int i = 0; i < NPCs.Length; i++)
+            {
+                NPCs[i]._state = NpcRig.State.Hold;
+            }
+        }
     }
 }
