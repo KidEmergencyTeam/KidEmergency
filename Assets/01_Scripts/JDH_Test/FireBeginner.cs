@@ -9,252 +9,265 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class FireBeginner : MonoBehaviour
 {
-    public enum PLACE { CLASSROOM, HALLWAY, STAIRS_ELEVATOR, OUTSIDE };
+	public enum PLACE
+	{
+		CLASSROOM,
+		HALLWAY,
+		STAIRS_ELEVATOR,
+		OUTSIDE
+	};
 
-    [Header("Àå¼Ò »óÅÂ")]
-    public PLACE place;
+	[Header("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")] public PLACE place;
 
-    [Header("È­ÀçÀÎÁö ÁöÁøÀÎÁö È®ÀÎÇÏ´Â º¯¼ö")]
-    public bool isFireBeginner;
-    public bool isEarthquake;
+	[Header("È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+	public bool isFireBeginner;
 
-    [Header("NPC ¹× »óÈ£ÀÛ¿ë ¿ÀºêÁ§Æ®")]
-    public GameObject player;   //½Ì±Û ÇÃ·¹ÀÌ¾î À§Ä¡
-    public GameObject seti;
-    public GameObject[] NPC;    //¸ÖÆ¼ ÇÃ·¹ÀÌ¾î À§Ä¡
-    public FadeInOut fadeInOutImg;
-    public TestButton2 okBtn;
-    public GameObject exampleDescUi;
-    public GameObject leftHand; //¿Þ¼Õ ¿ÀºêÁ§Æ®
-    [SerializeField] private GameObject emergencyExit;    //ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ addcomponent¸¦ ÅëÇØ OutlinableÀ» ºÎÂø
-    [SerializeField] private GameObject handkerchief;
-    [SerializeField] private GameObject fireAlarm;
+	public bool isEarthquake;
 
-    [Header("¸Ó¸® ¼÷ÀÓ °¨Áö º¯¼ö")]
-    public bool isHeadDown = false;
-    public float headHeightThreshold; // ±âÁØ ³ôÀÌ (ÀÌ °ªº¸´Ù ³·¾ÆÁö¸é ¼÷ÀÎ °ÍÀ¸·Î ÆÇ´Ü)
+	[Header("NPC ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")] public GameObject player; //ï¿½Ì±ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
+	public GameObject seti;
+	public GameObject[] NPC; //ï¿½ï¿½Æ¼ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡
+	public FadeInOut fadeInOutImg;
+	public TestButton2 okBtn;
+	public GameObject exampleDescUi;
+	public GameObject leftHand; //ï¿½Þ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
-    [SerializeField] private Transform xrCamera;  // HMD Ä«¸Þ¶ó Æ®·¡Å·
-    [SerializeField]private float initialHeight; // ÃÊ±â ÇÃ·¹ÀÌ¾î ³ôÀÌ ÀúÀå
+	[SerializeField]
+	private GameObject
+		emergencyExit; //ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ addcomponentï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Outlinableï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    [Header("»óÈ£ÀÛ¿ë È¤Àº À§Ä¡ ÀÌµ¿ ÁöÁ¡")]
-    public Transform playerMovPos;
-    public Transform setiMovPos;
-    public Transform[] npcMovPos;
+	[SerializeField] private GameObject handkerchief;
+	[SerializeField] private GameObject fireAlarm;
 
-    [Header("»ç¿ëÇÏ´Â ÆÄÆ¼Å¬")]
-    public ParticleSystem smokeParticle;
+	[Header("ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")] public bool isHeadDown = false;
 
-    [Header("ExampleUI º¯°æ ÀÌ¹ÌÁö °ü·Ã º¯¼ö")]
-    [SerializeField] private Image LeftImg;
-    [SerializeField] private Image RightImg;
-    [SerializeField] private Sprite leftChangeImg;
-    [SerializeField] private Sprite rightChangeImg;
-    [SerializeField] private TextMeshProUGUI descriptionText;
+	public float
+		headHeightThreshold; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½)
 
-    [Header("ÁøÇà»óÈ² Ã¼Å© º¯¼ö")]
-    public bool isFirstStepRdy;
-    public bool isSecondStepRdy;
-    public bool hasHandkerchief;
-    public bool iscoverFace;
+	[SerializeField] private Transform xrCamera; // HMD Ä«ï¿½Þ¶ï¿½ Æ®ï¿½ï¿½Å·
+	[SerializeField] private float initialHeight; // ï¿½Ê±ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    [Header("½Ã³ª¸®¿À ´ë»ç ¸ñ·Ï")]
-    [SerializeField] private BeginnerDialogSystem firstDialog;
-    [SerializeField] private BeginnerDialogSystem secondDialog;
-    [SerializeField] private BeginnerDialogSystem thirdDialog;
+	[Header("ï¿½ï¿½È£ï¿½Û¿ï¿½ È¤ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½")] public Transform playerMovPos;
+	public Transform setiMovPos;
+	public Transform[] npcMovPos;
 
-    private void Awake()
-    {
-        xrCamera = Camera.main.transform;
-        initialHeight = xrCamera.position.y; // °ÔÀÓ ½ÃÀÛ ½Ã ÃÊ±â ³ôÀÌ ÀúÀå
-    }
+	[Header("ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Æ¼Å¬")] public ParticleSystem smokeParticle;
 
-    // Start is called before the first frame update
-    IEnumerator Start()
-    {
-        switch (place)
-        {
-            //±³½Ç
-            case PLACE.CLASSROOM:
-                //1. ½ÃÀÛ
-                //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+	[Header("ExampleUI ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")] [SerializeField]
+	private Image LeftImg;
 
-                //2. È­Àç °æº¸À½°ú ÇÔ²² µÎ¹øÂ° ½Ã³ª¸®¿À ´ë»ç Ãâ·Â
-                secondDialog.gameObject.SetActive(true);
-                //È­Àç °æº¸À½ Ãâ·Â
-                fireAlarm.SetActive(true);
-                Debug.Log("È­Àç °æº¸À½ÀÌ Ãâ·ÂµË´Ï´Ù.");
-                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-                
-                //3. ´ë»ç Á¾·á ÈÄ ¹öÆ° È°¼ºÈ­, ¹öÆ° ´©¸£±â Àü±îÁö ´ë±â
-                okBtn.gameObject.SetActive(true);
-                Debug.Log("OK ¹öÆ° È°¼ºÈ­");
-                yield return new WaitUntil(() => okBtn.isHovered == true);
-                //´ÙÀ½ ÁøÇàÀº isFirstStepRdy °¡ trueÀÏ ¶§ ±îÁö ´ë±âÇÑ´Ù. (ÀÌ¹ÌÁö º¯°æ)
-                LeftImg.sprite = leftChangeImg;
-                RightImg.sprite = rightChangeImg;
-                isFirstStepRdy = true;
-                Debug.Log("¼³¸í ÀÌ¹ÌÁö º¯°æ ¹× Ã¹¹øÂ° ÁøÇà Á¶°Ç ¸¸Á·");
+	[SerializeField] private Image RightImg;
+	[SerializeField] private Sprite leftChangeImg;
+	[SerializeField] private Sprite rightChangeImg;
+	[SerializeField] private TextMeshProUGUI descriptionText;
 
-                //4. ¹öÆ° ´©¸£¸é isFirstStepRdy°¡ true·Î º¯°æµÇ¸ç ´ÙÀ½ ³»¿ë ÁøÇà (¼³¸í UI ¹× ¼Õ¼ö°Ç »ý¼º)
-                yield return new WaitUntil(() => isFirstStepRdy == true);
-                okBtn.gameObject.SetActive(false);
-                exampleDescUi.SetActive(true);
-                Debug.Log("OK ¹öÆ° ºñÈ°¼ºÈ­ ¹× ¼³¸í UI È°¼ºÈ­");
-                //Ã¥»ó¿¡ ¼Õ¼ö°Ç ±×·¦ È°¼ºÈ­
-                handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
-                Debug.Log("¼Õ¼ö°Ç È°¼ºÈ­");
-                //NPC ¸ð½À º¯°æ
+	[Header("ï¿½ï¿½ï¿½ï¿½ï¿½È² Ã¼Å© ï¿½ï¿½ï¿½ï¿½")] public bool isFirstStepRdy;
+	public bool isSecondStepRdy;
+	public bool hasHandkerchief;
+	public bool iscoverFace;
 
-                //5. ¼ÕÀ¸·Î ¼Õ¼ö°Ç ÀâÀ¸¸é ¿Þ¼Õ¿¡ °íÁ¤ ¹× ÀÔ°ú ÄÚ¸¦ °¡¸°°ÍÀ¸·Î ÆÇÁ¤µÉ ¶§ ±îÁö ´ë±â(°íÁ¤ÇÒ ¶§ ±îÁö ´ë±â) 
-                yield return new WaitUntil(() => hasHandkerchief == true && iscoverFace == true);
-                Debug.Log("¼Õ¼ö°Ç °íÁ¤ ¿Ï·á ¹× ÀÔ°ú ÄÚ¸¦ ¸·¾Ò½À´Ï´Ù.");
-                exampleDescUi.SetActive(false);
+	[Header("ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½")] [SerializeField]
+	private BeginnerDialogSystem firstDialog;
 
-                //6. ¸ðµç Çàµ¿À» ¸¸Á·ÇÏ¸é ÇÃ·¹ÀÌ¾î¿Í NPCÀÇ À§Ä¡¸¦ ÀÌµ¿½ÃÅ²´Ù.
-                //FadeIn, OutÀ¸·Î ÀÌµ¿ÇÏ´Â ¸ð½ÀÀ» ¾Èº¸¿©ÁØ´Ù.
-                StartCoroutine(fadeInOutImg.FadeOut());
-                //FadeIn, OutÀÌ Á¾·áµÉ¶§±îÁö ´ë±â ÈÄ ÀÌµ¿(ÀÌµ¿ ¸ð½ÀÀ» º¸¿©ÁÖÁö ¾Ê±â À§ÇÔ)
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                // ÇÃ·¹ÀÌ¾î¿Í NPCÀÇ À§Ä¡¸¦ ¹® ¾ÕÀ¸·Î ÀÌµ¿, ¼¼Æ¼ ¶ÇÇÑ À§Ä¡ º¯°æ
-                Debug.Log("ÇÃ·¹ÀÌ¾î NPC À§Ä¡ ÀÌµ¿");
-                TeleportCharacters();
-                //ÀÌµ¿ÀÌ ¿Ï·áµÇ¸é ´Ù½Ã È­¸éÀÌ ¹à¾ÆÁø´Ù µÎ¹øÂ° ÁøÇà Á¶°Ç ¸¸Á·ÇßÀ¸¹Ç·Î isSecondStepRdy = true·Î º¯°æ
-                StartCoroutine(fadeInOutImg.FadeIn());
-                isSecondStepRdy = true;
-                yield return new WaitUntil(() => isSecondStepRdy == true);
+	[SerializeField] private BeginnerDialogSystem secondDialog;
+	[SerializeField] private BeginnerDialogSystem thirdDialog;
 
-                //7. ´ë»ç ÁøÇà ÀÌÈÄ À¯Àú°¡ ¼³¸í Á¶°Ç¿¡ ¸¸Á·ÇÏ¸é(ÀÌµ¿ ÈÄ ÀÔ°ú ÄÚ¸¦ °¡¸° °ÍÀ¸·Î ÆÇÁ¤µÇ¸é)
-                thirdDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && iscoverFace == true);
-                //Fade Out ÁøÇà µÈ ÈÄ Scene ÀÌµ¿
-                fadeInOutImg.gameObject.SetActive(true);
-                StartCoroutine(fadeInOutImg.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                //¸ðµç ÁøÇàÀÌ ¿Ï·áµÇ¾ú±â¿¡ ¹öÆ° Å¬¸¯ ½Ã ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿
-                SceneManager.LoadScene("JDH2");
-                break;
+	private void Awake()
+	{
+		xrCamera = Camera.main.transform;
+		initialHeight = xrCamera.position.y; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	}
 
-            //º¹µµ
-            case PLACE.HALLWAY:
-                hasHandkerchief = true;
-                //1. ½ÃÀÛ ´ë»ç ÁøÇà
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+	// Start is called before the first frame update
+	IEnumerator Start()
+	{
+		switch (place)
+		{
+			//ï¿½ï¿½ï¿½ï¿½
+			case PLACE.CLASSROOM:
+				//1. ï¿½ï¿½ï¿½ï¿½
+				//fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-                //2. ´ë»ç ÁøÇàÇÏ¸ç ÇÇ³­ À¯µµ¼± °­Á¶ 
-                secondDialog.gameObject.SetActive(true);
-                //ÇÇ³­ À¯µµ¼± Å×µÎ¸® °­Á¶
-                ActiveOutlineToChildren(emergencyExit);
-                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+				//2. È­ï¿½ï¿½ ï¿½æº¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½Î¹ï¿½Â° ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+				secondDialog.gameObject.SetActive(true);
+				//È­ï¿½ï¿½ ï¿½æº¸ï¿½ï¿½ ï¿½ï¿½ï¿½
+				fireAlarm.SetActive(true);
+				Debug.Log("È­ï¿½ï¿½ ï¿½æº¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÂµË´Ï´ï¿½.");
+				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-                //3. ¸¶Áö¸· ´ë»ç ÁøÇà ÈÄ ¼Õ¼ö°ÇÀ¸·Î ÀÔ°ú ÄÚ¸¦ Àß ¸·°í ÀÖ°í °í°³¸¦ ¼÷¿´´ÂÁö È®ÀÎ ÈÄ Scene ÀÌµ¿
-                thirdDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-                //ÇÃ·¹ÀÌ¾î°¡ ¼Õ¼ö°ÇÀ» ÅëÇØ ÀÔ°ú ÄÚ¸¦ Àß ¸·°íÀÖ´ÂÁö È®ÀÎ(°æ°í UI Ãâ·Â: ¼Õ¼ö°ÇÀ¸·Î ÀÔ°ú ÄÚ¸¦ °¡·ÁÁà!)
-                //°í°³¸¦ ¼÷ÀÌ°í ÀÔ°ú ÄÚ¸¦ ¸·°í ÀÖ´ÂÁö È®ÀÎ
-                yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true);
+				//3. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Æ° È°ï¿½ï¿½È­, ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+				okBtn.gameObject.SetActive(true);
+				Debug.Log("OK ï¿½ï¿½Æ° È°ï¿½ï¿½È­");
+				yield return new WaitUntil(() => okBtn.isClick == true);
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ isFirstStepRdy ï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½. (ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+				LeftImg.sprite = leftChangeImg;
+				RightImg.sprite = rightChangeImg;
+				isFirstStepRdy = true;
+				Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã¹ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
-                //Fade Out ÁøÇà µÈ ÈÄ Scene ÀÌµ¿
-                StartCoroutine(fadeInOutImg.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                //¸ðµç ÁøÇàÀÌ ¿Ï·áµÇ¾ú±â¿¡ ¹öÆ° Å¬¸¯ ½Ã ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿
-                SceneManager.LoadScene("JDH3");
-                break;
+				//4. ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ isFirstStepRdyï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ ï¿½Õ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+				yield return new WaitUntil(() => isFirstStepRdy == true);
+				okBtn.gameObject.SetActive(false);
+				exampleDescUi.SetActive(true);
+				Debug.Log("OK ï¿½ï¿½Æ° ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ UI È°ï¿½ï¿½È­");
+				//Ã¥ï¿½ï¿½ ï¿½Õ¼ï¿½ï¿½ï¿½ ï¿½×·ï¿½ È°ï¿½ï¿½È­
+				handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
+				Debug.Log("ï¿½Õ¼ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­");
+				//NPC ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-            //°è´Ü, ¿¤·¹º£ÀÌÅÍ
-            case PLACE.STAIRS_ELEVATOR:
-                //1. ´ë»ç ÁøÇà
-                hasHandkerchief = true;
-                //¸ðµç ÁøÇàÀÌ ¿Ï·áµÇ¾ú±â¿¡ ¹öÆ° Å¬¸¯ ½Ã ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿(°æ°í UI Ãâ·Â: ¼Õ¼ö°ÇÀ¸·Î ÀÔ°ú ÄÚ¸¦ °¡·ÁÁà!)
-                //°í°³¸¦ ¼÷ÀÌ°í ÀÖ¾î¾ß ´ë»ç°¡ Á¾·áµÈ ÈÄ ¸¶Áö¸· ¾ÀÀ¸·Î ÀÌµ¿
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+				//5. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½) 
+				yield return new WaitUntil(() =>
+					hasHandkerchief == true && iscoverFace == true);
+				Debug.Log("ï¿½Õ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½Ò½ï¿½ï¿½Ï´ï¿½.");
+				exampleDescUi.SetActive(false);
 
-                //2. ¹öÆ° Å¬¸¯ ÈÄ ÀÔ°ú ÄÚ¸¦ ¸·°í ÀÖÀ¸¸é FadeoutÀÌ Á¾·áµÈ ÈÄ ³îÀÌÅÍ·Î Scene ÀÌµ¿
-                okBtn.gameObject.SetActive(true);
-                //¹öÆ° Å¬¸¯ ´ë±â
-                yield return new WaitUntil(() => okBtn.isHovered == true);
-                okBtn.gameObject.SetActive(false);
-                //¹öÆ° Å¬¸¯ ÈÄ ¼Õ¼ö°ÇÀ» È°¿ëÇØ ÀÔ°ú ÄÚ¸¦ ¸·°í °í°³¸¦ ¼÷ÀÌ°í ÀÖ´ÂÁö È®ÀÎ ÈÄ Scene ÀÌµ¿
-                yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true);
-                //Fade Out ÁøÇà µÈ ÈÄ Scene ÀÌµ¿
-                StartCoroutine(fadeInOutImg.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH4");
-                break;
+				//6. ï¿½ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½Å²ï¿½ï¿½.
+				//FadeIn, Outï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Èºï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
+				StartCoroutine(fadeInOutImg.FadeOut());
+				//FadeIn, Outï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ìµï¿½(ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½ ï¿½ï¿½ï¿½ï¿½)
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½, ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+				Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ NPC ï¿½ï¿½Ä¡ ï¿½Ìµï¿½");
+				TeleportCharacters();
+				//ï¿½Ìµï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¸ï¿½ ï¿½Ù½ï¿½ È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¹ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ isSecondStepRdy = trueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				StartCoroutine(fadeInOutImg.FadeIn());
+				isSecondStepRdy = true;
+				yield return new WaitUntil(() => isSecondStepRdy == true);
 
-            //À¯Ä¡¿ø ¹Û ³îÀÌÅÍ
-            case PLACE.OUTSIDE:
-                //¸¶¹«¸® ´ë»ç¸¸ Ãâ·Â ÈÄ Á¾·á
-                firstDialog.gameObject.SetActive(true);
-                break;
+				//7. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½(ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½)
+				thirdDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() =>
+					thirdDialog.isDialogsEnd == true && iscoverFace == true);
+				//Fade Out ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Scene ï¿½Ìµï¿½
+				fadeInOutImg.gameObject.SetActive(true);
+				StartCoroutine(fadeInOutImg.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½â¿¡ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+				SceneManager.LoadScene("JDH2");
+				break;
 
-        }
-    }
-    private void Update()
-    {
-        DetectHeadLowering(); // ¸Ó¸® ³ôÀÌ °¨Áö ÇÔ¼ö È£Ãâ
-    }
+			//ï¿½ï¿½ï¿½ï¿½
+			case PLACE.HALLWAY:
+				hasHandkerchief = true;
+				//1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-    private void TeleportCharacters()
-    {
-        // ÇÃ·¹ÀÌ¾î Áï½Ã ÀÌµ¿
-        if (playerMovPos != null)
-        {
-            player.transform.position = playerMovPos.position;
-        }
+				//2. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ç³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+				secondDialog.gameObject.SetActive(true);
+				//ï¿½Ç³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×µÎ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+				ActiveOutlineToChildren(emergencyExit);
+				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-        // ¼¼Æ¼ Áï½Ã ÀÌµ¿
-        if (setiMovPos != null)
-        {
-            seti.transform.position = setiMovPos.position;
-        }
+				//3. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ Scene ï¿½Ìµï¿½
+				thirdDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+				//ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½(ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½: ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!)
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+				yield return new WaitUntil(() =>
+					isHeadDown == true && iscoverFace == true);
 
-        // NPC Áï½Ã ÀÌµ¿
-        for (int i = 0; i < NPC.Length; i++)
-        {
-            if (npcMovPos.Length > i && npcMovPos[i] != null)
-            {
-                NPC[i].transform.position = npcMovPos[i].position;
-            }
-        }
+				//Fade Out ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Scene ï¿½Ìµï¿½
+				StartCoroutine(fadeInOutImg.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½â¿¡ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+				SceneManager.LoadScene("JDH3");
+				break;
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î ¹× NPC ÅÚ·¹Æ÷Æ® ¿Ï·á");
-    }
+			//ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			case PLACE.STAIRS_ELEVATOR:
+				//1. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				hasHandkerchief = true;
+				//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½â¿¡ ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½(ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½: ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!)
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½ç°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-    //ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ OutlinableÀ» È°¼ºÈ­
-    private void ActiveOutlineToChildren(GameObject parent)
-    {
-        if (parent == null) return;
+				//2. ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Fadeoutï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ Scene ï¿½Ìµï¿½
+				okBtn.gameObject.SetActive(true);
+				//ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½
+				yield return new WaitUntil(() => okBtn.isClick == true);
+				okBtn.gameObject.SetActive(false);
+				//ï¿½ï¿½Æ° Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ Scene ï¿½Ìµï¿½
+				yield return new WaitUntil(() =>
+					isHeadDown == true && iscoverFace == true);
+				//Fade Out ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Scene ï¿½Ìµï¿½
+				StartCoroutine(fadeInOutImg.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				SceneManager.LoadScene("JDH4");
+				break;
 
-        foreach (Transform child in parent.GetComponentsInChildren<Transform>())
-        {
-            Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+			//ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			case PLACE.OUTSIDE:
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ç¸¸ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				firstDialog.gameObject.SetActive(true);
+				break;
+		}
+	}
 
-            if (outline == null)
-            {
-                outline = child.gameObject.AddComponent<Outlinable>();
-            }
+	private void Update()
+	{
+		DetectHeadLowering(); // ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ È£ï¿½ï¿½
+	}
 
-            outline.enabled = true; // Outlinable È°¼ºÈ­
-        }
-    }
-    private void DetectHeadLowering()
-    {
-        if (xrCamera == null) return;
+	private void TeleportCharacters()
+	{
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+		if (playerMovPos != null)
+		{
+			player.transform.position = playerMovPos.position;
+		}
 
-        float currentHeight = xrCamera.position.y; // ÇöÀç ¸Ó¸® ³ôÀÌ
+		// ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+		if (setiMovPos != null)
+		{
+			seti.transform.position = setiMovPos.position;
+		}
 
-        // ¸Ó¸® ³ôÀÌ°¡ ±âÁØº¸´Ù ³·¾ÆÁö¸é ¼÷ÀÎ °ÍÀ¸·Î ÆÇ´Ü
-        if (currentHeight < headHeightThreshold)
-        {
-            isHeadDown = true;
-            //Debug.Log("¸Ó¸®¸¦ ¼÷¿´½À´Ï´Ù! (Y°ª °¨Áö)");
-        }
-        else
-        {
-            isHeadDown = false;
-        }
-    }
+		// NPC ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+		for (int i = 0; i < NPC.Length; i++)
+		{
+			if (npcMovPos.Length > i && npcMovPos[i] != null)
+			{
+				NPC[i].transform.position = npcMovPos[i].position;
+			}
+		}
 
+		Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ NPC ï¿½Ú·ï¿½ï¿½ï¿½Æ® ï¿½Ï·ï¿½");
+	}
+
+	//ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Outlinableï¿½ï¿½ È°ï¿½ï¿½È­
+	private void ActiveOutlineToChildren(GameObject parent)
+	{
+		if (parent == null) return;
+
+		foreach (Transform child in parent.GetComponentsInChildren<Transform>())
+		{
+			Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+
+			if (outline == null)
+			{
+				outline = child.gameObject.AddComponent<Outlinable>();
+			}
+
+			outline.enabled = true; // Outlinable È°ï¿½ï¿½È­
+		}
+	}
+
+	private void DetectHeadLowering()
+	{
+		if (xrCamera == null) return;
+
+		float currentHeight = xrCamera.position.y; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+		// ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½
+		if (currentHeight < headHeightThreshold)
+		{
+			isHeadDown = true;
+			//Debug.Log("ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½! (Yï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)");
+		}
+		else
+		{
+			isHeadDown = false;
+		}
+	}
 }
