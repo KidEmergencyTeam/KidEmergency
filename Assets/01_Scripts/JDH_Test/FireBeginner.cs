@@ -174,7 +174,7 @@ public class FireBeginner : MonoBehaviour
                 okBtn.gameObject.SetActive(true);
                 //버튼 클릭 대기
                 yield return new WaitUntil(() => okBtn.isHovered == true);
-
+                okBtn.gameObject.SetActive(false);
                 //버튼 클릭 후 손수건을 활용해 입과 코를 막고 고개를 숙이고 있는지 확인 후 Scene 이동
                 yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true);
                 //Fade Out 진행 된 후 Scene 이동
