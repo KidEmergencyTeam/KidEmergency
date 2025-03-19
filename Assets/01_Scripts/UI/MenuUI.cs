@@ -30,6 +30,21 @@ public class MenuUI : OutlineHighlight
         TitleUI titleUI = GetComponentInParent<TitleUI>();
         titleUI.currentMenu = _menuName;
         titleUI.SetCurrentMenu();
+
+        if (_menuName == "Normal")
+        {
+            
+        }
+        
+        else if (_menuName == "Hard")
+        {
+            
+        }
+        
+        else if (_menuName != "Exit")
+        {
+            
+        }
     }
 
 }
