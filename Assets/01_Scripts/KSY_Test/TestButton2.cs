@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
+// TestButton2.cs 목적: 할당된 버튼 이벤트 출력
 public enum ButtonType
 {
     A,
