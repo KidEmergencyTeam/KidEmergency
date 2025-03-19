@@ -234,13 +234,18 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
     IEnumerator Step17() { yield return PlayAndWait(11); }
+
+    // Step18 화재 경보벨 연출 
     IEnumerator Step18() { yield return null; }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
     IEnumerator Step21() { yield return PlayAndWait(14); }
+
+    // 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
-    // 24. 피난유도선(1) vs 익숙한 길(2)
+    
+    // Step24 피난유도선(1) vs 익숙한 길(2)
     IEnumerator Step24()
     {
         int selected = 0;
