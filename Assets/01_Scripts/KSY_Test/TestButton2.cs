@@ -29,7 +29,10 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private InputAction rightSelectAction;
 
     // Pointer 이벤트로 레이의 진입 상태를 관리
-    public bool isHovered = false;
+    private bool isHovered = false;
+
+    // 버튼 클릭 상태를 관리
+    public bool isClick = false;
 
     private void Awake()
     {
@@ -169,6 +172,10 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // 버튼 이벤트 실행
         button.onClick.Invoke();
+
+        // 버튼 클릭 했을때 
+        // isClick 플래그를 true로 설정
+        isClick = true;
     }
 
     // 버튼 클릭 이벤트 처리 (스위치문으로 분기)
