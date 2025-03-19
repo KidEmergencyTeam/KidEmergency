@@ -20,7 +20,7 @@ public class NpcRig : MonoBehaviour
 		public Vector3 rightHandRot;
 	}
 
-	public State _state = State.None;
+	public State state = State.None;
 
 	public Transform player;
 	public Transform leftHandTarget;
@@ -32,7 +32,7 @@ public class NpcRig : MonoBehaviour
 
 	private void Update()
 	{
-		switch (_state)
+		switch (state)
 		{
 			case State.None:
 				SetState(noneState);
@@ -49,12 +49,12 @@ public class NpcRig : MonoBehaviour
 	private void SetState(PoseData pose)
 	{
 		player.localPosition = pose.playerPos;
-		player.rotation = Quaternion.Euler(pose.playerRot);
+		player.localRotation = Quaternion.Euler(pose.playerRot);
 
 		leftHandTarget.localPosition = pose.leftHandPos;
-		leftHandTarget.rotation = Quaternion.Euler(pose.leftHandRot);
+		leftHandTarget.localRotation = Quaternion.Euler(pose.leftHandRot);
 
 		rightHandTarget.localPosition = pose.rightHandPos;
-		rightHandTarget.rotation = Quaternion.Euler(pose.rightHandRot);
+		rightHandTarget.localRotation = Quaternion.Euler(pose.rightHandRot);
 	}
 }
