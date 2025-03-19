@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-// using UnityEngine.XR.Interaction.Toolkit;
+// using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
 public class ScenarioManager : MonoBehaviour
 {
@@ -138,7 +138,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step5() { yield return PlayAndWait(3); }
     IEnumerator Step6() { yield return PlayAndWait(4); }
 
-    // Step7 손(1) vs 손수건(2) - 선택지 이후부터 손수건 오브젝트 상호작용 안됨
+    // Step7 손(1) vs 손수건(2) 선택지 이후부터 손수건 오브젝트 상호작용 안됨
     IEnumerator Step7()
     {
         int selected = 0;
@@ -147,22 +147,22 @@ public class ScenarioManager : MonoBehaviour
         }));
 
         if (selected == 1)
-            currentStep = 8 - 1;
+            currentStep = 7;  
         else
-            currentStep = 11 - 1;
+            currentStep = 10; 
     }
     IEnumerator Step8() { yield return null; }
     IEnumerator Step9() { yield return PlayAndWait(5); }
     IEnumerator Step10()
     {
         yield return PlayAndWait(6);
-        currentStep = 13 - 1;
+        currentStep = 12; 
     }
     IEnumerator Step11() { yield return null; }
     IEnumerator Step12()
     {
         yield return PlayAndWait(7);
-        currentStep = 13 - 1;
+        currentStep = 12; 
     }
     IEnumerator Step13()
     {
@@ -244,7 +244,7 @@ public class ScenarioManager : MonoBehaviour
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
-    
+
     // Step24 피난유도선(1) vs 익숙한 길(2)
     IEnumerator Step24()
     {
@@ -254,20 +254,20 @@ public class ScenarioManager : MonoBehaviour
         }));
 
         if (selected == 1)
-            currentStep = 25 - 1;
+            currentStep = 24; 
         else
-            currentStep = 26 - 1;
+            currentStep = 25; 
     }
     IEnumerator Step25()
     {
         yield return PlayAndWait(16);
-        currentStep = 28 - 1;
+        currentStep = 27; 
     }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27()
     {
         yield return PlayAndWait(17);
-        currentStep = 28 - 1;
+        currentStep = 27; 
     }
     IEnumerator Step28()
     {
@@ -276,10 +276,23 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step29() { yield return PlayAndWait(19); }
     IEnumerator Step30() { yield return PlayAndWait(20); }
-    IEnumerator Step31() { yield return null; }
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35 - 1; }
+
+    // Step31 선택지: 엘베 VS 계단
+    IEnumerator Step31()
+    {
+        int selected = 0;
+        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, r => {
+            selected = r;
+        }));
+
+        if (selected == 1)
+            currentStep = 24; 
+        else
+            currentStep = 25; 
+    }
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
     IEnumerator Step33() { yield return null; }
-    IEnumerator Step34() { yield return PlayAndWait(22); currentStep = 35 - 1; }
+    IEnumerator Step34() { yield return PlayAndWait(22); currentStep = 34; } 
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
