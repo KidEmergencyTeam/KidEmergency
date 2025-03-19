@@ -94,7 +94,9 @@ public class FireBeginner : MonoBehaviour
             // 교실
             case PLACE.CLASSROOM:
                 // 1. 첫 번째 대화 시작
-                //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 // 2. 화재 상황 안내 대화 시작 및 화재 경보 작동
@@ -152,6 +154,8 @@ public class FireBeginner : MonoBehaviour
 
             // 복도
             case PLACE.HALLWAY:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
@@ -175,6 +179,8 @@ public class FireBeginner : MonoBehaviour
 
             // 계단/엘리베이터
             case PLACE.STAIRS_ELEVATOR:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
@@ -194,6 +200,8 @@ public class FireBeginner : MonoBehaviour
 
             // 외부
             case PLACE.OUTSIDE:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 // 외부에서는 첫 번째 대화만 실행
                 firstDialog.gameObject.SetActive(true);
                 break;
