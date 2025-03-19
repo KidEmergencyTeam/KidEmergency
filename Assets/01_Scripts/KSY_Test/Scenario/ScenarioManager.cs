@@ -138,7 +138,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step5() { yield return PlayAndWait(3); }
     IEnumerator Step6() { yield return PlayAndWait(4); }
 
-    // 7. 손(1) vs 손수건(2) - 선택지 이후부터 손수건 오브젝트 상호작용 안됨
+    // Step7 손(1) vs 손수건(2) - 선택지 이후부터 손수건 오브젝트 상호작용 안됨
     IEnumerator Step7()
     {
         int selected = 0;
@@ -241,7 +241,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step20() { yield return PlayAndWait(13); }
     IEnumerator Step21() { yield return PlayAndWait(14); }
 
-    // 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
+    // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
     
