@@ -26,6 +26,8 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 	private Dictionary<int, NetworkObject> _playersMap =
 		new Dictionary<int, NetworkObject>();
 
+	private List<NetworkObject> _spawnedPlayerList = new List<NetworkObject>();
+
 	private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers =
 		new Dictionary<PlayerRef, NetworkObject>();
 
@@ -210,46 +212,58 @@ public class ConnectionManager : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
 	{
-		if (!runner.IsServer) return;
-
-		var playerToken = GetPlayerToken(runner, player);
-
-		// 재접속한 플레이어 처리
-		if (_playersMap.TryGetValue(playerToken, out var existingPlayer))
-		{
-			Debug.Log($"재접속한 플레이어: {playerToken}");
-			existingPlayer.AssignInputAuthority(player);
-			_spawnedPlayers[player] = existingPlayer;
-
-			lock (_pendingTokens)
-			{
-				if (_pendingTokens.Contains(playerToken))
-				{
-					_pendingTokens.Remove(playerToken);
-				}
-			}
-		}
-		else
-		{
-			Debug.Log($"새로운 플레이어: {playerToken}");
-			networkVR.transform.position =
-				spawnTransforms[_spawnedPlayers.Count].position;
-			networkVR.transform.rotation =
-				spawnTransforms[_spawnedPlayers.Count].rotation;
-			NetworkObject playerObject = runner.Spawn(_playerPrefab,
-				spawnTransforms[_spawnedPlayers.Count].position,
-				Quaternion.identity,
-				player,
-				(r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
-			);
-
-			_playersMap[playerToken] = playerObject;
-			_spawnedPlayers[player] = playerObject;
-		}
-
 		if (runner.IsServer)
 		{
+			var playerToken = GetPlayerToken(runner, player);
+
+			// 재접속한 플레이어 처리
+			if (_playersMap.TryGetValue(playerToken, out var existingPlayer))
+			{
+				Debug.Log($"재접속한 플레이어: {playerToken}");
+				existingPlayer.AssignInputAuthority(player);
+				_spawnedPlayers[player] = existingPlayer;
+
+				lock (_pendingTokens)
+				{
+					if (_pendingTokens.Contains(playerToken))
+					{
+						_pendingTokens.Remove(playerToken);
+					}
+				}
+			}
+			else
+			{
+				Debug.Log($"새로운 플레이어: {playerToken}");
+				NetworkObject playerObject = runner.Spawn(_playerPrefab,
+					spawnTransforms[_spawnedPlayers.Count].position,
+					Quaternion.identity,
+					player,
+					(r, obj) => obj.GetComponent<NetworkPlayer>().Token = playerToken
+				);
+				_playersMap[playerToken] = playerObject;
+				_spawnedPlayers[player] = playerObject;
+
+				Rpc_PlayerSetPosition(playerObject);
+			}
+
 			runner.PushHostMigrationSnapshot();
+		}
+	}
+
+	[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+	public void Rpc_PlayerSetPosition(NetworkObject player)
+	{
+		if (player.InputAuthority ==
+		    networkRig.GetComponent<NetworkObject>().InputAuthority)
+		{
+			for (int i = 0; i < _spawnedPlayerList.Count; i++)
+			{
+				if (_spawnedPlayerList[i] == player)
+				{
+					networkVR.transform.position = spawnTransforms[i].position;
+					networkVR.transform.rotation = spawnTransforms[i].rotation;
+				}
+			}
 		}
 	}
 
