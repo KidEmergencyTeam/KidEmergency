@@ -70,7 +70,12 @@ public class JSYRayController : MonoBehaviour
             {
                 return true;
             }
-        } 
+        }
+
+        if (UIManager.Instance.titleUI.gameObject.activeSelf)
+        {
+            return true;
+        }
         
         // 타이틀 ui도 추가해야 할듯?
         

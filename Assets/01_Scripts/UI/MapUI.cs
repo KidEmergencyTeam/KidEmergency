@@ -14,12 +14,13 @@ public class MapUI : OutlineHighlight
     [SerializeField] private string _nextScene;
     private Button _button;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(ButtonClicked);
     }
-
+    
     private void ButtonClicked()
     {
         if (UIManager.Instance.titleUI.currentMenu == "Normal" && this.transform.name == _mapName)

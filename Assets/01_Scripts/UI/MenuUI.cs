@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,11 +16,18 @@ public class MenuUI : OutlineHighlight
     {
         base.Awake();
         originalColor = text.color;
-        activeImage.SetActive(false);
         _menuName = this.transform.name;
         
         _button = GetComponent<Button>();
         _button.onClick.AddListener(MenuButtonClicked);
+    }
+
+    private void Start()
+    {
+        if (this.transform.name == "Normal")
+        {
+            text.color = Color.white;
+        }
     }
 
     private void MenuButtonClicked()

@@ -11,10 +11,9 @@ public class TitleUI : MonoBehaviour
     public GameObject normalPanel;
     public GameObject hardPanel;
     
-    public Button[] buttons;
-
     private void Start()
     {
+        hardPanel.SetActive(false);
         currentMenu = "Normal";
     }
 
