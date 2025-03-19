@@ -22,6 +22,8 @@ public class NpcRig : MonoBehaviour
 
 	public State state = State.None;
 
+	public GameObject handkerchief;
+
 	public Transform player;
 	public Transform leftHandTarget;
 	public Transform rightHandTarget;
@@ -35,12 +37,15 @@ public class NpcRig : MonoBehaviour
 		switch (state)
 		{
 			case State.None:
+				handkerchief.gameObject.SetActive(false);
 				SetState(noneState);
 				break;
 			case State.Hold:
+				handkerchief.gameObject.SetActive(true);
 				SetState(holdState);
 				break;
 			case State.Bow:
+				handkerchief.gameObject.SetActive(true);
 				SetState(bowState);
 				break;
 		}
