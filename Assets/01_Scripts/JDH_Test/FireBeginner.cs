@@ -124,6 +124,7 @@ public class FireBeginner : MonoBehaviour
                 // 손수건(핸드커치) 활성화
                 handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
                 Debug.Log("손수건 활성화");
+                SetAllNpcState(NpcRig.State.Hold); // 모든 NPC 상태를 Hold로 설정
 
                 // 5. 손수건 사용 및 얼굴 가리기 완료 대기
                 yield return new WaitUntil(() =>
@@ -155,6 +156,7 @@ public class FireBeginner : MonoBehaviour
             // 복도
             case PLACE.HALLWAY:
                 fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 ruleCheck = true;
                 hasHandkerchief = true;
@@ -180,6 +182,7 @@ public class FireBeginner : MonoBehaviour
             // 계단/엘리베이터
             case PLACE.STAIRS_ELEVATOR:
                 fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 ruleCheck = true;
                 hasHandkerchief = true;
@@ -236,10 +239,6 @@ public class FireBeginner : MonoBehaviour
 
         Debug.Log("playerUi 위치 및 회전 변경 완료 (Local Space)");
     }
-
-
-
-
 
     private void TeleportCharacters()
     {
@@ -322,5 +321,16 @@ public class FireBeginner : MonoBehaviour
         Debug.Log("모든 연기 파티클이 활성화되었습니다.");
     }
 
+    // 모든 NPC들의 상태를 동일하게 변경하는 함수
+    public void SetAllNpcState(NpcRig.State newState)
+    {
+        foreach (GameObject npc in NPC)
+        {
+            if (npc != null) // NPC가 null이 아닌지 확인
+            {
+                npc.GetComponent<NpcRig>().state = newState; // NPC의 상태를 변경
+            }
+        }
+    }
 
 }
