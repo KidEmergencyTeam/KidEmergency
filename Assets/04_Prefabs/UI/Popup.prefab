@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6530568233990341943}
   - component: {fileID: 8360530618252164819}
   - component: {fileID: 8154232378351918154}
-  - component: {fileID: 7490601125205657794}
+  - component: {fileID: 1222963029928578788}
+  - component: {fileID: 7172890035266719554}
   m_Layer: 5
   m_Name: Yes
   m_TagString: Untagged
@@ -78,7 +79,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 15
---- !u!114 &7490601125205657794
+--- !u!114 &1222963029928578788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 874859359935848590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c315e5d780ea643855160d92afa185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 2932877716438360184}
+  _button: {fileID: 0}
+--- !u!114 &7172890035266719554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -552,7 +567,8 @@ GameObject:
   - component: {fileID: 5335572575671766948}
   - component: {fileID: 6530722981919539842}
   - component: {fileID: 8305614818599063311}
-  - component: {fileID: 8317009792686716906}
+  - component: {fileID: 6158840323766637584}
+  - component: {fileID: 2168340877373072509}
   m_Layer: 5
   m_Name: No
   m_TagString: Untagged
@@ -619,7 +635,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 15
---- !u!114 &8317009792686716906
+--- !u!114 &6158840323766637584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5818793489708107762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c315e5d780ea643855160d92afa185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 9072431765580543605}
+  _button: {fileID: 0}
+--- !u!114 &2168340877373072509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -694,9 +724,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4976942776531036063}
   - {fileID: 7092112191819720550}
   - {fileID: 2098669280364462392}
-  - {fileID: 4976942776531036063}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -759,8 +789,6 @@ MonoBehaviour:
   - "\uACE0\uAE09 \uB09C\uC774\uB3C4"
   - "\uD654\uC7AC \uB300\uCC98 \uAD50\uC721(\uD559\uAD50 - \uBA40\uD2F0)"
   highlightColor: {r: 1, g: 0.21226418, b: 0.21226418, a: 0}
-  yesButton: {fileID: 7490601125205657794}
-  noButton: {fileID: 8317009792686716906}
 --- !u!1 &7686199431744735611
 GameObject:
   m_ObjectHideFlags: 0

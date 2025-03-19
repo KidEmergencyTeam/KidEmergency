@@ -11,10 +11,9 @@ public class TitleUI : MonoBehaviour
     public GameObject normalPanel;
     public GameObject hardPanel;
     
-    public Button[] buttons;
-
     private void Start()
     {
+        hardPanel.SetActive(false);
         currentMenu = "Normal";
     }
 
@@ -24,9 +23,11 @@ public class TitleUI : MonoBehaviour
         { 
             if(currentMenu != menus[i].gameObject.name)
             {
-                menus[i].text.color = menus[i].originalColor;
-                menus[i].activeImage.SetActive(false);
-                
+                if (currentMenu != "Exit")
+                {
+                    menus[i].text.color = menus[i].originalColor;
+                    menus[i].activeImage.SetActive(false);
+                }
             }
         }
     }
