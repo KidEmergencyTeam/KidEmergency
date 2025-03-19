@@ -43,6 +43,11 @@ public class ScenarioManager : MonoBehaviour
             Debug.LogError("TypingEffect가 할당되지 않았습니다.");
             return;
         }
+        if (smokeEffect == null)
+        {
+            Debug.LogError("SmokeEffect가 할당되지 않았습니다.");
+            return;
+        }
         if (sceneNames == null || sceneNames.Count < 3)
         {
             Debug.LogError("Scene Names 리스트에 최소 3개 이상의 씬 이름이 필요합니다.");
@@ -96,20 +101,30 @@ public class ScenarioManager : MonoBehaviour
         StartCoroutine(RunScenario());
     }
 
-    // 시나리오 전체를 순차적으로 실행
+    // 시나리오를 순차적으로 실행
     IEnumerator RunScenario()
     {
+        // 딕셔너리에 등록된 전체 스텝 실행
         while (currentStep <= 38)
         {
+            // 현재 스텝 -> 딕션너리에 등록o
             if (scenarioSteps.ContainsKey(currentStep))
             {
+                // 현재 스텝의 코루틴을 실행하고
+                // 완료될 때까지 대기
                 yield return StartCoroutine(scenarioSteps[currentStep]());
             }
+            
+            // 현재 스텝-> 딕셔너리에 등록x
             else
             {
                 Debug.LogWarning($"[ScenarioManager] 구현되지 않은 스텝: {currentStep}");
             }
+
+            // 다음 스텝으로 넘김 -> 이게 없으면 같은 스텝에서 무한 반복됨
             currentStep++;
+
+            // 한 프레임 대기 (모든 로직이 실행된 후 다음 프레임에서 루프 재시작)
             yield return null;
         }
     }
@@ -225,14 +240,12 @@ public class ScenarioManager : MonoBehaviour
         // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
         playerPosition.ApplyStep14Positions();
 
+        // 대기
         yield return null;
     }
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
-
-        // 1초 대기 후 씬 전환
-        yield return new WaitForSeconds(1);
         yield return StartCoroutine(ChangeScene(0));
     }
     IEnumerator Step16() { yield return PlayAndWait(10); }
@@ -285,22 +298,21 @@ public class ScenarioManager : MonoBehaviour
 
         // 정답: 계단 선택 시 Step32로 이동
         if (selected == 1)
-            currentStep = 31;
+            currentStep = 32;
 
         // 오답: 엘리베이터 선택 시 Step34로 이동
         else
-            currentStep = 33; 
+            currentStep = 34; 
     }
 
     // Step32 대사 출력 -> Step35 진행
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35; } 
     IEnumerator Step33() { yield return null; }
     IEnumerator Step34() { yield return PlayAndWait(22); } 
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
-        yield return null;
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
     IEnumerator Step37() { yield return PlayAndWait(25); }
@@ -317,6 +329,7 @@ public class ScenarioManager : MonoBehaviour
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
+                // 로딩 대기
                 yield return null;
             }
         }
