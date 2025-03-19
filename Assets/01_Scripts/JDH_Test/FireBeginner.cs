@@ -53,8 +53,8 @@ public class FireBeginner : MonoBehaviour
     public Transform setiMovPos;
     public Transform[] npcMovPos;
 
-    [Header("연기 파티클 효과")]
-    public ParticleSystem smokeParticle;
+    [Header("연기 파티클 그룹")]
+    public GameObject smokeParticles;
 
     [Header("예제 UI 이미지")]
     [SerializeField]
@@ -100,6 +100,7 @@ public class FireBeginner : MonoBehaviour
                 secondDialog.gameObject.SetActive(true);
                 fireAlarm.SetActive(true);
                 Debug.Log("화재 경보 작동.");
+                SmokeObjsActive();  //모든 연기 파티클 활성화
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                 // 3. OK 버튼 활성화 및 버튼 클릭 대기
@@ -269,4 +270,25 @@ public class FireBeginner : MonoBehaviour
             isHeadDown = false;
         }
     }
+    // 화재 발생 시 모든 연기 파티클 활성화
+    public void SmokeObjsActive()
+    {
+        if (smokeParticles == null) return;
+
+        // 1. 모든 자식 오브젝트 활성화
+        foreach (Transform child in smokeParticles.GetComponentsInChildren<Transform>(true)) // 비활성화된 오브젝트도 포함
+        {
+            child.gameObject.SetActive(true);
+        }
+
+        // 2. 자식 오브젝트들 중 ParticleSystem 찾아서 실행
+        foreach (ParticleSystem particle in smokeParticles.GetComponentsInChildren<ParticleSystem>(true))
+        {
+            particle.Play(); // 파티클 실행
+        }
+
+        Debug.Log("모든 연기 파티클이 활성화되었습니다.");
+    }
+
+
 }
