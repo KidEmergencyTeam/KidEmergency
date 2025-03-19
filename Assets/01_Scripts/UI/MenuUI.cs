@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,29 +22,31 @@ public class MenuUI : OutlineHighlight
         _button = GetComponent<Button>();
         _button.onClick.AddListener(MenuButtonClicked);
     }
-    
+
     private void MenuButtonClicked()
     {
         text.color = Color.white;
         activeImage.SetActive(true);
+        
+        UIManager.Instance.titleUI.currentMenu = _menuName;
+        UIManager.Instance.titleUI.SetCurrentMenu();
 
-        TitleUI titleUI = GetComponentInParent<TitleUI>();
-        titleUI.currentMenu = _menuName;
-        titleUI.SetCurrentMenu();
-
-        if (_menuName == "Normal")
+        if (UIManager.Instance.titleUI.currentMenu == "Normal")
         {
-            
+            UIManager.Instance.titleUI.hardPanel.SetActive(false);
+            UIManager.Instance.titleUI.normalPanel.SetActive(true);
         }
         
-        else if (_menuName == "Hard")
+        else if ( UIManager.Instance.titleUI.currentMenu == "Hard")
         {
-            
+            UIManager.Instance.titleUI.normalPanel.SetActive(false);
+            UIManager.Instance.titleUI.hardPanel.SetActive(true);
         }
         
-        else if (_menuName != "Exit")
+        else if ( UIManager.Instance.titleUI.currentMenu == "Exit")
         {
-            
+            UIManager.Instance.SetPopup("게임을 종료하시겠습니까?", null, null);
+            UIManager.Instance.popupUI.gameObject.SetActive(true);
         }
     }
 
