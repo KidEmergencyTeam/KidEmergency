@@ -1,11 +1,12 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIManager : SingletonManager<UIManager>
 {
     public OptionUI[] optionUI;
     public DialogUI dialogUI;
     public WarningUI warningUI;
+    public TitleUI titleUI;
+    public PopupUI popupUI;
 
     #region Option
     public void SetOptionUI()
@@ -56,4 +57,14 @@ public class UIManager : SingletonManager<UIManager>
     
     #endregion
 
+    #region Title
+
+    public void SetPopup(string text, string levelText, string modeText)
+    {
+        popupUI.popupText.text = text;
+        popupUI.highlightText[0] = levelText;
+        popupUI.highlightText[1] = modeText;
+    }
+
+    #endregion
 }
