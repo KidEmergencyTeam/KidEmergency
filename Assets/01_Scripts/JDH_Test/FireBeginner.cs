@@ -9,265 +9,253 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class FireBeginner : MonoBehaviour
 {
-	public enum PLACE
-	{
-		CLASSROOM,
-		HALLWAY,
-		STAIRS_ELEVATOR,
-		OUTSIDE
-	};
+    public enum PLACE
+    {
+        CLASSROOM,
+        HALLWAY,
+        STAIRS_ELEVATOR,
+        OUTSIDE
+    };
 
-	[Header("��� ����")] public PLACE place;
+    [Header("시작 장소")]
+    public PLACE place;
 
-	[Header("ȭ������ �������� Ȯ���ϴ� ����")]
-	public bool isFireBeginner;
+    [Header("화재 상황 여부")]
+    public bool isFireBeginner;
 
-	public bool isEarthquake;
+    public bool isEarthquake;
 
-	[Header("NPC �� ��ȣ�ۿ� ������Ʈ")] public GameObject player; //�̱� �÷��̾� ��ġ
-	public GameObject seti;
-	public GameObject[] NPC; //��Ƽ �÷��̾� ��ġ
-	public FadeInOut fadeInOutImg;
-	public TestButton2 okBtn;
-	public GameObject exampleDescUi;
-	public GameObject leftHand; //�޼� ������Ʈ
+    [Header("NPC 및 플레이어 이동 관련 설정")]
+    public GameObject player; // 플레이어의 시작 위치
+    public GameObject seti;
+    public GameObject[] NPC; // 기타 NPC들의 시작 위치
+    public FadeInOut fadeInOutImg;
+    public TestButton2 okBtn;
+    public GameObject exampleDescUi;
+    public GameObject leftHand; // 왼손 관련 오브젝트
 
-	[SerializeField]
-	private GameObject
-		emergencyExit; //�ڽ� ������Ʈ�� addcomponent�� ���� Outlinable�� ����
+    [SerializeField]
+    private GameObject emergencyExit; // 비상구 오브젝트 (Outlinable 컴포넌트를 추가할 대상)
 
-	[SerializeField] private GameObject handkerchief;
-	[SerializeField] private GameObject fireAlarm;
+    [SerializeField] private GameObject handkerchief;
+    [SerializeField] private GameObject fireAlarm;
 
-	[Header("�Ӹ� ���� ���� ����")] public bool isHeadDown = false;
+    [Header("머리 위치 체크")]
+    public bool isHeadDown = false;
+    public float headHeightThreshold; // 머리 높이 기준 (이 값보다 낮으면 머리를 숙인 것으로 판단)
 
-	public float
-		headHeightThreshold; // ���� ���� (�� ������ �������� ���� ������ �Ǵ�)
+    [SerializeField] private Transform xrCamera; // HMD 카메라
+    [SerializeField] private float initialHeight; // 초기 플레이어 높이
 
-	[SerializeField] private Transform xrCamera; // HMD ī�޶� Ʈ��ŷ
-	[SerializeField] private float initialHeight; // �ʱ� �÷��̾� ���� ����
+    [Header("이동 목표 위치")]
+    public Transform playerMovPos;
+    public Transform setiMovPos;
+    public Transform[] npcMovPos;
 
-	[Header("��ȣ�ۿ� Ȥ�� ��ġ �̵� ����")] public Transform playerMovPos;
-	public Transform setiMovPos;
-	public Transform[] npcMovPos;
+    [Header("연기 파티클 효과")]
+    public ParticleSystem smokeParticle;
 
-	[Header("����ϴ� ��ƼŬ")] public ParticleSystem smokeParticle;
+    [Header("예제 UI 이미지")]
+    [SerializeField]
+    private Image LeftImg;
 
-	[Header("ExampleUI ���� �̹��� ���� ����")] [SerializeField]
-	private Image LeftImg;
+    [SerializeField] private Image RightImg;
+    [SerializeField] private Sprite leftChangeImg;
+    [SerializeField] private Sprite rightChangeImg;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
-	[SerializeField] private Image RightImg;
-	[SerializeField] private Sprite leftChangeImg;
-	[SerializeField] private Sprite rightChangeImg;
-	[SerializeField] private TextMeshProUGUI descriptionText;
+    [Header("상황 진행 체크")]
+    public bool isFirstStepRdy;
+    public bool isSecondStepRdy;
+    public bool hasHandkerchief;
+    public bool iscoverFace;
 
-	[Header("�����Ȳ üũ ����")] public bool isFirstStepRdy;
-	public bool isSecondStepRdy;
-	public bool hasHandkerchief;
-	public bool iscoverFace;
+    [Header("대화 시스템")]
+    [SerializeField]
+    private BeginnerDialogSystem firstDialog;
 
-	[Header("�ó����� ��� ���")] [SerializeField]
-	private BeginnerDialogSystem firstDialog;
+    [SerializeField] private BeginnerDialogSystem secondDialog;
+    [SerializeField] private BeginnerDialogSystem thirdDialog;
 
-	[SerializeField] private BeginnerDialogSystem secondDialog;
-	[SerializeField] private BeginnerDialogSystem thirdDialog;
+    private void Awake()
+    {
+        xrCamera = Camera.main.transform;
+        initialHeight = xrCamera.position.y; // 초기 플레이어 높이 저장
+    }
 
-	private void Awake()
-	{
-		xrCamera = Camera.main.transform;
-		initialHeight = xrCamera.position.y; // ���� ���� �� �ʱ� ���� ����
-	}
+    // 게임 시작 시 실행
+    IEnumerator Start()
+    {
+        switch (place)
+        {
+            // 교실
+            case PLACE.CLASSROOM:
+                // 1. 첫 번째 대화 시작
+                //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-	// Start is called before the first frame update
-	IEnumerator Start()
-	{
-		switch (place)
-		{
-			//����
-			case PLACE.CLASSROOM:
-				//1. ����
-				//fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 2. 화재 상황 안내 대화 시작 및 화재 경보 작동
+                secondDialog.gameObject.SetActive(true);
+                fireAlarm.SetActive(true);
+                Debug.Log("화재 경보 작동.");
+                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-				//2. ȭ�� �溸���� �Բ� �ι�° �ó����� ��� ���
-				secondDialog.gameObject.SetActive(true);
-				//ȭ�� �溸�� ���
-				fireAlarm.SetActive(true);
-				Debug.Log("ȭ�� �溸���� ��µ˴ϴ�.");
-				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+                // 3. OK 버튼 활성화 및 버튼 클릭 대기
+                okBtn.gameObject.SetActive(true);
+                Debug.Log("OK 버튼 활성화");
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                // 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
+                LeftImg.sprite = leftChangeImg;
+                RightImg.sprite = rightChangeImg;
+                isFirstStepRdy = true;
+                Debug.Log("예제 UI 첫 번째 단계 준비 완료");
 
-				//3. ��� ���� �� ��ư Ȱ��ȭ, ��ư ������ ������ ���
-				okBtn.gameObject.SetActive(true);
-				Debug.Log("OK ��ư Ȱ��ȭ");
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				//���� ������ isFirstStepRdy �� true�� �� ���� ����Ѵ�. (�̹��� ����)
-				LeftImg.sprite = leftChangeImg;
-				RightImg.sprite = rightChangeImg;
-				isFirstStepRdy = true;
-				Debug.Log("���� �̹��� ���� �� ù��° ���� ���� ����");
+                // 4. 첫 단계 준비 완료 후 OK 버튼 비활성화 및 예제 UI 활성화
+                yield return new WaitUntil(() => isFirstStepRdy == true);
+                okBtn.gameObject.SetActive(false);
+                exampleDescUi.SetActive(true);
+                Debug.Log("OK 버튼 비활성화 및 예제 UI 활성화");
+                // 손수건(핸드커치) 활성화
+                handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
+                Debug.Log("손수건 활성화");
 
-				//4. ��ư ������ isFirstStepRdy�� true�� ����Ǹ� ���� ���� ���� (���� UI �� �ռ��� ����)
-				yield return new WaitUntil(() => isFirstStepRdy == true);
-				okBtn.gameObject.SetActive(false);
-				exampleDescUi.SetActive(true);
-				Debug.Log("OK ��ư ��Ȱ��ȭ �� ���� UI Ȱ��ȭ");
-				//å�� �ռ��� �׷� Ȱ��ȭ
-				handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
-				Debug.Log("�ռ��� Ȱ��ȭ");
-				//NPC ��� ����
+                // 5. 손수건 사용 및 얼굴 가리기 완료 대기
+                yield return new WaitUntil(() =>
+                    hasHandkerchief == true && iscoverFace == true);
+                Debug.Log("손수건 사용 및 얼굴 가리기 완료");
+                exampleDescUi.SetActive(false);
 
-				//5. ������ �ռ��� ������ �޼տ� ���� �� �԰� �ڸ� ���������� ������ �� ���� ���(������ �� ���� ���) 
-				yield return new WaitUntil(() =>
-					hasHandkerchief == true && iscoverFace == true);
-				Debug.Log("�ռ��� ���� �Ϸ� �� �԰� �ڸ� ���ҽ��ϴ�.");
-				exampleDescUi.SetActive(false);
+                // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                Debug.Log("플레이어 및 NPC 이동");
+                TeleportCharacters();
+                StartCoroutine(fadeInOutImg.FadeIn());
+                isSecondStepRdy = true;
+                yield return new WaitUntil(() => isSecondStepRdy == true);
 
-				//6. ��� �ൿ�� �����ϸ� �÷��̾�� NPC�� ��ġ�� �̵���Ų��.
-				//FadeIn, Out���� �̵��ϴ� ����� �Ⱥ����ش�.
-				StartCoroutine(fadeInOutImg.FadeOut());
-				//FadeIn, Out�� ����ɶ����� ��� �� �̵�(�̵� ����� �������� �ʱ� ����)
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				// �÷��̾�� NPC�� ��ġ�� �� ������ �̵�, ��Ƽ ���� ��ġ ����
-				Debug.Log("�÷��̾� NPC ��ġ �̵�");
-				TeleportCharacters();
-				//�̵��� �Ϸ�Ǹ� �ٽ� ȭ���� ������� �ι�° ���� ���� ���������Ƿ� isSecondStepRdy = true�� ����
-				StartCoroutine(fadeInOutImg.FadeIn());
-				isSecondStepRdy = true;
-				yield return new WaitUntil(() => isSecondStepRdy == true);
+                // 7. 추가 대화 진행 후 얼굴 가리기 완료 대기, 페이드 아웃 후 씬 전환
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() =>
+                    thirdDialog.isDialogsEnd == true && iscoverFace == true);
+                fadeInOutImg.gameObject.SetActive(true);
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH2");
+                break;
 
-				//7. ��� ���� ���� ������ ���� ���ǿ� �����ϸ�(�̵� �� �԰� �ڸ� ���� ������ �����Ǹ�)
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() =>
-					thirdDialog.isDialogsEnd == true && iscoverFace == true);
-				//Fade Out ���� �� �� Scene �̵�
-				fadeInOutImg.gameObject.SetActive(true);
-				StartCoroutine(fadeInOutImg.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				//��� ������ �Ϸ�Ǿ��⿡ ��ư Ŭ�� �� ���� ������ �̵�
-				SceneManager.LoadScene("JDH2");
-				break;
+            // 복도
+            case PLACE.HALLWAY:
+                hasHandkerchief = true;
+                // 1. 첫 번째 대화 종료 대기
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-			//����
-			case PLACE.HALLWAY:
-				hasHandkerchief = true;
-				//1. ���� ��� ����
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 2. 두 번째 대화 시작 및 비상구에 아웃라인 활성화
+                secondDialog.gameObject.SetActive(true);
+                ActiveOutlineToChildren(emergencyExit);
+                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-				//2. ��� �����ϸ� �ǳ� ������ ���� 
-				secondDialog.gameObject.SetActive(true);
-				//�ǳ� ������ �׵θ� ����
-				ActiveOutlineToChildren(emergencyExit);
-				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+                // 3. 세 번째 대화 시작 및 머리 숙이기, 얼굴 가리기 완료 대기 후 씬 전환
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() =>
+                    isHeadDown == true && iscoverFace == true);
 
-				//3. ������ ��� ���� �� �ռ������� �԰� �ڸ� �� ���� �ְ� ���� �������� Ȯ�� �� Scene �̵�
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-				//�÷��̾ �ռ����� ���� �԰� �ڸ� �� �����ִ��� Ȯ��(��� UI ���: �ռ������� �԰� �ڸ� ������!)
-				//���� ���̰� �԰� �ڸ� ���� �ִ��� Ȯ��
-				yield return new WaitUntil(() =>
-					isHeadDown == true && iscoverFace == true);
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH3");
+                break;
 
-				//Fade Out ���� �� �� Scene �̵�
-				StartCoroutine(fadeInOutImg.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				//��� ������ �Ϸ�Ǿ��⿡ ��ư Ŭ�� �� ���� ������ �̵�
-				SceneManager.LoadScene("JDH3");
-				break;
+            // 계단/엘리베이터
+            case PLACE.STAIRS_ELEVATOR:
+                hasHandkerchief = true;
+                // 1. 첫 번째 대화 종료 대기
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-			//���, ����������
-			case PLACE.STAIRS_ELEVATOR:
-				//1. ��� ����
-				hasHandkerchief = true;
-				//��� ������ �Ϸ�Ǿ��⿡ ��ư Ŭ�� �� ���� ������ �̵�(��� UI ���: �ռ������� �԰� �ڸ� ������!)
-				//���� ���̰� �־�� ��簡 ����� �� ������ ������ �̵�
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 2. OK 버튼 활성화 후 클릭 대기
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
+                // 머리 숙이기와 얼굴 가리기 완료 대기 후 씬 전환
+                yield return new WaitUntil(() =>
+                    isHeadDown == true && iscoverFace == true);
+                StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH4");
+                break;
 
-				//2. ��ư Ŭ�� �� �԰� �ڸ� ���� ������ Fadeout�� ����� �� �����ͷ� Scene �̵�
-				okBtn.gameObject.SetActive(true);
-				//��ư Ŭ�� ���
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				okBtn.gameObject.SetActive(false);
-				//��ư Ŭ�� �� �ռ����� Ȱ���� �԰� �ڸ� ���� ���� ���̰� �ִ��� Ȯ�� �� Scene �̵�
-				yield return new WaitUntil(() =>
-					isHeadDown == true && iscoverFace == true);
-				//Fade Out ���� �� �� Scene �̵�
-				StartCoroutine(fadeInOutImg.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				SceneManager.LoadScene("JDH4");
-				break;
+            // 외부
+            case PLACE.OUTSIDE:
+                // 외부에서는 첫 번째 대화만 실행
+                firstDialog.gameObject.SetActive(true);
+                break;
+        }
+    }
 
-			//��ġ�� �� ������
-			case PLACE.OUTSIDE:
-				//������ ��縸 ��� �� ����
-				firstDialog.gameObject.SetActive(true);
-				break;
-		}
-	}
+    private void Update()
+    {
+        DetectHeadLowering(); // 머리 숙임 감지
+    }
 
-	private void Update()
-	{
-		DetectHeadLowering(); // �Ӹ� ���� ���� �Լ� ȣ��
-	}
+    private void TeleportCharacters()
+    {
+        // 플레이어 이동
+        if (playerMovPos != null)
+        {
+            player.transform.position = playerMovPos.position;
+        }
 
-	private void TeleportCharacters()
-	{
-		// �÷��̾� ��� �̵�
-		if (playerMovPos != null)
-		{
-			player.transform.position = playerMovPos.position;
-		}
+        // 세티 이동
+        if (setiMovPos != null)
+        {
+            seti.transform.position = setiMovPos.position;
+        }
 
-		// ��Ƽ ��� �̵�
-		if (setiMovPos != null)
-		{
-			seti.transform.position = setiMovPos.position;
-		}
+        // NPC 이동
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcMovPos.Length > i && npcMovPos[i] != null)
+            {
+                NPC[i].transform.position = npcMovPos[i].position;
+            }
+        }
 
-		// NPC ��� �̵�
-		for (int i = 0; i < NPC.Length; i++)
-		{
-			if (npcMovPos.Length > i && npcMovPos[i] != null)
-			{
-				NPC[i].transform.position = npcMovPos[i].position;
-			}
-		}
+        Debug.Log("플레이어 및 NPC 이동 완료");
+    }
 
-		Debug.Log("�÷��̾� �� NPC �ڷ���Ʈ �Ϸ�");
-	}
+    // 부모 오브젝트의 모든 자식에게 Outlinable 컴포넌트 활성화
+    private void ActiveOutlineToChildren(GameObject parent)
+    {
+        if (parent == null) return;
 
-	//�ڽ� ������Ʈ�� Outlinable�� Ȱ��ȭ
-	private void ActiveOutlineToChildren(GameObject parent)
-	{
-		if (parent == null) return;
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>())
+        {
+            Outlinable outline = child.gameObject.GetComponent<Outlinable>();
 
-		foreach (Transform child in parent.GetComponentsInChildren<Transform>())
-		{
-			Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+            if (outline == null)
+            {
+                outline = child.gameObject.AddComponent<Outlinable>();
+            }
 
-			if (outline == null)
-			{
-				outline = child.gameObject.AddComponent<Outlinable>();
-			}
+            outline.enabled = true; // Outlinable 활성화
+        }
+    }
 
-			outline.enabled = true; // Outlinable Ȱ��ȭ
-		}
-	}
+    // 머리 숙임 감지 함수
+    private void DetectHeadLowering()
+    {
+        if (xrCamera == null) return;
 
-	private void DetectHeadLowering()
-	{
-		if (xrCamera == null) return;
+        float currentHeight = xrCamera.position.y; // 현재 머리 높이
 
-		float currentHeight = xrCamera.position.y; // ���� �Ӹ� ����
-
-		// �Ӹ� ���̰� ���غ��� �������� ���� ������ �Ǵ�
-		if (currentHeight < headHeightThreshold)
-		{
-			isHeadDown = true;
-			//Debug.Log("�Ӹ��� �������ϴ�! (Y�� ����)");
-		}
-		else
-		{
-			isHeadDown = false;
-		}
-	}
+        if (currentHeight < headHeightThreshold)
+        {
+            isHeadDown = true;
+            // Debug.Log("머리를 숙였습니다! (Y 값 기준)");
+        }
+        else
+        {
+            isHeadDown = false;
+        }
+    }
 }

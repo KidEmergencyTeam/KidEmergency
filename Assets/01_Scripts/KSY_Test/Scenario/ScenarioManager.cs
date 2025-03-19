@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-// using UnityEngine.XR.Interaction.Toolkit;
+// using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
 public class ScenarioManager : MonoBehaviour
 {
@@ -138,7 +138,8 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step5() { yield return PlayAndWait(3); }
     IEnumerator Step6() { yield return PlayAndWait(4); }
 
-    // Step7 손(1) vs 손수건(2) - 선택지 이후부터 손수건 오브젝트 상호작용 안됨
+    // Step7 선택지: 손 vs 손수건
+    // 손수건 오브젝트 상호작용 보류
     IEnumerator Step7()
     {
         int selected = 0;
@@ -146,24 +147,21 @@ public class ScenarioManager : MonoBehaviour
             selected = result;
         }));
 
+        // 정답: 손 선택 시 Step9로 이동
         if (selected == 1)
-            currentStep = 8 - 1;
+            currentStep = 8;
+
+        // 오답: 손수건 선택 시 Step12로 이동
         else
-            currentStep = 11 - 1;
+            currentStep = 11; 
     }
     IEnumerator Step8() { yield return null; }
     IEnumerator Step9() { yield return PlayAndWait(5); }
-    IEnumerator Step10()
-    {
-        yield return PlayAndWait(6);
-        currentStep = 13 - 1;
-    }
+
+    // Step10 대사 출력 -> Step13 진행
+    IEnumerator Step10() { yield return PlayAndWait(6); currentStep = 12; }
     IEnumerator Step11() { yield return null; }
-    IEnumerator Step12()
-    {
-        yield return PlayAndWait(7);
-        currentStep = 13 - 1;
-    }
+    IEnumerator Step12() { yield return PlayAndWait(7); }
     IEnumerator Step13()
     {
         yield return PlayAndWait(8);
@@ -200,8 +198,12 @@ public class ScenarioManager : MonoBehaviour
         yield return new WaitUntil(() => handkerGrabbed);
         Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
         */
-        yield return null;
+
+        // 출력된 대사가 바로 사라지지 않고,
+        // 손수건 상호작용 완료할 때까지 화면에 유지
+        // yield return null; -> 상호작용 기능 완료하면 다시 사용
     }
+
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
     IEnumerator Step14()
     {
@@ -228,6 +230,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
+
         // 1초 대기 후 씬 전환
         yield return new WaitForSeconds(1);
         yield return StartCoroutine(ChangeScene(0));
@@ -244,8 +247,8 @@ public class ScenarioManager : MonoBehaviour
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
-    
-    // Step24 피난유도선(1) vs 익숙한 길(2)
+
+    // Step24 선택지: 피난유도선 vs 익숙한 길
     IEnumerator Step24()
     {
         int selected = 0;
@@ -253,22 +256,17 @@ public class ScenarioManager : MonoBehaviour
             selected = r;
         }));
 
+        // 정답: 피난 유도선 선택 시 Step24로 이동
         if (selected == 1)
-            currentStep = 25 - 1;
+            currentStep = 24;
+
+        // 오답: 익숙한 길 선택 시 Step25로 이동
         else
-            currentStep = 26 - 1;
+            currentStep = 25; 
     }
-    IEnumerator Step25()
-    {
-        yield return PlayAndWait(16);
-        currentStep = 28 - 1;
-    }
+    IEnumerator Step25() { yield return PlayAndWait(16); currentStep = 27; }
     IEnumerator Step26() { yield return null; }
-    IEnumerator Step27()
-    {
-        yield return PlayAndWait(17);
-        currentStep = 28 - 1;
-    }
+    IEnumerator Step27() { yield return PlayAndWait(17); }
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
@@ -276,10 +274,28 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step29() { yield return PlayAndWait(19); }
     IEnumerator Step30() { yield return PlayAndWait(20); }
-    IEnumerator Step31() { yield return null; }
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35 - 1; }
+
+    // Step31 선택지: 계단 VS 엘베
+    IEnumerator Step31()
+    {
+        int selected = 0;
+        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, r => {
+            selected = r;
+        }));
+
+        // 정답: 계단 선택 시 Step32로 이동
+        if (selected == 1)
+            currentStep = 31;
+
+        // 오답: 엘리베이터 선택 시 Step34로 이동
+        else
+            currentStep = 33; 
+    }
+
+    // Step32 대사 출력 -> Step35 진행
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
     IEnumerator Step33() { yield return null; }
-    IEnumerator Step34() { yield return PlayAndWait(22); currentStep = 35 - 1; }
+    IEnumerator Step34() { yield return PlayAndWait(22); } 
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
