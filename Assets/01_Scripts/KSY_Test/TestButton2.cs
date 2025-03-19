@@ -10,7 +10,9 @@ public enum ButtonType
     A,
     B,
     C,
-    D
+    D,
+    E,
+    F
 }
 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -178,7 +180,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         isClick = true;
     }
 
-    // 버튼 클릭 이벤트 처리 (스위치문으로 분기)
+    // 버튼 클릭 이벤트 처리 (스위치문으로 분기) -> 단순 상태만 표시
     private void OnButtonClicked()
     {
         switch (buttonType)
@@ -194,6 +196,12 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 break;
             case ButtonType.D:
                 Debug.Log("스위치문: 버튼 D 클릭 이벤트 발생");
+                break;
+            case ButtonType.E:
+                Debug.Log("스위치문: 버튼 E 클릭 이벤트 발생");
+                break;
+            case ButtonType.F:
+                Debug.Log("스위치문: 버튼 F 클릭 이벤트 발생");
                 break;
             default:
                 Debug.Log("스위치문: 미지정 버튼 클릭 이벤트 발생");
