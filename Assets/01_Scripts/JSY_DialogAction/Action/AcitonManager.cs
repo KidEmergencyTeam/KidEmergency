@@ -3,162 +3,169 @@ using System.Collections;
 using UnityEngine;
 
 public class ActionManager : SingletonManager<ActionManager>
-{    
-    public ActionType currentAction;
-    public DialogData beforeDialog;
-    public DialogData currentDialog;
-    
-    [Header("액션")]
-    public ShowOptionAction showOptionAction;
-    public ChangeSceneAction changeSceneAction;
-    public EarthquakeAction earthquakeAction; 
-    public ChangeViewAction changeViewAction;
-    public PlaceObjectAction placeObjectAction;
-    public HighlightObjectAction highlightObjectAction;
-    public FixingBagAction fixingBagAction;
-    public HoldingLegAction holdingLegAction;
+{
+	public ActionType currentAction;
+	public DialogData beforeDialog;
+	public DialogData currentDialog;
 
-    public NpcRig[] NPCs;
-    private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
+	[Header("액션")] public ShowOptionAction showOptionAction;
+	public ChangeSceneAction changeSceneAction;
+	public EarthquakeAction earthquakeAction;
+	public ChangeViewAction changeViewAction;
+	public PlaceObjectAction placeObjectAction;
+	public HighlightObjectAction highlightObjectAction;
+	public FixingBagAction fixingBagAction;
+	public HoldingLegAction holdingLegAction;
 
-    private void Start()
-    {
-        currentAction = ActionType.Basic;
-        
-        OnActionComplete += () =>
-        {
-            currentAction = ActionType.ShowDialog;
-            UpdateAction();
-        };
-    }
+	public NpcRig[] NPCs;
+	private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
-    public void UpdateAction() 
-    {
-        print($"상태 업데이트 성공! 현재 상태: {currentAction}");
-        switch (currentAction)
-        {
-            case ActionType.Basic:
-                break;
-            
-            case ActionType.ShowDialog:
-                if (currentDialog.dialogs != null)
-                {
-                    StartCoroutine(DialogManager.Instance.ShowDialog());
-                }
-                else
-                {
-                    print("현재 SO에 저장된 다이얼로그가 없음~");
-                }
-                break;
-            
-            case ActionType.ShowOption:
-                if (showOptionAction != null)
-                {
-                    showOptionAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(showOptionAction));
-                }
-                break;
-            
-            case ActionType.ChangeScene:
-                if (changeSceneAction != null)
-                {
-                    changeSceneAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(changeSceneAction));
-                }
-                break;
-            
-            case ActionType.Earthquake:
-                if (earthquakeAction != null)
-                {
-                    earthquakeAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(earthquakeAction));
-                }
-                break;
-            
-            case ActionType.ChangeView:
-                if (changeViewAction != null)
-                {
-                    changeViewAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(changeViewAction));
-                }
-                break;
-            
-            case ActionType.PlaceObject:
-                if (placeObjectAction != null)
-                {
-                    placeObjectAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(placeObjectAction));
-                }
-                break;
-            
-            case ActionType.HighlightObject:
-                if (highlightObjectAction != null)
-                {
-                    highlightObjectAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(highlightObjectAction));
-                }
-                break;
-            
-            case ActionType.FixingBag:
-                if (fixingBagAction != null)
-                {
-                    fixingBagAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(fixingBagAction));
-                }
-                break;
-            case ActionType.HoldingLeg:
-                if (holdingLegAction != null)
-                {
-                    holdingLegAction.StartAction();
-                    StartCoroutine(WaitForActionComplete(holdingLegAction));
-                }
-                break;
-        }
-        
-    }
+	private void Start()
+	{
+		currentAction = ActionType.Basic;
 
-    private IEnumerator WaitForActionComplete(IActionEffect effect)
-    {
-        yield return new WaitUntil(() => effect.IsActionComplete);
-        if (currentDialog.dialogs != null)
-        {
-            Invoke("ActionEventComplete", 1f);
-        }
-        else
-        {
-            print("현재 다이얼로그에 대사가 없음");
-        }
-    }
+		OnActionComplete += () =>
+		{
+			currentAction = ActionType.ShowDialog;
+			UpdateAction();
+		};
+	}
 
-    private void ActionEventComplete()
-    {
-        OnActionComplete?.Invoke();
-    }
+	public void UpdateAction()
+	{
+		print($"상태 업데이트 성공! 현재 상태: {currentAction}");
+		switch (currentAction)
+		{
+			case ActionType.Basic:
+				break;
 
-    public void SetNPCState(string st)
-    {
-        if (st == "None")
-        {
-            for (int i = 0; i < NPCs.Length; i++)
-            {
-                NPCs[i]._state = NpcRig.State.None;
-            }
-        }
-        
-        else if (st == "Bow")
-        {
-            for (int i = 0; i < NPCs.Length; i++)
-            {
-                NPCs[i]._state = NpcRig.State.Bow;
-            }
-        }
-        
-        else if (st == "Hold")
-        {
-            for (int i = 0; i < NPCs.Length; i++)
-            {
-                NPCs[i]._state = NpcRig.State.Hold;
-            }
-        }
-    }
+			case ActionType.ShowDialog:
+				if (currentDialog.dialogs != null)
+				{
+					StartCoroutine(DialogManager.Instance.ShowDialog());
+				}
+				else
+				{
+					print("현재 SO에 저장된 다이얼로그가 없음~");
+				}
+
+				break;
+
+			case ActionType.ShowOption:
+				if (showOptionAction != null)
+				{
+					showOptionAction.StartAction();
+					StartCoroutine(WaitForActionComplete(showOptionAction));
+				}
+
+				break;
+
+			case ActionType.ChangeScene:
+				if (changeSceneAction != null)
+				{
+					changeSceneAction.StartAction();
+					StartCoroutine(WaitForActionComplete(changeSceneAction));
+				}
+
+				break;
+
+			case ActionType.Earthquake:
+				if (earthquakeAction != null)
+				{
+					earthquakeAction.StartAction();
+					StartCoroutine(WaitForActionComplete(earthquakeAction));
+				}
+
+				break;
+
+			case ActionType.ChangeView:
+				if (changeViewAction != null)
+				{
+					changeViewAction.StartAction();
+					StartCoroutine(WaitForActionComplete(changeViewAction));
+				}
+
+				break;
+
+			case ActionType.PlaceObject:
+				if (placeObjectAction != null)
+				{
+					placeObjectAction.StartAction();
+					StartCoroutine(WaitForActionComplete(placeObjectAction));
+				}
+
+				break;
+
+			case ActionType.HighlightObject:
+				if (highlightObjectAction != null)
+				{
+					highlightObjectAction.StartAction();
+					StartCoroutine(WaitForActionComplete(highlightObjectAction));
+				}
+
+				break;
+
+			case ActionType.FixingBag:
+				if (fixingBagAction != null)
+				{
+					fixingBagAction.StartAction();
+					StartCoroutine(WaitForActionComplete(fixingBagAction));
+				}
+
+				break;
+			case ActionType.HoldingLeg:
+				if (holdingLegAction != null)
+				{
+					holdingLegAction.StartAction();
+					StartCoroutine(WaitForActionComplete(holdingLegAction));
+				}
+
+				break;
+		}
+	}
+
+	private IEnumerator WaitForActionComplete(IActionEffect effect)
+	{
+		yield return new WaitUntil(() => effect.IsActionComplete);
+		if (currentDialog.dialogs != null)
+		{
+			Invoke("ActionEventComplete", 1f);
+		}
+		else
+		{
+			print("현재 다이얼로그에 대사가 없음");
+		}
+	}
+
+	private void ActionEventComplete()
+	{
+		OnActionComplete?.Invoke();
+	}
+
+	public void SetNPCState(string st)
+	{
+		if (st == "None")
+		{
+			for (int i = 0; i < NPCs.Length; i++)
+			{
+				NPCs[i].state = NpcRig.State.None;
+			}
+		}
+
+		else if (st == "Bow")
+		{
+			for (int i = 0; i < NPCs.Length; i++)
+			{
+				NPCs[i].state = NpcRig.State.Bow;
+			}
+		}
+
+		else if (st == "Hold")
+		{
+			for (int i = 0; i < NPCs.Length; i++)
+			{
+				NPCs[i].state = NpcRig.State.Hold;
+			}
+		}
+	}
 }
