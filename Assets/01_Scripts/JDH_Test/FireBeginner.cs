@@ -31,6 +31,7 @@ public class FireBeginner : MonoBehaviour
     public GameObject[] NPC; // 기타 NPC들의 시작 위치
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
+    public GameObject warningUi;
     public GameObject exampleDescUi;
     public GameObject leftHand; // 왼손 관련 오브젝트
 
@@ -69,6 +70,7 @@ public class FireBeginner : MonoBehaviour
     public bool isSecondStepRdy;
     public bool hasHandkerchief;
     public bool iscoverFace;
+    public bool ruleCheck;  //손수건을 획득한 후 경고창을 띄우기 위해 경고 지점을 설정하는 변수 (해당 변수가 true된 시점부터 경고가 출력)
 
     [Header("대화 시스템")]
     [SerializeField]
@@ -124,7 +126,8 @@ public class FireBeginner : MonoBehaviour
                     hasHandkerchief == true && iscoverFace == true);
                 Debug.Log("손수건 사용 및 얼굴 가리기 완료");
                 exampleDescUi.SetActive(false);
-
+                ruleCheck = true;   //해당 시점부터 손수건 경고 출력
+                                    
                 // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
                 StartCoroutine(fadeInOutImg.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -146,6 +149,7 @@ public class FireBeginner : MonoBehaviour
 
             // 복도
             case PLACE.HALLWAY:
+                ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -168,6 +172,7 @@ public class FireBeginner : MonoBehaviour
 
             // 계단/엘리베이터
             case PLACE.STAIRS_ELEVATOR:
+                ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -194,7 +199,13 @@ public class FireBeginner : MonoBehaviour
 
     private void Update()
     {
-        DetectHeadLowering(); // 머리 숙임 감지
+        //손수건 획득 후 손수건으로 입을 잘 가리고 있는지 확인
+        if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false)
+            warningUi.SetActive(true);
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == true)
+            warningUi.SetActive(false);
+
+       DetectHeadLowering(); // 머리 숙임 감지
     }
 
     private void TeleportCharacters()
