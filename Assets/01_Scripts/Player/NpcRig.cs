@@ -6,7 +6,10 @@ public class NpcRig : MonoBehaviour
 	{
 		None,
 		Hold,
-		Bow
+		Bow,
+		DownDesk,
+		HoldDesk,
+		HoldBag
 	}
 
 	[System.Serializable]
@@ -23,6 +26,7 @@ public class NpcRig : MonoBehaviour
 	public State state = State.None;
 
 	public GameObject handkerchief;
+	public GameObject bag;
 
 	public Transform player;
 	public Transform leftHandTarget;
@@ -31,6 +35,9 @@ public class NpcRig : MonoBehaviour
 	[Header("Pose Data")] [SerializeField] private PoseData noneState;
 	[SerializeField] private PoseData holdState;
 	[SerializeField] private PoseData bowState;
+	[SerializeField] private PoseData downDeskState;
+	[SerializeField] private PoseData holdDeskState;
+	[SerializeField] private PoseData holdBagState;
 
 	private void Update()
 	{
@@ -38,15 +45,33 @@ public class NpcRig : MonoBehaviour
 		{
 			case State.None:
 				handkerchief.gameObject.SetActive(false);
+				bag.gameObject.SetActive(false);
 				SetState(noneState);
 				break;
 			case State.Hold:
 				handkerchief.gameObject.SetActive(true);
+				bag.gameObject.SetActive(false);
 				SetState(holdState);
 				break;
 			case State.Bow:
 				handkerchief.gameObject.SetActive(true);
+				bag.gameObject.SetActive(false);
 				SetState(bowState);
+				break;
+			case State.DownDesk:
+				handkerchief.gameObject.SetActive(false);
+				bag.gameObject.SetActive(false);
+				SetState(downDeskState);
+				break;
+			case State.HoldDesk:
+				handkerchief.gameObject.SetActive(false);
+				bag.gameObject.SetActive(false);
+				SetState(holdDeskState);
+				break;
+			case State.HoldBag:
+				handkerchief.gameObject.SetActive(false);
+				bag.gameObject.SetActive(true);
+				SetState(holdBagState);
 				break;
 		}
 	}
