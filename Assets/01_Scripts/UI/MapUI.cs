@@ -23,12 +23,12 @@ public class MapUI : OutlineHighlight
     
     private void ButtonClicked()
     {
-        if (UIManager.Instance.titleUI.currentMenu == "Normal" && this.transform.name == _mapName)
+        if (this.transform.name == _mapName)
         {
             SetCurrentPopup();
         }
         
-        else if (UIManager.Instance.titleUI.currentMenu == "Hard" && this.transform.name == _mapName)
+        else if (this.transform.name == _mapName)
         {
             SetCurrentPopup();
         }
