@@ -2,12 +2,11 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PopupUI : MonoBehaviour
 {
-    [FormerlySerializedAs("text")] public TextMeshProUGUI popupText;
+    public TextMeshProUGUI popupText;
     public string[] highlightText;
     public Color highlightColor;
 
@@ -18,6 +17,11 @@ public class PopupUI : MonoBehaviour
     {
         yesButton.onClick.AddListener(YesButtonClicked);
         noButton.onClick.AddListener(NoButtonClicked);
+    }
+
+    private void Start()
+    {
+        TextHighlight();
     }
 
     private void YesButtonClicked()
@@ -32,7 +36,7 @@ public class PopupUI : MonoBehaviour
         }
         else
         {
-            ChangeScene();
+            StartCoroutine(ChangeScene());
         }
     }
     
@@ -43,10 +47,12 @@ public class PopupUI : MonoBehaviour
     
     private IEnumerator ChangeScene()
     {
+        UIManager.Instance.titleUI.gameObject.SetActive(false);
+        
         StartCoroutine(FadeInOut.Instance.FadeOut());
         yield return new WaitForSeconds(1.5f);
         
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync("");
+        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(UIManager.Instance.titleUI.nextScene);
         
         while(!asyncChange.isDone)
         {
@@ -57,7 +63,7 @@ public class PopupUI : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
     }
     
-    public string TextHighlight()
+    public void TextHighlight()
     {
         string result = popupText.text;
 
@@ -66,7 +72,7 @@ public class PopupUI : MonoBehaviour
             string colorCode = ColorUtility.ToHtmlStringRGB(highlightColor);
             result = result.Replace(word, $"<color=#{colorCode}>{word}</color>");
         }
-
-        return result;
+        
+        popupText.text = result;
     }
 }

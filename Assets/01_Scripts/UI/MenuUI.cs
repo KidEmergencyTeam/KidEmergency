@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +28,7 @@ public class MenuUI : OutlineHighlight
         activeImage.SetActive(true);
         
         UIManager.Instance.titleUI.currentMenu = _menuName;
-        UIManager.Instance.titleUI.SetCurrentMenu();
+        UIManager.Instance.titleUI.SetCurrentMenuUI();
 
         if (UIManager.Instance.titleUI.currentMenu == "Normal")
         {
