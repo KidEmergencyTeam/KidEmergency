@@ -4,10 +4,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
+// TestButton2.cs 목적: 할당된 버튼 이벤트 출력
 public enum ButtonType
 {
     A,
-    B
+    B,
+    C,
+    D
 }
 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -26,7 +29,10 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private InputAction rightSelectAction;
 
     // Pointer 이벤트로 레이의 진입 상태를 관리
-    public bool isHovered = false;
+    private bool isHovered = false;
+
+    // 버튼 클릭 상태를 관리
+    public bool isClick = false;
 
     private void Awake()
     {
@@ -111,17 +117,16 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
     }
 
-    // IPointerExitHandler 구현: 레이가가 버튼 영역에서 벗어났을 때 호출
+    // IPointerExitHandler 구현: 레이가 버튼 영역에서 벗어났을 때 호출
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 레이가가 버튼 영역에서 벗어났을 때
+        // 레이가 버튼 영역에서 벗어났을 때
         // isHovered 플래그를 false로 설정
         isHovered = false;
 
         // 어느 버튼에서 레이가 벗어났는지 확인
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
     }
-
 
     // 좌측/우측 컨트롤러의 Select 액션 이벤트 처리 (두 액션 모두 동일하게 처리)
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
@@ -167,11 +172,13 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // 버튼 이벤트 실행
         button.onClick.Invoke();
+
+        // 버튼 클릭 했을때 
+        // isClick 플래그를 true로 설정
+        isClick = true;
     }
 
     // 버튼 클릭 이벤트 처리 (스위치문으로 분기)
-    // 클릭한 버튼이 A라면 A 이벤트 호출
-    // B라면 B 이벤트 호출
     private void OnButtonClicked()
     {
         switch (buttonType)
@@ -181,6 +188,12 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 break;
             case ButtonType.B:
                 Debug.Log("스위치문: 버튼 B 클릭 이벤트 발생");
+                break;
+            case ButtonType.C:
+                Debug.Log("스위치문: 버튼 C 클릭 이벤트 발생");
+                break;
+            case ButtonType.D:
+                Debug.Log("스위치문: 버튼 D 클릭 이벤트 발생");
                 break;
             default:
                 Debug.Log("스위치문: 미지정 버튼 클릭 이벤트 발생");
