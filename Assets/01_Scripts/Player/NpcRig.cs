@@ -48,13 +48,13 @@ public class NpcRig : MonoBehaviour
 
 	private void SetState(PoseData pose)
 	{
-		player.position = pose.playerPos;
+		player.localPosition = pose.playerPos;
 		player.rotation = Quaternion.Euler(pose.playerRot);
 
-		leftHandTarget.position = pose.leftHandPos;
+		leftHandTarget.localPosition = pose.leftHandPos;
 		leftHandTarget.rotation = Quaternion.Euler(pose.leftHandRot);
 
-		rightHandTarget.position = pose.rightHandPos;
+		rightHandTarget.localPosition = pose.rightHandPos;
 		rightHandTarget.rotation = Quaternion.Euler(pose.rightHandRot);
 	}
 }
