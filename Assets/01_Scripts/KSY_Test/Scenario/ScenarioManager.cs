@@ -289,7 +289,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step18()
     {
         TypingEffect.Instance.StartContinuousSeparateTypingClip();
-        yield return PlayAndWait(27);
+        yield return null;
     }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
