@@ -20,15 +20,13 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     
     private IEnumerator SetView(Vector3 newPos)
     {
-        FadeInOut fade = FindObjectOfType<FadeInOut>();
-
-        yield return StartCoroutine(fade.FadeOut());
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
 
         while (camOffset.transform.position != newPos)
         {
             camOffset.transform.position = newPos;
             
-            yield return StartCoroutine(fade.FadeIn());
+            yield return StartCoroutine(FadeInOut.Instance.FadeIn());
             _isComplete = true;
         }
     }

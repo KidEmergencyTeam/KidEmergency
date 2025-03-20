@@ -15,9 +15,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
     
     private IEnumerator ChangeScene()
     {
-        FadeInOut fade = FindObjectOfType<FadeInOut>();
-
-        yield return StartCoroutine(fade.FadeOut());
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
         
         AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene);
         
@@ -26,7 +24,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
             yield return null;
         }
 
-        yield return StartCoroutine(fade.FadeIn());
+        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
         _isComplete = true;
     }
     

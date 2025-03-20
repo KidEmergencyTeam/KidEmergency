@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class TitleUI : MonoBehaviour
 {
     public static TitleUI Instance { get; private set; }
+    
     public PopupUI popup;
     
     public List<MenuUI> menus;
@@ -21,7 +22,7 @@ public class TitleUI : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -48,20 +49,17 @@ public class TitleUI : MonoBehaviour
         }
     }
     
-    public IEnumerator ChangeScene() // 타이틀 씬에서 다른 게임 모드 씬으로 변경하는 코루틴
+    public IEnumerator ChangeScene()
     {
-        FadeInOut fade = FindObjectOfType<FadeInOut>();
-
-        yield return StartCoroutine(fade.FadeOut());
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
         
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(UIManager.Instance.titleUI.nextScene);
+        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
         
         while(!asyncChange.isDone)
         {
             yield return null;
         }
-
-        StartCoroutine(fade.FadeIn());
+        
         popup.gameObject.SetActive(false);
     }
     

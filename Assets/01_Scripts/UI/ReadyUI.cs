@@ -17,11 +17,15 @@ public class ReadyUI : MonoBehaviour
     [SerializeField] private ActionBasedController _leftCtrl;
     [SerializeField] private ActionBasedController _rightCtrl;
 
+    private void Start()
+    {
+        StartCoroutine(FadeInOut.Instance.FadeIn());
+    }
+
     private void Update()
     {
         SetPeopleReady();
-        
-}
+    }
 
     private void SetPeopleReady()
     {

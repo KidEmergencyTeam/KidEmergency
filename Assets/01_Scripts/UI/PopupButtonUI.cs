@@ -16,7 +16,7 @@ public class PopupButtonUI : OutlineHighlight
     {
         if (this.transform.name == "Yes")
         {
-            if (UIManager.Instance.titleUI.currentMenu == "Exit")
+            if (TitleUI.Instance.currentMenu == "Exit")
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
@@ -25,13 +25,13 @@ public class PopupButtonUI : OutlineHighlight
             }
             else
             {
-                StartCoroutine(UIManager.Instance.ChangeScene());
+                StartCoroutine(TitleUI.Instance.ChangeScene());
             }
         }
         
         else if (this.transform.name == "No")
         {
-            UIManager.Instance.popupUI.gameObject.SetActive(false);
+            TitleUI.Instance.popup.gameObject.SetActive(false);
         }
     }
     
