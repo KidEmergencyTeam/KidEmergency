@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class RobotController : SingletonManager<RobotController>
+public class RobotController : MonoBehaviour
 {
     public float speed = 1.0f;
     public Rob11ColorManager robotColorManager;
@@ -11,13 +11,7 @@ public class RobotController : SingletonManager<RobotController>
     public int playCount = 1; // Cyclyc Animations repeat time
     private int currentPlayCount = 0;
     private int currentNumber = 0; 
-    int N = 2;             
-
     private string animationName = "YourAnimationName";
-    public string pushableTag = "Pushable";
-    
-    int emo_i = 0;
-
     Animator anim;
     
     void Start()
