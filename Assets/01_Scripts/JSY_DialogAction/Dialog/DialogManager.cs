@@ -12,6 +12,8 @@ public class DialogManager : SingletonManager<DialogManager>
 
     public IEnumerator ShowDialog()
     {
+        RobotController robot = FindObjectOfType<RobotController>();
+        
         UIManager.Instance.dialogUI.dialogPanel.SetActive(true); 
 
         foreach (string dialog in ActionManager.Instance.currentDialog.dialogs)
@@ -20,7 +22,7 @@ public class DialogManager : SingletonManager<DialogManager>
         }
         
         UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
-        RobotController.Instance.SetBasic();
+        robot.SetBasic();
         
         if (ActionManager.Instance.currentDialog.choices.Length > 0)
         {

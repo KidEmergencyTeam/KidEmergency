@@ -33,6 +33,7 @@ public class OptionUI : OutlineHighlight
     
     private void OptionClicked()
     {
+        RobotController robot = FindObjectOfType<RobotController>();
         if (_myChoice != null)
         {
             UIManager.Instance.CloseAllOptionUI();
@@ -43,11 +44,11 @@ public class OptionUI : OutlineHighlight
             ActionManager.Instance.showOptionAction.CompleteAction();
             if (_myChoice.isAnswer)
             {
-                RobotController.Instance.SetHappy();
+                robot.SetHappy();
             }
             else
             {
-                RobotController.Instance.SetAngry();
+                robot.SetAngry();
             }
         }
     }
