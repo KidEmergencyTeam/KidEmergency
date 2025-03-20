@@ -12,7 +12,7 @@ public class ReadyUI : MonoBehaviour
 {
     public Image cirlceImage;
     public GameObject checkImage;
-    public string nextScene;
+    private string _nextScene;
     private bool _isReady = false;
     [SerializeField] private ActionBasedController _leftCtrl;
     [SerializeField] private ActionBasedController _rightCtrl;
@@ -20,6 +20,7 @@ public class ReadyUI : MonoBehaviour
     private void Update()
     {
         SetPeopleReady();
+        
 }
 
     private void SetPeopleReady()
@@ -39,7 +40,7 @@ public class ReadyUI : MonoBehaviour
         while (_isReady)
         {
             yield return new WaitForSeconds(2f);
-            SceneManager.LoadScene(nextScene);
+            SceneManager.LoadScene(_nextScene);
         }
     }
 }
