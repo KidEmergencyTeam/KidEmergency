@@ -339,7 +339,9 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step33() { yield return null; }
     IEnumerator Step34() { yield return PlayAndWait(22); }
-    IEnumerator Step35()
+
+    // Step35까지 연기 파티클 유지
+    IEnumerator Step35() 
     {
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
