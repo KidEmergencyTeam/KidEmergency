@@ -207,6 +207,14 @@ public class FireBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 // 외부에서는 첫 번째 대화만 실행
                 firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                //대사 종료되면 FadeOut 진행 후 Title Scene 이동
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                isFirstStepRdy = true;
+                yield return new WaitUntil(() => isFirstStepRdy == true);
+                SceneManager.LoadScene(0);  //Title로 복귀 
                 break;
         }
     }
