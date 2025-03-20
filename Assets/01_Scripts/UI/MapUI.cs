@@ -3,16 +3,12 @@ using UnityEngine.UI;
 
 public class MapUI : OutlineHighlight
 {
-    // 멀티가 없어지면 singeButton / multiButton 없이 _button = GetComponent로 진행
-    
     [Tooltip("오브젝트의 이름을 적어주세요.")]
     [SerializeField] private string _mapName;
     [Tooltip("0번 전체 텍스트, 1번 난이도, 2번 모드 순으로 적어주세요.")]
     [TextArea] [SerializeField] private string[] _popupTexts; 
     [Tooltip("게임 시작시 이동할 씬 이름을 적어주세요.")]
     [SerializeField] private string _nextScene;
-    [Tooltip("해당 맵의 모드를 적어주세요.ex) Fire, Eq")]
-    [SerializeField] private string _gameMode;
     private Button _button;
 
     protected override void Awake()
@@ -37,9 +33,9 @@ public class MapUI : OutlineHighlight
 
     private void SetCurrentPopup()
     {  
-        UIManager.Instance.SetPopup(_popupTexts[0], _popupTexts[1], _popupTexts[2]);
-        UIManager.Instance.popupUI.TextHighlight();
-        UIManager.Instance.titleUI.nextScene = _nextScene;
-        UIManager.Instance.popupUI.gameObject.SetActive(true);
+        TitleUI.Instance.SetPopup(_popupTexts[0], _popupTexts[1], _popupTexts[2]);
+        TitleUI.Instance.popup.TextHighlight();
+        TitleUI.Instance.nextScene = _nextScene;
+        TitleUI.Instance.popup.gameObject.SetActive(true);
     }
 }

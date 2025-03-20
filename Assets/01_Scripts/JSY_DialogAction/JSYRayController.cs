@@ -53,17 +53,23 @@ public class JSYRayController : MonoBehaviour
 
     private bool UIActive()
     {
-        for (int i = 0; i < UIManager.Instance.optionUI.Length; i++)
+        if (UIManager.Instance != null)
         {
-            if (UIManager.Instance.optionUI[i].gameObject.activeSelf)
+            for (int i = 0; i < UIManager.Instance.optionUI.Length; i++)
             {
-                return true;
+                if (UIManager.Instance.optionUI[i].gameObject.activeSelf)
+                {
+                    return true;
+                }
             }
         }
 
-        if (UIManager.Instance.titleUI.gameObject.activeSelf)
+        if (TitleUI.Instance != null)
         {
-            return true;
+            if (TitleUI.Instance.gameObject.activeSelf)
+            {
+                return true;
+            }   
         }
         
         // 타이틀 ui도 추가해야 할듯?
