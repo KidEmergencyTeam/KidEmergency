@@ -1,17 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogManager : SingletonManager<DialogManager>
 {
-    public Button testButton; // 삭제 예정
-
-    protected override void Awake()
-    {
-        base.Awake();       
-        testButton.onClick.AddListener(DialogStart); // 삭제 예정
-    }
-
     private void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
     {
         StartCoroutine(ShowDialog());

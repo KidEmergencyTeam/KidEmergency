@@ -9,7 +9,6 @@ public class UIManager : SingletonManager<UIManager>
     public WarningUI warningUI;
     public TitleUI titleUI;
     public PopupUI popupUI;
-    public PopupButtonUI buttonUI;
 
     #region Option
     public void SetOptionUI()
