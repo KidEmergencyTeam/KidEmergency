@@ -17,7 +17,8 @@ public class TitleUI : MonoBehaviour
     
     public GameObject normalPanel;
     public GameObject hardPanel;
-    
+
+    private bool _isLoading;
 
     private void Awake()
     {
@@ -51,15 +52,19 @@ public class TitleUI : MonoBehaviour
     public IEnumerator ChangeScene()
     {
         yield return StartCoroutine(FadeInOut.Instance.FadeOut());
-        
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
-        
-        while(!asyncChange.isDone)
+
+        if (!_isLoading)
         {
-            yield return null;
-        }
+            _isLoading = true;
+            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
         
-        popup.gameObject.SetActive(false);
+            while(!asyncChange.isDone)
+            {
+                yield return null;
+            }
+        
+            popup.gameObject.SetActive(false);
+        }
     }
     
     public void SetPopup(string text, string levelText, string modeText)
