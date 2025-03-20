@@ -274,6 +274,8 @@ public class ScenarioManager : MonoBehaviour
         // 대기
         yield return null;
     }
+
+    // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
@@ -316,6 +318,8 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27() { yield return PlayAndWait(17); }
+
+    // Step28 -> 페이드 아웃 효과 필수
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
@@ -350,6 +354,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step34() { yield return PlayAndWait(22); }
 
     // Step35까지 연기 파티클 유지
+    // Step35 -> 페이드 아웃 효과 필수
     IEnumerator Step35() 
     {
         yield return PlayAndWait(23);
