@@ -5,6 +5,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 // using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
+// 빌드 세팅 7개 필수
+// 1. 00_Scenes/Tests/KSY/1.Lobby
+// 2. 00_Scenes/Tests/KSY/2.School
+// 3. 00_Scenes/Tests/KSY/3.Hallway
+// 4. 00_Scenes/Tests/KSY/4.Elevator
+// 5. 00_Scenes/Tests/KSY/5.Schoolyard
+// 6. 00_Scenes/Tests/Fire_School_Ready
+// 7. 00_Scenes/Tests/LJW/LJW_Start
+
 // 파티클
 [Serializable]
 public class ParticleSetup
