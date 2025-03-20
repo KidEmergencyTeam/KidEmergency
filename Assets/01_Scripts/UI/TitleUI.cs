@@ -14,7 +14,6 @@ public class TitleUI : MonoBehaviour
     public List<MenuUI> menus;
     public string currentMenu; // 현재 선택중인 메뉴
     public string nextScene; // 이동할 씬 이름
-    public string mode; // 선택한 게임 모드 (화재 / 지진)
     
     public GameObject normalPanel;
     public GameObject hardPanel;

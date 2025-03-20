@@ -9,8 +9,6 @@ public class MapUI : OutlineHighlight
     [TextArea] [SerializeField] private string[] _popupTexts; 
     [Tooltip("게임 시작시 이동할 씬 이름을 적어주세요.")]
     [SerializeField] private string _nextScene;
-    [Tooltip("해당 맵의 모드를 적어주세요.ex) Fire, Eq")]
-    [SerializeField] private string _gameMode;
     private Button _button;
 
     protected override void Awake()
