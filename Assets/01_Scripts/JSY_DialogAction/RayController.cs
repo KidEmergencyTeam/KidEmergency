@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class JSYRayController : MonoBehaviour
+public class RayController : MonoBehaviour
 {
     [SerializeField] private ActionBasedController _leftController;
     [SerializeField] private ActionBasedController _rightController;
