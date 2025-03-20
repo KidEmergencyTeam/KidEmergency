@@ -11,8 +11,11 @@ public class MultilineString
     [Header("타이핑 텍스트")]
     public string typingText;
 
-    [Header("타이핑 오디오 클립")]
+    [Header("타이핑 오디오 클립 1")]
     public AudioClip typingSound;
+
+    [Header("타이핑 오디오 클립 2")]
+    public AudioClip typingSound2;
 }
 
 public class TypingEffect : MonoBehaviour
@@ -32,23 +35,21 @@ public class TypingEffect : MonoBehaviour
     [Header("타이핑 공통 속도")]
     public float commonTypingSpeed = 0.05f;
 
-    // 타이핑 전/후 대기 시간
+    // 대사 출력 전/후 대기 시간
     private float sentenceDelay = 0.5f;
 
-    // 타이핑 진행 여부 (외부에서는 읽기 전용으로 접근)
+    // 타이핑 진행 여부 
     private bool isTyping = false;
     public bool IsTyping { get { return isTyping; } }
 
     private void Awake()
     {
-        // 이미 인스턴스가 존재한다면 중복 생성 방지
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        // 씬 전환 시에도 파괴되지 않도록 설정
         DontDestroyOnLoad(gameObject);
     }
 
@@ -82,7 +83,7 @@ public class TypingEffect : MonoBehaviour
         }
     }
 
-    // 외부에서 인덱스에 해당하는 텍스트 타이핑 실행
+    // 시나리오 매니저에서 인덱스에 해당하는 텍스트 타이핑 실행 및 사운드 재생
     public void PlayTypingAtIndex(int index)
     {
         if (isTyping)
@@ -101,24 +102,46 @@ public class TypingEffect : MonoBehaviour
     IEnumerator PlaySingleText(MultilineString multiline)
     {
         isTyping = true;
-        yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound));
+        
+        // 타이핑과 사운드 재생을 함께 진행
+        yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound, multiline.typingSound2));
+        
+        // 타이핑 및 사운드 재생이 끝난 후 추가 대기(다음 대사 출력 전 대기 시간)
         yield return new WaitForSeconds(sentenceDelay);
+
+        // 시나리오 매니저에서 해당 값을 받으면
+        // 다음 코루틴으로 진행
         isTyping = false;
     }
 
-    IEnumerator TypeSentence(string sentence, AudioClip clip)
+    IEnumerator TypeSentence(string sentence, AudioClip clip1, AudioClip clip2)
     {
-        if (clip != null)
+        float typingDuration = sentence.Length * commonTypingSpeed;
+        float clipDuration1 = clip1 != null ? clip1.length : 0f;
+        float clipDuration2 = clip2 != null ? clip2.length : 0f;
+        float maxClipDuration = Mathf.Max(clipDuration1, clipDuration2);
+
+        // 두 개의 오디오 클립을 동시에 재생 (SoundManager를 통해)
+        if (clip1 != null)
         {
-            // 싱글톤으로 구현된 SoundManager를 통해 오디오 재생
-            SoundManager.Instance.PlaySFX(clip.name, gameObject);
+            SoundManager.Instance.PlaySFX(clip1.name, gameObject);
+        }
+        if (clip2 != null)
+        {
+            SoundManager.Instance.PlaySFX(clip2.name, gameObject);
         }
 
+        // 한 글자씩 타이핑 효과 구현
         for (int i = 0; i < sentence.Length; i++)
         {
             if (typingText != null)
                 typingText.text += sentence[i];
             yield return new WaitForSeconds(commonTypingSpeed);
         }
+
+        // 텍스트 타이핑 동안 사운드가 아직 재생 중일 경우, 남은 시간만큼 추가 대기
+        float remainingAudioTime = maxClipDuration - typingDuration;
+        if (remainingAudioTime > 0f)
+            yield return new WaitForSeconds(remainingAudioTime);
     }
 }
