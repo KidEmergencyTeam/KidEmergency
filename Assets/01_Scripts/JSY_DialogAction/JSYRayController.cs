@@ -43,23 +43,12 @@ public class JSYRayController : MonoBehaviour
 
         else
         {
+            _leftRay.enabled = true;
+            _rightRay.enabled = true;
+            
             _leftLine.enabled = false;
             _rightLine.enabled = false;
         }
-
-        // // 왼쪽 그립버튼을 누르고 있는 상태라면 오른쪽 레이 활성화
-        // if (_leftController.selectAction.action.ReadValue<float>() > 0 && _leftRay.hasSelection)
-        // {
-        //     _rightRay.enabled = true;
-        // }
-        //
-        //
-        // // 오른쪽 그립버튼을 누르고 있는 상태라면 왼쪽 레이 활성화
-        // else if (_rightController.selectAction.action.ReadValue<float>() > 0 && _rightRay.hasSelection)
-        // {
-        //     _leftRay.enabled = true;
-        // }
-
     }
 
     private bool UIActive()
