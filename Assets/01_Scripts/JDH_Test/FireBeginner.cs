@@ -31,8 +31,10 @@ public class FireBeginner : MonoBehaviour
     public GameObject[] NPC; // 기타 NPC들의 시작 위치
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
+    public GameObject warningUi;
     public GameObject exampleDescUi;
     public GameObject leftHand; // 왼손 관련 오브젝트
+    public Canvas playerUi; //플레이어 UI Canvas
 
     [SerializeField]
     private GameObject emergencyExit; // 비상구 오브젝트 (Outlinable 컴포넌트를 추가할 대상)
@@ -52,8 +54,8 @@ public class FireBeginner : MonoBehaviour
     public Transform setiMovPos;
     public Transform[] npcMovPos;
 
-    [Header("연기 파티클 효과")]
-    public ParticleSystem smokeParticle;
+    [Header("연기 파티클 그룹")]
+    public GameObject smokeParticles;
 
     [Header("예제 UI 이미지")]
     [SerializeField]
@@ -69,6 +71,7 @@ public class FireBeginner : MonoBehaviour
     public bool isSecondStepRdy;
     public bool hasHandkerchief;
     public bool iscoverFace;
+    public bool ruleCheck;  //손수건을 획득한 후 경고창을 띄우기 위해 경고 지점을 설정하는 변수 (해당 변수가 true된 시점부터 경고가 출력)
 
     [Header("대화 시스템")]
     [SerializeField]
@@ -91,13 +94,16 @@ public class FireBeginner : MonoBehaviour
             // 교실
             case PLACE.CLASSROOM:
                 // 1. 첫 번째 대화 시작
-                //fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 // 2. 화재 상황 안내 대화 시작 및 화재 경보 작동
                 secondDialog.gameObject.SetActive(true);
                 fireAlarm.SetActive(true);
                 Debug.Log("화재 경보 작동.");
+                SmokeObjsActive();  //모든 연기 파티클 활성화
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                 // 3. OK 버튼 활성화 및 버튼 클릭 대기
@@ -118,18 +124,21 @@ public class FireBeginner : MonoBehaviour
                 // 손수건(핸드커치) 활성화
                 handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
                 Debug.Log("손수건 활성화");
+                SetAllNpcState(NpcRig.State.Hold); // 모든 NPC 상태를 Hold로 설정
 
                 // 5. 손수건 사용 및 얼굴 가리기 완료 대기
                 yield return new WaitUntil(() =>
                     hasHandkerchief == true && iscoverFace == true);
                 Debug.Log("손수건 사용 및 얼굴 가리기 완료");
                 exampleDescUi.SetActive(false);
-
+                ruleCheck = true;   //해당 시점부터 손수건 경고 출력
+                                    
                 // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
                 StartCoroutine(fadeInOutImg.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 Debug.Log("플레이어 및 NPC 이동");
                 TeleportCharacters();
+                AdjustUiTransform();
                 StartCoroutine(fadeInOutImg.FadeIn());
                 isSecondStepRdy = true;
                 yield return new WaitUntil(() => isSecondStepRdy == true);
@@ -146,6 +155,10 @@ public class FireBeginner : MonoBehaviour
 
             // 복도
             case PLACE.HALLWAY:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -168,6 +181,10 @@ public class FireBeginner : MonoBehaviour
 
             // 계단/엘리베이터
             case PLACE.STAIRS_ELEVATOR:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                ruleCheck = true;
                 hasHandkerchief = true;
                 // 1. 첫 번째 대화 종료 대기
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
@@ -186,6 +203,8 @@ public class FireBeginner : MonoBehaviour
 
             // 외부
             case PLACE.OUTSIDE:
+                fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 // 외부에서는 첫 번째 대화만 실행
                 firstDialog.gameObject.SetActive(true);
                 break;
@@ -194,7 +213,31 @@ public class FireBeginner : MonoBehaviour
 
     private void Update()
     {
-        DetectHeadLowering(); // 머리 숙임 감지
+        //손수건 획득 후 손수건으로 입을 잘 가리고 있는지 확인
+        if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false)
+            warningUi.SetActive(true);
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == true)
+            warningUi.SetActive(false);
+
+       DetectHeadLowering(); // 머리 숙임 감지
+    }
+    //이동 후 Ui위치 변경
+
+    public void AdjustUiTransform()
+    {
+        if (playerUi == null || player == null) return;
+
+        RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
+        if (rectTransform == null) return;
+
+        // 월드 기준 위치 설정
+        Vector3 worldPosition = player.transform.position + player.transform.TransformDirection(new Vector3(0.75f, 1.5f, 0.5f));
+        rectTransform.position = worldPosition;
+
+        // 로컬 회전 설정 (주어진 값 그대로 적용)
+        rectTransform.localRotation = Quaternion.Euler(-20, 50, 0);  // 월드 기준이 아닌, 그대로 적용
+
+        Debug.Log("playerUi 위치 및 회전 변경 완료 (Local Space)");
     }
 
     private void TeleportCharacters()
@@ -258,4 +301,36 @@ public class FireBeginner : MonoBehaviour
             isHeadDown = false;
         }
     }
+    // 화재 발생 시 모든 연기 파티클 활성화
+    public void SmokeObjsActive()
+    {
+        if (smokeParticles == null) return;
+
+        // 1. 모든 자식 오브젝트 활성화
+        foreach (Transform child in smokeParticles.GetComponentsInChildren<Transform>(true)) // 비활성화된 오브젝트도 포함
+        {
+            child.gameObject.SetActive(true);
+        }
+
+        // 2. 자식 오브젝트들 중 ParticleSystem 찾아서 실행
+        foreach (ParticleSystem particle in smokeParticles.GetComponentsInChildren<ParticleSystem>(true))
+        {
+            particle.Play(); // 파티클 실행
+        }
+
+        Debug.Log("모든 연기 파티클이 활성화되었습니다.");
+    }
+
+    // 모든 NPC들의 상태를 동일하게 변경하는 함수
+    public void SetAllNpcState(NpcRig.State newState)
+    {
+        foreach (GameObject npc in NPC)
+        {
+            if (npc != null) // NPC가 null이 아닌지 확인
+            {
+                npc.GetComponent<NpcRig>().state = newState; // NPC의 상태를 변경
+            }
+        }
+    }
+
 }
