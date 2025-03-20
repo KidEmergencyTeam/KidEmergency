@@ -11,6 +11,7 @@ public class ReadyUI : MonoBehaviour
     public GameObject checkImage;
     public string nextScene;
     private bool _isReady = false;
+    private bool _isLoading = false;
     [SerializeField] private ActionBasedController _leftCtrl;
     [SerializeField] private ActionBasedController _rightCtrl;
 
@@ -29,21 +30,26 @@ public class ReadyUI : MonoBehaviour
         // 준비 버튼(각 그립 버튼)을 눌렀을 때 / 테스트 용으로 오른쪽 버튼만 클릭
         if (/*_leftCtrl.selectAction.action.ReadValue<float>() > 0 && */ _rightCtrl.selectAction.action.ReadValue<float>() > 0) 
         {
-            cirlceImage.color = Color.green;
-            checkImage.SetActive(true);
+            if (!_isReady)
+            {
+                print("준비 완료");
+                cirlceImage.color = Color.green;
+                checkImage.SetActive(true);
 
-            _isReady = true;
-            StartCoroutine(WaitForGameStart());
+                _isReady = true;
+                StartCoroutine(WaitForGameStart());
+            }
         }
     }
 
     private IEnumerator WaitForGameStart()
     {
-        while (_isReady)
+        while (!_isLoading && _isReady)
         {
+            _isLoading = true;
             yield return new WaitForSeconds(2f);
             yield return StartCoroutine(FadeInOut.Instance.FadeOut());
-                    
+            
             AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
         
             while(!asyncChange.isDone)
