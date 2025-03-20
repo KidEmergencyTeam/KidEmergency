@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,18 +7,24 @@ public class RobotController : MonoBehaviour
     public float speed = 1.0f;
     public Rob11ColorManager robotColorManager;
     public EmotionChanger emotionChanger;
-
-    private Animator anim;
+    [HideInInspector] public Vector3 originPos;
     
+    private Animator _anim;
+
+    private void Awake()
+    {
+        originPos = this.transform.position;
+    }
+
     void Start()
     {
-        anim = GetComponent<Animator>();
-        anim.SetFloat("speedMultiplier", speed);
+        _anim = GetComponent<Animator>();
+        _anim.SetFloat("speedMultiplier", speed);
     }
 
     public void SetAnimaiton(string animName)
     {
-        anim.SetBool(animName, true);
+        _anim.SetBool(animName, true);
     }
     
     // ㅁuㅁ 표정 ex) 기본 표정
@@ -51,6 +58,11 @@ public class RobotController : MonoBehaviour
         robotColorManager.ChangeBodyColor(emoNumber); 
         emotionChanger.SetEmotionEyes(emoNumber); 
         emotionChanger.SetEmotionMouth(emoNumber);
+    }
+
+    public void SetRobotPos(Vector3 pos)
+    {
+        this.transform.position = pos;
     }
 }
 
