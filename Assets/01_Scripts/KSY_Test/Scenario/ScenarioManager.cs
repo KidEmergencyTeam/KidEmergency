@@ -286,7 +286,11 @@ public class ScenarioManager : MonoBehaviour
 
     // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
     // Step35까지 화재 경보벨 사운드 출력
-    IEnumerator Step18() { yield return PlayAndWait(27); }
+    IEnumerator Step18()
+    {
+        TypingEffect.Instance.StartContinuousSeparateTypingClip();
+        yield return PlayAndWait(27);
+    }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
     IEnumerator Step21() { yield return PlayAndWait(14); }
@@ -361,7 +365,13 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
     }
-    IEnumerator Step36() { yield return PlayAndWait(24); }
+
+    // Step36: 연속 재생 종료 후 타이핑 실행
+    IEnumerator Step36()
+    {
+        TypingEffect.Instance.StopContinuousSeparateTypingClip();
+        yield return PlayAndWait(24);
+    }
     IEnumerator Step37() { yield return PlayAndWait(25); }
     IEnumerator Step38() 
     { 
