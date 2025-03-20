@@ -63,9 +63,11 @@ public class UIManager : SingletonManager<UIManager>
 
     public IEnumerator ChangeScene() // 타이틀 씬에서 다른 게임 모드 씬으로 변경하는 코루틴
     {
+        FadeInOut fade = FindObjectOfType<FadeInOut>();
+        
         titleUI.gameObject.SetActive(false);
         
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+        yield return StartCoroutine(fade.FadeOut());
         
         AsyncOperation asyncChange = SceneManager.LoadSceneAsync(UIManager.Instance.titleUI.nextScene);
         
@@ -74,7 +76,7 @@ public class UIManager : SingletonManager<UIManager>
             yield return null;
         }
 
-        StartCoroutine(FadeInOut.Instance.FadeIn());
+        StartCoroutine(fade.FadeIn());
         popupUI.gameObject.SetActive(false);
     }
     
