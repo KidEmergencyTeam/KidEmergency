@@ -322,12 +322,15 @@ public class ScenarioManager : MonoBehaviour
 
     #endregion
 
-    // 비동기 씬 전환 메서드 -> 동기에 비해 씬 전환이 매끄러움
+    // 비동기 방식으로 씬 전환
     IEnumerator ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
+
+            // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
+            // 추후에 로딩중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
