@@ -7,12 +7,7 @@ public class RobotController : MonoBehaviour
     public Rob11ColorManager robotColorManager;
     public EmotionChanger emotionChanger;
 
-    [Header("Repeat time for some animations")]
-    public int playCount = 1; // Cyclyc Animations repeat time
-    private int currentPlayCount = 0;
-    private int currentNumber = 0; 
-    private string animationName = "YourAnimationName";
-    Animator anim;
+    private Animator anim;
     
     void Start()
     {

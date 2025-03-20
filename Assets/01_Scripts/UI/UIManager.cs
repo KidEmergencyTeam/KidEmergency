@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +7,14 @@ public class UIManager : SingletonManager<UIManager>
     public OptionUI[] optionUI;
     public DialogUI dialogUI;
     public WarningUI warningUI;
+
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "JSY_Start")
+        {
+            Destroy(this);
+        }
+    }
 
     #region Option
     public void SetOptionUI()

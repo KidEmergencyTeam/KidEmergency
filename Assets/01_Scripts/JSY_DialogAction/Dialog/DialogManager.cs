@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DialogManager : SingletonManager<DialogManager>
 {
-    private void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
+    public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
     {
         StartCoroutine(ShowDialog());
     }

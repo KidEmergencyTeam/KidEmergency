@@ -36,9 +36,9 @@ public class MenuUI : OutlineHighlight
         {
             text.color = Color.white;
             activeImage.SetActive(true);   
+            TitleUI.Instance.currentMenu = _menuName;
         }
         
-        TitleUI.Instance.currentMenu = _menuName;
         TitleUI.Instance.SetCurrentMenuUI();
 
         if (_menuName == "Normal")
