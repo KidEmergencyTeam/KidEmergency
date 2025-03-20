@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -12,20 +9,25 @@ public class ReadyUI : MonoBehaviour
 {
     public Image cirlceImage;
     public GameObject checkImage;
-    private string _nextScene;
+    public string nextScene;
     private bool _isReady = false;
     [SerializeField] private ActionBasedController _leftCtrl;
     [SerializeField] private ActionBasedController _rightCtrl;
 
+    private void Start()
+    {
+        StartCoroutine(FadeInOut.Instance.FadeIn());
+    }
+
     private void Update()
     {
         SetPeopleReady();
-        
-}
+    }
 
     private void SetPeopleReady()
     {
-        if (_leftCtrl.selectAction.action.ReadValue<float>() > 0 && _rightCtrl.selectAction.action.ReadValue<float>() > 0) // 준비 버튼(각 그립 버튼)을 눌렀을 때
+        // 준비 버튼(각 그립 버튼)을 눌렀을 때 / 테스트 용으로 오른쪽 버튼만 클릭
+        if (/*_leftCtrl.selectAction.action.ReadValue<float>() > 0 && */ _rightCtrl.selectAction.action.ReadValue<float>() > 0) 
         {
             cirlceImage.color = Color.green;
             checkImage.SetActive(true);
@@ -40,7 +42,14 @@ public class ReadyUI : MonoBehaviour
         while (_isReady)
         {
             yield return new WaitForSeconds(2f);
-            SceneManager.LoadScene(_nextScene);
+            yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+                    
+            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
+        
+            while(!asyncChange.isDone)
+            {
+                yield return null;
+            }
         }
     }
 }

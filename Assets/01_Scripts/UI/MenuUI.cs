@@ -38,25 +38,25 @@ public class MenuUI : OutlineHighlight
             activeImage.SetActive(true);   
         }
         
-        UIManager.Instance.titleUI.currentMenu = _menuName;
-        UIManager.Instance.titleUI.SetCurrentMenuUI();
+        TitleUI.Instance.currentMenu = _menuName;
+        TitleUI.Instance.SetCurrentMenuUI();
 
         if (_menuName == "Normal")
         {
-            UIManager.Instance.titleUI.hardPanel.SetActive(false);
-            UIManager.Instance.titleUI.normalPanel.SetActive(true);
+            TitleUI.Instance.hardPanel.SetActive(false);
+            TitleUI.Instance.normalPanel.SetActive(true);
         }
         
         else if (_menuName == "Hard")
         {
-            UIManager.Instance.titleUI.normalPanel.SetActive(false);
-            UIManager.Instance.titleUI.hardPanel.SetActive(true);
+            TitleUI.Instance.normalPanel.SetActive(false);
+            TitleUI.Instance.hardPanel.SetActive(true);
         }
         
         else if (_menuName == "Exit")
         {
-            UIManager.Instance.SetPopup("게임을 종료하시겠습니까?", null, null);
-            UIManager.Instance.popupUI.gameObject.SetActive(true);
+            TitleUI.Instance.SetPopup("게임을 종료하시겠습니까?", null, null);
+            TitleUI.Instance.popup.gameObject.SetActive(true);
         }
     }
 

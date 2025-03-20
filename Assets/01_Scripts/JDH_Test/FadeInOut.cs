@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // 화면을 점점 밝게(FadeIn) 혹은 점점 어둡게(FadeOut) 만드는 싱글톤 클래스
 public class FadeInOut : SingletonManager<FadeInOut>
 {
-    [SerializeField] private float fadedTime = 0.5f; // 페이드 효과가 진행되는 시간 (초)
+    [SerializeField] private float fadedTime = 1.5f; // 페이드 효과가 진행되는 시간 (초)
     [SerializeField] private Image fadeInoutImg; // 페이드 효과를 적용할 이미지 (UI 패널)
 
     public bool isFadeIn;  // 현재 페이드 인이 진행 중인지 여부
@@ -61,5 +62,19 @@ public class FadeInOut : SingletonManager<FadeInOut>
         color.a = 1f; // 완전히 불투명하게 설정
         fadeInoutImg.color = color;
         isFadeOut = false; // 페이드 아웃 종료
+    }
+
+    public IEnumerator SceneFadeEffect(string sceneName) // 씬 전환용 페이드 효과
+    {
+        yield return StartCoroutine(FadeOut());
+        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(sceneName); 
+        
+        while (!asyncChange.isDone)
+        { 
+            yield return null;
+        }
+        
+        yield return StartCoroutine(FadeIn());
+        
     }
 }

@@ -7,8 +7,6 @@ public class UIManager : SingletonManager<UIManager>
     public OptionUI[] optionUI;
     public DialogUI dialogUI;
     public WarningUI warningUI;
-    public TitleUI titleUI;
-    public PopupUI popupUI;
 
     #region Option
     public void SetOptionUI()
@@ -58,32 +56,5 @@ public class UIManager : SingletonManager<UIManager>
     }
     
     #endregion
-
-    #region Title
-
-    public IEnumerator ChangeScene() // 타이틀 씬에서 다른 게임 모드 씬으로 변경하는 코루틴
-    {
-        titleUI.gameObject.SetActive(false);
-        
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
-        
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(UIManager.Instance.titleUI.nextScene);
-        
-        while(!asyncChange.isDone)
-        {
-            yield return null;
-        }
-
-        StartCoroutine(FadeInOut.Instance.FadeIn());
-        popupUI.gameObject.SetActive(false);
-    }
     
-    public void SetPopup(string text, string levelText, string modeText)
-    {
-        popupUI.popupText.text = text;
-        popupUI.highlightText[0] = levelText;
-        popupUI.highlightText[1] = modeText;
-    }
-
-    #endregion
 }

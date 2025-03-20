@@ -9,6 +9,7 @@ public class SingletonManager<T> : MonoBehaviour where T : MonoBehaviour
 		if (Instance == null)
 		{
 			Instance = this as T;
+			DontDestroyOnLoad(this);
 		}
 		else
 		{
