@@ -5,6 +5,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 // using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
+// 빌드 세팅 목록
+// 1. 00_Scenes/Tests/KSY/1.Lobby
+// 2. 00_Scenes/Tests/KSY/2.School
+// 3. 00_Scenes/Tests/KSY/3.Hallway
+// 4. 00_Scenes/Tests/KSY/4.Elevator
+// 5. 00_Scenes/Tests/KSY/5.Schoolyard
+// 6. 00_Scenes/Tests/Fire_School_Ready
+// 7. 00_Scenes/Tests/LJW/LJW_Start
+
 // 파티클
 [Serializable]
 public class ParticleSetup
@@ -149,7 +158,6 @@ public class ScenarioManager : MonoBehaviour
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
-
     IEnumerator Step3()
     {
         // 위치 반영해서 파티클 실행 
@@ -266,6 +274,8 @@ public class ScenarioManager : MonoBehaviour
         // 대기
         yield return null;
     }
+
+    // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
@@ -308,6 +318,8 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27() { yield return PlayAndWait(17); }
+
+    // Step28 -> 페이드 아웃 효과 필수
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
@@ -340,7 +352,10 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step33() { yield return null; }
     IEnumerator Step34() { yield return PlayAndWait(22); }
-    IEnumerator Step35()
+
+    // Step35까지 연기 파티클 유지
+    // Step35 -> 페이드 아웃 효과 필수
+    IEnumerator Step35() 
     {
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
@@ -374,31 +389,6 @@ public class ScenarioManager : MonoBehaviour
         else
         {
             Debug.LogError($"유효하지 않은 씬 인덱스: {sceneIndex}");
-        }
-    }
-
-    // 재사용 가능한 파티클 배치 메서드
-    // Inspector에서 설정한 particleSpawnPoints 리스트에 따라 파티클을 생성하고 실행합니다.
-    // (기존 PlayParticlesAtSpawnPoints 메서드에서도 smokeParticleData 활용)
-    public void PlayParticlesAtSpawnPoints()
-    {
-        if (smokeParticleData != null &&
-            smokeParticleData.smokeEffect != null &&
-            smokeParticleData.particleSpawnPoints != null &&
-            smokeParticleData.particleSpawnPoints.Count > 0)
-        {
-            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
-            {
-                if (spawnPoint != null)
-                {
-                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
-                    ps.Play();
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("파티클 설정(이펙트 혹은 배치 위치)이 올바르게 세팅되지 않았습니다.");
         }
     }
 

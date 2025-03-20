@@ -85,7 +85,7 @@ public class WaitStateManager : MonoBehaviour
         StartCoroutine(LoadSceneWithFadeOutAsync());
     }
 
-    // 페이드 아웃 효과 실행 후  비동기 방식으로 씬 전환
+    // 페이드 아웃 효과 실행 후  비동기 방식으로 씬 전환 -> 페이드 아웃 효과 필수
     IEnumerator LoadSceneWithFadeOutAsync()
     {
         // fadeInOut null 상태라면 바로 씬 전환
