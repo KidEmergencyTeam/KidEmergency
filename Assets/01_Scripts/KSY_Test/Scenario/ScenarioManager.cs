@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 // using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
-// 빌드 세팅 7개 필수
+// 빌드 세팅 목록
 // 1. 00_Scenes/Tests/KSY/1.Lobby
 // 2. 00_Scenes/Tests/KSY/2.School
 // 3. 00_Scenes/Tests/KSY/3.Hallway
