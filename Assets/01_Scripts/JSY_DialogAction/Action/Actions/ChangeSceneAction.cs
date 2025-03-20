@@ -17,7 +17,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
     {
         yield return StartCoroutine(FadeInOut.Instance.FadeOut());
         
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene);
+        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene, LoadSceneMode.Single);
         
         while(!asyncChange.isDone)
         {
