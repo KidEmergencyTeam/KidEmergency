@@ -271,12 +271,14 @@ public class ScenarioManager : MonoBehaviour
 
         // 정답: 피난 유도선 선택 시 Step24로 이동
         if (selected == 1)
-            currentStep = 24;
+            currentStep = 23;
 
         // 오답: 익숙한 길 선택 시 Step25로 이동
         else
-            currentStep = 25; 
+            currentStep = 24; 
     }
+
+    // Step25 대사 출력 -> Step28 진행
     IEnumerator Step25() { yield return PlayAndWait(16); currentStep = 27; }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27() { yield return PlayAndWait(17); }
@@ -298,15 +300,15 @@ public class ScenarioManager : MonoBehaviour
 
         // 정답: 계단 선택 시 Step32로 이동
         if (selected == 1)
-            currentStep = 32;
+            currentStep = 31;
 
         // 오답: 엘리베이터 선택 시 Step34로 이동
         else
-            currentStep = 34; 
+            currentStep = 33; 
     }
 
     // Step32 대사 출력 -> Step35 진행
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35; } 
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
     IEnumerator Step33() { yield return null; }
     IEnumerator Step34() { yield return PlayAndWait(22); } 
     IEnumerator Step35()
