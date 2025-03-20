@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+// 2개 이상 오디오 클립 동시 재생 가능
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
