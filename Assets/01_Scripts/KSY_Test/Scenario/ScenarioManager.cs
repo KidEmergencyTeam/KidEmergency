@@ -5,6 +5,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 // using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
 
+// 파티클
+[Serializable]
+public class ParticleSetup
+{
+    [Header("연기 파티클")]
+    public ParticleSystem smokeEffect;
+
+    [Header("파티클 위치")]
+    public List<Transform> particleSpawnPoints; 
+}
+
 public class ScenarioManager : MonoBehaviour
 {
     public static ScenarioManager Instance { get; private set; }
@@ -12,8 +23,8 @@ public class ScenarioManager : MonoBehaviour
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
-    [Header("연기 파티클")]
-    public ParticleSystem smokeEffect;
+    [Header("연기 파티클 + 위치")]
+    public ParticleSetup smokeParticleData;
 
     [Header("씬 이름")]
     public List<string> sceneNames;
@@ -43,14 +54,16 @@ public class ScenarioManager : MonoBehaviour
             Debug.LogError("TypingEffect가 할당되지 않았습니다.");
             return;
         }
-        if (smokeEffect == null)
+
+        if (smokeParticleData == null)
         {
-            Debug.LogError("SmokeEffect가 할당되지 않았습니다.");
+            Debug.LogError("ParticleSetup(연기 파티클 + 파티클 위치)가 설정되지 않았습니다.");
             return;
         }
-        if (sceneNames == null || sceneNames.Count < 3)
+
+        if (sceneNames == null || sceneNames.Count < 4)
         {
-            Debug.LogError("Scene Names 리스트에 최소 3개 이상의 씬 이름이 필요합니다.");
+            Debug.LogError("Scene Names 리스트에 최소 4개 이상의 씬 이름이 필요합니다.");
             return;
         }
 
@@ -107,24 +120,20 @@ public class ScenarioManager : MonoBehaviour
         // 딕셔너리에 등록된 전체 스텝 실행
         while (currentStep <= 38)
         {
-            // 현재 스텝 -> 딕션너리에 등록o
             if (scenarioSteps.ContainsKey(currentStep))
             {
-                // 현재 스텝의 코루틴을 실행하고
-                // 완료될 때까지 대기
+                // 현재 스텝의 코루틴을 실행하고 완료될 때까지 대기
                 yield return StartCoroutine(scenarioSteps[currentStep]());
             }
-            
-            // 현재 스텝-> 딕셔너리에 등록x
             else
             {
                 Debug.LogWarning($"[ScenarioManager] 구현되지 않은 스텝: {currentStep}");
             }
 
-            // 다음 스텝으로 넘김 -> 이게 없으면 같은 스텝에서 무한 반복됨
+            // 다음 스텝으로 넘김 (없으면 같은 스텝에서 무한 반복됨)
             currentStep++;
 
-            // 한 프레임 대기 (모든 로직이 실행된 후 다음 프레임에서 루프 재시작)
+            // 한 프레임 대기 (모든 로직 실행 후 다음 프레임에서 루프 재시작)
             yield return null;
         }
     }
@@ -140,13 +149,24 @@ public class ScenarioManager : MonoBehaviour
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
+
     IEnumerator Step3()
     {
-        if (smokeEffect != null)
+        // 위치 반영해서 파티클 실행 
+        if (smokeParticleData != null &&
+            smokeParticleData.particleSpawnPoints != null &&
+            smokeParticleData.particleSpawnPoints.Count > 0)
         {
-            var ps = Instantiate(smokeEffect);
-            ps.Play();
+            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
+            {
+                if (spawnPoint != null)
+                {
+                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
+                    ps.Play();
+                }
+            }
         }
+
         yield return null;
     }
     IEnumerator Step4() { yield return PlayAndWait(2); }
@@ -165,16 +185,19 @@ public class ScenarioManager : MonoBehaviour
         // 정답: 손 선택 시 Step9로 이동
         if (selected == 1)
             currentStep = 8;
-
         // 오답: 손수건 선택 시 Step12로 이동
         else
-            currentStep = 11; 
+            currentStep = 11;
     }
     IEnumerator Step8() { yield return null; }
     IEnumerator Step9() { yield return PlayAndWait(5); }
 
     // Step10 대사 출력 -> Step13 진행
-    IEnumerator Step10() { yield return PlayAndWait(6); currentStep = 12; }
+    IEnumerator Step10()
+    {
+        yield return PlayAndWait(6);
+        currentStep = 12;
+    }
     IEnumerator Step11() { yield return null; }
     IEnumerator Step12() { yield return PlayAndWait(7); }
     IEnumerator Step13()
@@ -212,11 +235,11 @@ public class ScenarioManager : MonoBehaviour
         // HandkerGrabbed()가 호출될 때까지 대기
         yield return new WaitUntil(() => handkerGrabbed);
         Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
-        */
 
         // 출력된 대사가 바로 사라지지 않고,
         // 손수건 상호작용 완료할 때까지 화면에 유지
         // yield return null; -> 상호작용 기능 완료하면 다시 사용
+        */
     }
 
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
@@ -272,14 +295,17 @@ public class ScenarioManager : MonoBehaviour
         // 정답: 피난 유도선 선택 시 Step24로 이동
         if (selected == 1)
             currentStep = 23;
-
         // 오답: 익숙한 길 선택 시 Step25로 이동
         else
-            currentStep = 24; 
+            currentStep = 24;
     }
 
     // Step25 대사 출력 -> Step28 진행
-    IEnumerator Step25() { yield return PlayAndWait(16); currentStep = 27; }
+    IEnumerator Step25()
+    {
+        yield return PlayAndWait(16);
+        currentStep = 27;
+    }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27() { yield return PlayAndWait(17); }
     IEnumerator Step28()
@@ -301,16 +327,19 @@ public class ScenarioManager : MonoBehaviour
         // 정답: 계단 선택 시 Step32로 이동
         if (selected == 1)
             currentStep = 31;
-
         // 오답: 엘리베이터 선택 시 Step34로 이동
         else
-            currentStep = 33; 
+            currentStep = 33;
     }
 
     // Step32 대사 출력 -> Step35 진행
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
+    IEnumerator Step32()
+    {
+        yield return PlayAndWait(21);
+        currentStep = 34;
+    }
     IEnumerator Step33() { yield return null; }
-    IEnumerator Step34() { yield return PlayAndWait(22); } 
+    IEnumerator Step34() { yield return PlayAndWait(22); }
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
@@ -318,7 +347,11 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step36() { yield return PlayAndWait(24); }
     IEnumerator Step37() { yield return PlayAndWait(25); }
-    IEnumerator Step38() { yield return PlayAndWait(26); }
+    IEnumerator Step38() 
+    { 
+        yield return PlayAndWait(26); 
+        yield return StartCoroutine(ChangeScene(3)); 
+    }
 
     #endregion
 
@@ -330,7 +363,7 @@ public class ScenarioManager : MonoBehaviour
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
 
             // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
-            // 추후에 로딩중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
+            // 추후 로딩중 UI(로딩바, 문구 등) 표시 가능
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
@@ -344,20 +377,47 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 비활성화된 손수건 오브젝트 검색
-    //private GameObject FindInactiveObjectWithTag(string tag)
-    //{
-    //    GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-    //    foreach (GameObject obj in allObjects)
-    //    {
-    //        // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
-    //        if (obj.CompareTag(tag))
-    //        {
-    //            return obj;
-    //        }
-    //    }
-    //    return null;
-    //}
+    // 재사용 가능한 파티클 배치 메서드
+    // Inspector에서 설정한 particleSpawnPoints 리스트에 따라 파티클을 생성하고 실행합니다.
+    // (기존 PlayParticlesAtSpawnPoints 메서드에서도 smokeParticleData 활용)
+    public void PlayParticlesAtSpawnPoints()
+    {
+        if (smokeParticleData != null &&
+            smokeParticleData.smokeEffect != null &&
+            smokeParticleData.particleSpawnPoints != null &&
+            smokeParticleData.particleSpawnPoints.Count > 0)
+        {
+            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
+            {
+                if (spawnPoint != null)
+                {
+                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
+                    ps.Play();
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("파티클 설정(이펙트 혹은 배치 위치)이 올바르게 세팅되지 않았습니다.");
+        }
+    }
+
+    // 비활성화된 손수건 오브젝트 검색 (주석 처리)
+    /*
+    private GameObject FindInactiveObjectWithTag(string tag)
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
+            if (obj.CompareTag(tag))
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+    */
 
     /*
     // MouthDetector로부터 손수건과 충돌이 감지되면 호출
