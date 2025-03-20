@@ -11,8 +11,6 @@ public class RayController : MonoBehaviour
     [SerializeField] private XRInteractorLineVisual _leftLine;
     [SerializeField] private XRInteractorLineVisual _rightLine;
 
-    private bool isUIActive = false;
-
     private void Start()
     {
         // 시작할 땐 오른쪽 레이만 활성화
