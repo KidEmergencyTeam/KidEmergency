@@ -286,7 +286,7 @@ public class ScenarioManager : MonoBehaviour
 
     // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
     // Step35까지 화재 경보벨 사운드 출력
-    IEnumerator Step18() { yield return null; }
+    IEnumerator Step18() { yield return PlayAndWait(27); }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
     IEnumerator Step21() { yield return PlayAndWait(14); }
