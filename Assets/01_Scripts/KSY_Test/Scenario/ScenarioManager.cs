@@ -147,7 +147,7 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 대사 출력 및 타이핑 효과 완료까지 대기
+    // 텍스트 출력과 사운드 재생이 모두 완료될 때까지 대기
     public IEnumerator PlayAndWait(int index)
     {
         typingEffect.PlayTypingAtIndex(index);
