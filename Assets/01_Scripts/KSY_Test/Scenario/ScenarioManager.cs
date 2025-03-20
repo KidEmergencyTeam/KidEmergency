@@ -149,7 +149,6 @@ public class ScenarioManager : MonoBehaviour
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
-
     IEnumerator Step3()
     {
         // 위치 반영해서 파티클 실행 
@@ -374,31 +373,6 @@ public class ScenarioManager : MonoBehaviour
         else
         {
             Debug.LogError($"유효하지 않은 씬 인덱스: {sceneIndex}");
-        }
-    }
-
-    // 재사용 가능한 파티클 배치 메서드
-    // Inspector에서 설정한 particleSpawnPoints 리스트에 따라 파티클을 생성하고 실행합니다.
-    // (기존 PlayParticlesAtSpawnPoints 메서드에서도 smokeParticleData 활용)
-    public void PlayParticlesAtSpawnPoints()
-    {
-        if (smokeParticleData != null &&
-            smokeParticleData.smokeEffect != null &&
-            smokeParticleData.particleSpawnPoints != null &&
-            smokeParticleData.particleSpawnPoints.Count > 0)
-        {
-            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
-            {
-                if (spawnPoint != null)
-                {
-                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
-                    ps.Play();
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("파티클 설정(이펙트 혹은 배치 위치)이 올바르게 세팅되지 않았습니다.");
         }
     }
 
