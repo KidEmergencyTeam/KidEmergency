@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 화면을 점점 밝게(FadeIn) 혹은 점점 어둡게(FadeOut) 만드는 싱글톤 클래스
-public class FadeInOut : SingletonManager<FadeInOut>
+public class FadeInOut : MonoBehaviour
 {
     [SerializeField] private float fadedTime = 0.5f; // 페이드 효과가 진행되는 시간 (초)
     [SerializeField] private Image fadeInoutImg; // 페이드 효과를 적용할 이미지 (UI 패널)
