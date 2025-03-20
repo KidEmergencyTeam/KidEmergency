@@ -40,6 +40,9 @@ public class TypingEffect : MonoBehaviour
 
     // 타이핑 진행 여부 
     private bool isTyping = false;
+
+    // 시나리오 매니저에서 IsTyping을 통해 내부의 isTyping 값에 접근 가능
+    // 따라서 시나리오 매니저에서 직접 값을 수정할 수 없음
     public bool IsTyping { get { return isTyping; } }
 
     private void Awake()
