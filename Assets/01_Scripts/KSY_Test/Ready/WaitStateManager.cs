@@ -10,7 +10,7 @@ public class WaitStateManager : MonoBehaviour
     public TextMeshProUGUI waitStateText;
 
     [Header("다음 씬 이름")]
-    public string nextSceneName;
+    public string SceneName;
 
     [Header("게임 시작 대기 시간")]
     public float gameStartDelay = 2f;
@@ -76,7 +76,7 @@ public class WaitStateManager : MonoBehaviour
     // 모든 플레이어 준비 완료 시 씬 전환 실행
     void StartGame()
     {
-        if (string.IsNullOrEmpty(nextSceneName))
+        if (string.IsNullOrEmpty(SceneName))
         {
             Debug.LogError("다음 씬 이름이 설정되어 있지 않습니다.");
             return;
@@ -85,28 +85,38 @@ public class WaitStateManager : MonoBehaviour
         StartCoroutine(LoadSceneWithFadeOutAsync());
     }
 
-    // 페이드 아웃 효과 실행 후 비동기 씬 전환하는 코루틴
+    // 페이드 아웃 효과 실행 후  비동기 방식으로 씬 전환
     IEnumerator LoadSceneWithFadeOutAsync()
     {
-        // FadeInOut 컴포넌트가 연결되어 있지 않으면 바로 씬 전환
+        // fadeInOut null 상태라면 바로 씬 전환
         if (fadeInOut == null)
         {
             Debug.LogError("FadeInOut 컴포넌트가 연결되어 있지 않습니다.");
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
+
+            // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
+            // 추후에 로딩중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
             while (!asyncLoad.isDone)
             {
+                // 로딩 대기
                 yield return null;
             }
+
+            // fadeInOut null 상태라면
+            // 씬 전환 이후
+            // 코루틴을 명시적으로 종료
             yield break;
         }
 
-        // 페이드 아웃 효과 실행
+        // fadeInOut null 상태가 아니라면
+        // 페이드 아웃 효과 실행 이후
         yield return StartCoroutine(fadeInOut.FadeOut());
 
-        // 비동기로 씬 전환
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Single);
+        // 비동기 방식으로 씬 전환
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
         while (!asyncOperation.isDone)
         {
+            // 로딩 대기
             yield return null;
         }
     }

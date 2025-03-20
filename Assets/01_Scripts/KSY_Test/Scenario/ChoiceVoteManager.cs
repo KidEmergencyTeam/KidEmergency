@@ -10,12 +10,12 @@ public class ChoiceVoteManager : MonoBehaviour
     // 싱글톤 인스턴스. 다른 스크립트에서는 ChoiceVoteManager.Instance로 접근 가능
     public static ChoiceVoteManager Instance { get; private set; }
 
-    // 인스펙터에서 UI 패널 씬 오브젝트와 관련 설정을 할당
+    // 인스펙터에서 UI 패널 프리팹과 관련 설정을 할당
     [Serializable]
     public class ChoiceUIPanelSceneReference
     {
-        // 각 플레이어가 사용할 UI 패널 (씬 내에 배치된 오브젝트, 기본적으로 비활성화 상태여야 함)
-        public List<GameObject> panelInstances;
+        // 각 플레이어가 사용할 UI 패널 프리팹 (프리팹은 에셋이므로 직접 수정할 수 없으며, 인스턴스화해서 사용)
+        public List<GameObject> panelPrefabs;
 
         // 동률 발생 시 우선할 선택.
         // 예를 들어 1이면 첫 번째 선택지, 2면 두 번째 선택지를 우선 처리
@@ -23,13 +23,13 @@ public class ChoiceVoteManager : MonoBehaviour
         public int tieChoiceIndex;
     }
 
-    [Header("선택지 패널 씬 오브젝트 목록 (프리팹 사용하지 않음)")]
+    [Header("선택지 패널 프리팹 목록")]
     public List<ChoiceUIPanelSceneReference> choicePanelSceneReferences;
 
     [Header("선택지 처리 대기 시간")]
     public float choiceDelay = 2f;
 
-    // 선택지 라벨 배열. 예를 들어 첫 번째 선택지는 "A", 두 번째 선택지는 "B"로 사용됨.
+    // 선택지 라벨 배열. 예: 첫 번째 선택지는 "A", 두 번째 선택지는 "B"
     private string[] choiceLabels = { "A", "B" };
 
     // 활성화된 UI 패널과 해당 구성요소(Button, Text 등)를 저장하는 클래스
@@ -64,12 +64,19 @@ public class ChoiceVoteManager : MonoBehaviour
     {
         // 싱글톤 패턴 적용: 인스턴스가 없으면 현재 인스턴스를 할당, 이미 있으면 파괴
         if (Instance == null)
+        {
             Instance = this;
+
+            // 씬 전환 시에도 인스턴스 유지
+            DontDestroyOnLoad(gameObject); 
+        }
         else
+        {
             Destroy(gameObject);
+        }
     }
 
-    // 모든 플레이어에게 선택지 UI 패널 씬 오브젝트를 활성화하여 투표를 받고,
+    // 모든 플레이어에게 선택지 UI 패널을 인스턴스화하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
     public IEnumerator ShowChoiceAndGetResult(int choicePanelSceneReferenceIndex, Action<int> onResult)
     {
@@ -96,11 +103,11 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 선택한 씬 오브젝트 목록 정보와 동률 처리 우선순위 값 가져오기
+        // 선택한 프리팹 목록 정보와 동률 처리 우선순위 값 가져오기
         ChoiceUIPanelSceneReference sceneReference = choicePanelSceneReferences[choicePanelSceneReferenceIndex];
         int tieChoiceIndex = sceneReference.tieChoiceIndex;
 
-        // 씬 내에서 UI 패널이 배치된 캔버스 오브젝트 찾기 (패널이 캔버스의 자식이 아닐 경우 대비)
+        // 씬 내에서 UI 패널이 배치될 캔버스 오브젝트 찾기
         GameObject canvas = GameObject.Find("Canvas");
         if (canvas == null)
         {
@@ -109,26 +116,22 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 할당된 UI 패널 씬 오브젝트의 개수가 플레이어 수보다 충분한지 확인
-        if (sceneReference.panelInstances == null || sceneReference.panelInstances.Count < totalPlayers)
+        // 할당된 UI 패널 프리팹의 개수가 플레이어 수보다 충분한지 확인
+        if (sceneReference.panelPrefabs == null || sceneReference.panelPrefabs.Count < totalPlayers)
         {
-            Debug.LogError("[ChoiceVoteManager] 할당된 UI 패널의 수가 충분하지 않습니다. 필요한 패널 수: " + totalPlayers);
+            Debug.LogError("[ChoiceVoteManager] 할당된 UI 패널 프리팹의 수가 충분하지 않습니다. 필요한 패널 수: " + totalPlayers);
             onResult?.Invoke(1);
             yield break;
         }
 
-        // 각 플레이어마다 씬 내 UI 패널 오브젝트를 활성화 및 초기화, 버튼 이벤트 등록
+        // 각 플레이어마다 UI 패널을 인스턴스화 및 초기화, 버튼 이벤트 등록
         int panelIndex = 0;
         foreach (var player in players)
         {
-            GameObject panelInstance = sceneReference.panelInstances[panelIndex];
+            // 프리팹을 인스턴스화하여 캔버스의 자식으로 설정
+            GameObject panelPrefab = sceneReference.panelPrefabs[panelIndex];
             panelIndex++;
-
-            // 패널이 캔버스의 자식이 아닌 경우, 자식으로 설정 (필요시)
-            if (panelInstance.transform.parent != canvas.transform)
-            {
-                panelInstance.transform.SetParent(canvas.transform, false);
-            }
+            GameObject panelInstance = Instantiate(panelPrefab, canvas.transform);
             panelInstance.SetActive(true);
 
             // 새 UI 패널 객체 생성 및 초기화
@@ -171,14 +174,14 @@ public class ChoiceVoteManager : MonoBehaviour
         // 모든 투표를 집계하여 최종 선택 결정 (동률 시 tieChoiceIndex 사용)
         finalVoteResult = CalculateMajorityWithTie(tieChoiceIndex);
 
-        // 각 플레이어의 UI 패널을 최종 업데이트 후 비활성화
+        // 각 플레이어의 UI 패널을 최종 업데이트 후 파괴 처리
         foreach (var icp in playerPanels.Values)
         {
             // 최종 결과 반영
             UpdateVoteUI(icp);
 
-            // 씬 내 오브젝트이므로 제거하지 않고 비활성화 처리
-            icp.panel.SetActive(false);
+            // 인스턴스화된 오브젝트는 더 이상 필요 없으므로 파괴
+            Destroy(icp.panel);
         }
         playerPanels.Clear();
 
@@ -243,7 +246,7 @@ public class ChoiceVoteManager : MonoBehaviour
             }
         }
 
-        // 해당 선택지 반환
+        // 단일 후보가 있을 경우 해당 선택지를 반환
         if (topCandidates.Count == 1)
         {
             return topCandidates[0];

@@ -271,12 +271,14 @@ public class ScenarioManager : MonoBehaviour
 
         // 정답: 피난 유도선 선택 시 Step24로 이동
         if (selected == 1)
-            currentStep = 24;
+            currentStep = 23;
 
         // 오답: 익숙한 길 선택 시 Step25로 이동
         else
-            currentStep = 25; 
+            currentStep = 24; 
     }
+
+    // Step25 대사 출력 -> Step28 진행
     IEnumerator Step25() { yield return PlayAndWait(16); currentStep = 27; }
     IEnumerator Step26() { yield return null; }
     IEnumerator Step27() { yield return PlayAndWait(17); }
@@ -298,15 +300,15 @@ public class ScenarioManager : MonoBehaviour
 
         // 정답: 계단 선택 시 Step32로 이동
         if (selected == 1)
-            currentStep = 32;
+            currentStep = 31;
 
         // 오답: 엘리베이터 선택 시 Step34로 이동
         else
-            currentStep = 34; 
+            currentStep = 33; 
     }
 
     // Step32 대사 출력 -> Step35 진행
-    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 35; } 
+    IEnumerator Step32() { yield return PlayAndWait(21); currentStep = 34; } 
     IEnumerator Step33() { yield return null; }
     IEnumerator Step34() { yield return PlayAndWait(22); } 
     IEnumerator Step35()
@@ -320,12 +322,15 @@ public class ScenarioManager : MonoBehaviour
 
     #endregion
 
-    // 비동기 씬 전환 메서드 -> 동기에 비해 씬 전환이 매끄러움
+    // 비동기 방식으로 씬 전환
     IEnumerator ChangeScene(int sceneIndex)
     {
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
+
+            // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
+            // 추후에 로딩중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
