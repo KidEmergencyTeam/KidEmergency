@@ -33,10 +33,7 @@ public class TypingEffect : MonoBehaviour
     public string typingTextTag;
 
     [Header("타이핑 공통 속도")]
-    public float commonTypingSpeed = 0.05f;
-
-    // 대사 출력 전/후 대기 시간
-    private float sentenceDelay = 0.5f;
+    public float commonTypingSpeed = 0.14f;
 
     // 타이핑 진행 여부 
     private bool isTyping = false;
@@ -105,15 +102,11 @@ public class TypingEffect : MonoBehaviour
     IEnumerator PlaySingleText(MultilineString multiline)
     {
         isTyping = true;
-        
+
         // 타이핑과 사운드 재생을 함께 진행
         yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound, multiline.typingSound2));
-        
-        // 타이핑 및 사운드 재생이 끝난 후 추가 대기(다음 대사 출력 전 대기 시간)
-        yield return new WaitForSeconds(sentenceDelay);
 
-        // 시나리오 매니저에서 해당 값을 받으면
-        // 다음 코루틴으로 진행
+        // 시나리오 매니저에서 해당 값을 받으면 다음 코루틴으로 진행
         isTyping = false;
     }
 
