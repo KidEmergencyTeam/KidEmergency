@@ -388,14 +388,18 @@ public class ScenarioManager : MonoBehaviour
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
 
-            // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
-            // 추후 로딩중 UI(로딩바, 문구 등) 표시 가능
+            // 페이드 아웃 효과 실행
+            yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+
+            // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
-                // 로딩 대기
                 yield return null;
             }
+
+            // 씬 로드 후 페이드 인 효과 실행
+            yield return StartCoroutine(FadeInOut.Instance.FadeIn());
         }
         else
         {
