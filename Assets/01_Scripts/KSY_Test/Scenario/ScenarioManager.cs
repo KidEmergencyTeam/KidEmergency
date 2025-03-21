@@ -307,12 +307,12 @@ public class ScenarioManager : MonoBehaviour
             selected = r;
         }));
 
-        // 정답: 피난 유도선 선택 시 Step24로 이동
+        // 정답: 피난 유도선 선택 시 Step25로 이동
         if (selected == 1)
-            currentStep = 23;
-        // 오답: 익숙한 길 선택 시 Step25로 이동
-        else
             currentStep = 24;
+        // 오답: 익숙한 길 선택 시 Step27로 이동
+        else
+            currentStep = 26;
     }
 
     // Step25 대사 출력 -> Step28 진행
