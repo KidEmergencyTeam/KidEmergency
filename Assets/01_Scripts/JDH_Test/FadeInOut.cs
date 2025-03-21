@@ -22,10 +22,10 @@ public class FadeInOut : SingletonManager<FadeInOut>
     {
         if (fadeInoutImg != null)
         {
-            // 초기 설정: 페이드 이미지의 알파 값을 0으로 설정하여 화면이 보이도록 함
+            // 초기 설정: 페이드 이미지의 알파 값을 1으로 설정하여 화면이 보이도록 함
             Color color = fadeInoutImg.color;
-            // 투명하게 설정
-            color.a = 0f; 
+            // 불투명하게 설정
+            color.a = 1f; 
             fadeInoutImg.color = color;
         }
     }
