@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+// 상호작용에 따라 윤곽선 처리
 public class VRUIOutline : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Outline outline;
