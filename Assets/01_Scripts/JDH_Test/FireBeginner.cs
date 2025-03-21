@@ -1,6 +1,7 @@
 using EPOOutline;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -268,15 +269,59 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                     thirdDialog.gameObject.SetActive(true);
 					yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-
-
+					//손수건 생성
+					//손수건을 장착 시 마지막 대사 출력 후 이동
+					forthDialog.gameObject.SetActive(true);
+					yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+					//Scene 이동
+					SceneManager.LoadScene("JDH_Advanced2");
 						break;
 				case PLACE.STAIRS_ELEVATOR:
+                    // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                    LeftImg.sprite = leftChangeImg;
+                    RightImg.sprite = rightChangeImg;
+                    isFirstStepRdy = true;
+                    Debug.Log("예제 UI 첫 번째 단계 준비 완료");
+                    yield return new WaitUntil(() => isFirstStepRdy == true);
 
-					break;
+                    //2. 대화 종료 후 선택지 UI 출력(선택지에 따라 다른 대사 출력)
+                    exampleDescUi.SetActive(true);
+                    if (LeftImg.GetComponent<TestButton2>().isClick == true)
+                    {
+                        leftChoiceDialog.gameObject.SetActive(true);
+                        yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true);
+                    }
+                    else if (RightImg.GetComponent<TestButton2>().isClick == true)
+                    {
+                        rightChoiceDialog.gameObject.SetActive(true);
+                        yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true);
+                    }
+                    //3. 피난 유도선 Ray로 선택 시 Outline 강조, 대사종료 후 놀이터 Scene으로 이동
+                    secondDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => secondDialog.isDialogsEnd);
+                    //피난 유도선 Ray감지까지 대기
+                    //Ray감지 시  Outline 강조
+                    ActiveOutlineToChildren(emergencyExit);
+					isSecondStepRdy = true;
+					yield return new WaitUntil(() => isSecondStepRdy == true);
+					thirdDialog.gameObject.SetActive(true);
+					yield return new WaitUntil(() => thirdDialog.isDialogsEnd);
+					SceneManager.LoadScene("JDH_Advanced3");
+                    break;
 				case PLACE.OUTSIDE:
-
-					break;
+                    // 1. Fade In, Out 진행 후 첫 번째 대화 시작,대화 종료 후 TitleScene으로 이동
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+					SceneManager.LoadScene(0);
+                    break;
 
 			}
         }
