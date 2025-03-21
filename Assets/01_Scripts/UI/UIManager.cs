@@ -1,5 +1,3 @@
-using System;
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -91,12 +89,14 @@ public class UIManager : SingletonManager<UIManager>
                 if (camOffset.transform.position == _originPos)
                 {
                     DialogPosReset(0);
+                    WarningPosReset(1);
                     seti.SetRobotPos(seti.setiPos[0]);
                 }
 
                 else
                 {
                     DialogPosReset(1);
+                    WarningPosReset(0);
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
@@ -108,14 +108,14 @@ public class UIManager : SingletonManager<UIManager>
         {
             DialogPosReset(2);
             OptionPosReset(1);
-            WarningPosReset(1);
+            WarningPosReset(2);
         }
         
         else if (SceneManager.GetActiveScene().name == "JSY_StairEv")
         {
             DialogPosReset(3);
             OptionPosReset(2);
-            WarningPosReset(2);
+            WarningPosReset(3);
         }
         
         else if (SceneManager.GetActiveScene().name == "JSY_SchoolGround")

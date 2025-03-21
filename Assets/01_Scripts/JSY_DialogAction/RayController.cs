@@ -22,40 +22,67 @@ public class RayController : MonoBehaviour
     {
         if (UIActive())
         {
-            _rightRay.enabled = true;
-            _rightLine.enabled = true;
-
-            _leftRay.enabled = false;
-            _leftLine.enabled = false;
-            
-            // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
-            if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
+            if (_leftRay.enabled && _rightRay.enabled)
             {
-                SwitchLeftRay();
+                _rightRay.enabled = true;
+                _rightLine.enabled = true;
+                
+                _leftRay.enabled = false;
+                _leftLine.enabled = false;
             }
 
-            // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
-            else if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
+            else
             {
-                SwitchRightRay();
+                if (_leftRay.enabled)
+                {
+                    _leftLine.enabled = true;
+                    // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
+                    if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
+                    {
+                        SwitchRightRay();
+                    }
+                }
+
+                else
+                {
+                    _rightLine.enabled = true;
+                    // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
+                    if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
+                    {
+                        for (int i = 0; i < _leftController.transform.childCount; i++)
+                        {
+                            if (_leftController.transform.GetChild(i).name == "Bag")
+                            {
+                                return;
+                            }
+
+                            if(_leftController.transform.GetChild(i).name != "Bag")
+                            {
+                                SwitchLeftRay();
+                            }
+                        }
+                    }
+                }
             }
         }
 
+        
         else
         {
-            _leftRay.enabled = true;
-            _rightRay.enabled = true;
-            
-            _leftLine.enabled = false;
-            _rightLine.enabled = false;
-            
-            if (_leftController.transform.GetChild(4))
+            for (int i = 0; i < _leftController.transform.childCount; i++)
             {
-                _leftRay.enabled = false;
-            }
-            else
-            {
-                _leftRay.enabled = true;
+                if (_leftController.transform.GetChild(i).name == "Bag")
+                {
+                    _leftRay.enabled = false;
+                    _leftLine.enabled = false;
+                    _rightLine.enabled = false;
+                }
+
+                else
+                {
+                    _leftLine.enabled = false;
+                    _rightLine.enabled = false;
+                }
             }
         }
     }
