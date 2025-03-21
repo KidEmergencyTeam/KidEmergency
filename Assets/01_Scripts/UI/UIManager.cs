@@ -1,4 +1,5 @@
 using System;
+using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,10 @@ public class UIManager : SingletonManager<UIManager>
     public DialogUI dialogUI;
     public WarningUI warningUI;
 
+    public Transform[] dialogPos;
+    public Transform[] optionPos;
+    public Transform[] warningPos;
+    
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == "JSY_Start")
