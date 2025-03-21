@@ -5829,6 +5829,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905864646}
   m_Mesh: {fileID: -8670401986210828039, guid: b47ee7e21355ad94b9128dd099329700, type: 3}
+--- !u!1 &920534023 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1053880369360303302, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+  m_PrefabInstance: {fileID: 84133214}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &927780843
 GameObject:
   m_ObjectHideFlags: 0
@@ -6261,6 +6266,158 @@ MonoBehaviour:
   dialogDelay: 2
   audioSource: {fileID: 151235429}
   isDialogsEnd: 0
+--- !u!1 &1029074397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1029074400}
+  - component: {fileID: 1029074399}
+  - component: {fileID: 1029074398}
+  m_Layer: 0
+  m_Name: ' fire alarm'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!164 &1029074398
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029074397}
+  m_Enabled: 1
+  m_DryLevel: 0
+  m_Room: 0
+  m_RoomHF: 0
+  m_DecayTime: 16
+  m_DecayHFRatio: 0.5
+  m_ReflectionsLevel: -3368
+  m_ReverbLevel: 800
+  m_ReverbDelay: 0.1
+  m_Diffusion: 100
+  m_Density: 100
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0.3
+  m_ReverbPreset: 27
+--- !u!82 &1029074399
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029074397}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 0e46e93f7a0b6d4468c57ae284b398f3, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1029074400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029074397}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1040271311
 GameObject:
   m_ObjectHideFlags: 0
@@ -7076,7 +7233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1181319526
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7809,17 +7966,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   place: 0
   isEarthquakeBeginner: 0
-  player: {fileID: 0}
-  seti: {fileID: 0}
+  player: {fileID: 920534023}
+  seti: {fileID: 151235428}
   NPC: []
-  fadeInOutImg: {fileID: 0}
-  okBtn: {fileID: 0}
+  fadeInOutImg: {fileID: 2042630426}
+  okBtn: {fileID: 1878658400}
   warningUi: {fileID: 0}
-  exampleDescUi: {fileID: 0}
+  exampleDescUi: {fileID: 2145771513}
   leftHand: {fileID: 0}
-  playerUi: {fileID: 0}
+  playerUi: {fileID: 872987867}
   emergencyExit: {fileID: 0}
-  fireAlarm: {fileID: 0}
+  fireAlarm: {fileID: 1029074397}
   isHeadDown: 0
   headHeightThreshold: 0
   xrCamera: {fileID: 0}
@@ -7833,15 +7990,18 @@ MonoBehaviour:
   RightBtn: {fileID: 0}
   leftChangeImg: {fileID: 0}
   rightChangeImg: {fileID: 0}
-  descriptionText: {fileID: 0}
+  descriptionText: {fileID: 1908555513}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
   hasHandkerchief: 0
   ruleCheck: 0
-  firstDialog: {fileID: 0}
-  secondDialog: {fileID: 0}
-  thirdDialog: {fileID: 0}
-  forthDialog: {fileID: 0}
+  firstDialog: {fileID: 148890330}
+  secondDialog: {fileID: 1024297581}
+  thirdDialog: {fileID: 1675582422}
+  forthDialog: {fileID: 274612198}
+  fifthDialog: {fileID: 1383276149}
+  sixthDialog: {fileID: 1401458226}
+  seventhDialog: {fileID: 1812007459}
   leftChoiceDialog: {fileID: 0}
   rightChoiceDialog: {fileID: 0}
 --- !u!1 &1368604799
@@ -8015,10 +8175,9 @@ MonoBehaviour:
   dialogs:
   - dialogIndex: 0
     Name: "\uC138\uD2F0"
-    dialogue: "\uC598\uB4E4\uC544 \uBB34\uC12D\uACA0\uC9C0\uB9CC \uB4E4\uC5B4\uBD10
-      \uCC45\uC0C1 \uBC11\uC5D0 \uB4E4\uC5B4\uAC00 \uC788\uC744 \uB3D9\uC548 \uC8FC\uBCC0\uC5D0\uC11C
-      \uBA38\uB9AC\uB97C \uBCF4\uD638\uD560 \uBB3C\uAC74\uC744 \uCC3E\uC544\uC57C
-      \uD574"
+    dialogue: "\uCC45\uC0C1 \uC704\uC5D0 \uC788\uB358 \uAC00\uBC29\uC774 \uB5A8\uC5B4\uC838
+      \uC788\uC5B4 \uC800\uAC78 \uC0AC\uC6A9\uD574\uC11C \uBA38\uB9AC\uB97C \uBCF4\uD638\uD558\uB294
+      \uAC8C \uC88B\uC744 \uAEBC \uAC19\uC544"
     audioClip: {fileID: 0}
   - dialogIndex: 1
     Name: "\uC138\uD2F0"
@@ -8085,9 +8244,8 @@ MonoBehaviour:
   dialogs:
   - dialogIndex: 0
     Name: "\uC138\uD2F0"
-    dialogue: "\uC11C\uC11C\uD788 \uD754\uB4E4\uB9BC\uC774 \uC904\uC5B4\uB4E4\uACE0
-      \uC788\uC5B4 \uAC00\uBC29 \uC704\uCE58\uB97C \uD655\uC778\uD558\uACE0 \uCC45\uC0C1
-      \uBC11\uC5D0\uC11C \uB098\uAC08 \uC900\uBE44\uB97C \uD558\uC790"
+    dialogue: "\uBAA8\uB450 \uCC45\uC0C1 \uBC16\uC73C\uB85C \uB098\uC640\uB3C4 \uB420
+      \uAC70 \uAC19\uC544!"
     audioClip: {fileID: 0}
   - dialogIndex: 1
     Name: "\uC138\uD2F0"
@@ -12143,3 +12301,4 @@ SceneRoots:
   - {fileID: 760835099}
   - {fileID: 1332082414}
   - {fileID: 1231277318}
+  - {fileID: 1029074400}

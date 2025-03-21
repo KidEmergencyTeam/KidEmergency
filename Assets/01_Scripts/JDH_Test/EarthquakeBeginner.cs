@@ -63,7 +63,6 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool ruleCheck;
 
     [Header("대화 시스템")][SerializeField] private BeginnerDialogSystem firstDialog;
-
     [SerializeField] private BeginnerDialogSystem secondDialog;
     [SerializeField] private BeginnerDialogSystem thirdDialog;
     [SerializeField] private BeginnerDialogSystem forthDialog;
@@ -92,7 +91,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 //2. 화면이 조금씩 흔들리며 경보음이 울리고 서랍장 같은 물체가 넘어지고 지진 소리가 시작됨
-
+                fireAlarm.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
@@ -132,11 +131,45 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH_Earth3");
                 break;
-            case PLACE.STAIRS_ELEVATOR:
 
+            case PLACE.STAIRS_ELEVATOR:
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                //미리 선택지 이미지 변경
+                LeftImg.sprite = leftChangeImg;
+                RightImg.sprite = rightChangeImg;
+                isFirstStepRdy = true;
+                yield return new WaitUntil(() => isFirstStepRdy == true);
+
+                // 2.계단과 엘리베이터 선택지가 유저에게 보여짐, 버튼 선택 후 대사 진행
+                exampleDescUi.gameObject.SetActive(true);
+                //
+                LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
+                RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
+                yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true);
+
+                //3.세 번째 대화 진행 이후
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //Scene이동
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth4");
                 break;
             case PLACE.OUTSIDE:
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
+                //Scene이동
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene(0);  //타이틀로 이동
                 break;
         }
 
