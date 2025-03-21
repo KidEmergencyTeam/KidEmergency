@@ -4,7 +4,6 @@ using UnityEngine.UI;
 // UI Image 컴포넌트를 FadeInOut.cs에 연결
 public class FadeInOutImage : MonoBehaviour
 {
-    // Inspector에서 할당할 이미지 (Fade 패널의 Image 컴포넌트)
     [SerializeField] private Image fadeImage;
 
     void Start()
