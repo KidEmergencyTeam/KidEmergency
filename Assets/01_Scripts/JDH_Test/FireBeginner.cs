@@ -15,8 +15,7 @@ public class FireBeginner : MonoBehaviour
 		HALLWAY,
 		STAIRS_ELEVATOR,
 		OUTSIDE,
-		LIVINGROOM,
-        Kitchen,
+		House,
     };
 
 	[Header("시작 장소")] public PLACE place;
@@ -64,6 +63,8 @@ public class FireBeginner : MonoBehaviour
 	public bool isSecondStepRdy;
 	public bool hasHandkerchief;
 	public bool iscoverFace;
+	public bool isInLivingRoom;
+	public bool isInKitchen;
 
 	public bool
 		ruleCheck; //손수건을 획득한 후 경고창을 띄우기 위해 경고 지점을 설정하는 변수 (해당 변수가 true된 시점부터 경고가 출력)
@@ -89,7 +90,6 @@ public class FireBeginner : MonoBehaviour
                 // 교실
                 case PLACE.CLASSROOM:
                     // 1. 첫 번째 대화 시작
-                    // fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                     firstDialog.gameObject.SetActive(true);
@@ -214,10 +214,24 @@ public class FireBeginner : MonoBehaviour
                     break;
             }
         }
+		//화재 고급 시나리오 진행
 		else if(isFireAdvanced)
 		{
+			switch(place)
+			{
+				case PLACE.House:
 
-		}
+					break;
+
+			}
+            // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
+            StartCoroutine(FadeInOut.Instance.FadeIn());
+            yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+            firstDialog.gameObject.SetActive(true);
+            yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+			//2. 
+        }
 		
 	}
 
