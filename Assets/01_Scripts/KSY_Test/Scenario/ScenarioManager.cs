@@ -78,49 +78,59 @@ public class ScenarioManager : MonoBehaviour
 
         // 스텝별 시나리오 정의
         scenarioSteps = new Dictionary<int, Func<IEnumerator>>()
-        {
-            { 1, Step1 },
-            { 2, Step2 },
-            { 3, Step3 },
-            { 4, Step4 },
-            { 5, Step5 },
-            { 6, Step6 },
-            { 7, Step7 },
-            { 8, Step8 },
-            { 9, Step9 },
-            { 10, Step10 },
-            { 11, Step11 },
-            { 12, Step12 },
-            { 13, Step13 },
-            { 14, Step14 },
-            { 15, Step15 },
-            { 16, Step16 },
-            { 17, Step17 },
-            { 18, Step18 },
-            { 19, Step19 },
-            { 20, Step20 },
-            { 21, Step21 },
-            { 22, Step22 },
-            { 23, Step23 },
-            { 24, Step24 },
-            { 25, Step25 },
-            { 26, Step26 },
-            { 27, Step27 },
-            { 28, Step28 },
-            { 29, Step29 },
-            { 30, Step30 },
-            { 31, Step31 },
-            { 32, Step32 },
-            { 33, Step33 },
-            { 34, Step34 },
-            { 35, Step35 },
-            { 36, Step36 },
-            { 37, Step37 },
-            { 38, Step38 }
-        };
+    {
+        { 1, Step1 },
+        { 2, Step2 },
+        { 3, Step3 },
+        { 4, Step4 },
+        { 5, Step5 },
+        { 6, Step6 },
+        { 7, Step7 },
+        { 8, Step8 },
+        { 9, Step9 },
+        { 10, Step10 },
+        { 11, Step11 },
+        { 12, Step12 },
+        { 13, Step13 },
+        { 14, Step14 },
+        { 15, Step15 },
+        { 16, Step16 },
+        { 17, Step17 },
+        { 18, Step18 },
+        { 19, Step19 },
+        { 20, Step20 },
+        { 21, Step21 },
+        { 22, Step22 },
+        { 23, Step23 },
+        { 24, Step24 },
+        { 25, Step25 },
+        { 26, Step26 },
+        { 27, Step27 },
+        { 28, Step28 },
+        { 29, Step29 },
+        { 30, Step30 },
+        { 31, Step31 },
+        { 32, Step32 },
+        { 33, Step33 },
+        { 34, Step34 },
+        { 35, Step35 },
+        { 36, Step36 },
+        { 37, Step37 },
+        { 38, Step38 }
+    };
+
+        // FadeIn 효과 후 시나리오 실행
+        StartCoroutine(StartSequence());
+    }
+
+    // FadeIn 효과가 완료된 후 시나리오를 실행하는 코루틴
+    private IEnumerator StartSequence()
+    {
+        // 페이드 인 효과 실행 및 완료 대기
+        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
 
         // 시나리오 실행 시작
-        StartCoroutine(RunScenario());
+        yield return StartCoroutine(RunScenario());
     }
 
     // 시나리오를 순차적으로 실행
