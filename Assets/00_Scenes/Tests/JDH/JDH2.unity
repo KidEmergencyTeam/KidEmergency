@@ -295,7 +295,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 73f68c2555aad734480eca606f786340, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
-  dialogDelay: 2
+  dialogDelay: 2.5
   audioSource: {fileID: 1304727627}
   isDialogsEnd: 0
 --- !u!1 &32629425
@@ -5104,7 +5104,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 35dadcf8a7a5579428b39f503d24ff61, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
-  dialogDelay: 2
+  dialogDelay: 2.5
   audioSource: {fileID: 1304727627}
   isDialogsEnd: 0
 --- !u!1 &844227129
@@ -6419,6 +6419,8 @@ MonoBehaviour:
   smokeParticles: {fileID: 0}
   LeftImg: {fileID: 1606703036}
   RightImg: {fileID: 173084531}
+  LeftBtn: {fileID: 0}
+  RightBtn: {fileID: 0}
   leftChangeImg: {fileID: 21300000, guid: cfa663a1a97148d4493d6d0f68c26f16, type: 3}
   rightChangeImg: {fileID: 21300000, guid: 1ab8436a8153361418e99680a18eb534, type: 3}
   descriptionText: {fileID: 1166883087}
@@ -6426,10 +6428,15 @@ MonoBehaviour:
   isSecondStepRdy: 0
   hasHandkerchief: 0
   iscoverFace: 0
+  isInLivingRoom: 0
+  isInKitchen: 0
   ruleCheck: 0
   firstDialog: {fileID: 823183684}
   secondDialog: {fileID: 1671671207}
   thirdDialog: {fileID: 27465845}
+  forthDialog: {fileID: 0}
+  leftChoiceDialog: {fileID: 0}
+  rightChoiceDialog: {fileID: 0}
 --- !u!4 &1064976829
 Transform:
   m_ObjectHideFlags: 0
@@ -8108,7 +8115,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0e46e93f7a0b6d4468c57ae284b398f3, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -10862,7 +10869,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 63d0760a8914cdc43b3a732d7c745f88, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
-  dialogDelay: 2
+  dialogDelay: 2.5
   audioSource: {fileID: 1304727627}
   isDialogsEnd: 0
 --- !u!1 &1678308285

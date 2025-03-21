@@ -2264,7 +2264,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 19c4b7f2a7f131040bb5dad8c12dc66d, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
-  dialogDelay: 2
+  dialogDelay: 2.5
   audioSource: {fileID: 1470056313}
   isDialogsEnd: 0
 --- !u!1001 &346420910
@@ -2976,7 +2976,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0e46e93f7a0b6d4468c57ae284b398f3, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4666,6 +4666,8 @@ MonoBehaviour:
   smokeParticles: {fileID: 597870126}
   LeftImg: {fileID: 1307052642}
   RightImg: {fileID: 319427448}
+  LeftBtn: {fileID: 0}
+  RightBtn: {fileID: 0}
   leftChangeImg: {fileID: 21300000, guid: cfa663a1a97148d4493d6d0f68c26f16, type: 3}
   rightChangeImg: {fileID: 21300000, guid: 1ab8436a8153361418e99680a18eb534, type: 3}
   descriptionText: {fileID: 518355756}
@@ -4673,10 +4675,15 @@ MonoBehaviour:
   isSecondStepRdy: 0
   hasHandkerchief: 0
   iscoverFace: 0
+  isInLivingRoom: 0
+  isInKitchen: 0
   ruleCheck: 0
   firstDialog: {fileID: 1321544152}
   secondDialog: {fileID: 327445259}
   thirdDialog: {fileID: 761118860}
+  forthDialog: {fileID: 0}
+  leftChoiceDialog: {fileID: 0}
+  rightChoiceDialog: {fileID: 0}
 --- !u!1001 &700163010
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4983,7 +4990,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: d848625f57c1223439d50b87a02cb510, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
-  dialogDelay: 2
+  dialogDelay: 2.5
   audioSource: {fileID: 1470056313}
   isDialogsEnd: 0
 --- !u!1001 &768283331
@@ -9219,7 +9226,7 @@ MonoBehaviour:
   - dialogIndex: 0
     Name: "\uC138\uD2F0"
     dialogue: "\uC548\uB155 \uB0B4 \uC774\uB984\uC740 \uC138\uD2F0\uC57C \uC774\uBC88
-      \uC2DC\uAC04\uC5D0\uB294 \uC720\uCE58\uC6D0\uC5D0\uC11C \uBD88\uC774 \uB0AC\uC744
+      \uC2DC\uAC04\uC5D0\uB294 \n\uC720\uCE58\uC6D0\uC5D0\uC11C \uBD88\uC774 \uB0AC\uC744
       \uB54C \uC5B4\uB5BB\uAC8C \uD574\uC57C\uD558\uB294\uC9C0 \uAC19\uC774 \uC54C\uC544\uBCFC\uAEBC\uC57C"
     audioClip: {fileID: 8300000, guid: ff3fbfdc146f49d48907abbbdc237ffe, type: 3}
   - dialogIndex: 1
@@ -9239,7 +9246,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 79efbd91b4fea5b4ab0630127944a4ab, type: 3}
   isAutoStart: 1
   typingSpeed: 0.13
-  dialogDelay: 2
+  dialogDelay: 3
   audioSource: {fileID: 1470056313}
   isDialogsEnd: 0
 --- !u!1 &1327974614
