@@ -21,7 +21,7 @@ public class FireBeginner : MonoBehaviour
 
 	[Header("화재 상황 여부")] public bool isFireBeginner;
 
-	public bool isEarthquake;
+	public bool isFireAdvanced;
 
 	[Header("NPC 및 플레이어 이동 관련 설정")] public GameObject player; // 플레이어의 시작 위치
 	public GameObject seti;
@@ -80,135 +80,143 @@ public class FireBeginner : MonoBehaviour
 	// 게임 시작 시 실행
 	IEnumerator Start()
 	{
-		switch (place)
+		if(isFireBeginner)
 		{
-			// 교실
-			case PLACE.CLASSROOM:
-				// 1. 첫 번째 대화 시작
-				// fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+            switch (place)
+            {
+                // 교실
+                case PLACE.CLASSROOM:
+                    // 1. 첫 번째 대화 시작
+                    // fadeInOutImg.StartCoroutine(fadeInOutImg.FadeIn());
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-				// 2. 화재 상황 안내 대화 시작 및 화재 경보 작동
-				secondDialog.gameObject.SetActive(true);
-				fireAlarm.SetActive(true);
-				Debug.Log("화재 경보 작동.");
-				SmokeObjsActive(); //모든 연기 파티클 활성화
-				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+                    // 2. 화재 상황 안내 대화 시작 및 화재 경보 작동
+                    secondDialog.gameObject.SetActive(true);
+                    fireAlarm.SetActive(true);
+                    Debug.Log("화재 경보 작동.");
+                    SmokeObjsActive(); //모든 연기 파티클 활성화
+                    yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-				// 3. OK 버튼 활성화 및 버튼 클릭 대기
-				okBtn.gameObject.SetActive(true);
-				Debug.Log("OK 버튼 활성화");
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				// 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
-				LeftImg.sprite = leftChangeImg;
-				RightImg.sprite = rightChangeImg;
-				isFirstStepRdy = true;
-				Debug.Log("예제 UI 첫 번째 단계 준비 완료");
+                    // 3. OK 버튼 활성화 및 버튼 클릭 대기
+                    okBtn.gameObject.SetActive(true);
+                    Debug.Log("OK 버튼 활성화");
+                    yield return new WaitUntil(() => okBtn.isClick == true);
+                    // 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
+                    LeftImg.sprite = leftChangeImg;
+                    RightImg.sprite = rightChangeImg;
+                    isFirstStepRdy = true;
+                    Debug.Log("예제 UI 첫 번째 단계 준비 완료");
 
-				// 4. 첫 단계 준비 완료 후 OK 버튼 비활성화 및 예제 UI 활성화
-				yield return new WaitUntil(() => isFirstStepRdy == true);
-				okBtn.gameObject.SetActive(false);
-				exampleDescUi.SetActive(true);
-				Debug.Log("OK 버튼 비활성화 및 예제 UI 활성화");
-				// 손수건(핸드커치) 활성화
-				handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
-				Debug.Log("손수건 활성화");
-				SetAllNpcState(NpcRig.State.Hold); // 모든 NPC 상태를 Hold로 설정
+                    // 4. 첫 단계 준비 완료 후 OK 버튼 비활성화 및 예제 UI 활성화
+                    yield return new WaitUntil(() => isFirstStepRdy == true);
+                    okBtn.gameObject.SetActive(false);
+                    exampleDescUi.SetActive(true);
+                    Debug.Log("OK 버튼 비활성화 및 예제 UI 활성화");
+                    // 손수건(핸드커치) 활성화
+                    handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
+                    Debug.Log("손수건 활성화");
+                    SetAllNpcState(NpcRig.State.Hold); // 모든 NPC 상태를 Hold로 설정
 
-				// 5. 손수건 사용 및 얼굴 가리기 완료 대기
-				yield return new WaitUntil(() =>
-					hasHandkerchief == true && iscoverFace == true);
-				Debug.Log("손수건 사용 및 얼굴 가리기 완료");
-				exampleDescUi.SetActive(false);
-				ruleCheck = true; //해당 시점부터 손수건 경고 출력
+                    // 5. 손수건 사용 및 얼굴 가리기 완료 대기
+                    yield return new WaitUntil(() =>
+                        hasHandkerchief == true && iscoverFace == true);
+                    Debug.Log("손수건 사용 및 얼굴 가리기 완료");
+                    exampleDescUi.SetActive(false);
+                    ruleCheck = true; //해당 시점부터 손수건 경고 출력
 
-				// 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				Debug.Log("플레이어 및 NPC 이동");
-				TeleportCharacters();
-				AdjustUiTransform();
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				isSecondStepRdy = true;
-				yield return new WaitUntil(() => isSecondStepRdy == true);
+                    // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                    Debug.Log("플레이어 및 NPC 이동");
+                    TeleportCharacters();
+                    AdjustUiTransform();
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    isSecondStepRdy = true;
+                    yield return new WaitUntil(() => isSecondStepRdy == true);
 
-				// 7. 추가 대화 진행 후 얼굴 가리기 완료 대기, 페이드 아웃 후 씬 전환
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() =>
-					thirdDialog.isDialogsEnd == true && iscoverFace == true);
-				fadeInOutImg.gameObject.SetActive(true);
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-				SceneManager.LoadScene("JDH2");
-				break;
+                    // 7. 추가 대화 진행 후 얼굴 가리기 완료 대기, 페이드 아웃 후 씬 전환
+                    thirdDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() =>
+                        thirdDialog.isDialogsEnd == true && iscoverFace == true);
+                    fadeInOutImg.gameObject.SetActive(true);
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
+                    SceneManager.LoadScene("JDH2");
+                    break;
 
-			// 복도
-			case PLACE.HALLWAY:
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
-				ruleCheck = true;
-				hasHandkerchief = true;
-				// 1. 첫 번째 대화 종료 대기
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 복도
+                case PLACE.HALLWAY:
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
+                    ruleCheck = true;
+                    hasHandkerchief = true;
+                    // 1. 첫 번째 대화 종료 대기
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-				// 2. 두 번째 대화 시작 및 비상구에 아웃라인 활성화
-				secondDialog.gameObject.SetActive(true);
-				ActiveOutlineToChildren(emergencyExit);
-				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+                    // 2. 두 번째 대화 시작 및 비상구에 아웃라인 활성화
+                    secondDialog.gameObject.SetActive(true);
+                    ActiveOutlineToChildren(emergencyExit);
+                    yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-				// 3. 세 번째 대화 시작 및 머리 숙이기, 얼굴 가리기 완료 대기 후 씬 전환
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-				yield return new WaitUntil(() =>
-					isHeadDown == true && iscoverFace == true);
+                    // 3. 세 번째 대화 시작 및 머리 숙이기, 얼굴 가리기 완료 대기 후 씬 전환
+                    thirdDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                    yield return new WaitUntil(() =>
+                        isHeadDown == true && iscoverFace == true);
 
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-				SceneManager.LoadScene("JDH3");
-				break;
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
+                    SceneManager.LoadScene("JDH3");
+                    break;
 
-			// 계단/엘리베이터
-			case PLACE.STAIRS_ELEVATOR:
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
-				ruleCheck = true;
-				hasHandkerchief = true;
-				// 1. 첫 번째 대화 종료 대기
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 계단/엘리베이터
+                case PLACE.STAIRS_ELEVATOR:
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
+                    ruleCheck = true;
+                    hasHandkerchief = true;
+                    // 1. 첫 번째 대화 종료 대기
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-				// 2. OK 버튼 활성화 후 클릭 대기
-				okBtn.gameObject.SetActive(true);
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				okBtn.gameObject.SetActive(false);
-				// 머리 숙이기와 얼굴 가리기 완료 대기 후 씬 전환
-				yield return new WaitUntil(() =>
-					isHeadDown == true && iscoverFace == true);
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-				SceneManager.LoadScene("JDH4");
-				break;
+                    // 2. OK 버튼 활성화 후 클릭 대기
+                    okBtn.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => okBtn.isClick == true);
+                    okBtn.gameObject.SetActive(false);
+                    // 머리 숙이기와 얼굴 가리기 완료 대기 후 씬 전환
+                    yield return new WaitUntil(() =>
+                        isHeadDown == true && iscoverFace == true);
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
+                    SceneManager.LoadScene("JDH4");
+                    break;
 
-			// 외부
-			case PLACE.OUTSIDE:
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
-				// 외부에서는 첫 번째 대화만 실행
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 외부
+                case PLACE.OUTSIDE:
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
+                    // 외부에서는 첫 번째 대화만 실행
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-				//대사 종료되면 FadeOut 진행 후 Title Scene 이동
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-				isFirstStepRdy = true;
-				yield return new WaitUntil(() => isFirstStepRdy == true);
-				SceneManager.LoadScene(0); //Title로 복귀 
-				break;
+                    //대사 종료되면 FadeOut 진행 후 Title Scene 이동
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
+                    isFirstStepRdy = true;
+                    yield return new WaitUntil(() => isFirstStepRdy == true);
+                    SceneManager.LoadScene(0); //Title로 복귀 
+                    break;
+            }
+        }
+		else if(isFireAdvanced)
+		{
+
 		}
+		
 	}
 
 	private void Update()
