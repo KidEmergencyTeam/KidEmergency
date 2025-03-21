@@ -242,17 +242,34 @@ public class FireBeginner : MonoBehaviour
                     RightImg.sprite = rightChangeImg;
                     isFirstStepRdy = true;
                     Debug.Log("예제 UI 첫 번째 단계 준비 완료");
-                    // 4. 첫 단계 준비 완료 후 선택지 UI 출력
                     yield return new WaitUntil(() => isFirstStepRdy == true);
-					exampleDescUi.SetActive(true);
+                    // 4. 첫 단계 준비 완료 후 선택지 UI 출력 선택지에 따라 다른 대사 출력
+                    exampleDescUi.SetActive(true);
 					if (LeftImg.GetComponent<TestButton2>().isClick == true)
 					{
-
+						leftChoiceDialog.gameObject.SetActive(true);
+						yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true);
 					}
 					else if (RightImg.GetComponent<TestButton2>().isClick == true)
 					{
+                        rightChoiceDialog.gameObject.SetActive(true);
+                        yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true);
+                    }
+					//5. 주방으로 이동 현재 위치 변수가 일치하면 이동 후 세번째 대사 실행
+					isInLivingRoom = false;
+					isInKitchen = true;
+					yield return new WaitUntil(() => isInLivingRoom == false && isInKitchen == true);
+                    //주방으로 이동 (fade in, out모두 실행 후 대사 출력)
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
+					//주방으로 이동
 
-					}
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    thirdDialog.gameObject.SetActive(true);
+					yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+
+
 						break;
 				case PLACE.STAIRS_ELEVATOR:
 
