@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class Grabber : MonoBehaviour
 {
 	public Animator handAnimator;
+	public HandAnimation handAnimation;
 	public InputActionProperty interactor;
 	public Grabbable currentGrabbable;
 	public bool isLeft = true;
@@ -53,7 +54,9 @@ public class Grabber : MonoBehaviour
 	{
 		print("OnGrab");
 		currentGrabbable = grabbable;
-
+		handAnimation.enabled = false;
+		if (isLeft) handAnimation.animator.SetFloat("Left Trigger", 1);
+		else handAnimation.animator.SetFloat("Right Trigger", 1);
 		if (currentGrabbable.isMoving)
 		{
 			currentGrabbable.isGrabbable = false;
