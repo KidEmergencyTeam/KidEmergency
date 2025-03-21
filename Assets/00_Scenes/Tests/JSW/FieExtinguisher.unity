@@ -122,11 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &173117838 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3824467109407068088, guid: b708ed653cceedc46a13a9fd3f5978e0, type: 3}
-  m_PrefabInstance: {fileID: 651592499}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &173117842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6685224542021039929, guid: b708ed653cceedc46a13a9fd3f5978e0, type: 3}
@@ -345,6 +340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 6788582550832643371}
+  handAnimation: {fileID: 1873768016884425358}
   interactor:
     m_UseReference: 1
     m_Action:
@@ -704,10 +700,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrabbable: 1
-  posOffset: {x: 0, y: -0.5, z: -0.03}
-  rotOffset: {x: -0.49999997, y: -0.49999997, z: -0.49999997}
+  posOffset: {x: 0, y: 0, z: 0}
+  rotOffset: {x: 0, y: 0, z: 0}
   currentGrabber: {fileID: 0}
-  realMovingObject: {fileID: 173117838}
+  realMovingObject: {fileID: 1433492495}
   isLeft: 0
   isMoving: 1
 --- !u!114 &1292491180
@@ -738,7 +734,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -1058,6 +1054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handAnimator: {fileID: 6788582550832643371}
+  handAnimation: {fileID: 1873768016884425358}
   interactor:
     m_UseReference: 1
     m_Action:
