@@ -310,8 +310,30 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step20() { yield return PlayAndWait(13); }
 
     // Step21 대사 출력 이후
-    // 피난 유도선 아웃라인 효과 실행 (강조만) -> Emergency_Exit
-    IEnumerator Step21() { yield return PlayAndWait(14); }
+    // 피난 유도선 아웃라인 효과 실행 -> Emergency_Exit 오브젝트 대상
+    IEnumerator Step21()
+    {
+        // 태그가 "SafetyLine"인 오브젝트들을 모두 찾음
+        GameObject[] safetyLineObjects = GameObject.FindGameObjectsWithTag("SafetyLine");
+
+        foreach (GameObject obj in safetyLineObjects)
+        {
+            // 각 오브젝트에서 ToggleOutlinable 컴포넌트 가져오기
+            ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
+
+            if (toggleComp != null)
+            {
+                // Outlinable 활성화 (false에서 true로 전환)
+                toggleComp.OutlinableEnabled = true;
+            }
+            else
+            {
+                Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
+            }
+        }
+
+        yield return PlayAndWait(14);
+    }
 
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
