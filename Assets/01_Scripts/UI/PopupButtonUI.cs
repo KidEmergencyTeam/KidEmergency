@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PopupButtonUI : OutlineHighlight
 {
     private Button _button;
-
+    [HideInInspector] public bool isPopup = true;
     protected override void Awake()
     {
         base.Awake();

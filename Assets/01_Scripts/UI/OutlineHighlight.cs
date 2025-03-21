@@ -15,11 +15,38 @@ public class OutlineHighlight : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        outline.color = Color.green;
+        if (TitleUI.Instance != null)
+        {
+            if (!TitleUI.Instance.IsPopupOpen())
+            {
+                outline.color = Color.green;
+            }
+
+            if (TitleUI.Instance.IsPopupOpen() && CompareTag("PopupUI"))
+            {
+                outline.color = Color.green;
+            }
+        }
+        else
+        {
+            outline.color = Color.green;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // if (TitleUI.Instance != null)
+        // {
+        //     if (!TitleUI.Instance.IsPopupOpen())
+        //     {
+        //         outline.color = _originalOutlineColor;
+        //     }
+        // }
+        // else
+        // {
+        //     outline.color = _originalOutlineColor;
+        // }
+        
         outline.color = _originalOutlineColor;
     }
 }

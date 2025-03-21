@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class TitleUI : MonoBehaviour
 {
@@ -33,7 +31,6 @@ public class TitleUI : MonoBehaviour
         hardPanel.SetActive(false);
         currentMenu = "Normal";
     }
-
     public void SetCurrentMenuUI()
     {
         for (int i = 0; i < menus.Count; i++)
@@ -74,4 +71,13 @@ public class TitleUI : MonoBehaviour
         popup.highlightText[1] = modeText;
     }
 
+    public bool IsPopupOpen()
+    {
+        if (popup.gameObject.activeSelf)
+        {
+            return true;
+        }
+
+        else return false;
+    }
 }
