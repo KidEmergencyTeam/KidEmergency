@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class DialogManager : SingletonManager<DialogManager>
 {
-    private void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
+    public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
     {
         StartCoroutine(ShowDialog());
     }
 
     public IEnumerator ShowDialog()
     {
+        RobotController robot = FindObjectOfType<RobotController>();
+        
         UIManager.Instance.dialogUI.dialogPanel.SetActive(true); 
 
         foreach (string dialog in ActionManager.Instance.currentDialog.dialogs)
@@ -20,7 +22,7 @@ public class DialogManager : SingletonManager<DialogManager>
         }
         
         UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
-        RobotController.Instance.SetBasic();
+        robot.SetBasic();
         
         if (ActionManager.Instance.currentDialog.choices.Length > 0)
         {

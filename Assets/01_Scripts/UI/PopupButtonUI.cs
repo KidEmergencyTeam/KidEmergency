@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PopupButtonUI : OutlineHighlight
 {
     private Button _button;
-
+    [HideInInspector] public bool isPopup = true;
     protected override void Awake()
     {
         base.Awake();
@@ -25,13 +25,23 @@ public class PopupButtonUI : OutlineHighlight
             }
             else
             {
-                StartCoroutine(TitleUI.Instance.ChangeScene());
+                if (TitleUI.Instance.nextScene != "")
+                {
+                    print(TitleUI.Instance.nextScene);
+                    StartCoroutine(TitleUI.Instance.ChangeScene());
+                }
+
+                else
+                {
+                    print("nextScene null");
+                } 
             }
         }
         
         else if (this.transform.name == "No")
         {
             TitleUI.Instance.popup.gameObject.SetActive(false);
+            outline.color = _originalOutlineColor;
         }
     }
     

@@ -50,7 +50,7 @@ public class ReadyUI : MonoBehaviour
             yield return new WaitForSeconds(2f);
             yield return StartCoroutine(FadeInOut.Instance.FadeOut());
             
-            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
+            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
         
             while(!asyncChange.isDone)
             {

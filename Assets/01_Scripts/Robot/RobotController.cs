@@ -1,34 +1,25 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class RobotController : SingletonManager<RobotController>
+public class RobotController : MonoBehaviour
 {
     public float speed = 1.0f;
     public Rob11ColorManager robotColorManager;
     public EmotionChanger emotionChanger;
-
-    [Header("Repeat time for some animations")]
-    public int playCount = 1; // Cyclyc Animations repeat time
-    private int currentPlayCount = 0;
-    private int currentNumber = 0; 
-    int N = 2;             
-
-    private string animationName = "YourAnimationName";
-    public string pushableTag = "Pushable";
+    public Transform[] setiPos;
     
-    int emo_i = 0;
-
-    Animator anim;
+    private Animator _anim;
     
     void Start()
     {
-        anim = GetComponent<Animator>();
-        anim.SetFloat("speedMultiplier", speed);
+        _anim = GetComponent<Animator>();
+        _anim.SetFloat("speedMultiplier", speed);
     }
 
     public void SetAnimaiton(string animName)
     {
-        anim.SetBool(animName, true);
+        _anim.SetBool(animName, true);
     }
     
     // ㅁuㅁ 표정 ex) 기본 표정
@@ -62,6 +53,12 @@ public class RobotController : SingletonManager<RobotController>
         robotColorManager.ChangeBodyColor(emoNumber); 
         emotionChanger.SetEmotionEyes(emoNumber); 
         emotionChanger.SetEmotionMouth(emoNumber);
+    }
+
+    public void SetRobotPos(Transform parent)
+    {
+        this.transform.SetParent(parent);
+        this.transform.localPosition = Vector3.zero;
     }
 }
 

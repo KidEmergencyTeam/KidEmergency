@@ -33,9 +33,11 @@ public class OptionUI : OutlineHighlight
     
     private void OptionClicked()
     {
+        RobotController robot = FindObjectOfType<RobotController>();
         if (_myChoice != null)
         {
             UIManager.Instance.CloseAllOptionUI();
+            outline.color = _originalOutlineColor;
 
             ActionManager.Instance.currentDialog = _myChoice.nextOptionDialog;
             ActionManager.Instance.currentAction = _myChoice.choiceOptionNextActionType;
@@ -43,11 +45,11 @@ public class OptionUI : OutlineHighlight
             ActionManager.Instance.showOptionAction.CompleteAction();
             if (_myChoice.isAnswer)
             {
-                RobotController.Instance.SetHappy();
+                robot.SetHappy();
             }
             else
             {
-                RobotController.Instance.SetAngry();
+                robot.SetAngry();
             }
         }
     }
@@ -60,7 +62,7 @@ public class OptionUI : OutlineHighlight
         {
             string colorCode = ColorUtility.ToHtmlStringRGB(highlightColor);
             optionText.text = optionText.text.Replace(highlightText,
-                $"<b><color=#{colorCode}><size=\"77\">" + highlightText + "</size></color></b>");
+                $"<b><color=#{colorCode}><size=\"90\">" + highlightText + "</size></color></b>");
             // 색상 변경 <color=#컬러코드></color> / 폰트 굵기 <b></b> / 폰트 변경(Legacy만 가능) <font=\"폰트명\"><font>
             // 폰트 사이즈 변경 <size=\"변경할 크기\"></size>
         }

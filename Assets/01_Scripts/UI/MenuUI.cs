@@ -30,15 +30,21 @@ public class MenuUI : OutlineHighlight
         }
     }
 
+    private void Update()
+    {
+        _button.interactable = !TitleUI.Instance.IsPopupOpen();
+        
+    }
+
     private void MenuButtonClicked()
     {
         if (_menuName != "Exit")
         {
             text.color = Color.white;
             activeImage.SetActive(true);   
+            TitleUI.Instance.currentMenu = _menuName;
         }
         
-        TitleUI.Instance.currentMenu = _menuName;
         TitleUI.Instance.SetCurrentMenuUI();
 
         if (_menuName == "Normal")

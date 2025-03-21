@@ -32,16 +32,17 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
 
     private IEnumerator EarthquakeRoutine()
     {
+        RobotController robot = FindObjectOfType<RobotController>();
         while (shakeDuration > 0 || objectShakeDuration > 0)
         {
-            RobotController.Instance.SetAnimaiton("LookingFor");
-            RobotController.Instance.SetLookingFor();
+            robot.SetAnimaiton("LookingFor");
+            robot.SetLookingFor();
             EarthquakeStart();
             yield return null;
         }
         
         _isComplete = true;
-        RobotController.Instance.SetLookingFor();
+        robot.SetLookingFor();
     }
 
     private void EarthquakeStart()

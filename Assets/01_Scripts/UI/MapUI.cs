@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,9 @@ public class MapUI : OutlineHighlight
     [TextArea] [SerializeField] private string[] _popupTexts; 
     [Tooltip("게임 시작시 이동할 씬 이름을 적어주세요.")]
     [SerializeField] private string _nextScene;
+
     private Button _button;
+
 
     protected override void Awake()
     {
@@ -17,7 +20,12 @@ public class MapUI : OutlineHighlight
         _button = GetComponent<Button>();
         _button.onClick.AddListener(ButtonClicked);
     }
-    
+
+    private void Update()
+    {
+        _button.interactable = !TitleUI.Instance.IsPopupOpen();
+    }
+
     private void ButtonClicked()
     {
         if (this.transform.name == _mapName)

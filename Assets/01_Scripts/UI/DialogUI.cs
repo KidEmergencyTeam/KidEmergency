@@ -20,8 +20,8 @@ public class DialogUI : MonoBehaviour
 
     private void SetColorSameRobot()
     {
-        Rob11ColorManager robotColor = GameObject.Find("Rob12").GetComponent<Rob11ColorManager>();
-        colorImage.color = robotColor.predefinedColors[robotColor.colorIndex];
+        Rob11ColorManager rob11Color = GameObject.Find("Seti").GetComponent<Rob11ColorManager>();
+        colorImage.color = rob11Color.predefinedColors[rob11Color.colorIndex];
     }
     
 }
