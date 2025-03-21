@@ -58,6 +58,7 @@ public class RobotController : MonoBehaviour
     public void SetRobotPos(Transform parent)
     {
         this.transform.SetParent(parent);
+        this.transform.localPosition = Vector3.zero;
     }
 }
 

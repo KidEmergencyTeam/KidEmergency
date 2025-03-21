@@ -5127,7 +5127,6 @@ GameObject:
   - component: {fileID: 530444146}
   - component: {fileID: 530444145}
   - component: {fileID: 530444144}
-  - component: {fileID: 530444143}
   m_Layer: 0
   m_Name: RightLeg
   m_TagString: BaseObject
@@ -5150,63 +5149,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 999364734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3.134}
---- !u!114 &530444143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530444141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets:
-  - IsVisible: 1
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 530444146}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 0
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &530444144
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -7519,7 +7461,7 @@ GameObject:
   - component: {fileID: 682230135}
   - component: {fileID: 682230136}
   m_Layer: 5
-  m_Name: OptionPanels
+  m_Name: OptionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11507,22 +11449,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e67c2902ce238d84a9d1c4c81263db9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  optionPanel: {fileID: 682230134}
   optionUI:
   - {fileID: 1556609385}
   - {fileID: 1778572221}
   - {fileID: 553949900}
   dialogUI: {fileID: 1612459329}
   warningUI: {fileID: 204973610}
-  optionPos:
-  - {fileID: 1554498225}
-  - {fileID: 950445002}
-  - {fileID: 1877735900}
   dialogPos:
   - {fileID: 1778346141}
   - {fileID: 1232330019}
   - {fileID: 1714171756}
   - {fileID: 253873288}
   - {fileID: 1613238401}
+  optionPos:
+  - {fileID: 1554498225}
+  - {fileID: 950445002}
+  - {fileID: 1877735900}
   warningPos:
   - {fileID: 1859188367}
   - {fileID: 2010322613}
@@ -12834,7 +12777,6 @@ GameObject:
   - component: {fileID: 1365208458}
   - component: {fileID: 1365208457}
   - component: {fileID: 1365208456}
-  - component: {fileID: 1365208455}
   m_Layer: 0
   m_Name: LeftLeg
   m_TagString: BaseObject
@@ -12857,63 +12799,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 999364734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3.134}
---- !u!114 &1365208455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1365208453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets:
-  - IsVisible: 1
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 1365208458}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 0
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &1365208456
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -20701,6 +20586,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Seti
       objectReference: {fileID: 0}
+    - target: {fileID: 942389713041380978, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
+      propertyPath: setiPos.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 942389713041380978, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
+      propertyPath: setiPos.Array.data[0]
+      value: 
+      objectReference: {fileID: 1477624139}
+    - target: {fileID: 942389713041380978, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
+      propertyPath: setiPos.Array.data[1]
+      value: 
+      objectReference: {fileID: 1643780314}
     - target: {fileID: 3102745890628497730, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
