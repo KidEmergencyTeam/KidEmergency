@@ -253,7 +253,7 @@ public class ScenarioManager : MonoBehaviour
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
     IEnumerator Step14()
     {
-        // PlayerPosition 컴포넌트 가져오기
+        // PlayerPosition.cs 가져오기
         PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
         if (playerPosition == null)
         {
@@ -268,10 +268,15 @@ public class ScenarioManager : MonoBehaviour
             yield break;
         }
 
+        // 페이드 아웃 효과 실행
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+
         // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
         playerPosition.ApplyStep14Positions();
 
-        // 대기
+        // 페이드 인 효과 실행
+        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+
         yield return null;
     }
 
@@ -395,6 +400,7 @@ public class ScenarioManager : MonoBehaviour
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
+                // 로딩 대기
                 yield return null;
             }
 
