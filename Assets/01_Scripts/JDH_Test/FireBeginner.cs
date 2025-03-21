@@ -15,8 +15,9 @@ public class FireBeginner : MonoBehaviour
 		HALLWAY,
 		STAIRS_ELEVATOR,
 		OUTSIDE,
-		ROOM,
-	};
+		LIVINGROOM,
+        Kitchen,
+    };
 
 	[Header("시작 장소")] public PLACE place;
 
