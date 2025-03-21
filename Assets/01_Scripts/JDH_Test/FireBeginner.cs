@@ -15,7 +15,7 @@ public class FireBeginner : MonoBehaviour
 		HALLWAY,
 		STAIRS_ELEVATOR,
 		OUTSIDE,
-		House,
+		HOUSE,
     };
 
 	[Header("시작 장소")] public PLACE place;
@@ -73,8 +73,11 @@ public class FireBeginner : MonoBehaviour
 
 	[SerializeField] private BeginnerDialogSystem secondDialog;
 	[SerializeField] private BeginnerDialogSystem thirdDialog;
+	[SerializeField] private BeginnerDialogSystem forthDialog;
+	[SerializeField] private BeginnerDialogSystem leftChoiceDialog;
+	[SerializeField] private BeginnerDialogSystem rightChoiceDialog;
 
-	private void Awake()
+    private void Awake()
 	{
 		xrCamera = Camera.main.transform;
 		initialHeight = xrCamera.position.y; // 초기 플레이어 높이 저장
@@ -219,18 +222,46 @@ public class FireBeginner : MonoBehaviour
 		{
 			switch(place)
 			{
-				case PLACE.House:
+				case PLACE.HOUSE:
+					isInLivingRoom = true;
+					yield return new WaitUntil(() => isInLivingRoom == true);
+
+                    // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+					//2.상황창밖으로 검은 연기와 불길이 아랫 집에서 올라오는 장면을 비춰 줌(화재 비상벨이 시끄럽게 울리고 있음) 이후 두번째 대화 진행
+					//대화 이후 선택지 창 활성화
+					fireAlarm.gameObject.SetActive(true);
+
+                    secondDialog.gameObject.SetActive(true);
+					yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+                    LeftImg.sprite = leftChangeImg;
+                    RightImg.sprite = rightChangeImg;
+                    isFirstStepRdy = true;
+                    Debug.Log("예제 UI 첫 번째 단계 준비 완료");
+                    // 4. 첫 단계 준비 완료 후 선택지 UI 출력
+                    yield return new WaitUntil(() => isFirstStepRdy == true);
+					exampleDescUi.SetActive(true);
+					if (LeftImg.GetComponent<TestButton2>().isClick == true)
+					{
+
+					}
+					else if (RightImg.GetComponent<TestButton2>().isClick == true)
+					{
+
+					}
+						break;
+				case PLACE.STAIRS_ELEVATOR:
+
+					break;
+				case PLACE.OUTSIDE:
 
 					break;
 
 			}
-            // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
-            StartCoroutine(FadeInOut.Instance.FadeIn());
-            yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-            firstDialog.gameObject.SetActive(true);
-            yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-
-			//2. 
         }
 		
 	}
