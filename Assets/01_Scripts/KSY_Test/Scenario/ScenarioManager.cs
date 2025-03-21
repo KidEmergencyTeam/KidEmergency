@@ -318,7 +318,7 @@ public class ScenarioManager : MonoBehaviour
 
         foreach (GameObject obj in safetyLineObjects)
         {
-            // 각 오브젝트에서 ToggleOutlinable 컴포넌트 가져오기
+            // 각 오브젝트에서 ToggleOutlinable.cs 가져오기
             ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
 
             if (toggleComp != null)
