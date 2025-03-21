@@ -29,6 +29,8 @@ public class Bag : MonoBehaviour
     {
         if (ActionManager.Instance.currentAction == ActionType.FixingBag)
         {
+            print($"가방 위치: {this.transform.position}, 컨트롤러 위치: {_leftController.transform.position}");
+
             if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
                      _leftController.selectAction.action.ReadValue<float>() > 0)
             {
