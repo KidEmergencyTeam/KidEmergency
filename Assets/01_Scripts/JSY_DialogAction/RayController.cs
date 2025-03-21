@@ -20,11 +20,13 @@ public class RayController : MonoBehaviour
 
     private void Update()
     {
-
         if (UIActive())
         {
-            _leftLine.enabled = true;
+            _rightRay.enabled = true;
             _rightLine.enabled = true;
+
+            _leftRay.enabled = false;
+            _leftLine.enabled = false;
             
             // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
             if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
@@ -46,6 +48,15 @@ public class RayController : MonoBehaviour
             
             _leftLine.enabled = false;
             _rightLine.enabled = false;
+            
+            if (_leftController.transform.GetChild(4))
+            {
+                _leftRay.enabled = false;
+            }
+            else
+            {
+                _leftRay.enabled = true;
+            }
         }
     }
 
@@ -79,12 +90,18 @@ public class RayController : MonoBehaviour
     {
         _rightRay.enabled = false;
         _leftRay.enabled = true;
+        
+        _rightLine.enabled = false;
+        _leftLine.enabled = true;
     }
 
     private void SwitchRightRay()
     {
         _leftRay.enabled = false;
         _rightRay.enabled = true;
+        
+        _leftLine.enabled = false;
+        _rightLine.enabled = true;
     }
 
 }
