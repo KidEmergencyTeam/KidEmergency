@@ -308,13 +308,16 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
+
+    // Step21 대사 출력 이후
+    // 피난 유도선 아웃라인 효과 실행 (강조만) -> Emergency_Exit
     IEnumerator Step21() { yield return PlayAndWait(14); }
 
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22() { yield return null; }
     IEnumerator Step23() { yield return PlayAndWait(15); }
 
-    // Step24 선택지: 피난유도선 vs 익숙한 길
+    // Step24 선택지: 피난유도선 vs 익숙한 길 
     IEnumerator Step24()
     {
         int selected = 0;
