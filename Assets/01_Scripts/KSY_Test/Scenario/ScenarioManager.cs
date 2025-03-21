@@ -147,7 +147,7 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 대사 출력 및 타이핑 효과 완료까지 대기
+    // 텍스트 출력과 사운드 재생이 모두 완료될 때까지 대기
     public IEnumerator PlayAndWait(int index)
     {
         typingEffect.PlayTypingAtIndex(index);
@@ -253,7 +253,7 @@ public class ScenarioManager : MonoBehaviour
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
     IEnumerator Step14()
     {
-        // PlayerPosition 컴포넌트 가져오기
+        // PlayerPosition.cs 가져오기
         PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
         if (playerPosition == null)
         {
@@ -268,10 +268,15 @@ public class ScenarioManager : MonoBehaviour
             yield break;
         }
 
+        // 페이드 아웃 효과 실행
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+
         // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
         playerPosition.ApplyStep14Positions();
 
-        // 대기
+        // 페이드 인 효과 실행
+        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+
         yield return null;
     }
 
@@ -284,8 +289,13 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step16() { yield return PlayAndWait(10); }
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
-    // Step18 화재 경보벨 연출 
-    IEnumerator Step18() { yield return null; }
+    // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
+    // Step35까지 화재 경보벨 사운드 출력
+    IEnumerator Step18()
+    {
+        TypingEffect.Instance.StartContinuousSeparateTypingClip();
+        yield return null;
+    }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
     IEnumerator Step21() { yield return PlayAndWait(14); }
@@ -302,12 +312,12 @@ public class ScenarioManager : MonoBehaviour
             selected = r;
         }));
 
-        // 정답: 피난 유도선 선택 시 Step24로 이동
+        // 정답: 피난 유도선 선택 시 Step25로 이동
         if (selected == 1)
-            currentStep = 23;
-        // 오답: 익숙한 길 선택 시 Step25로 이동
-        else
             currentStep = 24;
+        // 오답: 익숙한 길 선택 시 Step27로 이동
+        else
+            currentStep = 26;
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -360,7 +370,13 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
     }
-    IEnumerator Step36() { yield return PlayAndWait(24); }
+
+    // Step36: 연속 재생 종료 후 타이핑 실행
+    IEnumerator Step36()
+    {
+        TypingEffect.Instance.StopContinuousSeparateTypingClip();
+        yield return PlayAndWait(24);
+    }
     IEnumerator Step37() { yield return PlayAndWait(25); }
     IEnumerator Step38() 
     { 
@@ -377,14 +393,19 @@ public class ScenarioManager : MonoBehaviour
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
 
-            // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
-            // 추후 로딩중 UI(로딩바, 문구 등) 표시 가능
+            // 페이드 아웃 효과 실행
+            yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+
+            // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
             while (!asyncLoad.isDone)
             {
                 // 로딩 대기
                 yield return null;
             }
+
+            // 씬 로드 후 페이드 인 효과 실행
+            yield return StartCoroutine(FadeInOut.Instance.FadeIn());
         }
         else
         {

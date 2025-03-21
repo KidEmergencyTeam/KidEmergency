@@ -11,8 +11,11 @@ public class MultilineString
     [Header("타이핑 텍스트")]
     public string typingText;
 
-    [Header("타이핑 오디오 클립")]
+    [Header("타이핑 오디오 클립 1")]
     public AudioClip typingSound;
+
+    [Header("타이핑 오디오 클립 2")]
+    public AudioClip typingSound2;
 }
 
 public class TypingEffect : MonoBehaviour
@@ -30,25 +33,30 @@ public class TypingEffect : MonoBehaviour
     public string typingTextTag;
 
     [Header("타이핑 공통 속도")]
-    public float commonTypingSpeed = 0.05f;
+    public float commonTypingSpeed = 0.14f;
 
-    // 타이핑 전/후 대기 시간
-    private float sentenceDelay = 0.5f;
+    // 타이핑 진행 시 별도로 재생할 오디오 클립 
+    [Header("화재 경보벨")]
+    public AudioClip separateTypingClip;
 
-    // 타이핑 진행 여부 (외부에서는 읽기 전용으로 접근)
+    // 연속 재생용 AudioSource 
+    private AudioSource continuousAudioSource;
+
+    // 타이핑 진행 여부 
     private bool isTyping = false;
+
+    // 시나리오 매니저에서 IsTyping을 통해 내부의 isTyping 값에 접근 가능
+    // 따라서 시나리오 매니저 내의 스텝별 코루틴에서 해당 값을 받으면 다음 스텝으로 진행
     public bool IsTyping { get { return isTyping; } }
 
     private void Awake()
     {
-        // 이미 인스턴스가 존재한다면 중복 생성 방지
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        // 씬 전환 시에도 파괴되지 않도록 설정
         DontDestroyOnLoad(gameObject);
     }
 
@@ -82,7 +90,7 @@ public class TypingEffect : MonoBehaviour
         }
     }
 
-    // 외부에서 인덱스에 해당하는 텍스트 타이핑 실행
+    // 인덱스에 해당하는 텍스트 타이핑 실행 및 사운드 재생
     public void PlayTypingAtIndex(int index)
     {
         if (isTyping)
@@ -95,30 +103,82 @@ public class TypingEffect : MonoBehaviour
 
         if (typingText != null)
             typingText.text = "";
+
         StartCoroutine(PlaySingleText(typingContents[index]));
     }
+
 
     IEnumerator PlaySingleText(MultilineString multiline)
     {
         isTyping = true;
-        yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound));
-        yield return new WaitForSeconds(sentenceDelay);
+
+        // 타이핑 효과와 사운드를 동시에 시작하고, 모두 완료될 때까지 기다림
+        yield return StartCoroutine(TypeSentence(multiline.typingText, multiline.typingSound, multiline.typingSound2));
+
+        // 타이핑이 끝나면 다음 단계로 진행할 수 있도록 isTyping 값을 false로 전환
+        // 따라서 시나리오 매니저 내의 스텝별 코루틴에서 해당 값을 받으면 다음 스텝으로 진행
         isTyping = false;
     }
 
-    IEnumerator TypeSentence(string sentence, AudioClip clip)
+    IEnumerator TypeSentence(string sentence, AudioClip clip1, AudioClip clip2)
     {
-        if (clip != null)
+        float typingDuration = sentence.Length * commonTypingSpeed;
+        float clipDuration1 = clip1 != null ? clip1.length : 0f;
+        float clipDuration2 = clip2 != null ? clip2.length : 0f;
+        float maxClipDuration = Mathf.Max(clipDuration1, clipDuration2);
+
+        // 리스트 내의 오디오 클립 재생
+        if (clip1 != null)
         {
-            // 싱글톤으로 구현된 SoundManager를 통해 오디오 재생
-            SoundManager.Instance.PlaySFX(clip.name, gameObject);
+            SoundManager.Instance.PlaySFX(clip1.name, gameObject);
+        }
+        if (clip2 != null)
+        {
+            SoundManager.Instance.PlaySFX(clip2.name, gameObject);
         }
 
+        // 한 글자씩 타이핑 효과 구현
         for (int i = 0; i < sentence.Length; i++)
         {
             if (typingText != null)
                 typingText.text += sentence[i];
             yield return new WaitForSeconds(commonTypingSpeed);
+        }
+
+        // 텍스트 타이핑 동안 재생된 사운드가 아직 끝나지 않았다면 남은 시간만큼 추가 대기
+        float remainingAudioTime = maxClipDuration - typingDuration;
+        if (remainingAudioTime > 0f)
+            yield return new WaitForSeconds(remainingAudioTime);
+    }
+
+    // 화재 경보벨 연속 재생 시작 (Step18에서 호출)
+    public void StartContinuousSeparateTypingClip()
+    {
+        if (separateTypingClip == null)
+            return;
+
+        if (continuousAudioSource == null)
+        {
+            continuousAudioSource = gameObject.AddComponent<AudioSource>();
+            continuousAudioSource.clip = separateTypingClip;
+            continuousAudioSource.loop = true;
+            continuousAudioSource.playOnAwake = false;
+        }
+
+        if (!continuousAudioSource.isPlaying)
+        {
+            continuousAudioSource.Play();
+            Debug.Log("화재 경보벨 연속 재생 시작");
+        }
+    }
+
+    // 화재 경보벨 연속 재생 종료 (Step36에서 호출)
+    public void StopContinuousSeparateTypingClip()
+    {
+        if (continuousAudioSource != null && continuousAudioSource.isPlaying)
+        {
+            continuousAudioSource.Stop();
+            Debug.Log("화재 경보벨 연속 재생 종료");
         }
     }
 }
