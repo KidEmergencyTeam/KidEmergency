@@ -8,6 +8,7 @@ public class FadeInOut : SingletonManager<FadeInOut>
 {
     // 페이드 효과가 진행되는 시간 
     [SerializeField] private float fadedTime = 1.5f;
+
     // 페이드 효과를 적용할 이미지 
     [SerializeField] private Image fadeInoutImg; 
 
