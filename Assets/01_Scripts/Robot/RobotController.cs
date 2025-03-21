@@ -7,15 +7,10 @@ public class RobotController : MonoBehaviour
     public float speed = 1.0f;
     public Rob11ColorManager robotColorManager;
     public EmotionChanger emotionChanger;
-    [HideInInspector] public Vector3 originPos;
+    public Transform[] setiPos;
     
     private Animator _anim;
-
-    private void Awake()
-    {
-        originPos = this.transform.position;
-    }
-
+    
     void Start()
     {
         _anim = GetComponent<Animator>();
@@ -60,9 +55,9 @@ public class RobotController : MonoBehaviour
         emotionChanger.SetEmotionMouth(emoNumber);
     }
 
-    public void SetRobotPos(Vector3 pos)
+    public void SetRobotPos(Transform parent)
     {
-        this.transform.position = pos;
+        this.transform.SetParent(parent);
     }
 }
 
