@@ -40,13 +40,17 @@ public class Grabber : MonoBehaviour
 		if (currentGrabbedObject.isMoving) return;
 		if (isLeft)
 		{
-			_targetFollower.followTargets[2].posOffset = currentGrabbedObject.posOffset;
-			_targetFollower.followTargets[2].rotOffset = currentGrabbedObject.rotOffset;
+			_targetFollower.followTargets[2].posOffset =
+				currentGrabbedObject.grabPosOffset;
+			_targetFollower.followTargets[2].rotOffset =
+				currentGrabbedObject.grabRotOffset;
 		}
 		else
 		{
-			_targetFollower.followTargets[3].posOffset = currentGrabbedObject.posOffset;
-			_targetFollower.followTargets[3].rotOffset = currentGrabbedObject.rotOffset;
+			_targetFollower.followTargets[3].posOffset =
+				currentGrabbedObject.grabPosOffset;
+			_targetFollower.followTargets[3].rotOffset =
+				currentGrabbedObject.grabRotOffset;
 		}
 	}
 
@@ -84,6 +88,8 @@ public class Grabber : MonoBehaviour
 	public void OnGrab(Grabbable grabbable)
 	{
 		print("OnGrab");
+		grabbable.rb.useGravity = false;
+		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
 		_handAnimation.enabled = false;
 		currentGrabbedObject = grabbable;
@@ -102,17 +108,17 @@ public class Grabber : MonoBehaviour
 			{
 				_targetFollower.followTargets[2].target = currentGrabbedObject.transform;
 				_targetFollower.followTargets[2].posOffset =
-					currentGrabbedObject.posOffset;
+					currentGrabbedObject.grabPosOffset;
 				_targetFollower.followTargets[2].rotOffset =
-					currentGrabbedObject.rotOffset;
+					currentGrabbedObject.grabRotOffset;
 			}
 			else
 			{
 				_targetFollower.followTargets[3].target = currentGrabbedObject.transform;
 				_targetFollower.followTargets[3].posOffset =
-					currentGrabbedObject.posOffset;
+					currentGrabbedObject.grabPosOffset;
 				_targetFollower.followTargets[3].rotOffset =
-					currentGrabbedObject.rotOffset;
+					currentGrabbedObject.grabRotOffset;
 			}
 		}
 	}
@@ -123,7 +129,6 @@ public class Grabber : MonoBehaviour
 		_handAnimation.enabled = true;
 		if (currentGrabbedObject.isMoving)
 		{
-			currentGrabbedObject.isGrabbable = true;
 			currentGrabbedObject.currentGrabber = null;
 		}
 		else
