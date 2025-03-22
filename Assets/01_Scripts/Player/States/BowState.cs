@@ -3,8 +3,7 @@ using UnityEngine;
 public class BowState : State
 {
 	public bool isBow = false;
-	private float _bowThreshold = 1.2f; // 숙이는 기준 높이 (단위: 미터)
-	private float _standThreshold = 1.3f; // 다시 서는 기준 높이
+	public float bowThreshold = 1.2f; // 숙이는 기준 높이 (단위: 미터)
 
 	public override void Enter(PlayerController player)
 	{
@@ -17,13 +16,13 @@ public class BowState : State
 		float headHeight = Camera.main.transform.position.y;
 
 		// 기준보다 낮아지면 숙이기
-		if (headHeight < _bowThreshold && !isBow)
+		if (headHeight < bowThreshold)
 		{
 			isBow = true;
 			Debug.Log("Player is bowing.");
 		}
 		// 일정 높이 이상 올라가면 다시 서기
-		else if (headHeight > _standThreshold && isBow)
+		else
 		{
 			isBow = false;
 			Debug.Log("Player is standing up.");
