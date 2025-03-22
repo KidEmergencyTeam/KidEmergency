@@ -25,6 +25,7 @@ public class Grabbable : MonoBehaviour
 
 	private void Start()
 	{
+		rb = GetComponent<Rigidbody>();
 		outlinable = GetComponent<Outlinable>();
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
 	}
