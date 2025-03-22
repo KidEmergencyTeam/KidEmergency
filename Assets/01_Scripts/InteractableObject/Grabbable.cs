@@ -20,11 +20,17 @@ public class Grabbable : MonoBehaviour
 	[HideInInspector] public Rigidbody rb;
 	[HideInInspector] public Grabber currentGrabber;
 	[HideInInspector] public Outlinable outlinable;
+	public Collider collider;
 
 	public bool IsGrabbed => currentGrabber;
 
 	private void Start()
 	{
+		if(!this.TryGetComponent<Collider>(out Collider c))
+		{
+			Debug.LogWarning(this.gameObject.name + " 콜라이더 없음");
+		};
+		print(collider.name);
 		rb = GetComponent<Rigidbody>();
 		outlinable = GetComponent<Outlinable>();
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
