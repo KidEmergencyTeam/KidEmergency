@@ -5,36 +5,46 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(SphereCollider))]
 public class Grabber : MonoBehaviour
 {
-	public Animator handAnimator;
 	public HandAnimation handAnimation;
-	public InputActionProperty interactor;
-	public Grabbable currentGrabbable;
+	public InputActionProperty controllerButtonClick;
+	public Grabbable currentGrabbedObject;
 	public bool isLeft = true;
 	public TargetFollower targetFollower;
-	public List<Transform> originalTarget;
+	public List<Transform> originalHandTargetTransforms;
 
-	public bool Grabbed => currentGrabbable;
+	public bool Grabbed => currentGrabbedObject;
 
 	private void Start()
 	{
 		targetFollower = FindObjectOfType<TargetFollower>();
-		originalTarget.Add(targetFollower.followTargets[2].target);
-		originalTarget.Add(targetFollower.followTargets[3].target);
+		originalHandTargetTransforms.Add(targetFollower.followTargets[2].target);
+		originalHandTargetTransforms.Add(targetFollower.followTargets[3].target);
 	}
 
 	private void Update()
 	{
+		/*오브젝트 Offset 맞추는 용도
 		if (!Grabbed) return;
-		if (currentGrabbable.isMoving) return;
+		if (currentGrabbedObject.isMoving) return;
 		if (isLeft)
 		{
-			targetFollower.followTargets[2].posOffset = currentGrabbable.posOffset;
-			targetFollower.followTargets[2].rotOffset = currentGrabbable.rotOffset;
+			targetFollower.followTargets[2].posOffset = currentGrabbedObject.posOffset;
+			targetFollower.followTargets[2].rotOffset = currentGrabbedObject.rotOffset;
 		}
 		else
 		{
-			targetFollower.followTargets[3].posOffset = currentGrabbable.posOffset;
-			targetFollower.followTargets[3].rotOffset = currentGrabbable.rotOffset;
+			targetFollower.followTargets[3].posOffset = currentGrabbedObject.posOffset;
+			targetFollower.followTargets[3].rotOffset = currentGrabbedObject.rotOffset;
+		}*/
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
+
+		if (grabbable.isGrabbable)
+		{
+			grabbable.outlinable.OutlineParameters.Color = Color.green;
 		}
 	}
 
@@ -42,39 +52,58 @@ public class Grabber : MonoBehaviour
 	{
 		print(other.name);
 		if (Grabbed) return;
-		other.TryGetComponent<Grabbable>(out Grabbable grabbable);
-		if (interactor.action.ReadValue<float>() > 0 && grabbable.isGrabbable &&
+		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
+
+		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
+		    grabbable.isGrabbable &&
 		    grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
 		}
 	}
 
+	private void OnTriggerExit(Collider other)
+	{
+		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
+
+		if (grabbable.isGrabbable)
+		{
+			grabbable.outlinable.OutlineParameters.Color = Color.yellow;
+		}
+	}
+
 	public void OnGrab(Grabbable grabbable)
 	{
 		print("OnGrab");
-		currentGrabbable = grabbable;
+		grabbable.isGrabbable = false;
 		handAnimation.enabled = false;
+		currentGrabbedObject = grabbable;
 		if (isLeft) handAnimation.animator.SetFloat("Left Trigger", 1);
 		else handAnimation.animator.SetFloat("Right Trigger", 1);
-		if (currentGrabbable.isMoving)
+
+		if (currentGrabbedObject.isMoving)
 		{
-			currentGrabbable.isGrabbable = false;
-			currentGrabbable.currentGrabber = this;
+			currentGrabbedObject.isGrabbable = false;
+			currentGrabbedObject.currentGrabber = this;
 		}
+
 		else
 		{
 			if (isLeft)
 			{
-				targetFollower.followTargets[2].target = currentGrabbable.transform;
-				targetFollower.followTargets[2].posOffset = currentGrabbable.posOffset;
-				targetFollower.followTargets[2].rotOffset = currentGrabbable.rotOffset;
+				targetFollower.followTargets[2].target = currentGrabbedObject.transform;
+				targetFollower.followTargets[2].posOffset =
+					currentGrabbedObject.posOffset;
+				targetFollower.followTargets[2].rotOffset =
+					currentGrabbedObject.rotOffset;
 			}
 			else
 			{
-				targetFollower.followTargets[3].target = currentGrabbable.transform;
-				targetFollower.followTargets[3].posOffset = currentGrabbable.posOffset;
-				targetFollower.followTargets[3].rotOffset = currentGrabbable.rotOffset;
+				targetFollower.followTargets[3].target = currentGrabbedObject.transform;
+				targetFollower.followTargets[3].posOffset =
+					currentGrabbedObject.posOffset;
+				targetFollower.followTargets[3].rotOffset =
+					currentGrabbedObject.rotOffset;
 			}
 		}
 	}
@@ -82,20 +111,21 @@ public class Grabber : MonoBehaviour
 	public void OnRelease()
 	{
 		print("OnRelease");
-		if (currentGrabbable.isMoving)
+		handAnimation.enabled = true;
+		if (currentGrabbedObject.isMoving)
 		{
-			currentGrabbable.isGrabbable = true;
-			currentGrabbable.currentGrabber = null;
+			currentGrabbedObject.isGrabbable = true;
+			currentGrabbedObject.currentGrabber = null;
 		}
 		else
 		{
 			if (isLeft)
 			{
-				targetFollower.followTargets[2].target = originalTarget[0];
+				targetFollower.followTargets[2].target = originalHandTargetTransforms[0];
 			}
-			else targetFollower.followTargets[3].target = originalTarget[1];
+			else targetFollower.followTargets[3].target = originalHandTargetTransforms[1];
 		}
 
-		currentGrabbable = null;
+		currentGrabbedObject = null;
 	}
 }
