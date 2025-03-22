@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
 public class Grabbable : MonoBehaviour
 {
-	public bool isGrabbable = false;
+	public bool isGrabbable = true; //그랩 가능한 상태, 스토리 진행에 따라 조절
 	public Vector3 grabPosOffset;
 	public Vector3 grabRotOffset;
 
