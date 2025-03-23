@@ -3,7 +3,16 @@ using UnityEngine;
 public class BowState : State
 {
 	public bool isBow = false;
-	public float bowThreshold = 1.2f; // 숙이는 기준 높이 (단위: 미터)
+	public float bowThreshold = 0.5f; // 숙이는 기준 높이 (단위: 미터)
+
+	public Transform xrOrigin;
+	public Transform leftFootIk;
+	public Transform rightFootIk;
+	public Transform leftFoot;
+	public Transform rightFoot;
+	public Transform body;
+
+	public float bowYValue = 0.3f;
 
 	public override void Enter(PlayerController player)
 	{
@@ -16,16 +25,26 @@ public class BowState : State
 		float headHeight = Camera.main.transform.position.y;
 
 		// 기준보다 낮아지면 숙이기
-		if (headHeight < bowThreshold)
+		if (headHeight < bowThreshold && !isBow)
 		{
 			isBow = true;
-			Debug.Log("Player is bowing.");
+			xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
+			leftFootIk.localPosition += new Vector3(0, bowYValue, 0);
+			rightFootIk.localPosition += new Vector3(0, bowYValue, 0);
+			leftFoot.localPosition += new Vector3(0, bowYValue, 0);
+			rightFoot.localPosition += new Vector3(0, bowYValue, 0);
+			body.localPosition -= new Vector3(0, bowYValue, 0);
 		}
 		// 일정 높이 이상 올라가면 다시 서기
-		else
+		else if (headHeight > bowThreshold && isBow)
 		{
 			isBow = false;
-			Debug.Log("Player is standing up.");
+			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			leftFootIk.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFootIk.localPosition -= new Vector3(0, bowYValue, 0);
+			leftFoot.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFoot.localPosition -= new Vector3(0, bowYValue, 0);
+			body.localPosition += new Vector3(0, bowYValue, 0);
 		}
 	}
 
