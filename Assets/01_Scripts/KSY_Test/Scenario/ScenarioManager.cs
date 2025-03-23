@@ -331,12 +331,29 @@ public class ScenarioManager : MonoBehaviour
                 Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
             }
         }
-
         yield return PlayAndWait(14);
     }
 
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
-    IEnumerator Step22() { yield return null; }
+    IEnumerator Step22()
+    {
+        // 태그가 "Player"인 오브젝트들을 모두 찾음
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject player in players)
+        {
+            // 각 오브젝트에서 NpcRig.cs 가져오기
+            NpcRig npcRig = player.GetComponent<NpcRig>();
+
+            if (npcRig != null)
+            {
+                // state를 Bow로 설정합니다.
+                npcRig.state = NpcRig.State.Bow;
+            }
+        }
+        yield return null;
+    }
+
     IEnumerator Step23() { yield return PlayAndWait(15); }
 
     // Step24 선택지: 피난유도선 vs 익숙한 길 
