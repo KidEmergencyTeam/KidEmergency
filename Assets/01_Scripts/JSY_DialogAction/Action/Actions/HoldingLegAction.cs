@@ -26,6 +26,8 @@ public class HoldingLegAction : MonoBehaviour, IActionEffect
         while (!_isComplete)
         {
             _leg.enabled = true;
+            JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
+            npcCtrl.SetNPCState("HoldDesk");
             if (_leg.IsHoldComplete())
             {
                 _isComplete = true;
