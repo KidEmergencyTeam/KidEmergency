@@ -7,6 +7,14 @@ public class PlayerController : MonoBehaviour
 	public bool isHolding = false;
 	public bool isBowing = false;
 
+	public TargetFollower playerTargetFollower;
+	public Transform xrOrigin;
+	public Transform leftFootIkTarget;
+	public Transform rightFootIkTarget;
+	public Transform leftFootTarget;
+	public Transform rightFootTarget;
+	public Transform bodyTarget;
+
 	private void Start()
 	{
 		if (ModeController.Instance?.StateMachine != null)

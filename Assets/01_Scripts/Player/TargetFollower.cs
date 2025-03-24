@@ -18,11 +18,13 @@ public class TargetFollower : MonoBehaviour
 		{
 			if (isFollowPos)
 			{
-				follower.position = target.TransformPoint(posOffset);
+				// posOffset을 글로벌 좌표 기준으로 적용
+				follower.position = target.position + posOffset;
 			}
 
 			if (isFollowRot)
 			{
+				// 글로벌 위치가 적용된 후, 회전 적용
 				follower.rotation = target.rotation * Quaternion.Euler(rotOffset);
 			}
 		}
