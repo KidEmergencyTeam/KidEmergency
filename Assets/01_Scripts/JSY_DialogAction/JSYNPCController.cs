@@ -9,12 +9,14 @@ public class JSYNPCController : MonoBehaviour
 {
     public NpcRig[] npcs;
     private Vector3[] _originPos;
+    private Vector3[] _originScale;
     
     private void Start()
     {
         for (int i = 0; i < npcs.Length; i++)
         {
-           _originPos[i] = npcs[i].transform.position;
+            _originPos[i] = npcs[i].transform.localPosition;
+           _originScale[i] = npcs[i].transform.localScale;
         }
         
         if (SceneManager.GetActiveScene().name == "JSY" ||
@@ -37,15 +39,17 @@ public class JSYNPCController : MonoBehaviour
             if (st == "None")
             {
                 npcs[i].state = NpcRig.State.None;
-                npcs[i].transform.position = _originPos[i];
+                npcs[i].transform.localPosition = _originPos[i];
+                npcs[i].transform.localScale = _originScale[i];
             }
 			
             else if (st == "DownDesk")
             {
                 npcs[i].state = NpcRig.State.DownDesk;
-                Vector3 changePos = npcs[i].transform.position;
+                Vector3 changePos = npcs[i].transform.localPosition;
                 changePos.x += 0.3f;
-                npcs[i].transform.position = changePos;
+                npcs[i].transform.localPosition = changePos;
+                npcs[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
 			
             else if (st == "HoldDesk")
