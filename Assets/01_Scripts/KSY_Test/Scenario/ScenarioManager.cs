@@ -297,6 +297,7 @@ public class ScenarioManager : MonoBehaviour
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
     IEnumerator Step16()
     {
+        yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
         yield return PlayAndWait(10);
     }
@@ -385,6 +386,7 @@ public class ScenarioManager : MonoBehaviour
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
     IEnumerator Step29()
     {
+        yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
         yield return PlayAndWait(19);
     }
