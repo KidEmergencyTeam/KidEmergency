@@ -45,12 +45,14 @@ public class ScenarioManager : MonoBehaviour
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
-    // 기존 ParticleSetup 대신 씬별 파티클 설정 리스트 사용
     [Header("씬별 파티클 설정")]
     public List<SceneParticleSetup> sceneParticleSetups;
 
     [Header("씬 이름")]
     public List<string> sceneNames;
+
+    // 생성된 모든 연기 파티클 저장
+    private List<ParticleSystem> activeSmokeParticles = new List<ParticleSystem>();
 
     // 현재 시나리오 스텝 번호
     private int currentStep = 1;
@@ -323,7 +325,12 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step19() { yield return PlayAndWait(12); }
 
     // 연기 파티클 강조
-    IEnumerator Step20() { yield return PlayAndWait(13); }
+    IEnumerator Step20() 
+    {
+        // 생성된 연기 파티클 y값 변경 
+        yield return StartCoroutine(UpdateSmokeParticlesYCoroutine(2.0f));
+        yield return PlayAndWait(13);
+    }
 
     // Step21 대사 출력 이후
     // 피난 유도선 아웃라인 효과 실행 -> Emergency_Exit 오브젝트 대상
@@ -506,22 +513,25 @@ public class ScenarioManager : MonoBehaviour
     // 연기 파티클 실행
     public IEnumerator PlaySmokeParticles()
     {
+        // 이전에 생성된 파티클 리스트 초기화
+        activeSmokeParticles.Clear();
+
         // 현재 활성화된 씬 이름 확인
         string activeSceneName = SceneManager.GetActiveScene().name;
 
         // 현재 씬에 해당하는 파티클 설정 찾기
         SceneParticleSetup particleSetup = sceneParticleSetups.Find(setup => setup.sceneName == activeSceneName);
 
-        // 위치 및 회전 반영해서 파티클 실행 
-        if (particleSetup != null &&
-            particleSetup.particleData != null &&
-            particleSetup.particleData.Count > 0)
+        if (particleSetup != null && particleSetup.particleData != null && particleSetup.particleData.Count > 0)
         {
             foreach (ParticleData data in particleSetup.particleData)
             {
                 Quaternion rotation = Quaternion.Euler(data.rotation);
                 ParticleSystem ps = Instantiate(particleSetup.smokeEffect, data.position, rotation);
                 ps.Play();
+
+                // 생성된 파티클을 리스트에 저장
+                activeSmokeParticles.Add(ps);
             }
         }
         else
@@ -531,6 +541,24 @@ public class ScenarioManager : MonoBehaviour
 
         yield return null;
     }
+
+    // 생성된 연기 파티클 y값 변경 
+    public IEnumerator UpdateSmokeParticlesYCoroutine(float newY)
+    {
+        foreach (ParticleSystem ps in activeSmokeParticles)
+        {
+            if (ps != null)
+            {
+                Vector3 pos = ps.transform.position;
+
+                // y 값을 새 값으로 변경
+                pos.y = newY; 
+                ps.transform.position = pos;
+            }
+        }
+        yield return null;
+    }
+
 
     /*
     // 비활성화된 손수건 오브젝트 검색 (주석 처리)
