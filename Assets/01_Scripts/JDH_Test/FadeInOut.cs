@@ -22,11 +22,21 @@ public class FadeInOut : SingletonManager<FadeInOut>
     {
         if (fadeInoutImg != null)
         {
-            // 초기 설정: 페이드 이미지의 알파 값을 1으로 설정하여 화면이 보이도록 함
-            Color color = fadeInoutImg.color;
-            // 불투명하게 설정
-            color.a = 1f; 
-            fadeInoutImg.color = color;
+            if (SceneManager.GetActiveScene().name == "JSY_Start")
+            {
+                Color color = fadeInoutImg.color;
+                color.a = 0f;
+                fadeInoutImg.color = color;
+            }
+
+            else
+            {
+                // 초기 설정: 페이드 이미지의 알파 값을 1으로 설정하여 화면이 보이도록 함
+                Color color = fadeInoutImg.color;
+                // 불투명하게 설정
+                color.a = 1f; 
+                fadeInoutImg.color = color;
+            }
         }
     }
 

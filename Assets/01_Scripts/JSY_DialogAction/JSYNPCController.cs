@@ -2,40 +2,64 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class JSYNPCController : MonoBehaviour
 {
-    public NpcRig[] NPCs;
-
-    private void Awake()
+    public NpcRig[] npcs;
+    private Vector3[] _originPos;
+    private Vector3[] _originScale;
+    
+    private void Start()
     {
-        NPCs = GetComponentsInChildren<NpcRig>();
+        for (int i = 0; i < npcs.Length; i++)
+        {
+            _originPos[i] = npcs[i].transform.localPosition;
+           _originScale[i] = npcs[i].transform.localScale;
+        }
+        
+        if (SceneManager.GetActiveScene().name == "JSY" ||
+            SceneManager.GetActiveScene().name == "JSY_SchoolGround")
+        {
+            SetNPCState("None");
+        } 
+        
+        else if (SceneManager.GetActiveScene().name == "JSY_SchoolHall" ||
+              SceneManager.GetActiveScene().name == "JSY_StairEv") 
+        {
+            SetNPCState("HoldBag");
+        }
     }
-
+    
     public void SetNPCState(string st)
     {
-        for (int i = 0; i < NPCs.Length; i++)
+        for (int i = 0; i < npcs.Length; i++)
         {
-            NPCs[i] = FindObjectOfType<NpcRig>();
-				
             if (st == "None")
             {
-                NPCs[i].state = NpcRig.State.None;
+                npcs[i].state = NpcRig.State.None;
+                npcs[i].transform.localPosition = _originPos[i];
+                npcs[i].transform.localScale = _originScale[i];
             }
 			
             else if (st == "DownDesk")
             {
-                NPCs[i].state = NpcRig.State.DownDesk;
+                npcs[i].state = NpcRig.State.DownDesk;
+                Vector3 changePos = npcs[i].transform.localPosition;
+                changePos.x += 0.3f;
+                npcs[i].transform.localPosition = changePos;
+                npcs[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
 			
             else if (st == "HoldDesk")
             {
-                NPCs[i].state = NpcRig.State.HoldDesk;
+                npcs[i].state = NpcRig.State.HoldDesk;
             }
 
             else if (st == "HoldBag")
             {
-                NPCs[i].state = NpcRig.State.HoldBag;
+                npcs[i].state = NpcRig.State.HoldBag;
             }
         }
     }
