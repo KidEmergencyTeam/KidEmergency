@@ -223,7 +223,7 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(8);
 
         // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
 
         foreach (GameObject player in players)
         {
@@ -354,7 +354,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step22()
     {
         // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
 
         foreach (GameObject player in players)
         {
