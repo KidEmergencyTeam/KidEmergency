@@ -16,6 +16,16 @@ using UnityEngine.SceneManagement;
 
 // 씬별 파티클 설정
 [Serializable]
+public class ParticleData
+{
+    [Header("파티클 위치")]
+    public Vector3 position;
+
+    [Header("파티클 회전")]
+    public Vector3 rotation;
+}
+
+[Serializable]
 public class SceneParticleSetup
 {
     [Header("씬 이름")]
@@ -24,8 +34,8 @@ public class SceneParticleSetup
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
-    [Header("파티클 위치")]
-    public List<Vector3> particlePositions;
+    [Header("파티클 설정")]
+    public List<ParticleData> particleData;
 }
 
 public class ScenarioManager : MonoBehaviour
@@ -500,20 +510,21 @@ public class ScenarioManager : MonoBehaviour
         // 현재 씬에 해당하는 파티클 설정 찾기
         SceneParticleSetup particleSetup = sceneParticleSetups.Find(setup => setup.sceneName == activeSceneName);
 
-        // 위치 반영해서 파티클 실행 
+        // 위치 및 회전 반영해서 파티클 실행 
         if (particleSetup != null &&
-            particleSetup.particlePositions != null &&
-            particleSetup.particlePositions.Count > 0)
+            particleSetup.particleData != null &&
+            particleSetup.particleData.Count > 0)
         {
-            foreach (Vector3 position in particleSetup.particlePositions)
+            foreach (ParticleData data in particleSetup.particleData)
             {
-                ParticleSystem ps = Instantiate(particleSetup.smokeEffect, position, Quaternion.identity);
+                Quaternion rotation = Quaternion.Euler(data.rotation);
+                ParticleSystem ps = Instantiate(particleSetup.smokeEffect, data.position, rotation);
                 ps.Play();
             }
         }
         else
         {
-            Debug.LogWarning("해당 씬에 대한 파티클 설정이 없거나 파티클 위치가 정의되지 않았습니다: " + activeSceneName);
+            Debug.LogWarning("해당 씬에 대한 파티클 설정이 없거나 파티클 데이터가 정의되지 않았습니다: " + activeSceneName);
         }
 
         yield return null;
