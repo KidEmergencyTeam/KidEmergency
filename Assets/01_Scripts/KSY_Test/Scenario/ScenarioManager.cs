@@ -25,7 +25,7 @@ public class SceneParticleSetup
     public ParticleSystem smokeEffect;
 
     [Header("파티클 위치")]
-    public List<Transform> particleSpawnPoints;
+    public List<Vector3> particlePositions;
 }
 
 public class ScenarioManager : MonoBehaviour
@@ -500,16 +500,13 @@ public class ScenarioManager : MonoBehaviour
 
         // 위치 반영해서 파티클 실행 
         if (particleSetup != null &&
-            particleSetup.particleSpawnPoints != null &&
-            particleSetup.particleSpawnPoints.Count > 0)
+            particleSetup.particlePositions != null &&
+            particleSetup.particlePositions.Count > 0)
         {
-            foreach (Transform spawnPoint in particleSetup.particleSpawnPoints)
+            foreach (Vector3 position in particleSetup.particlePositions)
             {
-                if (spawnPoint != null)
-                {
-                    ParticleSystem ps = Instantiate(particleSetup.smokeEffect, spawnPoint.position, Quaternion.identity);
-                    ps.Play();
-                }
+                ParticleSystem ps = Instantiate(particleSetup.smokeEffect, position, Quaternion.identity);
+                ps.Play();
             }
         }
         else
