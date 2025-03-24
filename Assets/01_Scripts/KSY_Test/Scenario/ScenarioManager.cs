@@ -220,22 +220,21 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step12() { yield return PlayAndWait(7); }
     IEnumerator Step13()
     {
-        yield return PlayAndWait(8);
+        // 태그가 "NPC"인 오브젝트들을 모두 찾음
+        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
 
-        // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
-
-        foreach (GameObject player in players)
+        foreach (GameObject npc in npcs)
         {
             // 각 오브젝트에서 NpcRig.cs 가져오기
-            NpcRig npcRig = player.GetComponent<NpcRig>();
+            NpcRig npcRig = npc.GetComponent<NpcRig>();
 
             if (npcRig != null)
             {
-                // state를 Bow로 설정합니다.
+                // state를 Hold로 설정
                 npcRig.state = NpcRig.State.Hold;
             }
         }
+
         yield return null;
 
         // 아래 손수건 관련 로직 주석 처리
@@ -353,20 +352,21 @@ public class ScenarioManager : MonoBehaviour
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
     IEnumerator Step22()
     {
-        // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
+        // 태그가 "NPC"인 오브젝트들을 모두 찾음
+        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
 
-        foreach (GameObject player in players)
+        foreach (GameObject npc in npcs)
         {
             // 각 오브젝트에서 NpcRig.cs 가져오기
-            NpcRig npcRig = player.GetComponent<NpcRig>();
+            NpcRig npcRig = npc.GetComponent<NpcRig>();
 
             if (npcRig != null)
             {
-                // state를 Bow로 설정합니다.
+                // state를 Bow로 설정
                 npcRig.state = NpcRig.State.Bow;
             }
         }
+
         yield return null;
     }
 
