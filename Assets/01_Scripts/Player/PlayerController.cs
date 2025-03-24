@@ -4,8 +4,17 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 	private PlayerState _currentState;
-	public bool isHolding = false;
-	public bool isBowing = false;
+
+	public TargetFollower playerTargetFollower;
+	public Transform xrOrigin;
+	public Transform leftFootIkTarget;
+	public Transform rightFootIkTarget;
+	public Transform leftFootTarget;
+	public Transform rightFootTarget;
+	public Transform bodyTarget;
+
+	[Header("숙이는 기준 높이")] public float bowThreshold = 1.2f;
+	[Header("숙일 때 낮출 카메라 높이")] public float bowYValue = 0.35f;
 
 	private void Start()
 	{
