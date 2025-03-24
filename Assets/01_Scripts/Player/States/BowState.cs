@@ -3,9 +3,6 @@ using UnityEngine;
 public class BowState : State
 {
 	public bool isBow = false;
-	public float bowThreshold = 1.2f; // 숙이는 기준 높이 (단위: 미터)
-
-	public float bowYValue = 0.35f;
 
 	public override void Enter(PlayerController player)
 	{
@@ -14,6 +11,9 @@ public class BowState : State
 
 	public override void Execute(PlayerController player)
 	{
+		float bowThreshold = player.bowThreshold;
+		float bowYValue = player.bowYValue;
+
 		// 현재 헤드셋(카메라)의 Y 좌표 가져오기
 		float headHeight = Camera.main.transform.position.y;
 
