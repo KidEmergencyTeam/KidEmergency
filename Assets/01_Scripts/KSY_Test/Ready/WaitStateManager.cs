@@ -22,7 +22,6 @@ public class WaitStateManager : MonoBehaviour
     {
         // 태그가 "Player"인 모든 오브젝트에서 PlayerReady.cs 찾기
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        GameObject[] npcObjects = GameObject.FindGameObjectsWithTag("NPC");
         foreach (GameObject player in players)
         {
             PlayerReady pr = player.GetComponent<PlayerReady>();
