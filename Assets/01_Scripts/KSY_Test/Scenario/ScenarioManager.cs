@@ -223,6 +223,7 @@ public class ScenarioManager : MonoBehaviour
     // 사용자 손수건 처리
     IEnumerator Step13()
     {
+        yield return PlayAndWait(8);
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
         yield return null;
     }
