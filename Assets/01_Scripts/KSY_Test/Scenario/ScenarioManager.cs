@@ -78,49 +78,59 @@ public class ScenarioManager : MonoBehaviour
 
         // 스텝별 시나리오 정의
         scenarioSteps = new Dictionary<int, Func<IEnumerator>>()
-        {
-            { 1, Step1 },
-            { 2, Step2 },
-            { 3, Step3 },
-            { 4, Step4 },
-            { 5, Step5 },
-            { 6, Step6 },
-            { 7, Step7 },
-            { 8, Step8 },
-            { 9, Step9 },
-            { 10, Step10 },
-            { 11, Step11 },
-            { 12, Step12 },
-            { 13, Step13 },
-            { 14, Step14 },
-            { 15, Step15 },
-            { 16, Step16 },
-            { 17, Step17 },
-            { 18, Step18 },
-            { 19, Step19 },
-            { 20, Step20 },
-            { 21, Step21 },
-            { 22, Step22 },
-            { 23, Step23 },
-            { 24, Step24 },
-            { 25, Step25 },
-            { 26, Step26 },
-            { 27, Step27 },
-            { 28, Step28 },
-            { 29, Step29 },
-            { 30, Step30 },
-            { 31, Step31 },
-            { 32, Step32 },
-            { 33, Step33 },
-            { 34, Step34 },
-            { 35, Step35 },
-            { 36, Step36 },
-            { 37, Step37 },
-            { 38, Step38 }
-        };
+    {
+        { 1, Step1 },
+        { 2, Step2 },
+        { 3, Step3 },
+        { 4, Step4 },
+        { 5, Step5 },
+        { 6, Step6 },
+        { 7, Step7 },
+        { 8, Step8 },
+        { 9, Step9 },
+        { 10, Step10 },
+        { 11, Step11 },
+        { 12, Step12 },
+        { 13, Step13 },
+        { 14, Step14 },
+        { 15, Step15 },
+        { 16, Step16 },
+        { 17, Step17 },
+        { 18, Step18 },
+        { 19, Step19 },
+        { 20, Step20 },
+        { 21, Step21 },
+        { 22, Step22 },
+        { 23, Step23 },
+        { 24, Step24 },
+        { 25, Step25 },
+        { 26, Step26 },
+        { 27, Step27 },
+        { 28, Step28 },
+        { 29, Step29 },
+        { 30, Step30 },
+        { 31, Step31 },
+        { 32, Step32 },
+        { 33, Step33 },
+        { 34, Step34 },
+        { 35, Step35 },
+        { 36, Step36 },
+        { 37, Step37 },
+        { 38, Step38 }
+    };
+
+        // FadeIn 효과 후 시나리오 실행
+        StartCoroutine(StartSequence());
+    }
+
+    // FadeIn 효과가 완료된 후 시나리오를 실행하는 코루틴
+    private IEnumerator StartSequence()
+    {
+        // 페이드 인 효과 실행 및 완료 대기
+        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
 
         // 시나리오 실행 시작
-        StartCoroutine(RunScenario());
+        yield return StartCoroutine(RunScenario());
     }
 
     // 시나리오를 순차적으로 실행
@@ -212,6 +222,22 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(8);
 
+        // 태그가 "Player"인 오브젝트들을 모두 찾음
+        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
+
+        foreach (GameObject player in players)
+        {
+            // 각 오브젝트에서 NpcRig.cs 가져오기
+            NpcRig npcRig = player.GetComponent<NpcRig>();
+
+            if (npcRig != null)
+            {
+                // state를 Bow로 설정합니다.
+                npcRig.state = NpcRig.State.Hold;
+            }
+        }
+        yield return null;
+
         // 아래 손수건 관련 로직 주석 처리
         /*
         // 비활성화된 손수건 오브젝트도 찾기
@@ -298,13 +324,55 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step19() { yield return PlayAndWait(12); }
     IEnumerator Step20() { yield return PlayAndWait(13); }
-    IEnumerator Step21() { yield return PlayAndWait(14); }
+
+    // Step21 대사 출력 이후
+    // 피난 유도선 아웃라인 효과 실행 -> Emergency_Exit 오브젝트 대상
+    IEnumerator Step21()
+    {
+        // 태그가 "SafetyLine"인 오브젝트들을 모두 찾음
+        GameObject[] safetyLineObjects = GameObject.FindGameObjectsWithTag("SafetyLine");
+
+        foreach (GameObject obj in safetyLineObjects)
+        {
+            // 각 오브젝트에서 ToggleOutlinable.cs 가져오기
+            ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
+
+            if (toggleComp != null)
+            {
+                // Outlinable 활성화 (false에서 true로 전환)
+                toggleComp.OutlinableEnabled = true;
+            }
+            else
+            {
+                Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
+            }
+        }
+        yield return PlayAndWait(14);
+    }
 
     // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
-    IEnumerator Step22() { yield return null; }
+    IEnumerator Step22()
+    {
+        // 태그가 "Player"인 오브젝트들을 모두 찾음
+        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
+
+        foreach (GameObject player in players)
+        {
+            // 각 오브젝트에서 NpcRig.cs 가져오기
+            NpcRig npcRig = player.GetComponent<NpcRig>();
+
+            if (npcRig != null)
+            {
+                // state를 Bow로 설정합니다.
+                npcRig.state = NpcRig.State.Bow;
+            }
+        }
+        yield return null;
+    }
+
     IEnumerator Step23() { yield return PlayAndWait(15); }
 
-    // Step24 선택지: 피난유도선 vs 익숙한 길
+    // Step24 선택지: 피난유도선 vs 익숙한 길 
     IEnumerator Step24()
     {
         int selected = 0;

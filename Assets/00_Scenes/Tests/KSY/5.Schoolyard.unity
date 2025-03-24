@@ -1881,7 +1881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &179373365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15176,7 +15176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7179101365202963679, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: NPC
       objectReference: {fileID: 0}
     - target: {fileID: 7896661323386678213, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_Name
@@ -26647,6 +26647,7 @@ GameObject:
   - component: {fileID: 2072854842}
   - component: {fileID: 2072854841}
   - component: {fileID: 2072854840}
+  - component: {fileID: 2072854843}
   m_Layer: 0
   m_Name: VR + Player
   m_TagString: Player
@@ -26699,6 +26700,25 @@ Transform:
   - {fileID: 744471194}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &2072854843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072854839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0cb0af9ef6a4c4f8d7bb9c57989cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _leftRay: {fileID: 1720752936}
+  _rightRay: {fileID: 179373365}
+  _leftLine: {fileID: 1720752938}
+  _rightLine: {fileID: 179373367}
+  _leftLineRenderer: {fileID: 1720752939}
+  _rightLineRenderer: {fileID: 179373368}
 --- !u!1 &2076811876
 GameObject:
   m_ObjectHideFlags: 0

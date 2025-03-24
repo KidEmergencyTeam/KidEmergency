@@ -15,9 +15,6 @@ public class WaitStateManager : MonoBehaviour
     [Header("게임 시작 대기 시간")]
     public float gameStartDelay = 2f;
 
-    [Header("페이드 효과")]
-    public FadeInOut fadeInOut;
-
     // 대기 중인 플레이어들의 PlayerReady.cs를 저장할 리스트
     private List<PlayerReady> playerReadyList = new List<PlayerReady>();
 
@@ -25,6 +22,7 @@ public class WaitStateManager : MonoBehaviour
     {
         // 태그가 "Player"인 모든 오브젝트에서 PlayerReady.cs 찾기
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] npcObjects = GameObject.FindGameObjectsWithTag("NPC");
         foreach (GameObject player in players)
         {
             PlayerReady pr = player.GetComponent<PlayerReady>();
@@ -44,6 +42,7 @@ public class WaitStateManager : MonoBehaviour
         if (AllPlayersReady())
         {
             Debug.Log("모든 플레이어 준비 완료!");
+
             // 일정 시간 대기 후 씬 전환 실행
             Invoke("StartGame", gameStartDelay);
         }
@@ -85,16 +84,17 @@ public class WaitStateManager : MonoBehaviour
         StartCoroutine(LoadSceneWithFadeOutAsync());
     }
 
-    // 페이드 아웃 효과 실행 후  비동기 방식으로 씬 전환 -> 페이드 아웃 효과 필수
+    // 비동기 방식으로 씬 전환
     IEnumerator LoadSceneWithFadeOutAsync()
     {
-        // fadeInOut null 상태라면 바로 씬 전환
-        if (fadeInOut == null)
+        // FadeInOut 싱글톤 인스턴스가 null 상태라면
+        // 페이드 인/아웃 효과 없이 바로 씬 전환
+        if (FadeInOut.Instance == null)
         {
-            Debug.LogError("FadeInOut 컴포넌트가 연결되어 있지 않습니다.");
+            Debug.LogError("FadeInOut 싱글톤 인스턴스가 연결되어 있지 않습니다.");
 
             // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
-            // 추후에 로딩중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
+            // 추후에 로딩 중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
             while (!asyncLoad.isDone)
             {
@@ -102,22 +102,23 @@ public class WaitStateManager : MonoBehaviour
                 yield return null;
             }
 
-            // fadeInOut null 상태라면
-            // 씬 전환 이후
-            // 코루틴을 명시적으로 종료
+            // 인스턴스가 null인 상태라면 코루틴 종료
             yield break;
         }
 
-        // fadeInOut null 상태가 아니라면
-        // 페이드 아웃 효과 실행 이후
-        yield return StartCoroutine(fadeInOut.FadeOut());
+        // FadeInOut 싱글톤 인스턴스가 정상적으로 존재하는 경우
+        // 1. 페이드 아웃 효과 실행
+        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
 
-        // 비동기 방식으로 씬 전환
+        // 2. 씬 전환 
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
         while (!asyncOperation.isDone)
         {
             // 로딩 대기
             yield return null;
         }
+
+        // 3. 씬 로드 후 페이드 인 효과 실행
+        // ScenarioManager.cs -> Start에서 코루틴으로 처리 (페이드 인 효과 이후 시나리오 진행)
     }
 }

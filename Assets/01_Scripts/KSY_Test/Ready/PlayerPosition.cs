@@ -48,6 +48,7 @@ public class PlayerPosition : MonoBehaviour
     private void FillPlayersFromTag()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] npcObjects = GameObject.FindGameObjectsWithTag("NPC");
         var sortedPlayers = players.OrderBy(p => p.transform.GetSiblingIndex()).ToArray();
 
         foreach (GameObject player in sortedPlayers)
