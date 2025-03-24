@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RayController2 : MonoBehaviour
@@ -46,7 +46,7 @@ public class RayController2 : MonoBehaviour
         {
             // 이름으로 좌측 그립 액션 찾기 
             leftSelectAction = inputActionAsset.FindAction("XRI LeftHand Interaction/Select", true);
-            
+
             // 액션이 존재하면 이벤트 등록
             if (leftSelectAction != null)
             {
@@ -67,8 +67,6 @@ public class RayController2 : MonoBehaviour
                 rightSelectAction.Enable();
                 Debug.Log("[RayController2] 우측 컨트롤러 Select 액션 활성화");
             }
-
-            // 액션이 존재하면 이벤트 등록
             else
             {
                 Debug.LogError("[RayController2] 우측 컨트롤러 Select 액션을 찾을 수 없습니다.");
@@ -107,7 +105,6 @@ public class RayController2 : MonoBehaviour
                 SwitchLeftRay();
             }
         }
-
         // 우측 그립 입력 시
         else if (context.action == rightSelectAction)
         {
@@ -146,5 +143,20 @@ public class RayController2 : MonoBehaviour
         _rightRay.enabled = true;
         _rightLine.enabled = true;
         _rightLineRenderer.enabled = true;
+    }
+
+    // 선택지 처리 후 InputAction을 재활성화
+    public void ReactivateInputActions()
+    {
+        if (leftSelectAction != null && !leftSelectAction.enabled)
+        {
+            leftSelectAction.Enable();
+            Debug.Log("[RayController2] 좌측 Input Action 재활성화");
+        }
+        if (rightSelectAction != null && !rightSelectAction.enabled)
+        {
+            rightSelectAction.Enable();
+            Debug.Log("[RayController2] 우측 Input Action 재활성화");
+        }
     }
 }

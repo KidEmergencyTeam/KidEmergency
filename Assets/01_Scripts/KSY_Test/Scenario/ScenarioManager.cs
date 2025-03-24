@@ -14,15 +14,18 @@ using UnityEngine.SceneManagement;
 // 6. 00_Scenes/Tests/Fire_School_Ready
 // 7. 00_Scenes/Tests/LJW/LJW_Start
 
-// 파티클
+// 씬별 파티클 설정
 [Serializable]
-public class ParticleSetup
+public class SceneParticleSetup
 {
+    [Header("씬 이름")]
+    public string sceneName;
+
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
     [Header("파티클 위치")]
-    public List<Transform> particleSpawnPoints; 
+    public List<Vector3> particlePositions;
 }
 
 public class ScenarioManager : MonoBehaviour
@@ -32,8 +35,9 @@ public class ScenarioManager : MonoBehaviour
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
-    [Header("연기 파티클 + 위치")]
-    public ParticleSetup smokeParticleData;
+    // 기존 ParticleSetup 대신 씬별 파티클 설정 리스트 사용
+    [Header("씬별 파티클 설정")]
+    public List<SceneParticleSetup> sceneParticleSetups;
 
     [Header("씬 이름")]
     public List<string> sceneNames;
@@ -64,9 +68,10 @@ public class ScenarioManager : MonoBehaviour
             return;
         }
 
-        if (smokeParticleData == null)
+        // 씬별 파티클 설정 유효성 검사
+        if (sceneParticleSetups == null || sceneParticleSetups.Count == 0)
         {
-            Debug.LogError("ParticleSetup(연기 파티클 + 파티클 위치)가 설정되지 않았습니다.");
+            Debug.LogError("씬별 파티클 설정이 정의되지 않았습니다.");
             return;
         }
 
@@ -78,46 +83,46 @@ public class ScenarioManager : MonoBehaviour
 
         // 스텝별 시나리오 정의
         scenarioSteps = new Dictionary<int, Func<IEnumerator>>()
-    {
-        { 1, Step1 },
-        { 2, Step2 },
-        { 3, Step3 },
-        { 4, Step4 },
-        { 5, Step5 },
-        { 6, Step6 },
-        { 7, Step7 },
-        { 8, Step8 },
-        { 9, Step9 },
-        { 10, Step10 },
-        { 11, Step11 },
-        { 12, Step12 },
-        { 13, Step13 },
-        { 14, Step14 },
-        { 15, Step15 },
-        { 16, Step16 },
-        { 17, Step17 },
-        { 18, Step18 },
-        { 19, Step19 },
-        { 20, Step20 },
-        { 21, Step21 },
-        { 22, Step22 },
-        { 23, Step23 },
-        { 24, Step24 },
-        { 25, Step25 },
-        { 26, Step26 },
-        { 27, Step27 },
-        { 28, Step28 },
-        { 29, Step29 },
-        { 30, Step30 },
-        { 31, Step31 },
-        { 32, Step32 },
-        { 33, Step33 },
-        { 34, Step34 },
-        { 35, Step35 },
-        { 36, Step36 },
-        { 37, Step37 },
-        { 38, Step38 }
-    };
+        {
+            { 1, Step1 },
+            { 2, Step2 },
+            { 3, Step3 },
+            { 4, Step4 },
+            { 5, Step5 },
+            { 6, Step6 },
+            { 7, Step7 },
+            { 8, Step8 },
+            { 9, Step9 },
+            { 10, Step10 },
+            { 11, Step11 },
+            { 12, Step12 },
+            { 13, Step13 },
+            { 14, Step14 },
+            { 15, Step15 },
+            { 16, Step16 },
+            { 17, Step17 },
+            { 18, Step18 },
+            { 19, Step19 },
+            { 20, Step20 },
+            { 21, Step21 },
+            { 22, Step22 },
+            { 23, Step23 },
+            { 24, Step24 },
+            { 25, Step25 },
+            { 26, Step26 },
+            { 27, Step27 },
+            { 28, Step28 },
+            { 29, Step29 },
+            { 30, Step30 },
+            { 31, Step31 },
+            { 32, Step32 },
+            { 33, Step33 },
+            { 34, Step34 },
+            { 35, Step35 },
+            { 36, Step36 },
+            { 37, Step37 },
+            { 38, Step38 }
+        };
 
         // FadeIn 효과 후 시나리오 실행
         StartCoroutine(StartSequence());
@@ -168,24 +173,11 @@ public class ScenarioManager : MonoBehaviour
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
+
+    // 교실 씬 -> 연기 파티클 처리
     IEnumerator Step3()
     {
-        // 위치 반영해서 파티클 실행 
-        if (smokeParticleData != null &&
-            smokeParticleData.particleSpawnPoints != null &&
-            smokeParticleData.particleSpawnPoints.Count > 0)
-        {
-            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
-            {
-                if (spawnPoint != null)
-                {
-                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
-                    ps.Play();
-                }
-            }
-        }
-
-        yield return null;
+        yield return StartCoroutine(PlaySmokeParticles());
     }
     IEnumerator Step4() { yield return PlayAndWait(2); }
     IEnumerator Step5() { yield return PlayAndWait(3); }
@@ -218,24 +210,13 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step11() { yield return null; }
     IEnumerator Step12() { yield return PlayAndWait(7); }
+
+    // Step13: NPC 상태를 Hold로 변경
+    // 사용자 손수건 처리
     IEnumerator Step13()
     {
-        yield return PlayAndWait(8);
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
 
-        // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
-
-        foreach (GameObject player in players)
-        {
-            // 각 오브젝트에서 NpcRig.cs 가져오기
-            NpcRig npcRig = player.GetComponent<NpcRig>();
-
-            if (npcRig != null)
-            {
-                // state를 Bow로 설정합니다.
-                npcRig.state = NpcRig.State.Hold;
-            }
-        }
         yield return null;
 
         // 아래 손수건 관련 로직 주석 처리
@@ -312,7 +293,13 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
-    IEnumerator Step16() { yield return PlayAndWait(10); }
+
+    // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
+    IEnumerator Step16()
+    {
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
+        yield return PlayAndWait(10);
+    }
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
     // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
@@ -350,29 +337,17 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(14);
     }
 
-    // Step22 유저가 몸을 숙이는 애니메이션을 보여준다 유저의 시점이 낮아진다.
+    // Step22: NPC 상태를 Bow로 변경 -> 운동장 씬 전까지 유지
+    // 사용자 낮은 자세로 숙이기
     IEnumerator Step22()
     {
-        // 태그가 "Player"인 오브젝트들을 모두 찾음
-        GameObject[] players = GameObject.FindGameObjectsWithTag("NPC");
-
-        foreach (GameObject player in players)
-        {
-            // 각 오브젝트에서 NpcRig.cs 가져오기
-            NpcRig npcRig = player.GetComponent<NpcRig>();
-
-            if (npcRig != null)
-            {
-                // state를 Bow로 설정합니다.
-                npcRig.state = NpcRig.State.Bow;
-            }
-        }
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
         yield return null;
     }
 
     IEnumerator Step23() { yield return PlayAndWait(15); }
 
-    // Step24 선택지: 피난유도선 vs 익숙한 길 
+    // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
     IEnumerator Step24()
     {
         int selected = 0;
@@ -383,6 +358,7 @@ public class ScenarioManager : MonoBehaviour
         // 정답: 피난 유도선 선택 시 Step25로 이동
         if (selected == 1)
             currentStep = 24;
+
         // 오답: 익숙한 길 선택 시 Step27로 이동
         else
             currentStep = 26;
@@ -402,11 +378,20 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(18);
         yield return StartCoroutine(ChangeScene(1));
+
+        // 씬 전환 -> NPC 상태 초기화
     }
-    IEnumerator Step29() { yield return PlayAndWait(19); }
+
+    // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
+    IEnumerator Step29()
+    {
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
+        yield return PlayAndWait(19);
+    }
+
     IEnumerator Step30() { yield return PlayAndWait(20); }
 
-    // Step31 선택지: 계단 VS 엘베
+    // Step31: 선택지 처리 (계단 VS 엘베)
     IEnumerator Step31()
     {
         int selected = 0;
@@ -417,6 +402,7 @@ public class ScenarioManager : MonoBehaviour
         // 정답: 계단 선택 시 Step32로 이동
         if (selected == 1)
             currentStep = 31;
+
         // 오답: 엘리베이터 선택 시 Step34로 이동
         else
             currentStep = 33;
@@ -433,7 +419,7 @@ public class ScenarioManager : MonoBehaviour
 
     // Step35까지 연기 파티클 유지
     // Step35 -> 페이드 아웃 효과 필수
-    IEnumerator Step35() 
+    IEnumerator Step35()
     {
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
@@ -446,10 +432,12 @@ public class ScenarioManager : MonoBehaviour
         yield return PlayAndWait(24);
     }
     IEnumerator Step37() { yield return PlayAndWait(25); }
-    IEnumerator Step38() 
-    { 
-        yield return PlayAndWait(26); 
-        yield return StartCoroutine(ChangeScene(3)); 
+
+    // 마지막 대사 출력 -> 마지막 씬 이동
+    IEnumerator Step38()
+    {
+        yield return PlayAndWait(26);
+        yield return StartCoroutine(ChangeScene(3));
     }
 
     #endregion
@@ -466,6 +454,7 @@ public class ScenarioManager : MonoBehaviour
 
             // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
+
             while (!asyncLoad.isDone)
             {
                 // 로딩 대기
@@ -481,8 +470,55 @@ public class ScenarioManager : MonoBehaviour
         }
     }
 
-    // 비활성화된 손수건 오브젝트 검색 (주석 처리)
+    // NPC의 상태 전환
+    private IEnumerator SetAllNPCsState(NpcRig.State desiredState)
+    {
+        GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPC");
+
+        foreach (GameObject npc in npcs)
+        {
+            NpcRig npcRig = npc.GetComponent<NpcRig>();
+
+            if (npcRig != null)
+            {
+                npcRig.state = desiredState;
+            }
+        }
+
+        // 모든 NPC 한 번에 상태 전환 -> 많은 NPC가 있을 경우, 약간 버벅거릴 수 있음
+        yield return null;
+    }
+
+    // 연기 파티클 실행
+    public IEnumerator PlaySmokeParticles()
+    {
+        // 현재 활성화된 씬 이름 확인
+        string activeSceneName = SceneManager.GetActiveScene().name;
+
+        // 현재 씬에 해당하는 파티클 설정 찾기
+        SceneParticleSetup particleSetup = sceneParticleSetups.Find(setup => setup.sceneName == activeSceneName);
+
+        // 위치 반영해서 파티클 실행 
+        if (particleSetup != null &&
+            particleSetup.particlePositions != null &&
+            particleSetup.particlePositions.Count > 0)
+        {
+            foreach (Vector3 position in particleSetup.particlePositions)
+            {
+                ParticleSystem ps = Instantiate(particleSetup.smokeEffect, position, Quaternion.identity);
+                ps.Play();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("해당 씬에 대한 파티클 설정이 없거나 파티클 위치가 정의되지 않았습니다: " + activeSceneName);
+        }
+
+        yield return null;
+    }
+
     /*
+    // 비활성화된 손수건 오브젝트 검색 (주석 처리)
     private GameObject FindInactiveObjectWithTag(string tag)
     {
         GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();

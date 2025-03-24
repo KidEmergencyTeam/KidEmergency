@@ -3,16 +3,6 @@ using UnityEngine;
 public class BowState : State
 {
 	public bool isBow = false;
-	public float bowThreshold = 0.5f; // 숙이는 기준 높이 (단위: 미터)
-
-	public Transform xrOrigin;
-	public Transform leftFootIk;
-	public Transform rightFootIk;
-	public Transform leftFoot;
-	public Transform rightFoot;
-	public Transform body;
-
-	public float bowYValue = 0.3f;
 
 	public override void Enter(PlayerController player)
 	{
@@ -21,6 +11,9 @@ public class BowState : State
 
 	public override void Execute(PlayerController player)
 	{
+		float bowThreshold = player.bowThreshold;
+		float bowYValue = player.bowYValue;
+
 		// 현재 헤드셋(카메라)의 Y 좌표 가져오기
 		float headHeight = Camera.main.transform.position.y;
 
@@ -28,23 +21,31 @@ public class BowState : State
 		if (headHeight < bowThreshold && !isBow)
 		{
 			isBow = true;
-			xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
-			leftFootIk.localPosition += new Vector3(0, bowYValue, 0);
-			rightFootIk.localPosition += new Vector3(0, bowYValue, 0);
-			leftFoot.localPosition += new Vector3(0, bowYValue, 0);
-			rightFoot.localPosition += new Vector3(0, bowYValue, 0);
-			body.localPosition -= new Vector3(0, bowYValue, 0);
+			player.xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
+			player.leftFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
+			player.rightFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
+			player.leftFootTarget.localPosition += new Vector3(0, bowYValue, 0);
+			player.rightFootTarget.localPosition += new Vector3(0, bowYValue, 0);
+			player.bodyTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			player.playerTargetFollower.followTargets[2].posOffset +=
+				new Vector3(0, bowYValue, 0);
+			player.playerTargetFollower.followTargets[3].posOffset +=
+				new Vector3(0, bowYValue, 0);
 		}
 		// 일정 높이 이상 올라가면 다시 서기
-		else if (headHeight > bowThreshold && isBow)
+		else if (headHeight > bowThreshold - bowYValue && isBow)
 		{
 			isBow = false;
-			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
-			leftFootIk.localPosition -= new Vector3(0, bowYValue, 0);
-			rightFootIk.localPosition -= new Vector3(0, bowYValue, 0);
-			leftFoot.localPosition -= new Vector3(0, bowYValue, 0);
-			rightFoot.localPosition -= new Vector3(0, bowYValue, 0);
-			body.localPosition += new Vector3(0, bowYValue, 0);
+			player.xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			player.leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			player.rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			player.leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			player.rightFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			player.bodyTarget.localPosition += new Vector3(0, bowYValue, 0);
+			player.playerTargetFollower.followTargets[2].posOffset -=
+				new Vector3(0, bowYValue, 0);
+			player.playerTargetFollower.followTargets[3].posOffset -=
+				new Vector3(0, bowYValue, 0);
 		}
 	}
 
