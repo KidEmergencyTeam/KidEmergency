@@ -24,7 +24,7 @@ public class PlayerPosition : MonoBehaviour
 
     private void Update()
     {
-        // 빈 슬롯이 있으면 태그로부터 플레이어를 찾아 추가
+        // 빈 슬롯이 있으면 태그로부터 플레이어와 NPC를 찾아 추가
         if (HasEmptySlot())
         {
             FillPlayersFromTag();
@@ -44,16 +44,23 @@ public class PlayerPosition : MonoBehaviour
         return false;
     }
 
-    // 태그 "Player"를 가진 오브젝트들을 찾아 슬롯에 추가
+    // 태그 "Player"와 "NPC"를 가진 오브젝트들을 찾아 슬롯에 추가
     private void FillPlayersFromTag()
     {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
         GameObject[] npcObjects = GameObject.FindGameObjectsWithTag("NPC");
-        var sortedPlayers = players.OrderBy(p => p.transform.GetSiblingIndex()).ToArray();
 
-        foreach (GameObject player in sortedPlayers)
+        // 두 배열을 합쳐서 모두 처리
+        List<GameObject> allObjects = new List<GameObject>();
+        allObjects.AddRange(playerObjects);
+        allObjects.AddRange(npcObjects);
+
+        // 필요에 따라 정렬 (여기서는 GetSiblingIndex 기준 정렬)
+        var sortedObjects = allObjects.OrderBy(p => p.transform.GetSiblingIndex()).ToArray();
+
+        foreach (GameObject obj in sortedObjects)
         {
-            AddPlayer(player);
+            AddPlayer(obj);
         }
     }
 
