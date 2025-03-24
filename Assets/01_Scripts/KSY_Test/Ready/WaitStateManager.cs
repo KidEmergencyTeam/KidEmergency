@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+// 준비 처리
 public class WaitStateManager : MonoBehaviour
 {
     [Header("대기 상태 UI")]
