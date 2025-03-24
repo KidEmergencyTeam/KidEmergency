@@ -10,23 +10,24 @@ public class Grabber : MonoBehaviour
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
 
 	[HideInInspector] public Grabbable currentGrabbedObject;
+	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private HandAnimation _handAnimation;
-	private InputActionProperty _controllerButtonClick;
 	private TargetFollower _targetFollower;
 	private SphereCollider _detectCollider;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
 
-	public bool Grabbed => currentGrabbedObject;
+	private bool Grabbed => currentGrabbedObject;
 
 	private void Start()
 	{
 		_detectCollider = GetComponent<SphereCollider>();
+		_detectCollider.isTrigger = true;
 		_detectCollider.radius = detectRadius;
 
 		_handAnimation = FindObjectOfType<HandAnimation>();
-		if (isLeft) _controllerButtonClick = _handAnimation.leftGrip;
-		else _controllerButtonClick = _handAnimation.rightGrip;
+		if (isLeft) controllerButtonClick = _handAnimation.leftGrip;
+		else controllerButtonClick = _handAnimation.rightGrip;
 
 		_targetFollower = FindObjectOfType<TargetFollower>();
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[2].target);
@@ -68,7 +69,7 @@ public class Grabber : MonoBehaviour
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (_controllerButtonClick.action.ReadValue<float>() > 0 &&
+		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
 		    grabbable.isGrabbable &&
 		    grabbable.isLeft == isLeft)
 		{
