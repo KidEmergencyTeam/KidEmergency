@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// 위치 설정
 [System.Serializable]
 public class PlayerEntry
 {
