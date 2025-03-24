@@ -193,7 +193,6 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step6() { yield return PlayAndWait(4); }
 
     // Step7 선택지: 손 vs 손수건
-    // 손수건 오브젝트 상호작용 보류
     IEnumerator Step7()
     {
         int selected = 0;
