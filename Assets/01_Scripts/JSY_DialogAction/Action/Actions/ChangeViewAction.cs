@@ -5,10 +5,12 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
 {
     public GameObject camOffset;
     private bool _isComplete = false;
+    private Vector3 _originPos;
     public bool IsActionComplete => _isComplete;
 
     private void Start()
     {
+        _originPos = camOffset.transform.localPosition;
     }
 
     public void StartAction()
@@ -24,7 +26,19 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
 
         while (camOffset.transform.position != newPos)
         {
-            camOffset.transform.position = newPos;
+            JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
+            
+            if (newPos == _originPos)
+            {
+                camOffset.transform.position = newPos;
+                npcCtrl.SetNPCState("None");
+            }
+            
+            else if (newPos != _originPos)
+            {
+                camOffset.transform.position = newPos;
+                npcCtrl.SetNPCState("DownDesk");
+            }
             
             yield return StartCoroutine(FadeInOut.Instance.FadeIn());
             _isComplete = true;
