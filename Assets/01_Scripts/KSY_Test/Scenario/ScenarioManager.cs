@@ -321,6 +321,8 @@ public class ScenarioManager : MonoBehaviour
         yield return null;
     }
     IEnumerator Step19() { yield return PlayAndWait(12); }
+
+    // 연기 파티클 강조
     IEnumerator Step20() { yield return PlayAndWait(13); }
 
     // Step21 대사 출력 이후
