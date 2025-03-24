@@ -14,10 +14,13 @@ using UnityEngine.SceneManagement;
 // 6. 00_Scenes/Tests/Fire_School_Ready
 // 7. 00_Scenes/Tests/LJW/LJW_Start
 
-// 파티클
+// 씬별 파티클 설정
 [Serializable]
-public class ParticleSetup
+public class SceneParticleSetup
 {
+    [Header("씬 이름")]
+    public string sceneName;
+
     [Header("연기 파티클")]
     public ParticleSystem smokeEffect;
 
@@ -32,8 +35,9 @@ public class ScenarioManager : MonoBehaviour
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
-    [Header("연기 파티클 + 위치")]
-    public ParticleSetup smokeParticleData;
+    // 기존 ParticleSetup 대신 씬별 파티클 설정 리스트 사용
+    [Header("씬별 파티클 설정")]
+    public List<SceneParticleSetup> sceneParticleSetups;
 
     [Header("씬 이름")]
     public List<string> sceneNames;
@@ -64,9 +68,10 @@ public class ScenarioManager : MonoBehaviour
             return;
         }
 
-        if (smokeParticleData == null)
+        // 씬별 파티클 설정 유효성 검사
+        if (sceneParticleSetups == null || sceneParticleSetups.Count == 0)
         {
-            Debug.LogError("ParticleSetup(연기 파티클 + 파티클 위치)가 설정되지 않았습니다.");
+            Debug.LogError("씬별 파티클 설정이 정의되지 않았습니다.");
             return;
         }
 
@@ -168,24 +173,11 @@ public class ScenarioManager : MonoBehaviour
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
     IEnumerator Step2() { yield return PlayAndWait(1); }
+
+    // 교실 씬 -> 연기 파티클 처리
     IEnumerator Step3()
     {
-        // 위치 반영해서 파티클 실행 
-        if (smokeParticleData != null &&
-            smokeParticleData.particleSpawnPoints != null &&
-            smokeParticleData.particleSpawnPoints.Count > 0)
-        {
-            foreach (Transform spawnPoint in smokeParticleData.particleSpawnPoints)
-            {
-                if (spawnPoint != null)
-                {
-                    ParticleSystem ps = Instantiate(smokeParticleData.smokeEffect, spawnPoint.position, Quaternion.identity);
-                    ps.Play();
-                }
-            }
-        }
-
-        yield return null;
+        yield return StartCoroutine(PlaySmokeParticles());
     }
     IEnumerator Step4() { yield return PlayAndWait(2); }
     IEnumerator Step5() { yield return PlayAndWait(3); }
@@ -303,10 +295,10 @@ public class ScenarioManager : MonoBehaviour
     }
 
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
-    IEnumerator Step16() 
+    IEnumerator Step16()
     {
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        yield return PlayAndWait(10); 
+        yield return PlayAndWait(10);
     }
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
@@ -386,12 +378,12 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(18);
         yield return StartCoroutine(ChangeScene(1));
-        
+
         // 씬 전환 -> NPC 상태 초기화
     }
 
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
-    IEnumerator Step29()    
+    IEnumerator Step29()
     {
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
         yield return PlayAndWait(19);
@@ -494,7 +486,38 @@ public class ScenarioManager : MonoBehaviour
         }
 
         // 모든 NPC 한 번에 상태 전환 -> 많은 NPC가 있을 경우, 약간 버벅거릴 수 있음
-        yield return null; 
+        yield return null;
+    }
+
+    // 연기 파티클 실행
+    public IEnumerator PlaySmokeParticles()
+    {
+        // 현재 활성화된 씬 이름 확인
+        string activeSceneName = SceneManager.GetActiveScene().name;
+
+        // 현재 씬에 해당하는 파티클 설정 찾기
+        SceneParticleSetup particleSetup = sceneParticleSetups.Find(setup => setup.sceneName == activeSceneName);
+
+        // 위치 반영해서 파티클 실행 
+        if (particleSetup != null &&
+            particleSetup.particleSpawnPoints != null &&
+            particleSetup.particleSpawnPoints.Count > 0)
+        {
+            foreach (Transform spawnPoint in particleSetup.particleSpawnPoints)
+            {
+                if (spawnPoint != null)
+                {
+                    ParticleSystem ps = Instantiate(particleSetup.smokeEffect, spawnPoint.position, Quaternion.identity);
+                    ps.Play();
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("해당 씬에 대한 파티클 설정이 없거나 파티클 위치가 정의되지 않았습니다: " + activeSceneName);
+        }
+
+        yield return null;
     }
 
     /*
