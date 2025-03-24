@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DownState : State
 {
-	private int _loop = 0;
+	public bool isDown = false;
 
 	public override void Enter(PlayerController player)
 	{
@@ -11,11 +11,41 @@ public class DownState : State
 
 	public override void Execute(PlayerController player)
 	{
-		_loop++;
-		Debug.Log("Down state...");
-		if (_loop > 100)
+		float downThreshold = player.downThreshold;
+		float downYValue = player.downYValue;
+
+		// 현재 헤드셋(카메라)의 Y 좌표 가져오기
+		float headHeight = Camera.main.transform.position.y;
+
+		// 기준보다 낮아지면 숙이기
+		if (headHeight < downThreshold && !isDown)
 		{
-			player.ChangeStateToNone();
+			isDown = true;
+			player.xrOrigin.localPosition -= new Vector3(0, downYValue, 0);
+			player.leftFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
+			player.rightFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
+			player.leftFootTarget.localPosition += new Vector3(0, downYValue, 0);
+			player.rightFootTarget.localPosition += new Vector3(0, downYValue, 0);
+			player.bodyTarget.localPosition -= new Vector3(0, downYValue, 0);
+			player.playerTargetFollower.followTargets[2].posOffset +=
+				new Vector3(0, downYValue, 0);
+			player.playerTargetFollower.followTargets[3].posOffset +=
+				new Vector3(0, downYValue, 0);
+		}
+		// 일정 높이 이상 올라가면 다시 서기
+		else if (headHeight > downThreshold - downYValue && isDown)
+		{
+			isDown = false;
+			player.xrOrigin.localPosition += new Vector3(0, downYValue, 0);
+			player.leftFootIkTarget.localPosition -= new Vector3(0, downYValue, 0);
+			player.rightFootIkTarget.localPosition -= new Vector3(0, downYValue, 0);
+			player.leftFootTarget.localPosition -= new Vector3(0, downYValue, 0);
+			player.rightFootTarget.localPosition -= new Vector3(0, downYValue, 0);
+			player.bodyTarget.localPosition += new Vector3(0, downYValue, 0);
+			player.playerTargetFollower.followTargets[2].posOffset -=
+				new Vector3(0, downYValue, 0);
+			player.playerTargetFollower.followTargets[3].posOffset -=
+				new Vector3(0, downYValue, 0);
 		}
 	}
 
