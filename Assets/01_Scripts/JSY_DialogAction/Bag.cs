@@ -23,17 +23,33 @@ public class Bag : MonoBehaviour
 
     public void BagInteraction()
     {
-        StartCoroutine(ProtectHead());
+        if (!_isGrab)
+        {
+            StartCoroutine(ProtectHead());
+        }
+    }
+    
+    private void Update()
+    {
+        _sceneName = SceneManager.GetActiveScene().name;
+        if (_sceneName == "JSY_SchoolGround")
+        {
+            Destroy(this.gameObject);
+            UIManager.Instance.CloseWarningUI();
+        }
     }
 
-    private void Grapped()
+    private IEnumerator ProtectHead()
     {
-        if (ActionManager.Instance.currentAction == ActionType.FixingBag)
+        while (!_isGrab)
         {
+            UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
+            UIManager.Instance.OpenWarningUI();
+
             print($"가방 위치: {this.transform.position}, 컨트롤러 위치: {_leftController.transform.position}");
 
             if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
-                     _leftController.selectAction.action.ReadValue<float>() > 0)
+                _leftController.selectAction.action.ReadValue<float>() > 0)
             {
                 this.transform.SetParent(_leftController.transform);
                 this.transform.localPosition = Vector3.zero;
@@ -41,34 +57,14 @@ public class Bag : MonoBehaviour
                 rb.isKinematic = true;
                 _isGrab = true;
             }
-        }
-    }
-    
-    private void Update()
-    {
-        if (this.gameObject != null && !_isGrab)
-        {
-            Grapped();
-        }
-        
-        _sceneName = SceneManager.GetActiveScene().name;
-        if (_sceneName == "JSY_SchoolGround")
-        {
-            Destroy(this.gameObject);
-            UIManager.Instance.CloseWarningUI();
-            // 플레이어 컨트롤러로 상태도 바꾸기
-        }
-    }
 
-    private IEnumerator ProtectHead()
-    {
-        // this.gameObject.transform.SetParent(_player.transform);
+            yield return null;
+        }
         
         while (_sceneName != "JSY_SchoolGround" && _isGrab)
         {
             if (!IsProtect())
             {
-                UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
                 UIManager.Instance.OpenWarningUI();
             }
 

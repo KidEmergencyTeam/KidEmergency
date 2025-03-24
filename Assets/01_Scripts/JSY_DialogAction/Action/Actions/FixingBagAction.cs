@@ -12,20 +12,16 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
         _isComplete = false;
         StartCoroutine(Fixing());
     }
-
-    public void StartMultiModeAction()
-    {
-        _isComplete = false;        
-    }
-
+    
     private IEnumerator Fixing()
     {
         Bag bag = FindObjectOfType<Bag>();
         JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
         npcCtrl.SetNPCState("HoldBag");
+        bag.BagInteraction();
+        
         while (!_isComplete)
         {
-            bag.BagInteraction();
             if (bag.IsProtect())
             {
                 _isComplete = true;
