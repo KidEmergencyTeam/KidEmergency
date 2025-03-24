@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-// using UnityEngine.XR.Interaction.Toolkit; -> 보류된 손수건 상호작용 
+using UnityEngine.XR.Interaction.Toolkit;
 
 // 빌드 세팅 목록
 // 1. 00_Scenes/Tests/KSY/1.Lobby
@@ -57,9 +57,6 @@ public class ScenarioManager : MonoBehaviour
     // 현재 시나리오 스텝 번호
     private int currentStep = 1;
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
-
-    // 충돌 여부 플래그 (Step13에서 대기)
-    // private bool handkerGrabbed = false;
 
     private void Awake()
     {
@@ -228,45 +225,7 @@ public class ScenarioManager : MonoBehaviour
     IEnumerator Step13()
     {
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-
         yield return null;
-
-        // 아래 손수건 관련 로직 주석 처리
-        /*
-        // 비활성화된 손수건 오브젝트도 찾기
-        GameObject handker = FindInactiveObjectWithTag("Handker");
-        if (handker != null)
-        {
-            // 손수건 활성화
-            handker.SetActive(true);
-            Debug.Log("손수건 오브젝트가 활성화되었습니다.");
-        }
-        else
-        {
-            Debug.LogError("손수건 오브젝트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // XRGrabInteractable 컴포넌트 가져오기
-        XRGrabInteractable grab = handker.GetComponent<XRGrabInteractable>();
-        if (grab == null)
-        {
-            Debug.LogError("손수건 오브젝트에 XRGrabInteractable 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // 손수건 충돌 여부 플래그 초기화
-        handkerGrabbed = false;
-        Debug.Log("손수건을 잡고 입에 가져다주세요");
-
-        // HandkerGrabbed()가 호출될 때까지 대기
-        yield return new WaitUntil(() => handkerGrabbed);
-        Debug.Log("손수건과 충돌이 감지되어 다음 스텝으로 진행합니다.");
-
-        // 출력된 대사가 바로 사라지지 않고,
-        // 손수건 상호작용 완료할 때까지 화면에 유지
-        // yield return null; -> 상호작용 기능 완료하면 다시 사용
-        */
     }
 
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
@@ -558,32 +517,4 @@ public class ScenarioManager : MonoBehaviour
         }
         yield return null;
     }
-
-
-    /*
-    // 비활성화된 손수건 오브젝트 검색 (주석 처리)
-    private GameObject FindInactiveObjectWithTag(string tag)
-    {
-        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-        foreach (GameObject obj in allObjects)
-        {
-            // 씬에 속해있는 오브젝트이고, 태그가 일치하는 경우 반환
-            if (obj.CompareTag(tag))
-            {
-                return obj;
-            }
-        }
-        return null;
-    }
-    */
-
-    /*
-    // MouthDetector로부터 손수건과 충돌이 감지되면 호출
-    public void HandkerGrabbed()
-    {
-        Debug.Log("ScenarioManager: 손수건과 충돌이 감지");
-        handkerGrabbed = true;
-        // 추가 로직 구현 가능
-    }
-    */
 }
