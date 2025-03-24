@@ -21,6 +21,8 @@ public class FixingBagAction : MonoBehaviour, IActionEffect
     private IEnumerator Fixing()
     {
         Bag bag = FindObjectOfType<Bag>();
+        JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
+        npcCtrl.SetNPCState("HoldBag");
         while (!_isComplete)
         {
             bag.BagInteraction();

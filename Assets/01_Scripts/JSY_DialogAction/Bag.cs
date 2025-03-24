@@ -11,8 +11,9 @@ public class Bag : MonoBehaviour
     [SerializeField] private string _warningText;
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
-
+    
     private Rigidbody rb;
+    private bool _isGrab = false;
     private string _sceneName;
 
     private void Awake()
@@ -38,13 +39,14 @@ public class Bag : MonoBehaviour
                 this.transform.localPosition = Vector3.zero;
                 this.transform.localRotation = Quaternion.Euler(0,0,-90f);
                 rb.isKinematic = true;
+                _isGrab = true;
             }
         }
     }
     
     private void Update()
     {
-        if (this.gameObject != null)
+        if (this.gameObject != null && !_isGrab)
         {
             Grapped();
         }
@@ -62,7 +64,7 @@ public class Bag : MonoBehaviour
     {
         // this.gameObject.transform.SetParent(_player.transform);
         
-        while (_sceneName != "JSY_SchoolGround")
+        while (_sceneName != "JSY_SchoolGround" && _isGrab)
         {
             if (!IsProtect())
             {

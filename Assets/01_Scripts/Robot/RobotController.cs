@@ -32,7 +32,7 @@ public class RobotController : MonoBehaviour
     public void SetAngry()
     {
         SetAnimaiton("No");
-        setEmotion(7);
+        setEmotion(4);
     }
 
     // ^o^ 표정 ex) 선택지가 정답일 경우
