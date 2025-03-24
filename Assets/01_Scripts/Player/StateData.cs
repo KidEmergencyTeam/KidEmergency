@@ -22,7 +22,7 @@ public static class ModeStateData
 			{
 				"Test", new List<PlayerState>
 				{
-					PlayerState.Bow, PlayerState.Button
+					PlayerState.Down, PlayerState.Button
 				}
 			},
 			{

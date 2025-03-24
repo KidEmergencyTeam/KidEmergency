@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
 	[Header("숙이는 기준 높이")] public float bowThreshold = 1.2f;
 	[Header("숙일 때 낮출 카메라 높이")] public float bowYValue = 0.35f;
 
+	[Header("엎드리는 기준 높이")] public float downThreshold = 1.2f;
+	[Header("엎드릴 때 낮출 카메라 높이")] public float downYValue = 0.35f;
+
 	private void Start()
 	{
 		if (ModeController.Instance?.StateMachine != null)
