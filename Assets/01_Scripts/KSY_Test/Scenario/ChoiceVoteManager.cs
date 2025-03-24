@@ -14,8 +14,8 @@ public class ChoiceVoteManager : MonoBehaviour
     [Serializable]
     public class ChoiceUIPanelSceneReference
     {
-        // 각 플레이어가 사용할 UI 패널 프리팹 (프리팹은 에셋이므로 직접 수정할 수 없으며, 인스턴스화해서 사용)
-        public List<GameObject> panelPrefabs;
+        // 모든 플레이어가 사용할 공용 UI 패널 프리팹 (프리팹은 에셋이므로 직접 수정할 수 없으며, 인스턴스화해서 사용)
+        public GameObject panelPrefab;
 
         // 동률 발생 시 우선할 선택.
         // 예를 들어 1이면 첫 번째 선택지, 2면 두 번째 선택지를 우선 처리
@@ -23,7 +23,7 @@ public class ChoiceVoteManager : MonoBehaviour
         public int tieChoiceIndex;
     }
 
-    [Header("선택지 패널 프리팹 목록")]
+    [Header("선택지 패널 프리팹 설정")]
     public List<ChoiceUIPanelSceneReference> choicePanelSceneReferences;
 
     [Header("선택지 처리 대기 시간")]
@@ -32,10 +32,10 @@ public class ChoiceVoteManager : MonoBehaviour
     // 선택지 라벨 배열. 예: 첫 번째 선택지는 "A", 두 번째 선택지는 "B"
     private string[] choiceLabels = { "A", "B" };
 
-    // 활성화된 UI 패널과 해당 구성요소(Button, Text 등)를 저장하는 클래스
+    // 공용 UI 패널과 해당 구성요소(Button, Text 등)를 저장하는 클래스
     public class InstantiatedChoicePanel
     {
-        // 활성화된 UI 패널 오브젝트 (씬 내 오브젝트)
+        // 인스턴스화된 공용 UI 패널 오브젝트 (씬 내 오브젝트)
         public GameObject panel;
         // 패널 내에 포함된 Button
         public List<Button> buttons;
@@ -45,10 +45,11 @@ public class ChoiceVoteManager : MonoBehaviour
         public int tieChoiceIndex;
     }
 
-    // 각 플레이어별로 할당된 UI 패널 오브젝트를 저장
-    private Dictionary<GameObject, InstantiatedChoicePanel> playerPanels = new Dictionary<GameObject, InstantiatedChoicePanel>();
+    // 공용 패널을 저장 (각 플레이어별로 개별 패널이 아닌 하나의 패널 사용)
+    private InstantiatedChoicePanel commonPanel = null;
 
     // 각 플레이어의 투표 결과 저장 
+    // 플레이어의 중복 투표를 막기 위해, 플레이어별로 한 번씩만 투표하도록 처리
     private Dictionary<GameObject, int> playerVotes = new Dictionary<GameObject, int>();
 
     // 전체 플레이어 수
@@ -66,9 +67,8 @@ public class ChoiceVoteManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-
             // 씬 전환 시에도 인스턴스 유지
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -76,7 +76,7 @@ public class ChoiceVoteManager : MonoBehaviour
         }
     }
 
-    // 모든 플레이어에게 선택지 UI 패널을 인스턴스화하여 투표를 받고,
+    // 모든 플레이어에게 공통된 선택지 UI 패널을 사용하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
     public IEnumerator ShowChoiceAndGetResult(int choicePanelSceneReferenceIndex, Action<int> onResult)
     {
@@ -103,7 +103,7 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 선택한 프리팹 목록 정보와 동률 처리 우선순위 값 가져오기
+        // 선택한 프리팹 설정 정보와 동률 처리 우선순위 값 가져오기
         ChoiceUIPanelSceneReference sceneReference = choicePanelSceneReferences[choicePanelSceneReferenceIndex];
         int tieChoiceIndex = sceneReference.tieChoiceIndex;
 
@@ -116,53 +116,41 @@ public class ChoiceVoteManager : MonoBehaviour
             yield break;
         }
 
-        // 할당된 UI 패널 프리팹의 개수가 플레이어 수보다 충분한지 확인
-        if (sceneReference.panelPrefabs == null || sceneReference.panelPrefabs.Count < totalPlayers)
+        // 공용 UI 패널 프리팹이 할당되어 있는지 확인
+        if (sceneReference.panelPrefab == null)
         {
-            Debug.LogError("[ChoiceVoteManager] 할당된 UI 패널 프리팹의 수가 충분하지 않습니다. 필요한 패널 수: " + totalPlayers);
+            Debug.LogError("[ChoiceVoteManager] 할당된 공용 UI 패널 프리팹이 없습니다.");
             onResult?.Invoke(1);
             yield break;
         }
 
-        // 각 플레이어마다 UI 패널을 인스턴스화 및 초기화, 버튼 이벤트 등록
-        int panelIndex = 0;
-        foreach (var player in players)
+        // 공용 UI 패널 인스턴스화
+        GameObject panelInstance = Instantiate(sceneReference.panelPrefab, canvas.transform);
+        panelInstance.SetActive(true);
+
+        commonPanel = new InstantiatedChoicePanel();
+        commonPanel.panel = panelInstance;
+        commonPanel.buttons = new List<Button>(panelInstance.GetComponentsInChildren<Button>());
+        commonPanel.voteCountTexts = new List<TextMeshProUGUI>(panelInstance.GetComponentsInChildren<TextMeshProUGUI>());
+        commonPanel.tieChoiceIndex = tieChoiceIndex;
+
+        // 투표 시작 전에 초기 텍스트 설정 ("선택지 A: 0/총 참여자수")
+        ResetVoteTexts(commonPanel, totalPlayers);
+
+        // 공용 패널의 버튼 이벤트 등록 (단 한 번만 등록)
+        // 버튼 클릭 시 호출하는 Vote()는, 예제에서는 현재 로컬 플레이어의 투표로 처리
+        // 실제 멀티플레이어 환경이라면 각 플레이어가 개별 입력을 통해 Vote()를 호출해야 함
+        for (int i = 0; i < commonPanel.buttons.Count; i++)
         {
-            // 프리팹을 인스턴스화하여 캔버스의 자식으로 설정
-            GameObject panelPrefab = sceneReference.panelPrefabs[panelIndex];
-            panelIndex++;
-            GameObject panelInstance = Instantiate(panelPrefab, canvas.transform);
-            panelInstance.SetActive(true);
-
-            // 새 UI 패널 객체 생성 및 초기화
-            InstantiatedChoicePanel icp = new InstantiatedChoicePanel();
-            icp.panel = panelInstance;
-
-            // 패널 내의 Button 및 TextMeshProUGUI 컴포넌트 가져오기
-            icp.buttons = new List<Button>(panelInstance.GetComponentsInChildren<Button>());
-            icp.voteCountTexts = new List<TextMeshProUGUI>(panelInstance.GetComponentsInChildren<TextMeshProUGUI>());
-
-            // 동률 처리 우선 순위 설정
-            icp.tieChoiceIndex = tieChoiceIndex;
-
-            // 투표 시작 전에 초기 텍스트 설정 ("선택지 A: 0/총 참여자수")
-            ResetVoteTexts(icp, totalPlayers);
-
-            // 각 버튼에 대해 클릭 이벤트 등록 (해당 플레이어의 투표를 기록)
-            for (int i = 0; i < icp.buttons.Count; i++)
+            int choiceVal = i + 1;
+            Button btn = commonPanel.buttons[i];
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() =>
             {
-                // 선택지는 1부터 시작 (첫 번째 버튼은 1, 두 번째 버튼은 2 등)
-                int choiceVal = i + 1;
-                Button btn = icp.buttons[i];
-                btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() =>
-                {
-                    Vote(player, choiceVal);
-                });
-            }
-
-            // 플레이어별로 UI 패널 할당
-            playerPanels[player] = icp;
+                // 여기서는 예시로 현재 로컬 플레이어(예: 첫 번째 플레이어 객체)를 사용
+                // 실제 구현에서는 각 플레이어의 입력에 따라 해당 플레이어 객체를 전달해야 함
+                Vote(players[0], choiceVal);
+            });
         }
 
         // 모든 플레이어가 투표할 때까지 대기
@@ -174,45 +162,45 @@ public class ChoiceVoteManager : MonoBehaviour
         // 모든 투표를 집계하여 최종 선택 결정 (동률 시 tieChoiceIndex 사용)
         finalVoteResult = CalculateMajorityWithTie(tieChoiceIndex);
 
-        // 각 플레이어의 UI 패널을 최종 업데이트 후 파괴 처리
-        foreach (var icp in playerPanels.Values)
-        {
-            // 최종 결과 반영
-            UpdateVoteUI(icp);
+        // 최종 결과 반영: 공용 패널 업데이트 후 파괴 처리
+        UpdateVoteUI(commonPanel);
+        Destroy(commonPanel.panel);
+        commonPanel = null;
 
-            // 인스턴스화된 오브젝트는 더 이상 필요 없으므로 파괴
-            Destroy(icp.panel);
+        // 선택지 처리 후 InputAction을 재활성화
+        RayController2 rayController = FindObjectOfType<RayController2>();
+        if (rayController != null)
+        {
+            rayController.ReactivateInputActions();
         }
-        playerPanels.Clear();
 
         // 최종 결과 콜백 호출 (다른 로직으로 최종 결과 전달)
         resultCallback?.Invoke(finalVoteResult);
     }
 
     // 특정 플레이어의 투표를 기록 (중복 투표는 무시)
+    // 실제 멀티플레이 환경에서는 각 플레이어의 입력에 의해 이 함수가 호출되어야 함
     public void Vote(GameObject player, int choice)
     {
+        // player가 null이면 (예: 로컬 입력 처리) 기록하지 않고 바로 반환할 수 있음
         if (player == null) return;
 
-        // 이미 투표한 경우 무시
+        // 이미 투표한 경우 무시 (한 플레이어당 한 번 투표)
         if (playerVotes.ContainsKey(player)) return;
 
         // 플레이어의 투표 기록 추가
         playerVotes.Add(player, choice);
 
-        // 만약 플레이어가 1명뿐이면 즉시 결과 처리
+        // 단일 플레이어인 경우 즉시 결과 처리
         if (totalPlayers == 1)
         {
             finalVoteResult = choice;
-            UpdateVoteUI(playerPanels[player]);
+            UpdateVoteUI(commonPanel);
             return;
         }
 
-        // 각 플레이어의 UI 패널에 실시간 투표 현황 업데이트
-        foreach (var icp in playerPanels.Values)
-        {
-            UpdateVoteUI(icp);
-        }
+        // 공용 패널의 투표 현황 업데이트
+        UpdateVoteUI(commonPanel);
     }
 
     // 모든 플레이어의 투표 결과를 집계하여 최다 득표 선택을 결정
@@ -257,8 +245,8 @@ public class ChoiceVoteManager : MonoBehaviour
             int tiePick = tieChoiceIndex;
             if (tiePick < 1) tiePick = 1;
             // 버튼 개수를 기준으로 범위를 조정 (버튼 순서대로 선택지가 매핑)
-            if (playerPanels.Count > 0 && tiePick > playerPanels[new List<GameObject>(playerPanels.Keys)[0]].buttons.Count)
-                tiePick = playerPanels[new List<GameObject>(playerPanels.Keys)[0]].buttons.Count;
+            if (commonPanel != null && tiePick > commonPanel.buttons.Count)
+                tiePick = commonPanel.buttons.Count;
             Debug.Log($"[ChoiceVoteManager] 동률 발생 -> tieChoiceIndex({tiePick}) 사용");
             return tiePick;
         }
