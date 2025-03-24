@@ -9,6 +9,7 @@ public class JSYNPCController : MonoBehaviour
 {
     public NpcRig[] npcs;
     private Vector3[] _originPos;
+    
     private void Start()
     {
         for (int i = 0; i < npcs.Length; i++)
@@ -21,13 +22,14 @@ public class JSYNPCController : MonoBehaviour
         {
             SetNPCState("None");
         } 
+        
         else if (SceneManager.GetActiveScene().name == "JSY_SchoolHall" ||
               SceneManager.GetActiveScene().name == "JSY_StairEv") 
         {
             SetNPCState("HoldBag");
         }
     }
-
+    
     public void SetNPCState(string st)
     {
         for (int i = 0; i < npcs.Length; i++)
@@ -42,7 +44,7 @@ public class JSYNPCController : MonoBehaviour
             {
                 npcs[i].state = NpcRig.State.DownDesk;
                 Vector3 changePos = npcs[i].transform.position;
-                changePos.z += 0.4f;
+                changePos.x += 0.3f;
                 npcs[i].transform.position = changePos;
             }
 			
