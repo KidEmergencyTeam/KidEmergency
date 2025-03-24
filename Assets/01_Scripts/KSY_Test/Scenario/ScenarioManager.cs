@@ -222,6 +222,22 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(8);
 
+        // 태그가 "Player"인 오브젝트들을 모두 찾음
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject player in players)
+        {
+            // 각 오브젝트에서 NpcRig.cs 가져오기
+            NpcRig npcRig = player.GetComponent<NpcRig>();
+
+            if (npcRig != null)
+            {
+                // state를 Bow로 설정합니다.
+                npcRig.state = NpcRig.State.Hold;
+            }
+        }
+        yield return null;
+
         // 아래 손수건 관련 로직 주석 처리
         /*
         // 비활성화된 손수건 오브젝트도 찾기
