@@ -1,11 +1,12 @@
 using EPOOutline;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 
+[DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
 public class Grabbable : MonoBehaviour
 {
+	public const int ExecutionOrder = 100;
 	public bool isGrabbable = true; //그랩 가능한 상태, 스토리 진행에 따라 조절
 	public Vector3 grabPosOffset;
 	public Vector3 grabRotOffset;
@@ -20,7 +21,6 @@ public class Grabbable : MonoBehaviour
 	[HideInInspector] public Rigidbody rb;
 	[HideInInspector] public Grabber currentGrabber;
 	[HideInInspector] public Outlinable outlinable;
-	public Collider collider;
 
 	public bool IsGrabbed => currentGrabber;
 
