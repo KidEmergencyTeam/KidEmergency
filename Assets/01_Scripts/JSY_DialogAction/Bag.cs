@@ -12,12 +12,17 @@ public class Bag : MonoBehaviour
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     
-    private bool _isGrab = false;
+    private Grabbable _grab;
     private string _sceneName;
+
+    private void Awake()
+    {
+        _grab = GetComponent<Grabbable>();
+    }
 
     public void BagInteraction()
     {
-        if (!_isGrab)
+        if (_grab.isGrabbable)
         {
             StartCoroutine(ProtectHead());
         }
@@ -28,33 +33,24 @@ public class Bag : MonoBehaviour
         _sceneName = SceneManager.GetActiveScene().name;
         if (_sceneName == "JSY_SchoolGround")
         {
-            Destroy(this.gameObject);
             UIManager.Instance.CloseWarningUI();
+            Destroy(this.gameObject);
         }
     }
 
     private IEnumerator ProtectHead()
     {
-        while (!_isGrab)
+        while (!_grab.IsGrabbed)
         {
             UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
             UIManager.Instance.OpenWarningUI();
 
             print($"가방 위치: {this.transform.position}, 컨트롤러 위치: {_leftController.transform.position}");
-
-            if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
-                _leftController.selectAction.action.ReadValue<float>() > 0)
-            {
-                this.transform.SetParent(_leftController.transform);
-                this.transform.localPosition = Vector3.zero;
-                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
-                _isGrab = true;
-            }
-
+            
             yield return null;
         }
         
-        while (_sceneName != "JSY_SchoolGround" && _isGrab)
+        while (_sceneName != "JSY_SchoolGround" && _grab.IsGrabbed)
         {
             if (!IsProtect())
             {
@@ -72,7 +68,7 @@ public class Bag : MonoBehaviour
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.2f)
+        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.position) < 0.1f)
         {
             return true;
         }
