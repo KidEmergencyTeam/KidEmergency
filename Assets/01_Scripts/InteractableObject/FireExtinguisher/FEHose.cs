@@ -28,7 +28,12 @@ public class FEHose : MonoBehaviour
 		Physics.Raycast(muzzle.position, muzzle.forward, out RaycastHit hit, maxDistance);
 		Gizmos.DrawRay(muzzle.position, muzzle.forward * maxDistance);
 		if (!hit.transform.TryGetComponent<FireDetectCollider>(
-			    out FireDetectCollider fire)) return;
+			    out FireDetectCollider fire))
+		{
+			currentFire = FirePosition.None;
+			return;
+		}
+
 		if (currentFire != FirePosition.None)
 		{
 			currentExtinguishingSpeed = extinguishingSpeed;
