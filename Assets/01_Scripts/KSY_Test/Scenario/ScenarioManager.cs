@@ -225,7 +225,10 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(8);
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        yield return null;
+
+        Debug.Log("600초 대기합니다.");
+        //yield return new WaitForSeconds(600f);
+        //yield return null;
     }
 
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
@@ -274,10 +277,21 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
-    // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
+    // Step18: 화재 경보벨 연출 -> 버튼 클릭 대기 후 화재 경보벨 재생
     // Step35까지 화재 경보벨 사운드 출력
     IEnumerator Step18()
     {
+        // 버튼 클릭할 때까지 대기
+        bool buttonClicked = false;
+        // 콜백 등록 
+        Action callback = () => buttonClicked = true;
+        // 버튼 클릭 이벤트에 콜백 등록 -> 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
+        EmergencyBellButton.OnEmergencyBellClicked += callback;
+        // buttonClicked = true가 될 때까지 대기
+        yield return new WaitUntil(() => buttonClicked);
+        // 콜백 제거
+        EmergencyBellButton.OnEmergencyBellClicked -= callback;
+        // 화재 경보벨 재생
         TypingEffect.Instance.StartContinuousSeparateTypingClip();
         yield return null;
     }
@@ -318,10 +332,29 @@ public class ScenarioManager : MonoBehaviour
 
     // Step22: NPC 상태를 Bow로 변경 -> 운동장 씬 전까지 유지
     // 사용자 낮은 자세로 숙이기
-    IEnumerator Step22()
+    public IEnumerator Step22()
     {
+        // 1. NPC들의 상태를 Bow(숙임)으로 변경
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-        yield return null;
+
+        // 2. "Head" 태그를 가진 객체에서 PlayerCrouch.cs 가져오기
+        PlayerCrouch playerCrouch = GameObject.FindGameObjectWithTag("Head")?.GetComponent<PlayerCrouch>();
+        if (playerCrouch == null)
+        {
+            Debug.LogError("태그 'Head'를 가진 객체가 없거나 해당 객체에 PlayerCrouch.cs가 부착되어 있지 않습니다.");
+            yield break;
+        }
+
+        // 3. 충돌 체크 
+        bool collisionOccurred = false;
+
+        // 4. 충돌이 발생하면 collisionOccurred를 true로 변경
+        playerCrouch.OnStomachCollision += () => collisionOccurred = true;
+
+        // 5. 충돌이 발생할 때까지 대기 
+        yield return new WaitUntil(() => collisionOccurred);
+
+        Debug.Log("콜라이더 충돌 감지 완료 - 다음 단계 실행");
     }
 
     IEnumerator Step23() { yield return PlayAndWait(15); }
