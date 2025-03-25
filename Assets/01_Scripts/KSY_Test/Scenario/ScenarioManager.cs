@@ -348,36 +348,6 @@ public class ScenarioManager : MonoBehaviour
         Debug.Log("높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달하여 다음 스텝으로 진행합니다.");
     }
 
-
-    // 콜라이더 반영 
-    // IEnumerator Step22()
-    // IEnumerator Step22()
-    // {
-    //    // 1. NPC들의 상태를 Bow(숙임)으로 변경
-    //    yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-
-    //    // 2. "Head" 태그를 가진 객체에서 PlayerCrouch.cs 가져오기
-    //    PlayerCrouch playerCrouch = GameObject.FindGameObjectWithTag("Head")?.GetComponent<PlayerCrouch>();
-    //    if (playerCrouch == null)
-    //    {
-    //        Debug.LogError("태그 'Head'를 가진 객체가 없거나 해당 객체에 PlayerCrouch.cs가 부착되어 있지 않습니다.");
-    //        yield break;
-    //    }
-
-    //    // 3. 충돌 체크 
-    //    bool collisionOccurred = false;
-
-    //    // 4. 충돌이 발생하면 collisionOccurred를 true로 변경
-    //    playerCrouch.OnStomachCollision += () => collisionOccurred = true;
-    //    // "MainCamera" 태그가 붙은 오브젝트를 찾습니다.
-    //    GameObject vrCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-
-    //    // 5. 충돌이 발생할 때까지 대기 
-    //    yield return new WaitUntil(() => collisionOccurred);
-
-    //    Debug.Log("콜라이더 충돌 감지 완료 - 다음 단계 실행");
-    // }
-
     IEnumerator Step23() { yield return PlayAndWait(15); }
 
     // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
