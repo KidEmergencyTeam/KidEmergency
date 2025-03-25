@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(SphereCollider))]
 public class Grabber : MonoBehaviour
@@ -9,6 +10,7 @@ public class Grabber : MonoBehaviour
 	public float detectRadius = 0.05f;
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
 
+	public XRRayInteractor rayInteractor;
 	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
@@ -89,6 +91,7 @@ public class Grabber : MonoBehaviour
 	public void OnGrab(Grabbable grabbable)
 	{
 		print("OnGrab");
+		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
@@ -127,6 +130,7 @@ public class Grabber : MonoBehaviour
 	public void OnRelease()
 	{
 		print("OnRelease");
+		rayInteractor.enabled = true;
 		_handAnimation.enabled = true;
 		if (currentGrabbedObject.isMoving)
 		{
