@@ -1,5 +1,6 @@
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
@@ -20,7 +21,6 @@ public class Grabbable : MonoBehaviour
 	[HideInInspector] public Rigidbody rb;
 	[HideInInspector] public Grabber currentGrabber;
 	[HideInInspector] public Outlinable outlinable;
-	public Collider collider;
 
 	public bool IsGrabbed => currentGrabber;
 
