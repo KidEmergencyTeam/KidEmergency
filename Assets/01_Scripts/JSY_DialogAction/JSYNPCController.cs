@@ -13,6 +13,8 @@ public class JSYNPCController : MonoBehaviour
     
     private void Start()
     {
+        _originPos = new Vector3[npcs.Length];
+        _originScale = new Vector3[npcs.Length];
         for (int i = 0; i < npcs.Length; i++)
         {
             _originPos[i] = npcs[i].transform.localPosition;

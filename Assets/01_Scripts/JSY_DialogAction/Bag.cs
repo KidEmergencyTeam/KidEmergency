@@ -12,63 +12,52 @@ public class Bag : MonoBehaviour
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     
-    private Rigidbody rb;
     private bool _isGrab = false;
     private string _sceneName;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
     public void BagInteraction()
     {
-        StartCoroutine(ProtectHead());
-    }
-
-    private void Grapped()
-    {
-        if (ActionManager.Instance.currentAction == ActionType.FixingBag)
+        if (!_isGrab)
         {
-            print($"가방 위치: {this.transform.position}, 컨트롤러 위치: {_leftController.transform.position}");
-
-            if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
-                     _leftController.selectAction.action.ReadValue<float>() > 0)
-            {
-                this.transform.SetParent(_leftController.transform);
-                this.transform.localPosition = Vector3.zero;
-                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
-                rb.isKinematic = true;
-                _isGrab = true;
-            }
+            StartCoroutine(ProtectHead());
         }
     }
     
     private void Update()
     {
-        if (this.gameObject != null && !_isGrab)
-        {
-            Grapped();
-        }
-        
         _sceneName = SceneManager.GetActiveScene().name;
         if (_sceneName == "JSY_SchoolGround")
         {
             Destroy(this.gameObject);
             UIManager.Instance.CloseWarningUI();
-            // 플레이어 컨트롤러로 상태도 바꾸기
         }
     }
 
     private IEnumerator ProtectHead()
     {
-        // this.gameObject.transform.SetParent(_player.transform);
+        while (!_isGrab)
+        {
+            UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
+            UIManager.Instance.OpenWarningUI();
+
+            print($"가방 위치: {this.transform.position}, 컨트롤러 위치: {_leftController.transform.position}");
+
+            if (Vector3.Distance(this.transform.position, _leftController.transform.position) < 0.1f &&
+                _leftController.selectAction.action.ReadValue<float>() > 0)
+            {
+                this.transform.SetParent(_leftController.transform);
+                this.transform.localPosition = Vector3.zero;
+                this.transform.localRotation = Quaternion.Euler(0,0,-90f);
+                _isGrab = true;
+            }
+
+            yield return null;
+        }
         
         while (_sceneName != "JSY_SchoolGround" && _isGrab)
         {
             if (!IsProtect())
             {
-                UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
                 UIManager.Instance.OpenWarningUI();
             }
 

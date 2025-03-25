@@ -1,36 +1,39 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlaceObjectAction : MonoBehaviour, IActionEffect
 {
-    // 오브젝트 미리 배치되면 삭제될 액션타입임.
     private bool _isComplete = false;
     public bool IsActionComplete => _isComplete;
     
     public void StartAction()
     {
         _isComplete = false;
-        _isComplete = true; 
-        // StartCoroutine(SetObjects(ActionManager.Instance.beforeDialog));
+        StartCoroutine(SetObjects(ActionManager.Instance.beforeDialog));
     }
 
-    // private IEnumerator SetObjects(DialogData dialogData)
-    // {
-    //     if (dialogData.objects != null && dialogData.objectsNames != null)
-    //     {
-    //         for (int i = 0; i < dialogData.objects.Length && i < dialogData.objectsNames.Length; i++)
-    //         {
-    //             GameObject clone = Instantiate(dialogData.objects[i]);
-    //             clone.name = dialogData.objectsNames[i];
-    //             yield return null;
-    //         }
-    //         
-    //         _isComplete = true;
-    //     }
-    //
-    //     else
-    //     {
-    //         print("SO에 오브젝트나 오브젝트 이름이 없음");
-    //     }
-    // }
+    private IEnumerator SetObjects(DialogData dialogData)
+    {
+        if (dialogData.parentName != null)
+        {
+            for (int i = 0; i < dialogData.parentName.Length; i++)
+            {
+                GameObject obj = GameObject.Find(dialogData.parentName[i]);
+                for (int j = 0; j < obj.transform.childCount; j++)
+                {
+                    obj.transform.GetChild(j).gameObject.SetActive(true);
+                    yield return null;
+                }
+            }
+            
+            _isComplete = true;
+        }
+    
+        else
+        {
+            _isComplete = false;
+            print("SO에 오브젝트 이름이 없음");
+        }
+    }
     
 }
