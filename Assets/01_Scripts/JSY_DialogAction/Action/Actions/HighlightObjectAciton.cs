@@ -19,9 +19,9 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
     {
         DeleteAllHighlightEffects();
         
-        for (int i = 0; i < dialogData.objectsName.Length; i++)
+        for (int i = 0; i < dialogData.parentName.Length; i++)
         {
-            GameObject outlineEffect = GameObject.Find(dialogData.objectsName[i]);
+            GameObject outlineEffect = GameObject.Find(dialogData.parentName[i]);
             
             for (int j = 0; j < outlineEffect.transform.childCount; j++)
             {
@@ -32,11 +32,6 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
                 if (obj.CompareTag("BaseObject"))
                 {
                     obj.AddComponent<BaseOutlineObject>();
-                }
-                else if (obj.CompareTag("GrabObject"))
-                {
-                    obj.AddComponent<GrabOutlineObject>();
-                    obj.AddComponent<XRGrabInteractable>();
                 }
             }
             
