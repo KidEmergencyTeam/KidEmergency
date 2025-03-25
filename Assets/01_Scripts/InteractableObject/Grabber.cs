@@ -19,7 +19,7 @@ public class Grabber : MonoBehaviour
 	private SphereCollider _detectCollider;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
 
-	private bool Grabbed => currentGrabbedObject;
+	public bool Grabbed => currentGrabbedObject;
 
 	private void Start()
 	{
@@ -110,7 +110,8 @@ public class Grabber : MonoBehaviour
 		{
 			if (isLeft)
 			{
-				_targetFollower.followTargets[2].target = currentGrabbedObject.transform;
+				_targetFollower.followTargets[2].target =
+					currentGrabbedObject.transform;
 				_targetFollower.followTargets[2].posOffset =
 					currentGrabbedObject.grabPosOffset;
 				_targetFollower.followTargets[2].rotOffset =
@@ -118,7 +119,8 @@ public class Grabber : MonoBehaviour
 			}
 			else
 			{
-				_targetFollower.followTargets[3].target = currentGrabbedObject.transform;
+				_targetFollower.followTargets[3].target =
+					currentGrabbedObject.transform;
 				_targetFollower.followTargets[3].posOffset =
 					currentGrabbedObject.grabPosOffset;
 				_targetFollower.followTargets[3].rotOffset =
