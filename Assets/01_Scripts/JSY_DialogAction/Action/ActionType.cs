@@ -9,5 +9,6 @@ public enum ActionType
     HighlightObject, // 오브젝트 강조
     HoldingLeg, // 책상 다리 잡기
     PlaceObject, // 오브젝트 배치
-    FixingBag // 가방 고정
+    FixingBag, // 가방 고정
+    EndGame // 게임 끝. 타이틀로 돌아가기
 }

@@ -17,16 +17,12 @@ public class ActionManager : SingletonManager<ActionManager>
 	public HighlightObjectAction highlightObjectAction;
 	public FixingBagAction fixingBagAction;
 	public HoldingLegAction holdingLegAction;
+	public EndGameAction endGameAction;
 	private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
 
 	private void Start()
 	{
-		// if (SceneManager.GetActiveScene().name == "JSY")
-		// {
-			StartCoroutine(FadeInOut.Instance.FadeIn());
-			DialogManager.Instance.DialogStart();
-		// }
-		
+		StartCoroutine(StartDialog());
 		currentAction = ActionType.Basic;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 		OnActionComplete += () =>
@@ -126,6 +122,14 @@ public class ActionManager : SingletonManager<ActionManager>
 				}
 
 				break;
+			
+			case ActionType.EndGame:
+				if (endGameAction != null)
+				{
+					endGameAction.StartAction();
+				}
+				
+				break;
 		}
 	}
 
@@ -140,6 +144,12 @@ public class ActionManager : SingletonManager<ActionManager>
 		{
 			print("현재 다이얼로그에 대사가 없음");
 		}
+	}
+
+	private IEnumerator StartDialog()
+	{
+		yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+		DialogManager.Instance.DialogStart();
 	}
 
 	private void ActionEventComplete()

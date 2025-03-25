@@ -1768,6 +1768,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 569499116392029940, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958563828402631287, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
+      propertyPath: followTargets.Array.data[2].posOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958563828402631287, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
+      propertyPath: followTargets.Array.data[2].posOffset.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958563828402631287, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
+      propertyPath: followTargets.Array.data[3].posOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2958563828402631287, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
+      propertyPath: followTargets.Array.data[3].posOffset.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4693716796510772944, guid: 248d2ca68674f2a4a82ae99c3932696c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.55
@@ -1942,6 +1962,7 @@ GameObject:
   - component: {fileID: 154242857}
   - component: {fileID: 154242861}
   - component: {fileID: 154242862}
+  - component: {fileID: 154242863}
   m_Layer: 0
   m_Name: Acitons
   m_TagString: Untagged
@@ -2073,6 +2094,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df543f2fe24949f4eb90985eeee30e99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &154242863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154242852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567c4490898965f4e97686f427282cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &161367096
@@ -4125,8 +4158,6 @@ GameObject:
   - component: {fileID: 380664009}
   - component: {fileID: 380664008}
   - component: {fileID: 380664007}
-  - component: {fileID: 380664011}
-  - component: {fileID: 380664010}
   m_Layer: 0
   m_Name: Left Controller
   m_TagString: Untagged
@@ -4442,56 +4473,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &380664010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380664005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7516308db9e2c534ca4652cde1e6ac3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isLeft: 1
-  detectRadius: 0.05
-  setObjectOffset: 0
-  rayInteractor: {fileID: 1917777074}
-  currentGrabbedObject: {fileID: 0}
-  controllerButtonClick:
-    m_UseReference: 0
-    m_Action:
-      m_Name: 
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 79ecb9d4-e6b1-4747-8f66-7b65b68e2da7
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 0}
---- !u!135 &380664011
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380664005}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &383064486
 GameObject:
   m_ObjectHideFlags: 0
@@ -20852,6 +20833,7 @@ MonoBehaviour:
   highlightObjectAction: {fileID: 154242856}
   fixingBagAction: {fileID: 154242857}
   holdingLegAction: {fileID: 154242862}
+  endGameAction: {fileID: 154242863}
 --- !u!1 &2071506378
 GameObject:
   m_ObjectHideFlags: 0
@@ -21624,7 +21606,7 @@ MonoBehaviour:
   _warningSprite: {fileID: 21300000, guid: 4efb6d35d00a7e14ea418204b0f9480d, type: 3}
   _warningText: "\uAC00\uBC29\uC744 \uBA38\uB9AC \uC704\uB85C \uC62C\uB824 \uBA38\uB9AC\uB97C
     \uBCF4\uD638\uD558\uC138\uC694"
-  _headObject: {fileID: 1988178785}
+  _headObject: {fileID: 6254364}
   _leftController: {fileID: 380664008}
 --- !u!1001 &6738620542909645634
 PrefabInstance:
@@ -21781,7 +21763,7 @@ GameObject:
   - component: {fileID: 8456719174108791652}
   m_Layer: 0
   m_Name: Bag
-  m_TagString: GrabObject
+  m_TagString: BaseObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
