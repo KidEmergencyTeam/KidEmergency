@@ -23,7 +23,10 @@ public class RayController2 : MonoBehaviour
     [SerializeField] private LineRenderer _leftLineRenderer;
     [SerializeField] private LineRenderer _rightLineRenderer;
 
-    // 현재 활성화된 레이가 오른손인지 여부 (true: 오른손, false: 왼손)
+    [Header("Grabber")]
+    [SerializeField] private Grabber leftGrabber;
+
+    // 현재 활성화된 레이가 오른손인지 여부 (true: 오른손, false: 좌측)
     private bool isRightActive = true;
 
     private void Start()
@@ -44,10 +47,8 @@ public class RayController2 : MonoBehaviour
     {
         if (inputActionAsset != null)
         {
-            // 이름으로 좌측 그립 액션 찾기 
+            // 좌측 그립 액션 찾기
             leftSelectAction = inputActionAsset.FindAction("XRI LeftHand Interaction/Select", true);
-
-            // 액션이 존재하면 이벤트 등록
             if (leftSelectAction != null)
             {
                 leftSelectAction.performed += OnSelectActionPerformed;
@@ -59,7 +60,7 @@ public class RayController2 : MonoBehaviour
                 Debug.LogError("[RayController2] 좌측 컨트롤러 Select 액션을 찾을 수 없습니다.");
             }
 
-            // 이름으로 우측 그립 액션 찾기 
+            // 우측 그립 액션 찾기
             rightSelectAction = inputActionAsset.FindAction("XRI RightHand Interaction/Select", true);
             if (rightSelectAction != null)
             {
@@ -92,26 +93,34 @@ public class RayController2 : MonoBehaviour
         }
     }
 
-    // 현재 비활성화된 컨트롤러의 그립 입력이 들어오면 레이를 전환
+    // 그립 입력 처리 시, 좌측 Grabber의 Grabbed 상태를 확인하여 오브젝트가 잡힌 경우에는 레이 전환을 막고 우측 레이를 고정
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
+        // 좌측 Grabber에서 오브젝트를 잡고 있다면
+        if (leftGrabber != null && leftGrabber.Grabbed)
+        {
+            // 우측 레이가 활성화되지 않았다면 강제로 전환
+            if (!isRightActive)
+            {
+                SwitchRightRay();
+            }
+            Debug.Log("[RayController2] 오브젝트가 잡힌 상태이므로 레이 전환 불가");
+            return;
+        }
+
         // 좌측 그립 입력 시
         if (context.action == leftSelectAction)
         {
-            // 우측 레이 활성화 상태라면
             if (isRightActive)
             {
-                // 좌측 레이 활성화
                 SwitchLeftRay();
             }
         }
         // 우측 그립 입력 시
         else if (context.action == rightSelectAction)
         {
-            // 좌측 레이 활성화 상태라면
             if (!isRightActive)
             {
-                // 우측 레이 활성화
                 SwitchRightRay();
             }
         }
@@ -129,6 +138,8 @@ public class RayController2 : MonoBehaviour
         _leftRay.enabled = true;
         _leftLine.enabled = true;
         _leftLineRenderer.enabled = true;
+
+        Debug.Log("[RayController2] 좌측 레이 활성화");
     }
 
     // 우측 레이 활성화, 좌측 레이 비활성화
@@ -143,6 +154,8 @@ public class RayController2 : MonoBehaviour
         _rightRay.enabled = true;
         _rightLine.enabled = true;
         _rightLineRenderer.enabled = true;
+
+        Debug.Log("[RayController2] 우측 레이 활성화");
     }
 
     // 선택지 처리 후 InputAction을 재활성화
