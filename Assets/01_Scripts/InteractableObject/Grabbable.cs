@@ -1,6 +1,5 @@
 using EPOOutline;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
@@ -12,7 +11,8 @@ public class Grabbable : MonoBehaviour
 	public Vector3 grabRotOffset;
 
 	public bool
-		isSameMoveAndGrabbable = true; //그랩이 가능하고 아웃라인이 나오는 오브젝트와 실제 움직이는 오브젝트가 다른 경우
+		isSameMoveAndGrabbable =
+			true; //그랩이 가능하고 아웃라인이 나오는 오브젝트와 실제 움직이는 오브젝트가 다른 경우 false
 
 	public GameObject realMovingObject; //실제 움직이는 오브젝트
 	public bool isLeft = true; //상호작용 가능한 손의 위치
@@ -36,7 +36,7 @@ public class Grabbable : MonoBehaviour
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
 	}
 
-	public void Update()
+	private void Update()
 	{
 		if (isGrabbable)
 		{
