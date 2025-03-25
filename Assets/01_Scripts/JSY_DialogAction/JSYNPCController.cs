@@ -21,7 +21,7 @@ public class JSYNPCController : MonoBehaviour
            _originScale[i] = npcs[i].transform.localScale;
         }
         
-        if (SceneManager.GetActiveScene().name == "JSY" ||
+        if (SceneManager.GetActiveScene().name == "JSY_School" ||
             SceneManager.GetActiveScene().name == "JSY_SchoolGround")
         {
             SetNPCState("None");

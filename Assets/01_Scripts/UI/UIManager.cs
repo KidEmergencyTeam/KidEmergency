@@ -81,7 +81,7 @@ public class UIManager : SingletonManager<UIManager>
 
     public void SetUIPosition()
     {
-        if (SceneManager.GetActiveScene().name == "JSY")
+        if (SceneManager.GetActiveScene().name == "JSY_School")
         {
             if (camOffset != null)
             {
