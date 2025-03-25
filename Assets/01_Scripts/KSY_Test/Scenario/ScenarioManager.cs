@@ -277,10 +277,21 @@ public class ScenarioManager : MonoBehaviour
     }
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
-    // Step18 화재 경보벨 연출 -> 여기서부터 화재 경보벨 사운드 출력
+    // Step18: 화재 경보벨 연출 -> 버튼 클릭 대기 후 화재 경보벨 재생
     // Step35까지 화재 경보벨 사운드 출력
     IEnumerator Step18()
     {
+        // 버튼 클릭할 때까지 대기
+        bool buttonClicked = false;
+        // 콜백 등록 
+        Action callback = () => buttonClicked = true;
+        // 버튼 클릭 이벤트에 콜백 등록 -> 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
+        EmergencyBellButton.OnEmergencyBellClicked += callback;
+        // buttonClicked = true가 될 때까지 대기
+        yield return new WaitUntil(() => buttonClicked);
+        // 콜백 제거
+        EmergencyBellButton.OnEmergencyBellClicked -= callback;
+        // 화재 경보벨 재생
         TypingEffect.Instance.StartContinuousSeparateTypingClip();
         yield return null;
     }
