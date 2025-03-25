@@ -371,7 +371,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   currentGrabber: {fileID: 0}
   outlinable: {fileID: 0}
-  collider: {fileID: 0}
 --- !u!54 &962814141
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -409,6 +408,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1035881572}
   - component: {fileID: 1035881573}
+  - component: {fileID: 1035881574}
   m_Layer: 0
   m_Name: DetecCollider
   m_TagString: Untagged
@@ -452,6 +452,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1035881574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035881571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e37d45ea09e7f141bdb094442df3eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePosition: 2
 --- !u!114 &1292491179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,7 +487,6 @@ MonoBehaviour:
   rb: {fileID: 1292491183}
   currentGrabber: {fileID: 7813284400657687500}
   outlinable: {fileID: 1292491181}
-  collider: {fileID: 0}
 --- !u!114 &1292491180
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -649,6 +661,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1472549027}
   - component: {fileID: 1472549028}
+  - component: {fileID: 1472549029}
   m_Layer: 0
   m_Name: DetecCollider
   m_TagString: Untagged
@@ -692,6 +705,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1472549029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472549026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e37d45ea09e7f141bdb094442df3eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePosition: 1
 --- !u!1 &1642679571
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,6 +761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1746720079}
   - component: {fileID: 1746720080}
+  - component: {fileID: 1746720081}
   m_Layer: 0
   m_Name: DetecCollider
   m_TagString: Untagged
@@ -778,6 +805,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1746720081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1746720078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e37d45ea09e7f141bdb094442df3eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePosition: 0
 --- !u!114 &1875708499
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -869,7 +909,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   currentGrabber: {fileID: 0}
   outlinable: {fileID: 0}
-  collider: {fileID: 0}
 --- !u!64 &1875708502
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3185,6 +3224,7 @@ GameObject:
   - component: {fileID: 3538570809759935932}
   - component: {fileID: 2410137505547142166}
   - component: {fileID: 5281240904587551036}
+  - component: {fileID: 5281240904587551037}
   m_Layer: 0
   m_Name: FX_Fire_Big_01
   m_TagString: Untagged
@@ -22423,6 +22463,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5281240904587551037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842019140975697830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78cb6160c890b194d885d6885619fede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireHp: 100
 --- !u!1 &5290797757166407681
 GameObject:
   m_ObjectHideFlags: 0
@@ -25064,7 +25117,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   currentGrabber: {fileID: 0}
   outlinable: {fileID: 0}
-  collider: {fileID: 0}
 --- !u!4 &6422470241331248043
 Transform:
   m_ObjectHideFlags: 0
@@ -26203,7 +26255,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8083222227893284467}
   serializedVersion: 8
-  lengthInSec: 10
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
