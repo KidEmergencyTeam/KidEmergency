@@ -21,6 +21,9 @@ public class NpcRig : MonoBehaviour
 		public Vector3 leftHandRot;
 		public Vector3 rightHandPos;
 		public Vector3 rightHandRot;
+
+		public bool isHandkerchiefActive;
+		public bool isBagActive;
 	}
 
 	public State state = State.None;
@@ -44,33 +47,21 @@ public class NpcRig : MonoBehaviour
 		switch (state)
 		{
 			case State.None:
-				handkerchief.gameObject.SetActive(false);
-				bag.gameObject.SetActive(false);
 				SetState(noneState);
 				break;
 			case State.Hold:
-				handkerchief.gameObject.SetActive(true);
-				bag.gameObject.SetActive(false);
 				SetState(holdState);
 				break;
 			case State.Bow:
-				handkerchief.gameObject.SetActive(true);
-				bag.gameObject.SetActive(false);
 				SetState(bowState);
 				break;
 			case State.DownDesk:
-				handkerchief.gameObject.SetActive(false);
-				bag.gameObject.SetActive(false);
 				SetState(downDeskState);
 				break;
 			case State.HoldDesk:
-				handkerchief.gameObject.SetActive(false);
-				bag.gameObject.SetActive(false);
 				SetState(holdDeskState);
 				break;
 			case State.HoldBag:
-				handkerchief.gameObject.SetActive(false);
-				bag.gameObject.SetActive(true);
 				SetState(holdBagState);
 				break;
 		}
@@ -86,5 +77,8 @@ public class NpcRig : MonoBehaviour
 
 		rightHandTarget.localPosition = pose.rightHandPos;
 		rightHandTarget.localRotation = Quaternion.Euler(pose.rightHandRot);
+
+		handkerchief.gameObject.SetActive(pose.isHandkerchiefActive);
+		bag.gameObject.SetActive(pose.isBagActive);
 	}
 }

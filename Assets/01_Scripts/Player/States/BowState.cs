@@ -13,39 +13,44 @@ public class BowState : State
 	{
 		float bowThreshold = player.bowThreshold;
 		float bowYValue = player.bowYValue;
-
-		// 현재 헤드셋(카메라)의 Y 좌표 가져오기
 		float headHeight = Camera.main.transform.position.y;
 
-		// 기준보다 낮아지면 숙이기
+		Vector3 bowOffset =
+			player.transform.InverseTransformDirection(Vector3.up * bowYValue);
+
 		if (headHeight < bowThreshold && !isBow)
 		{
 			isBow = true;
-			player.xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
-			player.leftFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
-			player.rightFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
-			player.leftFootTarget.localPosition += new Vector3(0, bowYValue, 0);
-			player.rightFootTarget.localPosition += new Vector3(0, bowYValue, 0);
-			player.bodyTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			player.playerTargetFollower.followTargets[2].posOffset +=
-				new Vector3(0, bowYValue, 0);
-			player.playerTargetFollower.followTargets[3].posOffset +=
-				new Vector3(0, bowYValue, 0);
+
+			// 월드 기준으로 이동하여 회전 영향을 최소화
+			player.xrOrigin.position -= Vector3.up * bowYValue;
+
+			// 발 위치 조정 (회전 보정 적용)
+			player.leftFootIkTarget.position += bowOffset;
+			player.rightFootIkTarget.position += bowOffset;
+			player.leftFootTarget.position += bowOffset;
+			player.rightFootTarget.position += bowOffset;
+			player.bodyTarget.position -= bowOffset;
+
+			// 팔 IK 보정 (회전 보정 적용)
+			player.playerTargetFollower.followTargets[2].posOffset += bowOffset;
+			player.playerTargetFollower.followTargets[3].posOffset += bowOffset;
 		}
-		// 일정 높이 이상 올라가면 다시 서기
 		else if (headHeight > bowThreshold - bowYValue && isBow)
 		{
 			isBow = false;
-			player.xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
-			player.leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			player.rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			player.leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			player.rightFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			player.bodyTarget.localPosition += new Vector3(0, bowYValue, 0);
-			player.playerTargetFollower.followTargets[2].posOffset -=
-				new Vector3(0, bowYValue, 0);
-			player.playerTargetFollower.followTargets[3].posOffset -=
-				new Vector3(0, bowYValue, 0);
+
+			// 원래 위치로 복귀
+			player.xrOrigin.position += Vector3.up * bowYValue;
+
+			player.leftFootIkTarget.position -= bowOffset;
+			player.rightFootIkTarget.position -= bowOffset;
+			player.leftFootTarget.position -= bowOffset;
+			player.rightFootTarget.position -= bowOffset;
+			player.bodyTarget.position += bowOffset;
+
+			player.playerTargetFollower.followTargets[2].posOffset -= bowOffset;
+			player.playerTargetFollower.followTargets[3].posOffset -= bowOffset;
 		}
 	}
 
