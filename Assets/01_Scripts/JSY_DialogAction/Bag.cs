@@ -12,14 +12,8 @@ public class Bag : MonoBehaviour
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     
-    private Rigidbody rb;
     private bool _isGrab = false;
     private string _sceneName;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     public void BagInteraction()
     {
@@ -54,7 +48,6 @@ public class Bag : MonoBehaviour
                 this.transform.SetParent(_leftController.transform);
                 this.transform.localPosition = Vector3.zero;
                 this.transform.localRotation = Quaternion.Euler(0,0,-90f);
-                rb.isKinematic = true;
                 _isGrab = true;
             }
 

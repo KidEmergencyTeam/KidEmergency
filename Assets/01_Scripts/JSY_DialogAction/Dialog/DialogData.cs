@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Dialog", menuName = "DialogSystem/Dialog")]
 public class DialogData : ScriptableObject
@@ -28,7 +29,7 @@ public class DialogData : ScriptableObject
     [Tooltip("대화가 끝난 후 실행될 선택지 설정(없으면 비워두세요)")]
     public DialogChoice[] choices;
     [Tooltip("대화가 끝난 후 강조될 오브젝트들의 부모 이름(없으면 비워두세요)")]
-    public string[] objectsName;
+    public string[] parentName;
     [Tooltip("대화가 끝난 후 로드할 씬 이름 설정(없으면 비워두세요)")]
     public string nextScene;
     [Tooltip("대화가 끝난 후 변경될 시점값(없으면 비워두세요)")]
