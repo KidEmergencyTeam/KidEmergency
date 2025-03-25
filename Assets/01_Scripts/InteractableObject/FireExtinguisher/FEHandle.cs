@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +7,7 @@ public class FEHandle : MonoBehaviour
 	private const int ExecutionOrder = Grabbable.ExecutionOrder + 10;
 
 	public FEHose hose;
-	public GameObject powder;
+	public ParticleSystem powder;
 
 	private Grabbable _grabbable;
 	private InputActionProperty _fireAction;
@@ -25,6 +24,7 @@ public class FEHandle : MonoBehaviour
 
 		if (_fireAction.action.ReadValue<float>() > 0)
 		{
+			powder.Play();
 		}
 	}
 }
