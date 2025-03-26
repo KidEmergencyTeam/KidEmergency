@@ -20,7 +20,7 @@ public class EarthquakeBeginner : MonoBehaviour
 
     [Header("시작 장소")] public PLACE place;
 
-    [Header("지진 상황 여부")] public bool isEarthquakeBeginner;
+    [Header("지진 상황 여부")] public bool isEarthquakeStart;
 
     [Header("NPC 및 플레이어 이동 관련 설정")] public GameObject player; // 플레이어의 시작 위치
     public GameObject seti;
@@ -31,7 +31,8 @@ public class EarthquakeBeginner : MonoBehaviour
     public GameObject exampleDescUi;
     public GameObject leftHand; // 왼손 관련 오브젝트
     public Canvas playerUi; //플레이어 UI Canvas
-
+    [Header("가방, 탈출구, 비상벨 오브젝트")]
+    [SerializeField] private GameObject backpack;
     [SerializeField]
     private GameObject emergencyExit; // 비상구 오브젝트 (Outlinable 컴포넌트를 추가할 대상)
     [SerializeField] private GameObject fireAlarm;
@@ -43,6 +44,9 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private Transform xrCamera; // HMD 카메라
     [SerializeField] private float initialHeight; // 초기 플레이어 높이
 
+    [Header("원래 생성 위치")]
+    [SerializeField] private Transform playerSpawnPos;
+    [SerializeField] private Transform[] npcSpawnPos;
     [Header("이동 목표 위치")]
     public Transform playerMovPos;
     public Transform setiMovPos;
@@ -91,25 +95,51 @@ public class EarthquakeBeginner : MonoBehaviour
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                 //2. 화면이 조금씩 흔들리며 경보음이 울리고 서랍장 같은 물체가 넘어지고 지진 소리가 시작됨
+                isEarthquakeStart = true;
+                //지진 시작
+
                 fireAlarm.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                 // 4. 책상 밑으로 들어가기 선택지 UI 발생 UI를 누르면 책상 밑으로 시점 변환 이후 대사 진행
-
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밑으로";
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
+                okBtn.isClick = false;
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                //플레이어와 NPC의 좌표 이동 및 행동 변화
+                TeleportCharacters();
+                SetAllNpcState(NpcRig.State.DownDesk);
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
 
                 // 5. 유저 앞에있는 책상 다리의 아웃라인이 활성화 이후 대사 출력
+                //아웃라인 활성화
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+                SetAllNpcState(NpcRig.State.DownDesk);  //NPC 행동 변경
+                //책상 다리 잡기
 
                 // 6. 책상 옆에 떨어져 있는 가방의 테두리를 강조하며 아이들에게 위치를 확인시킨다.
+                //가방 오브젝트 아웃라인 활성화
+                backpack.GetComponent<Outlinable>().enabled = true;
                 fifthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 흔들림이 멈춤 이후 대사 출력
+                //흔들림 멈춤
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
+                //책상 밖으로 버튼 활성화 및 텍스트 변경
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밖으로";
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
+                //원래 위치로 이동 및 NPC 모습 변경
 
                 // 8. 책상 옆에 떨어져 있는 가방의 테두리를 강조시키며 아이들에게 선택하게 한다. 선택 이후 대사 출력
                 seventhDialog.gameObject.SetActive(true);
