@@ -36,6 +36,7 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField]
     private GameObject emergencyExit; // 비상구 오브젝트 (Outlinable 컴포넌트를 추가할 대상)
     [SerializeField] private GameObject fireAlarm;
+    public EarthquakeSystem earthquake;
 
     [Header("머리 위치 체크")] 
     public bool isHeadDown = false;
@@ -80,6 +81,7 @@ public class EarthquakeBeginner : MonoBehaviour
     {
         xrCamera = Camera.main.transform;
         initialHeight = xrCamera.position.y; // 초기 플레이어 높이 저장
+        earthquake = FindObjectOfType<EarthquakeSystem>();
     }
 
     // 게임 시작 시 실행
@@ -97,7 +99,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 //2. 화면이 조금씩 흔들리며 경보음이 울리고 서랍장 같은 물체가 넘어지고 지진 소리가 시작됨
                 isEarthquakeStart = true;
                 //지진 시작
-
+                earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
@@ -132,6 +134,9 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 흔들림이 멈춤 이후 대사 출력
                 //흔들림 멈춤
+                earthquake.StopEarthquake(); // 지진 종료
+                yield return new WaitUntil(() => earthquake._endEarthquake == true);
+
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
                 //책상 밖으로 버튼 활성화 및 텍스트 변경
@@ -140,10 +145,16 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => okBtn.isClick == true);
                 okBtn.gameObject.SetActive(false);
                 //원래 위치로 이동 및 NPC 모습 변경
-
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                ReturnToOriginalPosition(); //원래 위치로 이동
+                SetAllNpcState(NpcRig.State.None);
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 // 8. 책상 옆에 떨어져 있는 가방의 테두리를 강조시키며 아이들에게 선택하게 한다. 선택 이후 대사 출력
                 seventhDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+                //가방을 잡으면 손에 부착된다. 머리 위치까지 올리면 마무리 대사 출력 후 fadeout으로 Scene 이동, 가방을 잡을 시 NPC 상태 변경
 
                 //9. Scene이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -152,17 +163,20 @@ public class EarthquakeBeginner : MonoBehaviour
                 break;
 
             case PLACE.HALLWAY:
+                SetAllNpcState((NpcRig.State.HoldBag));
                 //대사 출력 후 계단Scene으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                //피난 유도선 선택 컨트롤러로 select하면 outliner 활성화
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH_Earth3");
                 break;
 
             case PLACE.STAIRS_ELEVATOR:
+                SetAllNpcState((NpcRig.State.HoldBag));
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
@@ -236,6 +250,7 @@ public class EarthquakeBeginner : MonoBehaviour
         if (playerMovPos != null)
         {
             player.transform.position = playerMovPos.position;
+            player.transform.rotation = playerMovPos.rotation;
         }
 
         // 세티 이동
@@ -254,6 +269,28 @@ public class EarthquakeBeginner : MonoBehaviour
         }
 
         Debug.Log("플레이어 및 NPC 이동 완료");
+    }
+    // 원래 위치로 되돌리는 함수
+    public void ReturnToOriginalPosition()
+    {
+        // 플레이어 위치 복귀
+        if (playerSpawnPos != null)
+        {
+            player.transform.position = playerSpawnPos.position;
+            player.transform.rotation = playerSpawnPos.rotation;
+        }
+
+        // NPC 위치 복귀
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
+            {
+                NPC[i].transform.position = npcSpawnPos[i].position;
+                NPC[i].transform.rotation = npcSpawnPos[i].rotation;
+            }
+        }
+
+        Debug.Log("플레이어 및 NPC가 원래 위치로 복귀했습니다.");
     }
 
     // 부모 오브젝트의 모든 자식에게 Outlinable 컴포넌트 활성화

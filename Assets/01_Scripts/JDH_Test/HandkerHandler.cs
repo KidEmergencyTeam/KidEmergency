@@ -13,7 +13,7 @@ public class HandkerHandler : MonoBehaviour
     private void Awake()
     {
         interactable.selectExited.AddListener(CantGrabExit);
-    }
+    }   
     public void CantGrabExit(SelectExitEventArgs selectExit)
     {
         leftHand.interactionManager.SelectEnter((IXRSelectInteractor)leftHand,(IXRSelectInteractable)interactable);
