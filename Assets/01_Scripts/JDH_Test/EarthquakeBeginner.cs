@@ -1,358 +1,372 @@
 using EPOOutline;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class EarthquakeBeginner : MonoBehaviour
 {
-    public enum PLACE
-    {
-        CLASSROOM,
-        HALLWAY,
-        STAIRS_ELEVATOR,
-        OUTSIDE,
-        HOUSE,
-    };
+	public enum PLACE
+	{
+		CLASSROOM,
+		HALLWAY,
+		STAIRS_ELEVATOR,
+		OUTSIDE,
+		HOUSE,
+	};
 
-    [Header("½ÃÀÛ Àå¼Ò")] public PLACE place;
+	[Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½")] public PLACE place;
 
-    [Header("ÁöÁø »óÈ² ¿©ºÎ")] public bool isEarthquakeStart;
+	[Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È² ï¿½ï¿½ï¿½ï¿½")] public bool isEarthquakeStart;
 
-    [Header("NPC ¹× ÇÃ·¹ÀÌ¾î ÀÌµ¿ °ü·Ã ¼³Á¤")] public GameObject player; // ÇÃ·¹ÀÌ¾îÀÇ ½ÃÀÛ À§Ä¡
-    public GameObject seti;
-    public GameObject[] NPC; // ±âÅ¸ NPCµéÀÇ ½ÃÀÛ À§Ä¡
-    public FadeInOut fadeInOutImg;
-    public TestButton2 okBtn;
-    public GameObject warningUi;
-    public GameObject exampleDescUi;
-    public GameObject leftHand; // ¿Þ¼Õ °ü·Ã ¿ÀºêÁ§Æ®
-    public Canvas playerUi; //ÇÃ·¹ÀÌ¾î UI Canvas
-    [Header("°¡¹æ, Å»Ãâ±¸, ºñ»óº§ ¿ÀºêÁ§Æ®")]
-    [SerializeField] private GameObject backpack;
-    [SerializeField]
-    private GameObject emergencyExit; // ºñ»ó±¸ ¿ÀºêÁ§Æ® (Outlinable ÄÄÆ÷³ÍÆ®¸¦ Ãß°¡ÇÒ ´ë»ó)
-    [SerializeField] private GameObject fireAlarm;
-    public EarthquakeSystem earthquake;
+	[Header("NPC ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+	public GameObject player; // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
 
-    [Header("¸Ó¸® À§Ä¡ Ã¼Å©")] 
-    public bool isHeadDown = false;
-    public float headHeightThreshold; // ¸Ó¸® ³ôÀÌ ±âÁØ (ÀÌ °ªº¸´Ù ³·À¸¸é ¸Ó¸®¸¦ ¼÷ÀÎ °ÍÀ¸·Î ÆÇ´Ü)
+	public GameObject seti;
+	public GameObject[] NPC; // ï¿½ï¿½Å¸ NPCï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+	public FadeInOut fadeInOutImg;
+	public TestButton2 okBtn;
+	public GameObject warningUi;
+	public GameObject exampleDescUi;
+	public GameObject leftHand; // ï¿½Þ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+	public Canvas playerUi; //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ UI Canvas
 
-    [SerializeField] private Transform xrCamera; // HMD Ä«¸Þ¶ó
-    [SerializeField] private float initialHeight; // ÃÊ±â ÇÃ·¹ÀÌ¾î ³ôÀÌ
+	[Header("ï¿½ï¿½ï¿½ï¿½, Å»ï¿½â±¸, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")] [SerializeField]
+	private GameObject backpack;
 
-    [Header("¿ø·¡ »ý¼º À§Ä¡")]
-    [SerializeField] private Transform playerSpawnPos;
-    [SerializeField] private Transform[] npcSpawnPos;
-    [Header("ÀÌµ¿ ¸ñÇ¥ À§Ä¡")]
-    public Transform playerMovPos;
-    public Transform setiMovPos;
-    public Transform[] npcMovPos;
+	[SerializeField]
+	private GameObject
+		emergencyExit; // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® (Outlinable ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½)
 
-    [Header("¿¹Á¦ UI ÀÌ¹ÌÁö")]
-    [SerializeField] private Image LeftImg;
-    [SerializeField] private Image RightImg;
-    [SerializeField] private TestButton2 LeftBtn;
-    [SerializeField] private TestButton2 RightBtn;
-    [SerializeField] private Sprite leftChangeImg;
-    [SerializeField] private Sprite rightChangeImg;
-    [SerializeField] private TextMeshProUGUI descriptionText;
+	[SerializeField] private GameObject fireAlarm;
+	// public EarthquakeSystem earthquake;
 
-    [Header("»óÈ² ÁøÇà Ã¼Å©")] public bool isFirstStepRdy;
-    public bool isSecondStepRdy;
-    public bool hasHandkerchief;
-    public bool ruleCheck;
+	[Header("ï¿½Ó¸ï¿½ ï¿½ï¿½Ä¡ Ã¼Å©")] public bool isHeadDown = false;
 
-    [Header("´ëÈ­ ½Ã½ºÅÛ")][SerializeField] private BeginnerDialogSystem firstDialog;
-    [SerializeField] private BeginnerDialogSystem secondDialog;
-    [SerializeField] private BeginnerDialogSystem thirdDialog;
-    [SerializeField] private BeginnerDialogSystem forthDialog;
-    [SerializeField] private BeginnerDialogSystem fifthDialog;
-    [SerializeField] private BeginnerDialogSystem sixthDialog;
-    [SerializeField] private BeginnerDialogSystem seventhDialog;
-    [SerializeField] private BeginnerDialogSystem leftChoiceDialog;
-    [SerializeField] private BeginnerDialogSystem rightChoiceDialog;
+	public float
+		headHeightThreshold; // ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½)
 
-    private void Awake()
-    {
-        xrCamera = Camera.main.transform;
-        initialHeight = xrCamera.position.y; // ÃÊ±â ÇÃ·¹ÀÌ¾î ³ôÀÌ ÀúÀå
-        earthquake = FindObjectOfType<EarthquakeSystem>();
-    }
+	[SerializeField] private Transform xrCamera; // HMD Ä«ï¿½Þ¶ï¿½
+	[SerializeField] private float initialHeight; // ï¿½Ê±ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    // °ÔÀÓ ½ÃÀÛ ½Ã ½ÇÇà
-    IEnumerator Start()
-    {
-        switch (place)
-        {
-            // ±³½Ç
-            case PLACE.CLASSROOM:
-                // 1. Ã¹ ¹øÂ° ´ëÈ­ ½ÃÀÛ
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-                //2. È­¸éÀÌ Á¶±Ý¾¿ Èçµé¸®¸ç °æº¸À½ÀÌ ¿ï¸®°í ¼­¶øÀå °°Àº ¹°Ã¼°¡ ³Ñ¾îÁö°í ÁöÁø ¼Ò¸®°¡ ½ÃÀÛµÊ
-                isEarthquakeStart = true;
-                //ÁöÁø ½ÃÀÛ
-                earthquake.StartEarthquake();
-                fireAlarm.gameObject.SetActive(true);
-                // 3. µÎ ¹øÂ° ´ëÈ­ ½ÃÀÛ
-                secondDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-                // 4. Ã¥»ó ¹ØÀ¸·Î µé¾î°¡±â ¼±ÅÃÁö UI ¹ß»ý UI¸¦ ´©¸£¸é Ã¥»ó ¹ØÀ¸·Î ½ÃÁ¡ º¯È¯ ÀÌÈÄ ´ë»ç ÁøÇà
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Ã¥»ó ¹ØÀ¸·Î";
-                okBtn.gameObject.SetActive(true);
-                yield return new WaitUntil(() => okBtn.isClick == true);
-                okBtn.gameObject.SetActive(false);
-                okBtn.isClick = false;
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                //ÇÃ·¹ÀÌ¾î¿Í NPCÀÇ ÁÂÇ¥ ÀÌµ¿ ¹× Çàµ¿ º¯È­
-                TeleportCharacters();
-                SetAllNpcState(NpcRig.State.DownDesk);
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
-                thirdDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+	[Header("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡")] [SerializeField]
+	private Transform playerSpawnPos;
 
-                // 5. À¯Àú ¾Õ¿¡ÀÖ´Â Ã¥»ó ´Ù¸®ÀÇ ¾Æ¿ô¶óÀÎÀÌ È°¼ºÈ­ ÀÌÈÄ ´ë»ç Ãâ·Â
-                //¾Æ¿ô¶óÀÎ È°¼ºÈ­
-                forthDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
-                SetAllNpcState(NpcRig.State.DownDesk);  //NPC Çàµ¿ º¯°æ
-                //Ã¥»ó ´Ù¸® Àâ±â
+	[SerializeField] private Transform[] npcSpawnPos;
+	[Header("ï¿½Ìµï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡")] public Transform playerMovPos;
+	public Transform setiMovPos;
+	public Transform[] npcMovPos;
 
-                // 6. Ã¥»ó ¿·¿¡ ¶³¾îÁ® ÀÖ´Â °¡¹æÀÇ Å×µÎ¸®¸¦ °­Á¶ÇÏ¸ç ¾ÆÀÌµé¿¡°Ô À§Ä¡¸¦ È®ÀÎ½ÃÅ²´Ù.
-                //°¡¹æ ¿ÀºêÁ§Æ® ¾Æ¿ô¶óÀÎ È°¼ºÈ­
-                backpack.GetComponent<Outlinable>().enabled = true;
-                fifthDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
-                // 7. Èçµé¸²ÀÌ ¸ØÃã ÀÌÈÄ ´ë»ç Ãâ·Â
-                //Èçµé¸² ¸ØÃã
-                earthquake.StopEarthquake(); // ÁöÁø Á¾·á
-                yield return new WaitUntil(() => earthquake._endEarthquake == true);
+	[Header("ï¿½ï¿½ï¿½ï¿½ UI ï¿½Ì¹ï¿½ï¿½ï¿½")] [SerializeField]
+	private Image LeftImg;
 
-                sixthDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
-                //Ã¥»ó ¹ÛÀ¸·Î ¹öÆ° È°¼ºÈ­ ¹× ÅØ½ºÆ® º¯°æ
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Ã¥»ó ¹ÛÀ¸·Î";
-                okBtn.gameObject.SetActive(true);
-                yield return new WaitUntil(() => okBtn.isClick == true);
-                okBtn.gameObject.SetActive(false);
-                //¿ø·¡ À§Ä¡·Î ÀÌµ¿ ¹× NPC ¸ð½À º¯°æ
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                ReturnToOriginalPosition(); //¿ø·¡ À§Ä¡·Î ÀÌµ¿
-                SetAllNpcState(NpcRig.State.None);
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                // 8. Ã¥»ó ¿·¿¡ ¶³¾îÁ® ÀÖ´Â °¡¹æÀÇ Å×µÎ¸®¸¦ °­Á¶½ÃÅ°¸ç ¾ÆÀÌµé¿¡°Ô ¼±ÅÃÇÏ°Ô ÇÑ´Ù. ¼±ÅÃ ÀÌÈÄ ´ë»ç Ãâ·Â
-                seventhDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
-                //°¡¹æÀ» ÀâÀ¸¸é ¼Õ¿¡ ºÎÂøµÈ´Ù. ¸Ó¸® À§Ä¡±îÁö ¿Ã¸®¸é ¸¶¹«¸® ´ë»ç Ãâ·Â ÈÄ fadeoutÀ¸·Î Scene ÀÌµ¿, °¡¹æÀ» ÀâÀ» ½Ã NPC »óÅÂ º¯°æ
+	[SerializeField] private Image RightImg;
+	[SerializeField] private TestButton2 LeftBtn;
+	[SerializeField] private TestButton2 RightBtn;
+	[SerializeField] private Sprite leftChangeImg;
+	[SerializeField] private Sprite rightChangeImg;
+	[SerializeField] private TextMeshProUGUI descriptionText;
 
-                //9. SceneÀÌµ¿
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth2");
-                break;
+	[Header("ï¿½ï¿½È² ï¿½ï¿½ï¿½ï¿½ Ã¼Å©")] public bool isFirstStepRdy;
+	public bool isSecondStepRdy;
+	public bool hasHandkerchief;
+	public bool ruleCheck;
 
-            case PLACE.HALLWAY:
-                SetAllNpcState((NpcRig.State.HoldBag));
-                //´ë»ç Ãâ·Â ÈÄ °è´ÜSceneÀ¸·Î ÀÌµ¿
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-                //ÇÇ³­ À¯µµ¼± ¼±ÅÃ ÄÁÆ®·Ñ·¯·Î selectÇÏ¸é outliner È°¼ºÈ­
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth3");
-                break;
+	[Header("ï¿½ï¿½È­ ï¿½Ã½ï¿½ï¿½ï¿½")] [SerializeField]
+	private BeginnerDialogSystem firstDialog;
 
-            case PLACE.STAIRS_ELEVATOR:
-                SetAllNpcState((NpcRig.State.HoldBag));
-                // 1. Ã¹ ¹øÂ° ´ëÈ­ ½ÃÀÛ
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-                //¹Ì¸® ¼±ÅÃÁö ÀÌ¹ÌÁö º¯°æ
-                LeftImg.sprite = leftChangeImg;
-                RightImg.sprite = rightChangeImg;
-                isFirstStepRdy = true;
-                yield return new WaitUntil(() => isFirstStepRdy == true);
+	[SerializeField] private BeginnerDialogSystem secondDialog;
+	[SerializeField] private BeginnerDialogSystem thirdDialog;
+	[SerializeField] private BeginnerDialogSystem forthDialog;
+	[SerializeField] private BeginnerDialogSystem fifthDialog;
+	[SerializeField] private BeginnerDialogSystem sixthDialog;
+	[SerializeField] private BeginnerDialogSystem seventhDialog;
+	[SerializeField] private BeginnerDialogSystem leftChoiceDialog;
+	[SerializeField] private BeginnerDialogSystem rightChoiceDialog;
 
-                // 2.°è´Ü°ú ¿¤¸®º£ÀÌÅÍ ¼±ÅÃÁö°¡ À¯Àú¿¡°Ô º¸¿©Áü, ¹öÆ° ¼±ÅÃ ÈÄ ´ë»ç ÁøÇà
-                exampleDescUi.gameObject.SetActive(true);
-                //
-                LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
-                RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
-                yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true);
+	private void Awake()
+	{
+		xrCamera = Camera.main.transform;
+		initialHeight = xrCamera.position.y; // ï¿½Ê±ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		// earthquake = FindObjectOfType<EarthquakeSystem>();
+	}
 
-                //3.¼¼ ¹øÂ° ´ëÈ­ ÁøÇà ÀÌÈÄ
-                thirdDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-                //SceneÀÌµ¿
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth4");
-                break;
-            case PLACE.OUTSIDE:
-                // 1. Ã¹ ¹øÂ° ´ëÈ­ ½ÃÀÛ
-                StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	IEnumerator Start()
+	{
+		switch (place)
+		{
+			// ï¿½ï¿½ï¿½ï¿½
+			case PLACE.CLASSROOM:
+				// 1. Ã¹ ï¿½ï¿½Â° ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+				firstDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+				//2. È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ý¾ï¿½ ï¿½ï¿½é¸®ï¿½ï¿½ ï¿½æº¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½
+				isEarthquakeStart = true;
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				// earthquake.StartEarthquake();
+				fireAlarm.gameObject.SetActive(true);
+				// 3. ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+				secondDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+				// 4. Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UI ï¿½ß»ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+				okBtn.gameObject.SetActive(true);
+				yield return new WaitUntil(() => okBtn.isClick == true);
+				okBtn.gameObject.SetActive(false);
+				okBtn.isClick = false;
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½àµ¿ ï¿½ï¿½È­
+				TeleportCharacters();
+				SetAllNpcState(NpcRig.State.DownDesk);
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
+				thirdDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
 
-                //SceneÀÌµ¿
-                StartCoroutine(FadeInOut.Instance.FadeOut());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene(0);  //Å¸ÀÌÆ²·Î ÀÌµ¿
-                break;
-        }
+				// 5. ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ï¿½Ö´ï¿½ Ã¥ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+				//ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
+				forthDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+				SetAllNpcState(NpcRig.State.DownDesk); //NPC ï¿½àµ¿ ï¿½ï¿½ï¿½ï¿½
+				//Ã¥ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½
 
-    }
-    private void Update()
-    {
-        DetectHeadLowering(); // ¸Ó¸® ¼÷ÀÓ °¨Áö
-    }
-    //ÀÌµ¿ ÈÄ UiÀ§Ä¡ º¯°æ
+				// 6. Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×µÎ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½Ìµé¿¡ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ È®ï¿½Î½ï¿½Å²ï¿½ï¿½.
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
+				backpack.GetComponent<Outlinable>().enabled = true;
+				fifthDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
+				// 7. ï¿½ï¿½é¸²ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+				//ï¿½ï¿½é¸² ï¿½ï¿½ï¿½ï¿½
+				// earthquake.StopEarthquake(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				// yield return new WaitUntil(() => earthquake._endEarthquake == true);
 
-    public void AdjustUiTransform()
-    {
-        if (playerUi == null || player == null) return;
+				sixthDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
+				//Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° È°ï¿½ï¿½È­ ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+				okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+				okBtn.gameObject.SetActive(true);
+				yield return new WaitUntil(() => okBtn.isClick == true);
+				okBtn.gameObject.SetActive(false);
+				//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ NPC ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				ReturnToOriginalPosition(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
+				SetAllNpcState(NpcRig.State.None);
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+				// 8. Ã¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×µÎ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµé¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ñ´ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+				seventhDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½. ï¿½Ó¸ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ fadeoutï¿½ï¿½ï¿½ï¿½ Scene ï¿½Ìµï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ NPC ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
-        if (rectTransform == null) return;
+				//9. Sceneï¿½Ìµï¿½
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				SceneManager.LoadScene("JDH_Earth2");
+				break;
 
-        // ¿ùµå ±âÁØ À§Ä¡ ¼³Á¤
-        Vector3 worldPosition = player.transform.position +
-                                player.transform.TransformDirection(
-                                    new Vector3(0.75f, 1.5f, 0.5f));
-        rectTransform.position = worldPosition;
+			case PLACE.HALLWAY:
+				SetAllNpcState((NpcRig.State.HoldBag));
+				//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Sceneï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+				firstDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+				//ï¿½Ç³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ selectï¿½Ï¸ï¿½ outliner È°ï¿½ï¿½È­
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				SceneManager.LoadScene("JDH_Earth3");
+				break;
 
-        // ·ÎÄÃ È¸Àü ¼³Á¤ (ÁÖ¾îÁø °ª ±×´ë·Î Àû¿ë)
-        rectTransform.localRotation =
-            Quaternion.Euler(-20, 50, 0); // ¿ùµå ±âÁØÀÌ ¾Æ´Ñ, ±×´ë·Î Àû¿ë
+			case PLACE.STAIRS_ELEVATOR:
+				SetAllNpcState((NpcRig.State.HoldBag));
+				// 1. Ã¹ ï¿½ï¿½Â° ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+				firstDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+				//ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				LeftImg.sprite = leftChangeImg;
+				RightImg.sprite = rightChangeImg;
+				isFirstStepRdy = true;
+				yield return new WaitUntil(() => isFirstStepRdy == true);
 
-        Debug.Log("playerUi À§Ä¡ ¹× È¸Àü º¯°æ ¿Ï·á (Local Space)");
-    }
+				// 2.ï¿½ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				exampleDescUi.gameObject.SetActive(true);
+				//
+				LeftBtn.GetComponent<Button>().onClick
+					.AddListener(() => HandleChoice(true));
+				RightBtn.GetComponent<Button>().onClick
+					.AddListener(() => HandleChoice(false));
+				yield return new WaitUntil(() =>
+					leftChoiceDialog.isDialogsEnd == true ||
+					rightChoiceDialog.isDialogsEnd == true);
 
-    private void TeleportCharacters()
-    {
-        // ÇÃ·¹ÀÌ¾î ÀÌµ¿
-        if (playerMovPos != null)
-        {
-            player.transform.position = playerMovPos.position;
-            player.transform.rotation = playerMovPos.rotation;
-        }
+				//3.ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+				thirdDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+				//Sceneï¿½Ìµï¿½
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				SceneManager.LoadScene("JDH_Earth4");
+				break;
+			case PLACE.OUTSIDE:
+				// 1. Ã¹ ï¿½ï¿½Â° ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+				StartCoroutine(FadeInOut.Instance.FadeIn());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+				firstDialog.gameObject.SetActive(true);
+				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-        // ¼¼Æ¼ ÀÌµ¿
-        if (setiMovPos != null)
-        {
-            seti.transform.position = setiMovPos.position;
-        }
+				//Sceneï¿½Ìµï¿½
+				StartCoroutine(FadeInOut.Instance.FadeOut());
+				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+				SceneManager.LoadScene(0); //Å¸ï¿½ï¿½Æ²ï¿½ï¿½ ï¿½Ìµï¿½
+				break;
+		}
+	}
 
-        // NPC ÀÌµ¿
-        for (int i = 0; i < NPC.Length; i++)
-        {
-            if (npcMovPos.Length > i && npcMovPos[i] != null)
-            {
-                NPC[i].transform.position = npcMovPos[i].position;
-            }
-        }
+	private void Update()
+	{
+		DetectHeadLowering(); // ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	}
+	//ï¿½Ìµï¿½ ï¿½ï¿½ Uiï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î ¹× NPC ÀÌµ¿ ¿Ï·á");
-    }
-    // ¿ø·¡ À§Ä¡·Î µÇµ¹¸®´Â ÇÔ¼ö
-    public void ReturnToOriginalPosition()
-    {
-        // ÇÃ·¹ÀÌ¾î À§Ä¡ º¹±Í
-        if (playerSpawnPos != null)
-        {
-            player.transform.position = playerSpawnPos.position;
-            player.transform.rotation = playerSpawnPos.rotation;
-        }
+	public void AdjustUiTransform()
+	{
+		if (playerUi == null || player == null) return;
 
-        // NPC À§Ä¡ º¹±Í
-        for (int i = 0; i < NPC.Length; i++)
-        {
-            if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
-            {
-                NPC[i].transform.position = npcSpawnPos[i].position;
-                NPC[i].transform.rotation = npcSpawnPos[i].rotation;
-            }
-        }
+		RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
+		if (rectTransform == null) return;
 
-        Debug.Log("ÇÃ·¹ÀÌ¾î ¹× NPC°¡ ¿ø·¡ À§Ä¡·Î º¹±ÍÇß½À´Ï´Ù.");
-    }
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+		Vector3 worldPosition = player.transform.position +
+		                        player.transform.TransformDirection(
+			                        new Vector3(0.75f, 1.5f, 0.5f));
+		rectTransform.position = worldPosition;
 
-    // ºÎ¸ð ¿ÀºêÁ§Æ®ÀÇ ¸ðµç ÀÚ½Ä¿¡°Ô Outlinable ÄÄÆ÷³ÍÆ® È°¼ºÈ­
-    private void ActiveOutlineToChildren(GameObject parent)
-    {
-        if (parent == null) return;
+		// ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½Ö¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½×´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
+		rectTransform.localRotation =
+			Quaternion.Euler(-20, 50, 0); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´ï¿½, ï¿½×´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        foreach (Transform child in parent.GetComponentsInChildren<Transform>())
-        {
-            Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+		Debug.Log("playerUi ï¿½ï¿½Ä¡ ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ (Local Space)");
+	}
 
-            if (outline == null)
-            {
-                outline = child.gameObject.AddComponent<Outlinable>();
-            }
+	private void TeleportCharacters()
+	{
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½
+		if (playerMovPos != null)
+		{
+			player.transform.position = playerMovPos.position;
+			player.transform.rotation = playerMovPos.rotation;
+		}
 
-            outline.enabled = true; // Outlinable È°¼ºÈ­
-        }
-    }
+		// ï¿½ï¿½Æ¼ ï¿½Ìµï¿½
+		if (setiMovPos != null)
+		{
+			seti.transform.position = setiMovPos.position;
+		}
 
-    // ¸Ó¸® ¼÷ÀÓ °¨Áö ÇÔ¼ö
-    private void DetectHeadLowering()
-    {
-        if (xrCamera == null) return;
+		// NPC ï¿½Ìµï¿½
+		for (int i = 0; i < NPC.Length; i++)
+		{
+			if (npcMovPos.Length > i && npcMovPos[i] != null)
+			{
+				NPC[i].transform.position = npcMovPos[i].position;
+			}
+		}
 
-        float currentHeight = xrCamera.position.y; // ÇöÀç ¸Ó¸® ³ôÀÌ
+		Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ NPC ï¿½Ìµï¿½ ï¿½Ï·ï¿½");
+	}
 
-        if (currentHeight < headHeightThreshold)
-        {
-            isHeadDown = true;
-            // Debug.Log("¸Ó¸®¸¦ ¼÷¿´½À´Ï´Ù! (Y °ª ±âÁØ)");
-        }
-        else
-        {
-            isHeadDown = false;
-        }
-    }
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+	public void ReturnToOriginalPosition()
+	{
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+		if (playerSpawnPos != null)
+		{
+			player.transform.position = playerSpawnPos.position;
+			player.transform.rotation = playerSpawnPos.rotation;
+		}
 
-    // ¸ðµç NPCµéÀÇ »óÅÂ¸¦ µ¿ÀÏÇÏ°Ô º¯°æÇÏ´Â ÇÔ¼ö
-    public void SetAllNpcState(NpcRig.State newState)
-    {
-        foreach (GameObject npc in NPC)
-        {
-            if (npc != null) // NPC°¡ nullÀÌ ¾Æ´ÑÁö È®ÀÎ
-            {
-                npc.GetComponent<NpcRig>().state = newState; // NPCÀÇ »óÅÂ¸¦ º¯°æ
-            }
-        }
-    }
-    void HandleChoice(bool isLeftChoice)
-    {
-        exampleDescUi.SetActive(false);
+		// NPC ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+		for (int i = 0; i < NPC.Length; i++)
+		{
+			if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
+			{
+				NPC[i].transform.position = npcSpawnPos[i].position;
+				NPC[i].transform.rotation = npcSpawnPos[i].rotation;
+			}
+		}
 
-        if (isLeftChoice)
-        {
-            leftChoiceDialog.gameObject.SetActive(true);
-            Debug.Log("¿ÞÂÊ ¼±ÅÃÁö ´ë»ç Ãâ·Â");
-        }
-        else
-        {
-            rightChoiceDialog.gameObject.SetActive(true);
-            Debug.Log("¿À¸¥ÂÊ ¼±ÅÃÁö ´ë»ç Ãâ·Â");
-        }
-    }
+		Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ NPCï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
+	}
+
+	// ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ú½Ä¿ï¿½ï¿½ï¿½ Outlinable ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® È°ï¿½ï¿½È­
+	private void ActiveOutlineToChildren(GameObject parent)
+	{
+		if (parent == null) return;
+
+		foreach (Transform child in parent.GetComponentsInChildren<Transform>())
+		{
+			Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+
+			if (outline == null)
+			{
+				outline = child.gameObject.AddComponent<Outlinable>();
+			}
+
+			outline.enabled = true; // Outlinable È°ï¿½ï¿½È­
+		}
+	}
+
+	// ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+	private void DetectHeadLowering()
+	{
+		if (xrCamera == null) return;
+
+		float currentHeight = xrCamera.position.y; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+		if (currentHeight < headHeightThreshold)
+		{
+			isHeadDown = true;
+			// Debug.Log("ï¿½Ó¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½! (Y ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)");
+		}
+		else
+		{
+			isHeadDown = false;
+		}
+	}
+
+	// ï¿½ï¿½ï¿½ NPCï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
+	public void SetAllNpcState(NpcRig.State newState)
+	{
+		foreach (GameObject npc in NPC)
+		{
+			if (npc != null) // NPCï¿½ï¿½ nullï¿½ï¿½ ï¿½Æ´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+			{
+				npc.GetComponent<NpcRig>().state = newState; // NPCï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+			}
+		}
+	}
+
+	void HandleChoice(bool isLeftChoice)
+	{
+		exampleDescUi.SetActive(false);
+
+		if (isLeftChoice)
+		{
+			leftChoiceDialog.gameObject.SetActive(true);
+			Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
+		}
+		else
+		{
+			rightChoiceDialog.gameObject.SetActive(true);
+			Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½");
+		}
+	}
 }
