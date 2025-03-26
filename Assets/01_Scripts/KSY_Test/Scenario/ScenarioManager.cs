@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit;
 
 // 빌드 세팅 목록
 // 1. 00_Scenes/Tests/KSY/1.Lobby
@@ -137,15 +136,40 @@ public class ScenarioManager : MonoBehaviour
         StartCoroutine(StartSequence());
     }
 
-    // FadeIn 효과가 완료된 후 시나리오를 실행하는 코루틴
+    // FadeIn 효과가 완료된 후 시나리오를 실행
     private IEnumerator StartSequence()
     {
+        // 씬 로드 여부 체크
+        bool sceneLoaded = false;
+
+        // 씬 로드 완료 이벤트
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // 이벤트 호출 시 처리 내용
+            sceneLoaded = true;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        // 씬이 로드 -> OnSceneLoaded 함수 호출
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // 이미 씬이 로드된 상태라면 바로 처리
+        if (SceneManager.GetActiveScene().isLoaded)
+        {
+            sceneLoaded = true;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        // 씬 로드 완료까지 대기
+        yield return new WaitUntil(() => sceneLoaded);
+
         // 페이드 인 효과 실행 및 완료 대기
         yield return StartCoroutine(FadeInOut.Instance.FadeIn());
 
         // 시나리오 실행 시작
         yield return StartCoroutine(RunScenario());
     }
+
 
     // 시나리오를 순차적으로 실행
     IEnumerator RunScenario()
@@ -460,6 +484,7 @@ public class ScenarioManager : MonoBehaviour
     // 비동기 방식으로 씬 전환
     IEnumerator ChangeScene(int sceneIndex)
     {
+        // 씬 이름 체크
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
