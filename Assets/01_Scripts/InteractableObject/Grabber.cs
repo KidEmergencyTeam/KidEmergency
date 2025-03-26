@@ -9,8 +9,8 @@ public class Grabber : MonoBehaviour
 	public bool isLeft = true;
 	public float detectRadius = 0.05f;
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
-
 	public XRRayInteractor rayInteractor;
+
 	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
@@ -71,9 +71,7 @@ public class Grabber : MonoBehaviour
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
-		    grabbable.isGrabbable &&
-		    grabbable.isLeft == isLeft)
+		if (controllerButtonClick.action.ReadValue<float>() > 0 && grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
 		}
@@ -88,7 +86,7 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	public void OnGrab(Grabbable grabbable)
+	private void OnGrab(Grabbable grabbable)
 	{
 		print("OnGrab");
 		rayInteractor.enabled = false;
@@ -129,7 +127,7 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	public void OnRelease()
+	private void OnRelease()
 	{
 		print("OnRelease");
 		rayInteractor.enabled = true;
