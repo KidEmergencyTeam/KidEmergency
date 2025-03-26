@@ -91,6 +91,7 @@ public class EarthquakeBeginner : MonoBehaviour
     {
         switch (place)
         {
+            // 교실
             case PLACE.CLASSROOM:
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
@@ -98,7 +99,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-                // 2. 화면이 흔들리고 경보음이 울리며 지진 발생
+                // 2. 화면이 흔들리며 지진 발생. 화재 경보도 함께 울림.
                 isEarthquakeStart = true;
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
@@ -107,8 +108,8 @@ public class EarthquakeBeginner : MonoBehaviour
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-                // 4. 책상 아래로 대피하도록 유도하는 UI 표시
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 아래로";
+                // 4. 가방을 챙기라는 메시지를 띄우는 UI 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "가방 챙기기";
                 okBtn.gameObject.SetActive(true);
                 yield return new WaitUntil(() => okBtn.isClick == true);
                 okBtn.gameObject.SetActive(false);
@@ -120,30 +121,120 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 플레이어와 NPC 이동 및 행동 변경
                 TeleportCharacters();
                 SetAllNpcState(NpcRig.State.DownDesk);
-
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
 
-                // 5. 세 번째 대화 진행
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
 
-                // 6. 책가방을 머리 위로 올려 보호하는 행동을 유도
+                // 5. 책상 아래로 대피하는 장면 연출
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
                 SetAllNpcState(NpcRig.State.DownDesk);
 
-                // 7. 지진 종료
+                // 6. 가방을 챙기도록 유도하는 이벤트 발생
+                backpack.GetComponent<Outlinable>().enabled = true;
+                fifthDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
+
+                // 7. 지진 종료 (현재 주석 처리됨)
+                // earthquake.StopEarthquake();
+                // yield return new WaitUntil(() => earthquake._endEarthquake == true);
+
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
 
-                // 8. 다음 단계로 진행
+                // 가방 챙기기 버튼 다시 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "가방 챙기기";
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
+
+                // 플레이어와 NPC를 원래 위치로 이동
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                ReturnToOriginalPosition();
+                SetAllNpcState(NpcRig.State.None);
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+
+                // 8. 대피 후 정리 단계
+                seventhDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+
+                // 9. 다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH_Earth2");
                 break;
+
+            // 복도
+            case PLACE.HALLWAY:
+                SetAllNpcState(NpcRig.State.HoldBag);
+
+                // 첫 번째 대화 후 씬 이동
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                // 씬 전환
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth3");
+                break;
+
+            // 계단과 엘리베이터
+            case PLACE.STAIRS_ELEVATOR:
+                SetAllNpcState(NpcRig.State.HoldBag);
+
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                // 2. 선택지 이미지 변경 및 버튼 활성화
+                LeftImg.sprite = leftChangeImg;
+                RightImg.sprite = rightChangeImg;
+                isFirstStepRdy = true;
+                yield return new WaitUntil(() => isFirstStepRdy == true);
+
+                // 3. 선택지 UI 표시
+                exampleDescUi.gameObject.SetActive(true);
+                LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
+                RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
+
+                yield return new WaitUntil(() =>
+                    leftChoiceDialog.isDialogsEnd == true ||
+                    rightChoiceDialog.isDialogsEnd == true);
+
+                // 4. 다음 대화 진행
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+
+                // 씬 전환
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth4");
+                break;
+
+            // 건물 밖
+            case PLACE.OUTSIDE:
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                // 씬 전환 (타이틀 화면으로 이동)
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene(0);
+                break;
         }
     }
+
 
     private void Update()
     {
