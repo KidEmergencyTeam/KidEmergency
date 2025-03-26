@@ -223,12 +223,23 @@ public class ScenarioManager : MonoBehaviour
     // 사용자 손수건 처리
     IEnumerator Step13()
     {
+        // 대사 출력 -> 모두 책상 위에 있는 손수건을 사용해서 입과 코를 가리고 교실 문 앞에 2 줄로 서 줘! 
         yield return PlayAndWait(8);
+        // 1. "HandkerActivation" 태그를 가진 객체에서 HandkerActivation.cs 가져오기
+        HandkerActivation handkerActivation = GameObject.FindGameObjectWithTag("HandkerActivation")?.GetComponent<HandkerActivation>();
+        // 2. 손수건 활성화
+        handkerActivation.ActivateHandkerObject();
+        // 3. NPC들의 상태를 Hold로 변경
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-
-        Debug.Log("600초 대기합니다.");
-        //yield return new WaitForSeconds(600f);
-        //yield return null;
+        // 4. "Head" 태그를 가진 객체에서 FireEvacuationMask.cs 가져오기
+        FireEvacuationMask fireEvacuationMask = GameObject.FindGameObjectWithTag("Head")?.GetComponent<FireEvacuationMask>();
+        // 5. 충돌 체크 
+        bool collisionOccurred = false;
+        // 6. 충돌이 발생하면 collisionOccurred를 true로 변경
+        fireEvacuationMask.OnHandkerchiefCollision += () => collisionOccurred = true;
+        // 7. 충돌이 발생할 때까지 대기 
+        yield return new WaitUntil(() => collisionOccurred);
+        Debug.Log("손수건과 입 콜라이더가 충돌 - 다음 단계 실행");
     }
 
     // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
