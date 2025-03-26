@@ -1,5 +1,6 @@
 using EPOOutline;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
@@ -47,6 +48,12 @@ public class Grabbable : MonoBehaviour
 			outlinable.enabled = false;
 
 			if (!IsGrabbed) return;
+			DontDestroyOnLoad(gameObject);
+			if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
+			{
+				Destroy(gameObject);
+			}
+
 			if (isMoving)
 			{
 				realMovingObject.transform.position =
