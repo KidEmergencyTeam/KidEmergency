@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // 준비 처리
 public class WaitStateManager : MonoBehaviour
 {
     [Header("대기 상태 UI")]
-    public TextMeshProUGUI waitStateText;
+    public Image readyIndicatorImage;
 
     [Header("다음 씬 이름")]
     public string SceneName;
@@ -32,20 +32,36 @@ public class WaitStateManager : MonoBehaviour
                 pr.onPlayerReady += OnPlayerReady;
             }
         }
-        UpdateUI();
     }
 
-    // 플레이어 준비 완료 시 호출되는 콜백
+    // 전체 준비 완료 시 이미지 처리 및 일정 시간 대기 후 씬 전환 실행
+    // 추후에 멀티 구현 시 개별적으로 이미지를 처리하는 기능을 구현해야 함 
     void OnPlayerReady()
     {
-        UpdateUI();
         if (AllPlayersReady())
         {
             Debug.Log("모든 플레이어 준비 완료!");
 
-            // 일정 시간 대기 후 씬 전환 실행
-            Invoke("StartGame", gameStartDelay);
+            // 준비 완료 이미지 활성화 
+            if (readyIndicatorImage != null)
+            {
+                readyIndicatorImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning("readyIndicatorImage가 할당되어 있지 않습니다.");
+            }
+
+            // 코루틴을 통해 일정 시간 대기 후 씬 전환 실행
+            StartCoroutine(WaitAndStartGame());
         }
+    }
+
+    // 일정 시간 대기 후 StartGame()을 실행하는 코루틴
+    private IEnumerator WaitAndStartGame()
+    {
+        yield return new WaitForSeconds(gameStartDelay);
+        StartGame();
     }
 
     // 모든 플레이어가 준비되었는지 확인
@@ -57,19 +73,6 @@ public class WaitStateManager : MonoBehaviour
                 return false;
         }
         return true;
-    }
-
-    // UI 업데이트 (예: "대기중: 1/3")
-    void UpdateUI()
-    {
-        int readyCount = 0;
-        foreach (PlayerReady pr in playerReadyList)
-        {
-            if (pr.IsReady)
-                readyCount++;
-        }
-        if (waitStateText != null)
-            waitStateText.text = $"대기중: {readyCount}/{playerReadyList.Count}";
     }
 
     // 모든 플레이어 준비 완료 시 씬 전환 실행
