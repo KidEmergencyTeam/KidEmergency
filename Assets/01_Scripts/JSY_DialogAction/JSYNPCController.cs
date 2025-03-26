@@ -49,7 +49,7 @@ public class JSYNPCController : MonoBehaviour
             {
                 npcs[i].state = NpcRig.State.DownDesk;
                 Vector3 changePos = npcs[i].transform.localPosition;
-                changePos.x += 0.3f;
+                changePos.z += 0.4f;
                 npcs[i].transform.localPosition = changePos;
                 npcs[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
