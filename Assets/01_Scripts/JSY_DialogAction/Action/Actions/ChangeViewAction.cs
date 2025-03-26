@@ -24,19 +24,19 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     {
         yield return StartCoroutine(FadeInOut.Instance.FadeOut());
 
-        while (camOffset.transform.position != newPos)
+        while (camOffset.transform.localPosition != newPos)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
             
             if (newPos == _originPos)
             {
-                camOffset.transform.position = newPos;
+                camOffset.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("None");
             }
             
             else if (newPos != _originPos)
             {
-                camOffset.transform.position = newPos;
+                camOffset.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("DownDesk");
             }
             
