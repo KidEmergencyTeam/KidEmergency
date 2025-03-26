@@ -1,6 +1,7 @@
 using EPOOutline;
 using System.Collections;
 using TMPro;
+using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -68,6 +69,8 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool isSecondStepRdy;
     public bool hasHandkerchief;
     public bool ruleCheck;
+    public bool doProtectedHead;    //머리를 보호하고 있어야 하는 구간
+    public bool isprotectedHead;    //머리를 잘 보호하는지 확인하는 변수
 
     [Header("대화 시스템")]
     [SerializeField] private BeginnerDialogSystem firstDialog;
@@ -108,8 +111,8 @@ public class EarthquakeBeginner : MonoBehaviour
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-                // 4. 가방을 챙기라는 메시지를 띄우는 UI 활성화
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "가방 챙기기";
+                // 4. 책상 밑으로 들어가라는 메시지를 띄우는 UI 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밑으로";
                 okBtn.gameObject.SetActive(true);
                 yield return new WaitUntil(() => okBtn.isClick == true);
                 okBtn.gameObject.SetActive(false);
@@ -118,34 +121,33 @@ public class EarthquakeBeginner : MonoBehaviour
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
 
-                // 플레이어와 NPC 이동 및 행동 변경
+                // 플레이어와 NPC 이동 및 행동 변경 후 대사 출력
                 TeleportCharacters();
                 SetAllNpcState(NpcRig.State.DownDesk);
                 StartCoroutine(FadeInOut.Instance.FadeIn());
-                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 
+                //5. 책상 밑에서 대사가 완료된 후 책상 다리를 잡도록 Outline활성화 및 잡기
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //책상 다리 outline 활성화
+                //책상 다리를 잡을때까지 대기
 
-                // 5. 책상 아래로 대피하는 장면 연출
+                // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
-                SetAllNpcState(NpcRig.State.DownDesk);
-
-                // 6. 가방을 챙기도록 유도하는 이벤트 발생
                 backpack.GetComponent<Outlinable>().enabled = true;
                 fifthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
-
-                // 7. 지진 종료 (현재 주석 처리됨)
-                // earthquake.StopEarthquake();
-                // yield return new WaitUntil(() => earthquake._endEarthquake == true);
+                // 7. 지진 종료
+                earthquake.StopEarthquake();
+                yield return new WaitUntil(() => earthquake._endEarthquake == true);
 
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
 
-                // 가방 챙기기 버튼 다시 활성화
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "가방 챙기기";
+                // 책상 밖으로 이동을 위해 버튼 다시 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밖으로";
                 okBtn.gameObject.SetActive(true);
                 yield return new WaitUntil(() => okBtn.isClick == true);
                 okBtn.gameObject.SetActive(false);
@@ -153,16 +155,17 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 플레이어와 NPC를 원래 위치로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                doProtectedHead = true;     //머리 보호구간
                 ReturnToOriginalPosition();
                 SetAllNpcState(NpcRig.State.None);
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-
-                // 8. 대피 후 정리 단계
+                //가방을 주운뒤 머리 위에 올릴 때 까지 대기
+                yield return new WaitUntil(() => isprotectedHead == true);
+                //8. 마지막 대사가 끝난 후 복도로 이동
                 seventhDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
-
-                // 9. 다음 씬으로 이동
+                //다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
                 SceneManager.LoadScene("JDH_Earth2");
@@ -178,6 +181,9 @@ public class EarthquakeBeginner : MonoBehaviour
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
+                //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
+
+
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -191,8 +197,9 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                yield return new WaitUntil(() => isprotectedHead == true);
                 firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => isprotectedHead == true || firstDialog.isDialogsEnd == true);
 
                 // 2. 선택지 이미지 변경 및 버튼 활성화
                 LeftImg.sprite = leftChangeImg;
@@ -206,12 +213,12 @@ public class EarthquakeBeginner : MonoBehaviour
                 RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
 
                 yield return new WaitUntil(() =>
-                    leftChoiceDialog.isDialogsEnd == true ||
-                    rightChoiceDialog.isDialogsEnd == true);
+                    (leftChoiceDialog.isDialogsEnd == true ||
+                    rightChoiceDialog.isDialogsEnd == true) && isprotectedHead == true);
 
                 // 4. 다음 대화 진행
                 thirdDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && isprotectedHead == true);
 
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
