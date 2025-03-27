@@ -27,17 +27,19 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
         while (camOffset.transform.localPosition != newPos)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
-            
+            PlayerRig playerState = FindObjectOfType<PlayerRig>();
             if (newPos == _originPos)
             {
                 camOffset.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("None");
+                playerState.currentState = PlayerRig.State.None;
             }
             
             else if (newPos != _originPos)
             {
                 camOffset.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("DownDesk");
+                playerState.currentState = PlayerRig.State.Down;
             }
             
             yield return StartCoroutine(FadeInOut.Instance.FadeIn());
