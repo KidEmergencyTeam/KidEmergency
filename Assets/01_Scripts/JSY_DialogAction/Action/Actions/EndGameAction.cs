@@ -17,7 +17,7 @@ public class EndGameAction : MonoBehaviour, IActionEffect
         Destroy(ActionManager.Instance.gameObject);
         Destroy(FadeInOut.Instance.gameObject);
         Destroy(UIManager.Instance.gameObject);
-        SceneManager.LoadScene("JSY_Start", LoadSceneMode.Single);
+        SceneManager.LoadScene("Title", LoadSceneMode.Single);
     }
 
 }
