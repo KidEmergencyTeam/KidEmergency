@@ -151,7 +151,7 @@ public class FireBeginner : MonoBehaviour
                     fadeInOutImg.gameObject.SetActive(true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("JDH2");
+                    SceneManager.LoadScene("Fr_Kinder_1");
                     break;
 
                 // 복도
@@ -177,7 +177,7 @@ public class FireBeginner : MonoBehaviour
 
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("JDH3");
+                    SceneManager.LoadScene("Fr_Kinder_2");
                     break;
 
                 // 계단/엘리베이터
@@ -199,7 +199,7 @@ public class FireBeginner : MonoBehaviour
                         isHeadDown == true && iscoverFace == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("JDH4");
+                    SceneManager.LoadScene("Fr_Kinder_3");
                     break;
 
                 // 외부
@@ -277,7 +277,7 @@ public class FireBeginner : MonoBehaviour
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
                     //Scene 이동
-                    SceneManager.LoadScene("JDH_Advanced2");
+                    SceneManager.LoadScene("Fr_Home_1");
 						break;
 
 				case PLACE.STAIRS_ELEVATOR:
@@ -319,7 +319,7 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => isHeadDown == true && iscoverFace);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("JDH_Advanced3");
+                    SceneManager.LoadScene("Fr_Home_2");
                     break;
 
                 case PLACE.DOWNSTAIR:
@@ -335,7 +335,7 @@ public class FireBeginner : MonoBehaviour
 
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                    SceneManager.LoadScene("JDH_Advanced4");
+                    SceneManager.LoadScene("Fr_Home_3");
                     break;
 
 				case PLACE.OUTSIDE:
