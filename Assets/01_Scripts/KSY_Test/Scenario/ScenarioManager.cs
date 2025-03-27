@@ -464,12 +464,12 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(26);
         yield return StartCoroutine(ChangeScene(3));
+
+        // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
         ChoiceVoteManager.Instance.disableSingleton = true;
         TypingEffect.Instance.disableSingleton = true;
-        // FadeInOut.Instance.disableSingleton = true;
         disableSingleton = true;
     }
-
     #endregion
 
     // 비동기 방식으로 씬 전환
