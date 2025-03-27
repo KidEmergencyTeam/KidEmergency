@@ -168,7 +168,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 //다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth2");
+                SceneManager.LoadScene("Eq_Kinder_1");
                 break;
 
             // 복도
@@ -187,7 +187,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth3");
+                SceneManager.LoadScene("Eq_Kinder_2");
                 break;
 
             // 계단과 엘리베이터
@@ -197,7 +197,6 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                yield return new WaitUntil(() => isprotectedHead == true);
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => isprotectedHead == true || firstDialog.isDialogsEnd == true);
 
@@ -223,7 +222,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                SceneManager.LoadScene("JDH_Earth4");
+                SceneManager.LoadScene("Eq_Kinder_3");
                 break;
 
             // 건물 밖
