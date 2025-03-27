@@ -70,7 +70,7 @@ public class Bag : MonoBehaviour
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.1f)
+        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.localPosition) < 0.2f)
         {
             return true;
         }

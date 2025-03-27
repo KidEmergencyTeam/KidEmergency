@@ -26,8 +26,11 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
             for (int j = 0; j < outlineEffect.transform.childCount; j++)
             {
                 GameObject obj = outlineEffect.transform.GetChild(j).gameObject;
-                Outlinable outlinable = obj.AddComponent<Outlinable>();
-                outlinable.AddAllChildRenderersToRenderingList();
+                if (obj.GetComponent<Outlinable>() == null)
+                {
+                    Outlinable outlinable = obj.AddComponent<Outlinable>();
+                    outlinable.AddAllChildRenderersToRenderingList();
+                }
                 
                 if (obj.CompareTag("BaseObject"))
                 {

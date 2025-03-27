@@ -55,7 +55,7 @@ public class RayController : MonoBehaviour
                             {
                                 return;
                             }
-
+                            
                             if(_leftController.transform.GetChild(i).name != "Bag")
                             {
                                 SwitchLeftRay();
