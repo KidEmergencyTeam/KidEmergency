@@ -25,7 +25,7 @@ public class Grabbable : MonoBehaviour
 
 	public bool IsGrabbed => currentGrabber;
 
-	private void Start()
+	protected virtual void Start()
 	{
 		if (!this.TryGetComponent<Collider>(out Collider c))
 		{
@@ -37,7 +37,7 @@ public class Grabbable : MonoBehaviour
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
 	}
 
-	private void Update()
+	protected virtual void Update()
 	{
 		if (isGrabbable)
 		{
@@ -48,11 +48,6 @@ public class Grabbable : MonoBehaviour
 			outlinable.enabled = false;
 
 			if (!IsGrabbed) return;
-			DontDestroyOnLoad(gameObject);
-			if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
-			{
-				Destroy(gameObject);
-			}
 
 			if (isMoving)
 			{
