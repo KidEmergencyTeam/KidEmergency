@@ -5,11 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ChoiceVoteManager : MonoBehaviour
+public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
 {
-    // 싱글톤 인스턴스. 다른 스크립트에서는 ChoiceVoteManager.Instance로 접근 가능
-    public static ChoiceVoteManager Instance { get; private set; }
-
     // 인스펙터에서 UI 패널 프리팹과 관련 설정을 할당
     [Serializable]
     public class ChoiceUIPanelSceneReference
@@ -60,21 +57,6 @@ public class ChoiceVoteManager : MonoBehaviour
 
     // 투표 완료 후 최종 결과를 전달할 콜백 함수
     private Action<int> resultCallback;
-
-    private void Awake()
-    {
-        // 싱글톤 패턴 적용: 인스턴스가 없으면 현재 인스턴스를 할당, 이미 있으면 파괴
-        if (Instance == null)
-        {
-            Instance = this;
-            // 씬 전환 시에도 인스턴스 유지
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     // 모든 플레이어에게 공통된 선택지 UI 패널을 사용하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
