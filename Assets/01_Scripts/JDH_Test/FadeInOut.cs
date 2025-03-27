@@ -22,7 +22,7 @@ public class FadeInOut : SingletonManager<FadeInOut>
     {
         if (fadeInoutImg != null)
         {
-            if (SceneManager.GetActiveScene().name == "JSY_Start")
+            if (SceneManager.GetActiveScene().name == "Title")
             {
                 Color color = fadeInoutImg.color;
                 color.a = 0f;

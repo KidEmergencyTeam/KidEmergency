@@ -81,7 +81,7 @@ public class UIManager : SingletonManager<UIManager>
 
     public void SetUIPosition()
     {
-        if (SceneManager.GetActiveScene().name == "JSY_School")
+        if (SceneManager.GetActiveScene().name == "Eq_School_1")
         {
             if (camOffset != null)
             {
@@ -104,21 +104,21 @@ public class UIManager : SingletonManager<UIManager>
             else return;
         }
 
-        if(SceneManager.GetActiveScene().name == "JSY_SchoolHall")
+        if(SceneManager.GetActiveScene().name == "Eq_School_2")
         {
             DialogPosReset(2);
             OptionPosReset(1);
             WarningPosReset(2);
         }
         
-        else if (SceneManager.GetActiveScene().name == "JSY_StairEv")
+        else if (SceneManager.GetActiveScene().name == "Eq_School_3")
         {
             DialogPosReset(3);
             OptionPosReset(2);
             WarningPosReset(3);
         }
         
-        else if (SceneManager.GetActiveScene().name == "JSY_SchoolGround")
+        else if (SceneManager.GetActiveScene().name == "Eq_School_4")
         {
             DialogPosReset(4);
         }
