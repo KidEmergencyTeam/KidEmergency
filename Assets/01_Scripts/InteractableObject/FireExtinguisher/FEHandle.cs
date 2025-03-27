@@ -65,7 +65,7 @@ public class FEHandle : MonoBehaviour
 			{
 				print("time > cooltime");
 				_fireEndCoolTime = Time.time + fireCoolTime;
-				ObjectPoolManager.Instance.Spawn(powderPrefab, muzzle);
+				ObjectPoolManager.Instance.Spawn(powderPrefab, muzzle.position, muzzle.rotation);
 			}
 
 			if (!_fireDetectCollider) return;
