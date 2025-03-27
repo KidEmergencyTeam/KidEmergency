@@ -13,6 +13,7 @@ public class PlayerRig : MonoBehaviour
 
 	public TargetFollower playerTargetFollower;
 	public Transform xrOrigin;
+	public Transform mainCameraTarget;
 	public Transform leftFootIkTarget;
 	public Transform rightFootIkTarget;
 	public Transform leftFootTarget;
@@ -47,6 +48,7 @@ public class PlayerRig : MonoBehaviour
 		{
 			isAction = false;
 			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			mainCameraTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
@@ -69,6 +71,7 @@ public class PlayerRig : MonoBehaviour
 		{
 			isAction = true;
 			xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
+			mainCameraTarget.localPosition += new Vector3(0, bowYValue, 0);
 			leftFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
 			rightFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
 			leftFootTarget.localPosition += new Vector3(0, bowYValue, 0);
@@ -86,6 +89,7 @@ public class PlayerRig : MonoBehaviour
 		{
 			isAction = false;
 			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			mainCameraTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
 			leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
@@ -106,6 +110,7 @@ public class PlayerRig : MonoBehaviour
 		{
 			isAction = true;
 			xrOrigin.localPosition -= new Vector3(0, downYValue, 0);
+			mainCameraTarget.localPosition += new Vector3(0, bowYValue, 0);
 			leftFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
 			rightFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
 			leftFootTarget.localPosition += new Vector3(0, downYValue, 0);
