@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class DialogManager : SingletonManager<DialogManager>
 {
-    private AudioSource audioSource;
+    private AudioSource _dialogAudio;
 
     protected override void Awake()
     {
         base.Awake();
-        audioSource = GetComponent<AudioSource>();
+        _dialogAudio = GetComponent<AudioSource>();
     }
 
     public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
@@ -54,8 +54,8 @@ public class DialogManager : SingletonManager<DialogManager>
 
         if (audio != null)
         {
-            audioSource.clip = audio;
-            audioSource.Play(); 
+            _dialogAudio.clip = audio;
+            _dialogAudio.Play(); 
         }
         
         foreach (char letter in text.ToCharArray())
@@ -64,7 +64,7 @@ public class DialogManager : SingletonManager<DialogManager>
             yield return new WaitForSeconds(0.125f);
         }
         
-        yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text && !audioSource.isPlaying);
+        yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text && !_dialogAudio.isPlaying);
         yield return new WaitForSeconds(1f);
     }
     

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {
@@ -19,13 +20,9 @@ public class ActionManager : SingletonManager<ActionManager>
 	public HoldingLegAction holdingLegAction;
 	public EndGameAction endGameAction;
 
-	public AudioSource audioSource; // 만약 대사가 진행될 때 효과음이나 배경음이 나올 경우 다른 오디오 소스 써야함.
+	public AudioSource actionAudio;
 	private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
-
-	protected override void Awake()
-	{
-		base.Awake();
-	}
+	
 
 	private void Start()
 	{
