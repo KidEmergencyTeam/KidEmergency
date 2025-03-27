@@ -17,6 +17,7 @@ public class FireBeginner : MonoBehaviour
 		STAIRS_ELEVATOR,
 		OUTSIDE,
 		HOUSE,
+        DOWNSTAIR
     };
 
 	[Header("시작 장소")] public PLACE place;
@@ -75,6 +76,7 @@ public class FireBeginner : MonoBehaviour
 	[SerializeField] private BeginnerDialogSystem secondDialog;
 	[SerializeField] private BeginnerDialogSystem thirdDialog;
 	[SerializeField] private BeginnerDialogSystem forthDialog;
+	[SerializeField] private BeginnerDialogSystem fifthDialog;
 	[SerializeField] private BeginnerDialogSystem leftChoiceDialog;
 	[SerializeField] private BeginnerDialogSystem rightChoiceDialog;
 
@@ -232,10 +234,11 @@ public class FireBeginner : MonoBehaviour
                     firstDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-					//2.상황창밖으로 검은 연기와 불길이 아랫 집에서 올라오는 장면을 비춰 줌(화재 비상벨이 시끄럽게 울리고 있음) 이후 두번째 대화 진행
-					//대화 이후 선택지 창 활성화
-					fireAlarm.gameObject.SetActive(true);
-
+                    //2.상황창밖으로 검은 연기와 불길이 아랫 집에서 올라오는 장면을 비춰 줌(화재 비상벨이 시끄럽게 울리고 있음) 이후 두번째 대화 진행
+                    //파티클 활성화
+                    SmokeObjsActive();
+                    //대화 이후 선택지 창 활성화
+                    fireAlarm.gameObject.SetActive(true);
                     secondDialog.gameObject.SetActive(true);
 					yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                     LeftImg.sprite = leftChangeImg;
@@ -244,35 +247,41 @@ public class FireBeginner : MonoBehaviour
                     Debug.Log("예제 UI 첫 번째 단계 준비 완료");
                     yield return new WaitUntil(() => isFirstStepRdy == true);
 
-                    // 4. 첫 단계 준비 완료 후 선택지 UI 출력 선택지에 따라 다른 대사 출력
+                    // 4. 첫 단계 준비 완료 후 선택지 UI 출력 선택지에 따라 다른 대사 출력 후 마무리 대사진행
                     exampleDescUi.SetActive(true);
                     LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
                     RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
 
                     yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true);
-                    //5. 주방으로 이동 현재 위치 변수가 일치하면 이동 후 세번째 대사 실행
+                    thirdDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                    //5. 세번째 대사 실행 후 주방으로 이동
                     isInLivingRoom = false;
 					isInKitchen = true;
 					yield return new WaitUntil(() => isInLivingRoom == false && isInKitchen == true);
                     //주방으로 이동 (fade in, out모두 실행 후 대사 출력)
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-					//주방으로 이동
-
+                    //주방으로 이동
+                    TeleportCharacters();
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-                    thirdDialog.gameObject.SetActive(true);
-					yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-					//손수건 생성
-					//손수건을 장착 시 마지막 대사 출력 후 이동
 					forthDialog.gameObject.SetActive(true);
-					yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+                    //손수건 활성화
+                    handkerchief.GetComponent<Outlinable>().enabled = true;
+                    yield return new WaitUntil(() => forthDialog.isDialogsEnd == true && iscoverFace == true);
+
+                    //마지막 대사 출력 후 이동
+                    fifthDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true && iscoverFace == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
                     //Scene 이동
                     SceneManager.LoadScene("JDH_Advanced2");
 						break;
+
 				case PLACE.STAIRS_ELEVATOR:
+                    SetAllNpcState(NpcRig.State.Bow);
                     fireAlarm.gameObject.SetActive(true);
                     // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
                     StartCoroutine(FadeInOut.Instance.FadeIn());
@@ -294,16 +303,39 @@ public class FireBeginner : MonoBehaviour
                     //3. 피난 유도선 Ray로 선택 시 Outline 강조, 대사종료 후 놀이터 Scene으로 이동
                     secondDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd);
+
                     //피난 유도선 Ray감지까지 대기
-                    //Ray감지 시  Outline 강조
+                    thirdDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => thirdDialog.isDialogsEnd);
+                    //피난 유도선 선택 시 Outline 강조
+
                     ActiveOutlineToChildren(emergencyExit);
 					isSecondStepRdy = true;
 					yield return new WaitUntil(() => isSecondStepRdy == true);
-					thirdDialog.gameObject.SetActive(true);
-					yield return new WaitUntil(() => thirdDialog.isDialogsEnd);
+
+                    //선택시 시점 변환플레이어 시점 변환
+
+                    //머리 숙이고 코를 막아야 이동
+                    yield return new WaitUntil(() => isHeadDown == true && iscoverFace);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
                     SceneManager.LoadScene("JDH_Advanced3");
+                    break;
+
+                case PLACE.DOWNSTAIR:
+                    SetAllNpcState(NpcRig.State.Bow);
+                    StartCoroutine(FadeInOut.Instance.FadeIn());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+
+                    firstDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                    //두번째 대사 출력
+                    secondDialog.gameObject.SetActive(true);
+                    yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
+
+                    StartCoroutine(FadeInOut.Instance.FadeOut());
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                    SceneManager.LoadScene("JDH_Advanced4");
                     break;
 
 				case PLACE.OUTSIDE:
@@ -362,12 +394,14 @@ public class FireBeginner : MonoBehaviour
 		if (playerMovPos != null)
 		{
 			player.transform.position = playerMovPos.position;
-		}
+            player.transform.rotation = playerMovPos.rotation;
+        }
 
 		// 세티 이동
 		if (setiMovPos != null)
 		{
 			seti.transform.position = setiMovPos.position;
+            seti.transform.rotation = setiMovPos.rotation;
 		}
 
 		// NPC 이동
@@ -376,6 +410,7 @@ public class FireBeginner : MonoBehaviour
 			if (npcMovPos.Length > i && npcMovPos[i] != null)
 			{
 				NPC[i].transform.position = npcMovPos[i].position;
+                NPC[i].transform.rotation = npcMovPos[i].rotation;
 			}
 		}
 

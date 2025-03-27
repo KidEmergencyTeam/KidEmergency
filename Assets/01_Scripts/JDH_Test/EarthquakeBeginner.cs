@@ -1,277 +1,291 @@
 using EPOOutline;
 using System.Collections;
 using TMPro;
+using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EarthquakeBeginner : MonoBehaviour
 {
-	public enum PLACE
-	{
-		CLASSROOM,
-		HALLWAY,
-		STAIRS_ELEVATOR,
-		OUTSIDE,
-		HOUSE,
-	};
+    public enum PLACE
+    {
+        CLASSROOM, // 교실
+        HALLWAY, // 복도
+        STAIRS_ELEVATOR, // 계단/엘리베이터
+        OUTSIDE, // 건물 밖
+        HOUSE // 집
+    };
 
-	[Header("���� ���")] public PLACE place;
+    [Header("현재 위치")]
+    public PLACE place;
 
-	[Header("���� ��Ȳ ����")] public bool isEarthquakeStart;
+    [Header("지진 시작 여부")]
+    public bool isEarthquakeStart;
 
-	[Header("NPC �� �÷��̾� �̵� ���� ����")]
-	public GameObject player; // �÷��̾��� ���� ��ġ
+    [Header("NPC 및 플레이어 이동 관련 오브젝트")]
+    public GameObject player; // 플레이어 캐릭터 오브젝트
+    public GameObject seti;
+    public GameObject[] NPC; // NPC 캐릭터 오브젝트 배열
+    public FadeInOut fadeInOutImg;
+    public TestButton2 okBtn;
+    public GameObject warningUi;
+    public GameObject exampleDescUi;
+    public GameObject leftHand; // 메뉴 조작 핸드 오브젝트
+    public Canvas playerUi; // 플레이어 UI Canvas
 
-	public GameObject seti;
-	public GameObject[] NPC; // ��Ÿ NPC���� ���� ��ġ
-	public FadeInOut fadeInOutImg;
-	public TestButton2 okBtn;
-	public GameObject warningUi;
-	public GameObject exampleDescUi;
-	public GameObject leftHand; // �޼� ���� ������Ʈ
-	public Canvas playerUi; //�÷��̾� UI Canvas
+    [Header("가방, 출구, 경보 장치 오브젝트")]
+    [SerializeField] private GameObject backpack;
+    [SerializeField] private GameObject emergencyExit; // 비상 출구 (Outlinable 컴포넌트 추가 필요)
+    [SerializeField] private GameObject fireAlarm;
+    public EarthquakeSystem earthquake;
 
-	[Header("����, Ż�ⱸ, ��� ������Ʈ")] [SerializeField]
-	private GameObject backpack;
+    [Header("고개 숙임 여부 체크")]
+    public bool isHeadDown = false;
+    public float headHeightThreshold; // 고개 숙임을 판단하는 높이 기준
+    [SerializeField] private Transform xrCamera; // HMD 카메라
+    [SerializeField] private float initialHeight; // 초기 플레이어 높이
 
-	[SerializeField]
-	private GameObject
-		emergencyExit; // ��� ������Ʈ (Outlinable ������Ʈ�� �߰��� ���)
+    [Header("플레이어 및 NPC 스폰 위치")]
+    [SerializeField] private Transform playerSpawnPos;
+    [SerializeField] private Transform[] npcSpawnPos;
 
-	[SerializeField] private GameObject fireAlarm;
-	// public EarthquakeSystem earthquake;
+    [Header("이동 목표 위치")]
+    public Transform playerMovPos;
+    public Transform setiMovPos;
+    public Transform[] npcMovPos;
 
-	[Header("�Ӹ� ��ġ üũ")] public bool isHeadDown = false;
+    [Header("선택 UI 이미지 및 버튼")]
+    [SerializeField] private Image LeftImg;
+    [SerializeField] private Image RightImg;
+    [SerializeField] private TestButton2 LeftBtn;
+    [SerializeField] private TestButton2 RightBtn;
+    [SerializeField] private Sprite leftChangeImg;
+    [SerializeField] private Sprite rightChangeImg;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
-	public float
-		headHeightThreshold; // �Ӹ� ���� ���� (�� ������ ������ �Ӹ��� ���� ������ �Ǵ�)
+    [Header("진행 상태 체크 변수")]
+    public bool isFirstStepRdy;
+    public bool isSecondStepRdy;
+    public bool hasHandkerchief;
+    public bool ruleCheck;
+    public bool doProtectedHead;    //머리를 보호하고 있어야 하는 구간
+    public bool isprotectedHead;    //머리를 잘 보호하는지 확인하는 변수
 
-	[SerializeField] private Transform xrCamera; // HMD ī�޶�
-	[SerializeField] private float initialHeight; // �ʱ� �÷��̾� ����
+    [Header("대화 시스템")]
+    [SerializeField] private BeginnerDialogSystem firstDialog;
+    [SerializeField] private BeginnerDialogSystem secondDialog;
+    [SerializeField] private BeginnerDialogSystem thirdDialog;
+    [SerializeField] private BeginnerDialogSystem forthDialog;
+    [SerializeField] private BeginnerDialogSystem fifthDialog;
+    [SerializeField] private BeginnerDialogSystem sixthDialog;
+    [SerializeField] private BeginnerDialogSystem seventhDialog;
+    [SerializeField] private BeginnerDialogSystem leftChoiceDialog;
+    [SerializeField] private BeginnerDialogSystem rightChoiceDialog;
 
-	[Header("���� ���� ��ġ")] [SerializeField]
-	private Transform playerSpawnPos;
+    private void Awake()
+    {
+        xrCamera = Camera.main.transform;
+        initialHeight = xrCamera.position.y; // 초기 플레이어 높이 설정
+        earthquake = FindObjectOfType<EarthquakeSystem>();
+    }
 
-	[SerializeField] private Transform[] npcSpawnPos;
-	[Header("�̵� ��ǥ ��ġ")] public Transform playerMovPos;
-	public Transform setiMovPos;
-	public Transform[] npcMovPos;
+    IEnumerator Start()
+    {
+        switch (place)
+        {
+            // 교실
+            case PLACE.CLASSROOM:
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-	[Header("���� UI �̹���")] [SerializeField]
-	private Image LeftImg;
+                // 2. 화면이 흔들리며 지진 발생. 화재 경보도 함께 울림.
+                isEarthquakeStart = true;
+                earthquake.StartEarthquake();
+                fireAlarm.gameObject.SetActive(true);
 
-	[SerializeField] private Image RightImg;
-	[SerializeField] private TestButton2 LeftBtn;
-	[SerializeField] private TestButton2 RightBtn;
-	[SerializeField] private Sprite leftChangeImg;
-	[SerializeField] private Sprite rightChangeImg;
-	[SerializeField] private TextMeshProUGUI descriptionText;
+                // 3. 두 번째 대화 시작
+                secondDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
-	[Header("��Ȳ ���� üũ")] public bool isFirstStepRdy;
-	public bool isSecondStepRdy;
-	public bool hasHandkerchief;
-	public bool ruleCheck;
+                // 4. 책상 밑으로 들어가라는 메시지를 띄우는 UI 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밑으로";
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
+                okBtn.isClick = false;
 
-	[Header("��ȭ �ý���")] [SerializeField]
-	private BeginnerDialogSystem firstDialog;
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
 
-	[SerializeField] private BeginnerDialogSystem secondDialog;
-	[SerializeField] private BeginnerDialogSystem thirdDialog;
-	[SerializeField] private BeginnerDialogSystem forthDialog;
-	[SerializeField] private BeginnerDialogSystem fifthDialog;
-	[SerializeField] private BeginnerDialogSystem sixthDialog;
-	[SerializeField] private BeginnerDialogSystem seventhDialog;
-	[SerializeField] private BeginnerDialogSystem leftChoiceDialog;
-	[SerializeField] private BeginnerDialogSystem rightChoiceDialog;
+                // 플레이어와 NPC 이동 및 행동 변경 후 대사 출력
+                TeleportCharacters();
+                SetAllNpcState(NpcRig.State.DownDesk);
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 
-	private void Awake()
-	{
-		xrCamera = Camera.main.transform;
-		initialHeight = xrCamera.position.y; // �ʱ� �÷��̾� ���� ����
-		// earthquake = FindObjectOfType<EarthquakeSystem>();
-	}
+                //5. 책상 밑에서 대사가 완료된 후 책상 다리를 잡도록 Outline활성화 및 잡기
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                //책상 다리 outline 활성화
+                //책상 다리를 잡을때까지 대기
 
-	// ���� ���� �� ����
-	IEnumerator Start()
-	{
-		switch (place)
-		{
-			// ����
-			case PLACE.CLASSROOM:
-				// 1. ù ��° ��ȭ ����
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-				//2. ȭ���� ���ݾ� ��鸮�� �溸���� �︮�� ������ ���� ��ü�� �Ѿ����� ���� �Ҹ��� ���۵�
-				isEarthquakeStart = true;
-				//���� ����
-				// earthquake.StartEarthquake();
-				fireAlarm.gameObject.SetActive(true);
-				// 3. �� ��° ��ȭ ����
-				secondDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-				// 4. å�� ������ ���� ������ UI �߻� UI�� ������ å�� ������ ���� ��ȯ ���� ��� ����
-				okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "å�� ������";
-				okBtn.gameObject.SetActive(true);
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				okBtn.gameObject.SetActive(false);
-				okBtn.isClick = false;
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				//�÷��̾�� NPC�� ��ǥ �̵� �� �ൿ ��ȭ
-				TeleportCharacters();
-				SetAllNpcState(NpcRig.State.DownDesk);
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == true);
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
+                forthDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+                backpack.GetComponent<Outlinable>().enabled = true;
+                fifthDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
+                // 7. 지진 종료
+                earthquake.StopEarthquake();
+                yield return new WaitUntil(() => earthquake._endEarthquake == true);
 
-				// 5. ���� �տ��ִ� å�� �ٸ��� �ƿ������� Ȱ��ȭ ���� ��� ���
-				//�ƿ����� Ȱ��ȭ
-				forthDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
-				SetAllNpcState(NpcRig.State.DownDesk); //NPC �ൿ ����
-				//å�� �ٸ� ���
+                sixthDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
 
-				// 6. å�� ���� ������ �ִ� ������ �׵θ��� �����ϸ� ���̵鿡�� ��ġ�� Ȯ�ν�Ų��.
-				//���� ������Ʈ �ƿ����� Ȱ��ȭ
-				backpack.GetComponent<Outlinable>().enabled = true;
-				fifthDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
-				// 7. ��鸲�� ���� ���� ��� ���
-				//��鸲 ����
-				// earthquake.StopEarthquake(); // ���� ����
-				// yield return new WaitUntil(() => earthquake._endEarthquake == true);
+                // 책상 밖으로 이동을 위해 버튼 다시 활성화
+                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밖으로";
+                okBtn.gameObject.SetActive(true);
+                yield return new WaitUntil(() => okBtn.isClick == true);
+                okBtn.gameObject.SetActive(false);
 
-				sixthDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
-				//å�� ������ ��ư Ȱ��ȭ �� �ؽ�Ʈ ����
-				okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "å�� ������";
-				okBtn.gameObject.SetActive(true);
-				yield return new WaitUntil(() => okBtn.isClick == true);
-				okBtn.gameObject.SetActive(false);
-				//���� ��ġ�� �̵� �� NPC ��� ����
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				ReturnToOriginalPosition(); //���� ��ġ�� �̵�
-				SetAllNpcState(NpcRig.State.None);
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				// 8. å�� ���� ������ �ִ� ������ �׵θ��� ������Ű�� ���̵鿡�� �����ϰ� �Ѵ�. ���� ���� ��� ���
-				seventhDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
-				//������ ������ �տ� �����ȴ�. �Ӹ� ��ġ���� �ø��� ������ ��� ��� �� fadeout���� Scene �̵�, ������ ���� �� NPC ���� ����
+                // 플레이어와 NPC를 원래 위치로 이동
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                doProtectedHead = true;     //머리 보호구간
+                ReturnToOriginalPosition();
+                SetAllNpcState(NpcRig.State.None);
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                //가방을 주운뒤 머리 위에 올릴 때 까지 대기
+                yield return new WaitUntil(() => isprotectedHead == true);
+                //8. 마지막 대사가 끝난 후 복도로 이동
+                seventhDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+                //다음 씬으로 이동
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth2");
+                break;
 
-				//9. Scene�̵�
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				SceneManager.LoadScene("JDH_Earth2");
-				break;
+            // 복도
+            case PLACE.HALLWAY:
+                SetAllNpcState(NpcRig.State.HoldBag);
 
-			case PLACE.HALLWAY:
-				SetAllNpcState((NpcRig.State.HoldBag));
-				//��� ��� �� ���Scene���� �̵�
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-				//�ǳ� ������ ���� ��Ʈ�ѷ��� select�ϸ� outliner Ȱ��ȭ
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				SceneManager.LoadScene("JDH_Earth3");
-				break;
+                // 첫 번째 대화 후 씬 이동
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
-			case PLACE.STAIRS_ELEVATOR:
-				SetAllNpcState((NpcRig.State.HoldBag));
-				// 1. ù ��° ��ȭ ����
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-				//�̸� ������ �̹��� ����
-				LeftImg.sprite = leftChangeImg;
-				RightImg.sprite = rightChangeImg;
-				isFirstStepRdy = true;
-				yield return new WaitUntil(() => isFirstStepRdy == true);
+                //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
 
-				// 2.��ܰ� ���������� �������� �������� ������, ��ư ���� �� ��� ����
-				exampleDescUi.gameObject.SetActive(true);
-				//
-				LeftBtn.GetComponent<Button>().onClick
-					.AddListener(() => HandleChoice(true));
-				RightBtn.GetComponent<Button>().onClick
-					.AddListener(() => HandleChoice(false));
-				yield return new WaitUntil(() =>
-					leftChoiceDialog.isDialogsEnd == true ||
-					rightChoiceDialog.isDialogsEnd == true);
 
-				//3.�� ��° ��ȭ ���� ����
-				thirdDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
-				//Scene�̵�
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				SceneManager.LoadScene("JDH_Earth4");
-				break;
-			case PLACE.OUTSIDE:
-				// 1. ù ��° ��ȭ ����
-				StartCoroutine(FadeInOut.Instance.FadeIn());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
-				firstDialog.gameObject.SetActive(true);
-				yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                // 씬 전환
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth3");
+                break;
 
-				//Scene�̵�
-				StartCoroutine(FadeInOut.Instance.FadeOut());
-				yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-				SceneManager.LoadScene(0); //Ÿ��Ʋ�� �̵�
-				break;
-		}
-	}
+            // 계단과 엘리베이터
+            case PLACE.STAIRS_ELEVATOR:
+                SetAllNpcState(NpcRig.State.HoldBag);
 
-	private void Update()
-	{
-		DetectHeadLowering(); // �Ӹ� ���� ����
-	}
-	//�̵� �� Ui��ġ ����
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                yield return new WaitUntil(() => isprotectedHead == true);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => isprotectedHead == true || firstDialog.isDialogsEnd == true);
 
-	public void AdjustUiTransform()
+                // 2. 선택지 이미지 변경 및 버튼 활성화
+                LeftImg.sprite = leftChangeImg;
+                RightImg.sprite = rightChangeImg;
+                isFirstStepRdy = true;
+                yield return new WaitUntil(() => isFirstStepRdy == true);
+
+                // 3. 선택지 UI 표시
+                exampleDescUi.gameObject.SetActive(true);
+                LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
+                RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
+
+                yield return new WaitUntil(() =>
+                    (leftChoiceDialog.isDialogsEnd == true ||
+                    rightChoiceDialog.isDialogsEnd == true) && isprotectedHead == true);
+
+                // 4. 다음 대화 진행
+                thirdDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && isprotectedHead == true);
+
+                // 씬 전환
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene("JDH_Earth4");
+                break;
+
+            // 건물 밖
+            case PLACE.OUTSIDE:
+                // 1. 첫 번째 대화 시작
+                StartCoroutine(FadeInOut.Instance.FadeIn());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                firstDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+
+                // 씬 전환 (타이틀 화면으로 이동)
+                StartCoroutine(FadeInOut.Instance.FadeOut());
+                yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                SceneManager.LoadScene(0);
+                break;
+        }
+    }
+
+
+    private void Update()
+    {
+        DetectHeadLowering(); // 고개 숙임 감지
+    }
+
+    // 이동 후 UI 위치 조정
+    public void AdjustUiTransform()
 	{
 		if (playerUi == null || player == null) return;
 
 		RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
 		if (rectTransform == null) return;
 
-		// ���� ���� ��ġ ����
+		// UI의 월드 위치 설정
 		Vector3 worldPosition = player.transform.position +
-		                        player.transform.TransformDirection(
-			                        new Vector3(0.75f, 1.5f, 0.5f));
+								player.transform.TransformDirection(
+									new Vector3(0.75f, 1.5f, 0.5f));
 		rectTransform.position = worldPosition;
 
-		// ���� ȸ�� ���� (�־��� �� �״�� ����)
+		// UI 회전 설정 (임의의 값 적용)
 		rectTransform.localRotation =
-			Quaternion.Euler(-20, 50, 0); // ���� ������ �ƴ�, �״�� ����
+			Quaternion.Euler(-20, 50, 0); // 플레이어를 따라가는 것이 아니라 고정된 회전
 
-		Debug.Log("playerUi ��ġ �� ȸ�� ���� �Ϸ� (Local Space)");
+		Debug.Log("playerUi 위치 및 회전 조정 완료 (Local Space)");
 	}
 
+	// 캐릭터 순간이동 함수
 	private void TeleportCharacters()
 	{
-		// �÷��̾� �̵�
+		// 플레이어 이동
 		if (playerMovPos != null)
 		{
 			player.transform.position = playerMovPos.position;
 			player.transform.rotation = playerMovPos.rotation;
 		}
 
-		// ��Ƽ �̵�
+		// 세티 이동
 		if (setiMovPos != null)
 		{
 			seti.transform.position = setiMovPos.position;
 		}
 
-		// NPC �̵�
+		// NPC 이동
 		for (int i = 0; i < NPC.Length; i++)
 		{
 			if (npcMovPos.Length > i && npcMovPos[i] != null)
@@ -280,20 +294,20 @@ public class EarthquakeBeginner : MonoBehaviour
 			}
 		}
 
-		Debug.Log("�÷��̾� �� NPC �̵� �Ϸ�");
+		Debug.Log("플레이어 및 NPC 이동 완료");
 	}
 
-	// ���� ��ġ�� �ǵ����� �Լ�
+	// 초기 위치로 복귀하는 함수
 	public void ReturnToOriginalPosition()
 	{
-		// �÷��̾� ��ġ ����
+		// 플레이어 위치 복귀
 		if (playerSpawnPos != null)
 		{
 			player.transform.position = playerSpawnPos.position;
 			player.transform.rotation = playerSpawnPos.rotation;
 		}
 
-		// NPC ��ġ ����
+		// NPC 위치 복귀
 		for (int i = 0; i < NPC.Length; i++)
 		{
 			if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
@@ -303,10 +317,10 @@ public class EarthquakeBeginner : MonoBehaviour
 			}
 		}
 
-		Debug.Log("�÷��̾� �� NPC�� ���� ��ġ�� �����߽��ϴ�.");
+		Debug.Log("플레이어 및 NPC의 초기 위치로 복귀 완료");
 	}
 
-	// �θ� ������Ʈ�� ��� �ڽĿ��� Outlinable ������Ʈ Ȱ��ȭ
+	// 부모 오브젝트의 모든 자식에게 Outlinable 컴포넌트 활성화
 	private void ActiveOutlineToChildren(GameObject parent)
 	{
 		if (parent == null) return;
@@ -320,21 +334,22 @@ public class EarthquakeBeginner : MonoBehaviour
 				outline = child.gameObject.AddComponent<Outlinable>();
 			}
 
-			outline.enabled = true; // Outlinable Ȱ��ȭ
+			outline.enabled = true; // Outlinable 활성화
 		}
 	}
 
-	// �Ӹ� ���� ���� �Լ�
+
+	// 머리 숙임 감지 함수
 	private void DetectHeadLowering()
 	{
 		if (xrCamera == null) return;
 
-		float currentHeight = xrCamera.position.y; // ���� �Ӹ� ����
+		float currentHeight = xrCamera.position.y; // 현재 머리 높이
 
 		if (currentHeight < headHeightThreshold)
 		{
 			isHeadDown = true;
-			// Debug.Log("�Ӹ��� �������ϴ�! (Y �� ����)");
+			// Debug.Log("머리를 숙였습니다! (Y축 기준)");
 		}
 		else
 		{
@@ -342,18 +357,19 @@ public class EarthquakeBeginner : MonoBehaviour
 		}
 	}
 
-	// ��� NPC���� ���¸� �����ϰ� �����ϴ� �Լ�
+	// 모든 NPC의 상태를 변경하는 함수
 	public void SetAllNpcState(NpcRig.State newState)
 	{
 		foreach (GameObject npc in NPC)
 		{
-			if (npc != null) // NPC�� null�� �ƴ��� Ȯ��
+			if (npc != null) // NPC가 null이 아닌지 확인
 			{
-				npc.GetComponent<NpcRig>().state = newState; // NPC�� ���¸� ����
+				npc.GetComponent<NpcRig>().state = newState; // NPC의 상태 변경
 			}
 		}
 	}
 
+	// 선택지를 처리하는 함수
 	void HandleChoice(bool isLeftChoice)
 	{
 		exampleDescUi.SetActive(false);
@@ -361,12 +377,12 @@ public class EarthquakeBeginner : MonoBehaviour
 		if (isLeftChoice)
 		{
 			leftChoiceDialog.gameObject.SetActive(true);
-			Debug.Log("���� ������ ��� ���");
+			Debug.Log("왼쪽 선택지가 선택됨");
 		}
 		else
 		{
 			rightChoiceDialog.gameObject.SetActive(true);
-			Debug.Log("������ ������ ��� ���");
+			Debug.Log("오른쪽 선택지가 선택됨");
 		}
 	}
 }
