@@ -13,6 +13,8 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     public Light[] lightObjects;
     public Light mainLight; // 영향을 제일 많이 주는 메인 조명
 
+    [Header("오디오 클립")] public AudioClip eqAudio;
+    
     private Rigidbody[] _rbObjects;  // 흔들릴 물체들
     private bool _isComplete = false;
     
@@ -49,6 +51,8 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         if (shakeDuration > 0 && cameraParent != null)
         {
+            ActionManager.Instance.audioSource.clip = eqAudio;
+            ActionManager.Instance.audioSource.Play();
             cameraParent.localPosition = Random.insideUnitSphere * shakeAmount; 
             shakeDuration -= Time.deltaTime * decreaseFactor;
             SetLight();
@@ -59,6 +63,7 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
             cameraParent.localPosition = Vector3.zero;
             Vector3 newPos = cameraParent.localPosition;
             Mathf.Lerp(originPos.x, newPos.x, 1);
+            ActionManager.Instance.audioSource.Stop();
             mainLight.intensity = 0.6f;
             for (int i = 0; i < lightObjects.Length; i++)
             {
@@ -73,7 +78,6 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
                 Vector3 randomDirection = new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, .5f));
                 rb.AddForce(randomDirection * (earthquakeForce * 0.1f), ForceMode.Impulse);
             }
-
             objectShakeDuration -= Time.deltaTime; 
         }
     }

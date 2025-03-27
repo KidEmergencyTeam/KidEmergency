@@ -5,6 +5,14 @@ using UnityEngine.UI;
 
 public class DialogManager : SingletonManager<DialogManager>
 {
+    private AudioSource audioSource;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
     {
         StartCoroutine(ShowDialog());
@@ -14,13 +22,15 @@ public class DialogManager : SingletonManager<DialogManager>
     {
         RobotController robot = FindObjectOfType<RobotController>();
         
-        UIManager.Instance.dialogUI.dialogPanel.SetActive(true); 
+        UIManager.Instance.dialogUI.dialogPanel.SetActive(true);
 
-        foreach (string dialog in ActionManager.Instance.currentDialog.dialogs)
+        for (int i = 0; i < ActionManager.Instance.currentDialog.dialogs.Length; i++)
         {
-            yield return StartCoroutine(TypingEffect(dialog));
+            string dialog = ActionManager.Instance.currentDialog.dialogs[i];
+            AudioClip audio = ActionManager.Instance.currentDialog.audios[i];
+            yield return StartCoroutine(TypingEffect(dialog, audio));
         }
-        
+
         UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
         robot.SetBasic();
         
@@ -38,17 +48,23 @@ public class DialogManager : SingletonManager<DialogManager>
         }
     }
     
-    private IEnumerator TypingEffect(string text)
+    private IEnumerator TypingEffect(string text, AudioClip audio)
     {
         UIManager.Instance.dialogUI.dialogText.text = "";
 
+        if (audio != null)
+        {
+            audioSource.clip = audio;
+            audioSource.Play(); 
+        }
+        
         foreach (char letter in text.ToCharArray())
         {
             UIManager.Instance.dialogUI.dialogText.text += letter;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.125f);
         }
         
-        yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text);
+        yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text && !audioSource.isPlaying);
         yield return new WaitForSeconds(1f);
     }
     
