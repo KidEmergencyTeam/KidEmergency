@@ -348,7 +348,7 @@ Transform:
   m_GameObject: {fileID: 455270145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0076854, y: 0.38568825, z: 0.43040025}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -769,6 +769,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firePosition: 1
+--- !u!1 &1503248997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1503248999}
+  - component: {fileID: 1503248998}
+  m_Layer: 0
+  m_Name: FEScene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1503248998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503248997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e188e547db1abff459a200b0c7214ffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueData:
+  - {fileID: 11400000, guid: 808b877a7cb79964c9a9c191ec56f671, type: 2}
+  - {fileID: 11400000, guid: 95cd54c704d2dfa4e92ec14e79d501bc, type: 2}
+  - {fileID: 11400000, guid: dab386518907e1147a0c613313209de6, type: 2}
+  - {fileID: 11400000, guid: 3b1ab5417947bf1449f46d1cd1a27a54, type: 2}
+  - {fileID: 11400000, guid: 5b4cded497a3d22418dc638994b5e564, type: 2}
+  - {fileID: 11400000, guid: fbcbeae5c66297340ab33c15253e300a, type: 2}
+  - {fileID: 11400000, guid: 051f94dc49a607a4aa4587723a4ff991, type: 2}
+  - {fileID: 11400000, guid: ba148b1e121dd8d45953efbc4e1cf6ce, type: 2}
+  - {fileID: 11400000, guid: 9d513d93802d2384ea3c196cfa0e279b, type: 2}
+  - {fileID: 11400000, guid: 7b7bdc91104eb324a8ddae583c9b3054, type: 2}
+  - {fileID: 11400000, guid: 8493a92a73e9c8d4c84940239d9345d7, type: 2}
+  - {fileID: 11400000, guid: 70edb165acbbcac4d91f5c12a8cb40d6, type: 2}
+  - {fileID: 11400000, guid: d61225d4db06a2640b79ab66e669dd58, type: 2}
+  - {fileID: 11400000, guid: abe1bba2cad95374f93c82ebe24e4436, type: 2}
+  - {fileID: 11400000, guid: 4dfcb71cb58e66243bfca496c9edae3e, type: 2}
+  - {fileID: 11400000, guid: 4dca29b24b22a264ea7c2703f9995a15, type: 2}
+  - {fileID: 11400000, guid: 25452cca68132df419761fad7bce5f32, type: 2}
+  currentDialog: []
+  currentDialogIndex: 0
+  currentState: 0
+--- !u!4 &1503248999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503248997}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1642679571
 GameObject:
   m_ObjectHideFlags: 0
@@ -3276,7 +3341,7 @@ GameObject:
   - component: {fileID: 5281240904587551036}
   - component: {fileID: 5281240904587551037}
   m_Layer: 0
-  m_Name: FX_Fire_Big_01
+  m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14772,7 +14837,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 1
     gravitySource: 0
-    maxNumParticles: 100
+    maxNumParticles: 30
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -35474,3 +35539,4 @@ SceneRoots:
   - {fileID: 242786281}
   - {fileID: 3538570809759935932}
   - {fileID: 455270146}
+  - {fileID: 1503248999}
