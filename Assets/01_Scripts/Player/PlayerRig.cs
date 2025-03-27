@@ -21,8 +21,6 @@ public class PlayerRig : MonoBehaviour
 
 	[Header("숙이는 기준 높이")] public float bowThreshold = 1.2f;
 	[Header("숙일 때 낮출 카메라 높이")] public float bowYValue = 0.35f;
-
-	[Header("엎드리는 기준 높이")] public float downThreshold = 1.2f;
 	[Header("엎드릴 때 낮출 카메라 높이")] public float downYValue = 0.35f;
 
 	private bool isAction = false;
@@ -32,52 +30,93 @@ public class PlayerRig : MonoBehaviour
 		switch (currentState)
 		{
 			case State.None:
+				SetNone();
 				break;
 			case State.Bow:
-				SetState(bowThreshold, bowYValue);
+				SetBow();
 				break;
 			case State.Down:
-				SetState(downThreshold, downYValue);
+				SetDown();
 				break;
 		}
 	}
 
-	private void SetState(float threshold, float yValue)
+	private void SetNone()
 	{
-		float headHeight = Camera.main.transform.position.y;
-
-		if (headHeight < threshold && !isAction)
-		{
-			isAction = true;
-			xrOrigin.localPosition -= new Vector3(0, yValue, 0);
-			leftFootIkTarget.localPosition += new Vector3(0, yValue, 0);
-			rightFootIkTarget.localPosition += new Vector3(0, yValue, 0);
-			leftFootTarget.localPosition += new Vector3(0, yValue, 0);
-			rightFootTarget.localPosition += new Vector3(0, yValue, 0);
-			bodyTarget.localPosition -= new Vector3(0, yValue, 0);
-
-			// Hand 위치 조정을 위함
-			playerTargetFollower.followTargets[2].posOffset +=
-				new Vector3(0, yValue, 0);
-			playerTargetFollower.followTargets[3].posOffset +=
-				new Vector3(0, yValue, 0);
-		}
-		// 일정 높이 이상 올라가면 다시 서기
-		else if (headHeight > threshold - yValue && isAction)
+		if (isAction)
 		{
 			isAction = false;
-			xrOrigin.localPosition += new Vector3(0, yValue, 0);
-			leftFootIkTarget.localPosition -= new Vector3(0, yValue, 0);
-			rightFootIkTarget.localPosition -= new Vector3(0, yValue, 0);
-			leftFootTarget.localPosition -= new Vector3(0, yValue, 0);
-			rightFootTarget.localPosition -= new Vector3(0, yValue, 0);
-			bodyTarget.localPosition += new Vector3(0, yValue, 0);
+			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			bodyTarget.localPosition += new Vector3(0, bowYValue, 0);
 
 			// Hand 위치 조정을 위함
 			playerTargetFollower.followTargets[2].posOffset -=
-				new Vector3(0, yValue, 0);
+				new Vector3(0, bowYValue, 0);
 			playerTargetFollower.followTargets[3].posOffset -=
-				new Vector3(0, yValue, 0);
+				new Vector3(0, bowYValue, 0);
+		}
+	}
+
+	private void SetBow()
+	{
+		float headHeight = Camera.main.transform.position.y;
+
+		if (headHeight < bowThreshold && !isAction)
+		{
+			isAction = true;
+			xrOrigin.localPosition -= new Vector3(0, bowYValue, 0);
+			leftFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
+			rightFootIkTarget.localPosition += new Vector3(0, bowYValue, 0);
+			leftFootTarget.localPosition += new Vector3(0, bowYValue, 0);
+			rightFootTarget.localPosition += new Vector3(0, bowYValue, 0);
+			bodyTarget.localPosition -= new Vector3(0, bowYValue, 0);
+
+			// Hand 위치 조정을 위함
+			playerTargetFollower.followTargets[2].posOffset +=
+				new Vector3(0, bowYValue, 0);
+			playerTargetFollower.followTargets[3].posOffset +=
+				new Vector3(0, bowYValue, 0);
+		}
+		// 일정 높이 이상 올라가면 다시 서기
+		else if (headHeight > bowThreshold - bowYValue && isAction)
+		{
+			isAction = false;
+			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
+			leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			rightFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
+			bodyTarget.localPosition += new Vector3(0, bowYValue, 0);
+
+			// Hand 위치 조정을 위함
+			playerTargetFollower.followTargets[2].posOffset -=
+				new Vector3(0, bowYValue, 0);
+			playerTargetFollower.followTargets[3].posOffset -=
+				new Vector3(0, bowYValue, 0);
+		}
+	}
+
+	private void SetDown()
+	{
+		if (!isAction)
+		{
+			isAction = true;
+			xrOrigin.localPosition -= new Vector3(0, downYValue, 0);
+			leftFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
+			rightFootIkTarget.localPosition += new Vector3(0, downYValue, 0);
+			leftFootTarget.localPosition += new Vector3(0, downYValue, 0);
+			rightFootTarget.localPosition += new Vector3(0, downYValue, 0);
+			bodyTarget.localPosition -= new Vector3(0, downYValue, 0);
+
+			// Hand 위치 조정을 위함
+			playerTargetFollower.followTargets[2].posOffset +=
+				new Vector3(0, downYValue, 0);
+			playerTargetFollower.followTargets[3].posOffset +=
+				new Vector3(0, downYValue, 0);
 		}
 	}
 }
