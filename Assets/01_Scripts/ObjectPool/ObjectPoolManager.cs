@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +47,14 @@ public class ObjectPoolManager : MonoBehaviour
 
 		GameObject unit = objectInPoolDic[go.name + "(Clone)"].Dequeue();
 		unit.SetActive(true);
+		return unit;
+	}
+
+	public GameObject Spawn(GameObject go, Vector3 position, Quaternion rotation)
+	{
+		GameObject unit = Spawn(go);
+		unit.transform.position = position;
+		unit.transform.rotation = rotation;
 		return unit;
 	}
 
