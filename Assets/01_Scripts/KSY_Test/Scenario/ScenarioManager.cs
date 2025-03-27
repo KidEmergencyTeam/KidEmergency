@@ -37,10 +37,8 @@ public class SceneParticleSetup
     public List<ParticleData> particleData;
 }
 
-public class ScenarioManager : MonoBehaviour
+public class ScenarioManager : DisableableSingleton<ScenarioManager>
 {
-    public static ScenarioManager Instance { get; private set; }
-
     [Header("스크립트")]
     public TypingEffect typingEffect;
 
@@ -56,17 +54,6 @@ public class ScenarioManager : MonoBehaviour
     // 현재 시나리오 스텝 번호
     private int currentStep = 1;
     private Dictionary<int, Func<IEnumerator>> scenarioSteps;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {
@@ -477,8 +464,12 @@ public class ScenarioManager : MonoBehaviour
     {
         yield return PlayAndWait(26);
         yield return StartCoroutine(ChangeScene(3));
-    }
 
+        // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
+        ChoiceVoteManager.Instance.disableSingleton = true;
+        TypingEffect.Instance.disableSingleton = true;
+        disableSingleton = true;
+    }
     #endregion
 
     // 비동기 방식으로 씬 전환

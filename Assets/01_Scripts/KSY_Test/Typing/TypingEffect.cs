@@ -18,11 +18,8 @@ public class MultilineString
     public AudioClip typingSound2;
 }
 
-public class TypingEffect : MonoBehaviour
+public class TypingEffect : DisableableSingleton<TypingEffect>
 {
-    // 싱글톤 인스턴스
-    public static TypingEffect Instance { get; private set; }
-
     [Header("타이핑 설정")]
     public List<MultilineString> typingContents = new List<MultilineString>();
 
@@ -48,17 +45,6 @@ public class TypingEffect : MonoBehaviour
     // 시나리오 매니저에서 IsTyping을 통해 내부의 isTyping 값에 접근 가능
     // 따라서 시나리오 매니저 내의 스텝별 코루틴에서 해당 값을 받으면 다음 스텝으로 진행
     public bool IsTyping { get { return isTyping; } }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
 
     void OnEnable()
     {
