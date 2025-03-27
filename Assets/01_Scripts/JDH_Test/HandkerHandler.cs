@@ -8,19 +8,6 @@ public class HandkerHandler : MonoBehaviour
 {
     public FireBeginner fireBeginner;   // FireBeginner 참조
     public EarthquakeBeginner earthBeginner;   // EarthBeginner 참조
-    [SerializeField] XRGrabInteractable interactable;  // Grab 가능한 오브젝트
-    [SerializeField] XRDirectInteractor leftHand;  // 좌측 손 인터랙터
-
-    private void Awake()
-    {
-        interactable.selectExited.AddListener(CantGrabExit);
-    }
-
-    // Grab이 끝났을 때 다시 그랩하려는 기능
-    public void CantGrabExit(SelectExitEventArgs selectExit)
-    {
-        leftHand.interactionManager.SelectEnter((IXRSelectInteractor)leftHand, (IXRSelectInteractable)interactable);
-    }
 
     // Player가 손수건을 잡았을 때 (fireBeginner와 earthBeginner 각각 null 여부에 따라 다르게 처리)
     private void OnTriggerEnter(Collider other)
