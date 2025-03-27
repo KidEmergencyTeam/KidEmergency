@@ -17,7 +17,7 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
 
     private IEnumerator SetHighlightEffect(DialogData dialogData)
     {
-        DeleteAllHighlightEffects();
+        EnableAllHighlightEffects();
         
         for (int i = 0; i < dialogData.parentName.Length; i++)
         {
@@ -26,15 +26,12 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
             for (int j = 0; j < outlineEffect.transform.childCount; j++)
             {
                 GameObject obj = outlineEffect.transform.GetChild(j).gameObject;
-                if (obj.GetComponent<Outlinable>() == null)
+                if (obj.GetComponent<Outlinable>() != null && obj.GetComponent<BaseOutlineObject>())
                 {
-                    Outlinable outlinable = obj.AddComponent<Outlinable>();
-                    outlinable.AddAllChildRenderersToRenderingList();
-                }
-                
-                if (obj.CompareTag("BaseObject"))
-                {
-                    obj.AddComponent<BaseOutlineObject>();
+                    Outlinable outlinable = obj.GetComponent<Outlinable>();
+                    outlinable.enabled = true;
+                    BaseOutlineObject outline = obj.GetComponent<BaseOutlineObject>();
+                    outline.enabled = true;
                 }
             }
             
@@ -44,12 +41,12 @@ public class HighlightObjectAction : MonoBehaviour, IActionEffect
         _isComplete = true;
     }
     
-    private void DeleteAllHighlightEffects()
+    private void EnableAllHighlightEffects()
     {
         Outlinable[] outlinables = FindObjectsOfType<Outlinable>();
         foreach (Outlinable outline in outlinables)
         {
-            Destroy(outline);
+            outline.enabled = false;
         }
     }
 } 
