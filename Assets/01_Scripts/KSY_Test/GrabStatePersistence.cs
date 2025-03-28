@@ -7,6 +7,10 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
     [Header("손수건")]
     public Grabbable grabbableComponent;
 
+    // 이벤트를 사용한 이유: 씬이 로드될 때마다 자동으로 이벤트가 호출되어 처리되기 때문에,
+    // 별도의 수동 호출 없이도 새로운 씬에서 필요한 작업이 자동으로 처리됨
+    // 따라서 매 씬 마다 별도의 처리를 할 필요가 없다.
+
     // 이벤트 등록
     private void OnEnable()
     {
