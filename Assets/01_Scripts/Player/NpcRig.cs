@@ -15,8 +15,8 @@ public class NpcRig : MonoBehaviour
 	[System.Serializable]
 	private class PoseData
 	{
-		public Vector3 playerPos;
-		public Vector3 playerRot;
+		public Vector3 bodyPos;
+		public Vector3 bodyRot;
 		public Vector3 leftHandPos;
 		public Vector3 leftHandRot;
 		public Vector3 rightHandPos;
@@ -31,7 +31,7 @@ public class NpcRig : MonoBehaviour
 	public GameObject handkerchief;
 	public GameObject bag;
 
-	public Transform player;
+	public Transform body;
 	public Transform leftHandTarget;
 	public Transform rightHandTarget;
 
@@ -69,8 +69,8 @@ public class NpcRig : MonoBehaviour
 
 	private void SetState(PoseData pose)
 	{
-		player.localPosition = pose.playerPos;
-		player.localRotation = Quaternion.Euler(pose.playerRot);
+		body.localPosition = pose.bodyPos;
+		body.localRotation = Quaternion.Euler(pose.bodyRot);
 
 		leftHandTarget.localPosition = pose.leftHandPos;
 		leftHandTarget.localRotation = Quaternion.Euler(pose.leftHandRot);
