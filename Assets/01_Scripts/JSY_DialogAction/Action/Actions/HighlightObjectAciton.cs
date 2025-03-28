@@ -4,7 +4,7 @@ using EPOOutline;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class HighlightObjectAction : MonoBehaviour, IActionEffect
+public class OutlineObjectAction : MonoBehaviour, IActionEffect
 {
     private bool _isComplete = false;
     public bool IsActionComplete => _isComplete;

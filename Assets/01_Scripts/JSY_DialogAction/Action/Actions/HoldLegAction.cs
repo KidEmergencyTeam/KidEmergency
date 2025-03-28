@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class HoldingLegAction : MonoBehaviour, IActionEffect
+public class HoldLegAction : MonoBehaviour, IActionEffect
 {
     private DeskLeg _leg;
     private bool _isComplete = false;

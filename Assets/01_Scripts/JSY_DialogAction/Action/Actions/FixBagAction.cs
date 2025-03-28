@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using XRController = UnityEngine.XR.Interaction.Toolkit.XRController;
 
-public class FixingBagAction : MonoBehaviour, IActionEffect
+public class FixBagAction : MonoBehaviour, IActionEffect
 {
     private bool _isComplete = false;
     public bool IsActionComplete => _isComplete;
