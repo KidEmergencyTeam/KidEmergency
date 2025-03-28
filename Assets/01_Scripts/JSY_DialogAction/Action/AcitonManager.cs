@@ -18,6 +18,9 @@ public class ActionManager : SingletonManager<ActionManager>
 	public HighlightObjectAction highlightObjectAction;
 	public FixingBagAction fixingBagAction;
 	public HoldingLegAction holdingLegAction;
+	public CloseGVAction closeGVAction;
+	public OpenCBAction openCBAction;
+	public LowerCLAction lowerCLAction;
 	public EndGameAction endGameAction;
 
 	public AudioSource actionAudio;
@@ -118,6 +121,7 @@ public class ActionManager : SingletonManager<ActionManager>
 				}
 
 				break;
+			
 			case ActionType.HoldingLeg:
 				if (holdingLegAction != null)
 				{
@@ -126,6 +130,31 @@ public class ActionManager : SingletonManager<ActionManager>
 				}
 
 				break;
+			
+			case ActionType.CloseTheGasValve:
+				if (closeGVAction != null)
+				{
+					closeGVAction.StartAction();
+					StartCoroutine(WaitForActionComplete(closeGVAction));
+				}
+				break;
+			
+			case ActionType.OpenCircuitBox:
+				if (openCBAction != null)
+				{
+					openCBAction.StartAction();
+					StartCoroutine(WaitForActionComplete(openCBAction));
+				}
+				break;
+			
+			case ActionType.LowerCircuitLever:
+				if (lowerCLAction != null)
+				{
+					lowerCLAction.StartAction();
+					StartCoroutine(WaitForActionComplete(lowerCLAction));
+				}
+				break;
+			
 			
 			case ActionType.EndGame:
 				if (endGameAction != null)
