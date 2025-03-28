@@ -40,31 +40,6 @@ public class FadeInOut : SingletonManager<FadeInOut>
         }
     }
 
-    // 외부에서 이미지 할당 가능하도록 public 메서드 추가
-    // 최초 한 번만 할당된 이미지만 처리
-    public void SetFadeImage(Image image)
-    {
-        // fadeInoutImg가 아직 할당되지 않았을 때만 새 이미지 할당
-        if (fadeInoutImg == null)
-        {
-            fadeInoutImg = image;
-            if (fadeInoutImg != null)
-            {
-                Color color = fadeInoutImg.color;
-                color.a = 0f;
-                fadeInoutImg.color = color;
-            }
-            else
-            {
-                Debug.LogWarning("FadeInOut: 할당된 Image가 null입니다.");
-            }
-        }
-        else
-        {
-            Debug.Log("FadeInOut: 이미 이미지가 할당되어 있어 새 이미지로 교체하지 않습니다.");
-        }
-    }
-
     // 화면을 점점 밝게 만드는 코루틴 (페이드 인 효과)
     public IEnumerator FadeIn()
     {
