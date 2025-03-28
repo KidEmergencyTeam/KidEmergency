@@ -25,7 +25,7 @@ public class EarthquakeBeginner : MonoBehaviour
 
     [Header("NPC 및 플레이어 이동 관련 오브젝트")]
     public GameObject player; // 플레이어 캐릭터 오브젝트
-    public GameObject seti;
+    public RobotController seti;
     public GameObject[] NPC; // NPC 캐릭터 오브젝트 배열
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
@@ -104,6 +104,7 @@ public class EarthquakeBeginner : MonoBehaviour
 
                 // 2. 화면이 흔들리며 지진 발생. 화재 경보도 함께 울림.
                 isEarthquakeStart = true;
+                seti.SetLookingFor();
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
 
@@ -281,7 +282,7 @@ public class EarthquakeBeginner : MonoBehaviour
 		// 세티 이동
 		if (setiMovPos != null)
 		{
-			seti.transform.position = setiMovPos.position;
+			seti.gameObject.transform.position = setiMovPos.position;
 		}
 
 		// NPC 이동
