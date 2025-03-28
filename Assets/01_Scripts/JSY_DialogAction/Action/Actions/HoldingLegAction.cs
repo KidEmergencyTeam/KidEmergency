@@ -31,6 +31,7 @@ public class HoldingLegAction : MonoBehaviour, IActionEffect
             if (_leg.IsHoldComplete())
             {
                 _isComplete = true;
+                _leg.RemoveOutline();
                 _leg.enabled = false;
             }
 
