@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Interaction.Toolkit;
 
 // 씬 전환 시에도 손수건 유지해 주는 스크립트
 public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
@@ -60,3 +61,54 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
+
+//public void OnGrab(Grabbable grabbable)
+//{
+//    // null 체크 후 초기화
+//    if (_handAnimation == null)
+//    {
+//        _handAnimation = FindObjectOfType<HandAnimation>();
+//    }
+//    if (_targetFollower == null)
+//    {
+//        _targetFollower = FindObjectOfType<TargetFollower>();
+//    }
+
+//    print("OnGrab");
+//    rayInteractor.enabled = false;
+//    grabbable.rb.useGravity = false;
+//    grabbable.rb.isKinematic = true;
+//    grabbable.isGrabbable = false;
+//    _handAnimation.enabled = false;
+//    currentGrabbedObject = grabbable;
+//    if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
+//    else _handAnimation.animator.SetFloat("Right Trigger", 1);
+
+//    if (currentGrabbedObject.isMoving)
+//    {
+//        currentGrabbedObject.isGrabbable = false;
+//        currentGrabbedObject.currentGrabber = this;
+//    }
+
+//    else
+//    {
+//        if (isLeft)
+//        {
+//            _targetFollower.followTargets[2].target =
+//                currentGrabbedObject.transform;
+//            _targetFollower.followTargets[2].posOffset =
+//                currentGrabbedObject.grabPosOffset;
+//            _targetFollower.followTargets[2].rotOffset =
+//                currentGrabbedObject.grabRotOffset;
+//        }
+//        else
+//        {
+//            _targetFollower.followTargets[3].target =
+//                currentGrabbedObject.transform;
+//            _targetFollower.followTargets[3].posOffset =
+//                currentGrabbedObject.grabPosOffset;
+//            _targetFollower.followTargets[3].rotOffset =
+//                currentGrabbedObject.grabRotOffset;
+//        }
+//    }
+//}
