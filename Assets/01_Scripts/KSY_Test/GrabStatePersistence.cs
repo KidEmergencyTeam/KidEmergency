@@ -4,21 +4,8 @@ using UnityEngine.SceneManagement;
 // 씬 전환 시에도 손수건 유지해 주는 스크립트
 public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
 {
-    // 손수건 
     [Header("손수건")]
     public Grabbable grabbableComponent;
-
-    // grabbed object를 저장하고, 루트 오브젝트에 DontDestroyOnLoad를 적용합니다.
-    public void SaveGrabState(Grabbable grabbed)
-    {
-        if (grabbed == null)
-        {
-            Debug.LogWarning("Grabbable이 할당되지 않았습니다.");
-            return;
-        }
-
-        grabbableComponent = grabbed;
-    }
 
     // 이벤트 등록
     private void OnEnable()
@@ -26,7 +13,7 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // 씬 로드 후, Hand 태그를 가진 새로운 손 객체에서 Grabber를 갱신합니다.
+    // 씬 로드 후, Hand 태그를 가진 새로운 손 객체에서 Grabber를 갱신
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (grabbableComponent != null)
