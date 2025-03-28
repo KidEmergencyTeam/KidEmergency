@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class OpenCBAction : MonoBehaviour, IActionEffect
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private EqHomeTrigger box;
+    private bool _isComplete = false;
+    public bool IsActionComplete => _isComplete;
 
     public void StartAction()
     {
-        throw new System.NotImplementedException();
+        StartCoroutine(OpenCircuitBox());
     }
 
-    public bool IsActionComplete { get; }
+    private IEnumerator OpenCircuitBox()
+    {
+        while (!_isComplete)
+        {
+            box.Corou();
+            if (box.isOpen)
+            {
+                _isComplete = true;
+            }
+
+            yield return null;
+        }
+    }
+    
 }

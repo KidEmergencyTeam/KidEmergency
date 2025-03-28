@@ -23,7 +23,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
 
     private void Start()
     {
-        _startAngle = target.transform.eulerAngles.z;
+        _startAngle = target.transform.rotation.z;
         StartCoroutine(TryCloseGV());
     }
 
@@ -32,7 +32,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
         print(_isComplete);
         if (target != null && _isComplete)
         {
-            target.transform.eulerAngles = new Vector3(0,0,_limitAngle);
+            target.transform.rotation = Quaternion.Euler(0,0,_limitAngle);
         }
     }
 
@@ -47,10 +47,10 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
         {
             print("코루틴 시작");
             _grab.enabled = true;
-            _currentAngle = target.transform.eulerAngles.z;
+            _currentAngle = target.transform.rotation.z;
             float clampedAngle = Mathf.Clamp(_currentAngle, _startAngle, _startAngle + 90);
 
-            target.transform.eulerAngles = new Vector3(0, 0, clampedAngle);
+            target.transform.rotation = Quaternion.Euler(0, 0, clampedAngle);
 
             if (_currentAngle >= _limitAngle)
             {
