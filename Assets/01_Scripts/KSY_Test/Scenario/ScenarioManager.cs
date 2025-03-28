@@ -449,6 +449,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(23);
         yield return StartCoroutine(ChangeScene(2));
+
+        // 씬 이동 이후 -> 손수건 제거
+        GrabStatePersistence.Instance.disableSingleton = true;
     }
 
     // Step36: 연속 재생 종료 후 타이핑 실행
