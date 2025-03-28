@@ -86,9 +86,19 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	private void OnGrab(Grabbable grabbable)
+	public void OnGrab(Grabbable grabbable)
 	{
-		print("OnGrab");
+        // null 체크 후 초기화
+        if (_handAnimation == null)
+        {
+            _handAnimation = FindObjectOfType<HandAnimation>();
+        }
+        if (_targetFollower == null)
+        {
+            _targetFollower = FindObjectOfType<TargetFollower>();
+        }
+
+        print("OnGrab");
 		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
