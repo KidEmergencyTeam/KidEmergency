@@ -123,9 +123,6 @@ public class FireBeginner : MonoBehaviour
                     okBtn.gameObject.SetActive(false);
                     exampleDescUi.SetActive(true);
                     Debug.Log("OK 버튼 비활성화 및 예제 UI 활성화");
-                    // 손수건(핸드커치) 활성화
-                    handkerchief.GetComponent<XRGrabInteractable>().enabled = true;
-                    Debug.Log("손수건 활성화");
                     SetAllNpcState(NpcRig.State.Hold); // 모든 NPC 상태를 Hold로 설정
 
                     // 5. 손수건 사용 및 얼굴 가리기 완료 대기
@@ -151,7 +148,7 @@ public class FireBeginner : MonoBehaviour
                     fadeInOutImg.gameObject.SetActive(true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("Fr_Kinder_1");
+                    SceneManager.LoadScene("Fr_Kinder_2");
                     break;
 
                 // 복도
@@ -177,7 +174,7 @@ public class FireBeginner : MonoBehaviour
 
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("Fr_Kinder_2");
+                    SceneManager.LoadScene("Fr_Kinder_3");
                     break;
 
                 // 계단/엘리베이터
@@ -199,7 +196,7 @@ public class FireBeginner : MonoBehaviour
                         isHeadDown == true && iscoverFace == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("Fr_Kinder_3");
+                    SceneManager.LoadScene("Fr_Kinder_4");
                     break;
 
                 // 외부
@@ -277,7 +274,7 @@ public class FireBeginner : MonoBehaviour
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
                     //Scene 이동
-                    SceneManager.LoadScene("Fr_Home_1");
+                    SceneManager.LoadScene("Fr_Home_2");
 						break;
 
 				case PLACE.STAIRS_ELEVATOR:
@@ -319,7 +316,7 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => isHeadDown == true && iscoverFace);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
-                    SceneManager.LoadScene("Fr_Home_2");
+                    SceneManager.LoadScene("Fr_Home_3");
                     break;
 
                 case PLACE.DOWNSTAIR:
@@ -335,7 +332,7 @@ public class FireBeginner : MonoBehaviour
 
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                    SceneManager.LoadScene("Fr_Home_3");
+                    SceneManager.LoadScene("Fr_Home_4");
                     break;
 
 				case PLACE.OUTSIDE:

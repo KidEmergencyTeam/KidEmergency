@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EPOOutline;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -15,7 +16,16 @@ public class DeskLeg : MonoBehaviour
     private float _durationTime = 0f; // 지속 시간
     private float _endTime = 5f; // 종료 시간
     public bool isHoldComplete = false;
-    
+
+    private void Awake()
+    {
+        for (int i = 0; i < _legs.Length; i++)
+        {
+            _legs[i].GetComponent<Outlinable>().enabled = false;
+            _legs[i].GetComponent<BaseOutlineObject>().enabled = false;
+        }
+    }
+
     private void Start()
     {
         this.enabled = false;
@@ -32,6 +42,7 @@ public class DeskLeg : MonoBehaviour
         bool isRightGrapped = _rightController.selectAction.action.ReadValue<float>() > 0;
         bool isInteractable =
             Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped;
+        print(Vector3.Distance(_legs[0].transform.localPosition, _leftController.transform.localPosition));
         // bool isInteractable = Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped &&
         //                           Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
         if (isInteractable)
@@ -62,5 +73,14 @@ public class DeskLeg : MonoBehaviour
         }
         
         else return false;
+    }
+
+    public void RemoveOutline()
+    {
+        Outlinable[] outlinables = GetComponentsInChildren<Outlinable>();
+        foreach (Outlinable outline in outlinables)
+        {
+            Destroy(outline);
+        }
     }
 }

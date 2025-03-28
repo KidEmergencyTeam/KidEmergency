@@ -5,24 +5,33 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class Bag : MonoBehaviour
+public class Bag : Grabbable
 {
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     
-    private Grabbable _grab;
     private string _sceneName;
+    
 
-    private void Awake()
+    protected override void Start()
     {
-        _grab = GetComponent<Grabbable>();
-    }
-
-    private void Start()
-    {
-        _grab.isGrabbable = false;
+        base.Start();
+        if (SceneManager.GetActiveScene().name == "Eq_School_1")
+        {
+            isGrabbable = false;
+            currentGrabber.currentGrabbedObject = null;
+        }
+        else if (SceneManager.GetActiveScene().name == "Eq_School_2")
+        {
+            currentGrabber.currentGrabbedObject = this;
+        }
+        
+        else if (SceneManager.GetActiveScene().name == "Eq_School_3")
+        {
+            currentGrabber.currentGrabbedObject = this;
+        }
     }
 
     public void BagInteraction()
@@ -33,7 +42,7 @@ public class Bag : MonoBehaviour
     private void Update()
     {
         _sceneName = SceneManager.GetActiveScene().name;
-        if (_sceneName == "JSY_SchoolGround")
+        if (_sceneName == "Eq_School_4")
         {
             UIManager.Instance.CloseWarningUI();
             Destroy(this.gameObject);
@@ -42,9 +51,9 @@ public class Bag : MonoBehaviour
 
     private IEnumerator ProtectHead()
     {
-        _grab.isGrabbable = true;
+        isGrabbable = true;
         
-        while (!_grab.IsGrabbed)
+        while (!IsGrabbed)
         {
             UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
             UIManager.Instance.OpenWarningUI();
@@ -52,7 +61,7 @@ public class Bag : MonoBehaviour
             yield return null;
         }
 
-        while (_sceneName != "JSY_SchoolGround" && _grab.IsGrabbed)
+        while (_sceneName != "Eq_School_4" && IsGrabbed)
         {
             if (!IsProtect())
             {

@@ -8,6 +8,7 @@ public class DialogData : ScriptableObject
     [TextArea]
     [Tooltip("대사")]
     public string[] dialogs;
+    public AudioClip[] audios;
     
     [Serializable]
     public class DialogChoice

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class ActionManager : SingletonManager<ActionManager>
 {
@@ -18,7 +19,10 @@ public class ActionManager : SingletonManager<ActionManager>
 	public FixingBagAction fixingBagAction;
 	public HoldingLegAction holdingLegAction;
 	public EndGameAction endGameAction;
+
+	public AudioSource actionAudio;
 	private event Action OnActionComplete; // 액션 타입을 Show Dialog 로 변경하는 이벤트
+	
 
 	private void Start()
 	{
