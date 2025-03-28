@@ -341,11 +341,11 @@ public class FireBeginner : MonoBehaviour
                     break;
 
 				case PLACE.OUTSIDE:
-                    seti.SetHappy();
                     // 1. Fade In, Out 진행 후 첫 번째 대화 시작,대화 종료 후 TitleScene으로 이동
                     //사이렌 소리를 들려줌
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+                    seti.SetHappy();
                     firstDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
