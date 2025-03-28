@@ -11,7 +11,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     private XRGrabInteractable _grab;
     private float _startAngle;
     private float _currentAngle;
-    private float _limitAngle = 180f;
+    private float _limitAngle = 90f;
 
     [SerializeField] private bool _isComplete = false;
     public bool IsActionComplete => _isComplete;
@@ -29,9 +29,10 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
 
     private void Update()
     {
+        print(_isComplete);
         if (target != null && _isComplete)
         {
-            target.transform.localEulerAngles = new Vector3(0,180,_limitAngle);
+            target.transform.eulerAngles = new Vector3(0,0,_limitAngle);
         }
     }
 
@@ -49,7 +50,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
             _currentAngle = target.transform.eulerAngles.z;
             float clampedAngle = Mathf.Clamp(_currentAngle, _startAngle, _startAngle + 90);
 
-            target.transform.localEulerAngles = new Vector3(0,180, clampedAngle);
+            target.transform.eulerAngles = new Vector3(0, 0, clampedAngle);
 
             if (_currentAngle >= _limitAngle)
             {
