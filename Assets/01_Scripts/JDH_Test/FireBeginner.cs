@@ -27,7 +27,7 @@ public class FireBeginner : MonoBehaviour
 	public bool isFireAdvanced;
 
 	[Header("NPC 및 플레이어 이동 관련 설정")] public GameObject player; // 플레이어의 시작 위치
-	public GameObject seti;
+	public RobotController seti;
 	public GameObject[] NPC; // 기타 NPC들의 시작 위치
 	public FadeInOut fadeInOutImg;
 	public TestButton2 okBtn;
@@ -106,12 +106,14 @@ public class FireBeginner : MonoBehaviour
                     fireAlarm.SetActive(true);
                     Debug.Log("화재 경보 작동.");
                     SmokeObjsActive(); //모든 연기 파티클 활성화
+                    seti.SetLookingFor();
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                     // 3. OK 버튼 활성화 및 버튼 클릭 대기
                     okBtn.gameObject.SetActive(true);
                     Debug.Log("OK 버튼 활성화");
                     yield return new WaitUntil(() => okBtn.isClick == true);
+                    seti.SetBasic();
                     // 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
                     LeftImg.sprite = leftChangeImg;
                     RightImg.sprite = rightChangeImg;
@@ -201,6 +203,7 @@ public class FireBeginner : MonoBehaviour
 
                 // 외부
                 case PLACE.OUTSIDE:
+                    seti.SetHappy();
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
                     // 외부에서는 첫 번째 대화만 실행
@@ -234,6 +237,7 @@ public class FireBeginner : MonoBehaviour
                     //2.상황창밖으로 검은 연기와 불길이 아랫 집에서 올라오는 장면을 비춰 줌(화재 비상벨이 시끄럽게 울리고 있음) 이후 두번째 대화 진행
                     //파티클 활성화
                     SmokeObjsActive();
+                    seti.SetLookingFor();
                     //대화 이후 선택지 창 활성화
                     fireAlarm.gameObject.SetActive(true);
                     secondDialog.gameObject.SetActive(true);
@@ -250,6 +254,7 @@ public class FireBeginner : MonoBehaviour
                     RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
 
                     yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true);
+                    seti.SetBasic();
                     thirdDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                     //5. 세번째 대사 실행 후 주방으로 이동
@@ -296,7 +301,7 @@ public class FireBeginner : MonoBehaviour
                     LeftBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(true));
                     RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
                     yield return new WaitUntil(() => leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true);
-
+                    seti.SetBasic();
                     //3. 피난 유도선 Ray로 선택 시 Outline 강조, 대사종료 후 놀이터 Scene으로 이동
                     secondDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd);
@@ -336,8 +341,9 @@ public class FireBeginner : MonoBehaviour
                     break;
 
 				case PLACE.OUTSIDE:
+                    seti.SetHappy();
                     // 1. Fade In, Out 진행 후 첫 번째 대화 시작,대화 종료 후 TitleScene으로 이동
-					//사이렌 소리를 들려줌
+                    //사이렌 소리를 들려줌
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                     firstDialog.gameObject.SetActive(true);
@@ -490,11 +496,13 @@ public class FireBeginner : MonoBehaviour
         if (isLeftChoice)
         {
             leftChoiceDialog.gameObject.SetActive(true);
+            seti.SetAngry();
             Debug.Log("왼쪽 선택지 대사 출력");
         }
         else
         {
             rightChoiceDialog.gameObject.SetActive(true);
+            seti.SetHappy();
             Debug.Log("오른쪽 선택지 대사 출력");
         }
     }
