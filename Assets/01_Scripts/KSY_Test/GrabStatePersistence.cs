@@ -27,6 +27,8 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
                 return;
             }
 
+            // Hand 태그를 가진 새로운 Left Controller 오브젝트에서
+            // Grabber 컴포넌트 가져오기
             Grabber newGrabber = handObj.GetComponent<Grabber>();
             if (newGrabber == null)
             {
