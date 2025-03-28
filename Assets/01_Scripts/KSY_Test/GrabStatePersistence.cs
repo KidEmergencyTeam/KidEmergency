@@ -18,7 +18,7 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
     {
         if (grabbableComponent != null)
         {
-            // Hand 태그를 가진 새 손(Grabber) 오브젝트를 찾습니다.
+            // Hand 태그를 가진 새 손(Grabber) 오브젝트를 찾기
             GameObject handObj = GameObject.FindGameObjectWithTag("Hand");
             if (handObj == null)
             {
@@ -33,7 +33,7 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
                 return;
             }
 
-            // grabbed object의 currentGrabber를 갱신합니다.
+            // grabbed object의 currentGrabber를 갱신하기
             grabbableComponent.currentGrabber = newGrabber;
         }
     }
