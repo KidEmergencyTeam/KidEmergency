@@ -25,7 +25,7 @@ public class EarthquakeBeginner : MonoBehaviour
 
     [Header("NPC 및 플레이어 이동 관련 오브젝트")]
     public GameObject player; // 플레이어 캐릭터 오브젝트
-    public GameObject seti;
+    public RobotController seti;
     public GameObject[] NPC; // NPC 캐릭터 오브젝트 배열
     public FadeInOut fadeInOutImg;
     public TestButton2 okBtn;
@@ -104,13 +104,14 @@ public class EarthquakeBeginner : MonoBehaviour
 
                 // 2. 화면이 흔들리며 지진 발생. 화재 경보도 함께 울림.
                 isEarthquakeStart = true;
+                seti.SetLookingFor();
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
 
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
-
+                seti.SetBasic();
                 // 4. 책상 밑으로 들어가라는 메시지를 띄우는 UI 활성화
                 okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밑으로";
                 okBtn.gameObject.SetActive(true);
@@ -215,6 +216,7 @@ public class EarthquakeBeginner : MonoBehaviour
                     (leftChoiceDialog.isDialogsEnd == true ||
                     rightChoiceDialog.isDialogsEnd == true) && isprotectedHead == true);
 
+                seti.SetBasic();
                 // 4. 다음 대화 진행
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && isprotectedHead == true);
@@ -227,6 +229,7 @@ public class EarthquakeBeginner : MonoBehaviour
 
             // 건물 밖
             case PLACE.OUTSIDE:
+                seti.SetHappy();
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
@@ -281,7 +284,7 @@ public class EarthquakeBeginner : MonoBehaviour
 		// 세티 이동
 		if (setiMovPos != null)
 		{
-			seti.transform.position = setiMovPos.position;
+			seti.gameObject.transform.position = setiMovPos.position;
 		}
 
 		// NPC 이동
@@ -376,11 +379,13 @@ public class EarthquakeBeginner : MonoBehaviour
 		if (isLeftChoice)
 		{
 			leftChoiceDialog.gameObject.SetActive(true);
+            seti.SetAngry();
 			Debug.Log("왼쪽 선택지가 선택됨");
 		}
 		else
 		{
 			rightChoiceDialog.gameObject.SetActive(true);
+            seti.SetHappy();
 			Debug.Log("오른쪽 선택지가 선택됨");
 		}
 	}

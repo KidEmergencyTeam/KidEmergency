@@ -39,9 +39,7 @@ public class BeginnerDialogSystem : MonoBehaviour
         foreach (var speaker in speakers)
         {
             speaker.dialogImage.gameObject.SetActive(false);
-            speaker.textName.gameObject.SetActive(false);
             speaker.textDialogue.gameObject.SetActive(false);
-            speaker.textName.text = "";
             speaker.textDialogue.text = "";
         }
         currentDialogIndex = -1;
@@ -70,7 +68,6 @@ public class BeginnerDialogSystem : MonoBehaviour
         currentDialogIndex++;
         currentDialogIndexNum = dialogs[currentDialogIndex].dialogIndex;
         SetActiveObjects(speakers[currentDialogIndexNum], true);
-        speakers[currentDialogIndexNum].textName.text = dialogs[currentDialogIndex].Name;
 
         StartCoroutine(OnTypingText());
     }
@@ -79,7 +76,6 @@ public class BeginnerDialogSystem : MonoBehaviour
     private void SetActiveObjects(Speaker speaker, bool visible)
     {
         speaker.dialogImage.gameObject.SetActive(visible);
-        speaker.textName.gameObject.SetActive(visible);
         speaker.textDialogue.gameObject.SetActive(visible);
     }
 
@@ -131,7 +127,6 @@ public class BeginnerDialogSystem : MonoBehaviour
 public struct Speaker
 {
     public Image dialogImage; // 대사 창 이미지
-    public TextMeshProUGUI textName; // 화자의 이름
     public TextMeshProUGUI textDialogue; // 대사 텍스트
 }
 
@@ -139,7 +134,6 @@ public struct Speaker
 public struct Dialog
 {
     public int dialogIndex; // 대사를 출력할 Speaker 인덱스
-    public string Name; // 화자 이름
     [TextArea(5, 5)]
     public string dialogue; // 대사 내용
     public AudioClip audioClip; // 추가: 대사 오디오 클립
