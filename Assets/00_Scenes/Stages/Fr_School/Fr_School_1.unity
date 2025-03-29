@@ -1654,12 +1654,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158334608}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 0.76, z: 2.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1145025963}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &158334616
 MonoBehaviour:
@@ -6092,7 +6092,7 @@ GameObject:
   - component: {fileID: 688884670}
   m_Layer: 0
   m_Name: Left Controller
-  m_TagString: Untagged
+  m_TagString: Hand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10662,7 +10662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1145025962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10676,10 +10676,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbableComponent: {fileID: 158334616}
-  grabberComponent: {fileID: 0}
-  savedGrabPosOffset: {x: 0, y: 0, z: 0}
-  savedGrabRotOffset: {x: 0, y: 0, z: 0}
-  savedIsLeft: 0
 --- !u!4 &1145025963
 Transform:
   m_ObjectHideFlags: 0
@@ -10692,7 +10688,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 158334615}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1164842049
@@ -35852,7 +35849,6 @@ SceneRoots:
   - {fileID: 543450652695634585}
   - {fileID: 1300903952}
   - {fileID: 1616993271}
-  - {fileID: 158334615}
   - {fileID: 1514818952}
   - {fileID: 1145025963}
   - {fileID: 869607492}
