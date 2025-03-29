@@ -15,9 +15,13 @@ public class ActionManager : SingletonManager<ActionManager>
 	public EarthquakeAction earthquakeAction;
 	public ChangeViewAction changeViewAction;
 	public PlaceObjectAction placeObjectAction;
-	public HighlightObjectAction highlightObjectAction;
-	public FixingBagAction fixingBagAction;
-	public HoldingLegAction holdingLegAction;
+	public OutlineObjectAction outlineObjectAction;
+	public FixBagAction fixBagAction;
+	public HoldLegAction holdLegAction;
+	public CloseGVAction closeGVAction;
+	public OpenCBAction openCBAction;
+	public LowerCLAction lowerCLAction;
+	public SelectLineAction selectLineAction;
 	public EndGameAction endGameAction;
 
 	public AudioSource actionAudio;
@@ -101,30 +105,63 @@ public class ActionManager : SingletonManager<ActionManager>
 
 				break;
 
-			case ActionType.HighlightObject:
-				if (highlightObjectAction != null)
+			case ActionType.OutlineObject:
+				if (outlineObjectAction != null)
 				{
-					highlightObjectAction.StartAction();
-					StartCoroutine(WaitForActionComplete(highlightObjectAction));
+					outlineObjectAction.StartAction();
+					StartCoroutine(WaitForActionComplete(outlineObjectAction));
 				}
 
 				break;
 
-			case ActionType.FixingBag:
-				if (fixingBagAction != null)
+			case ActionType.FixBag:
+				if (fixBagAction != null)
 				{
-					fixingBagAction.StartAction();
-					StartCoroutine(WaitForActionComplete(fixingBagAction));
+					fixBagAction.StartAction();
+					StartCoroutine(WaitForActionComplete(fixBagAction));
 				}
 
 				break;
-			case ActionType.HoldingLeg:
-				if (holdingLegAction != null)
+			
+			case ActionType.HoldLeg:
+				if (holdLegAction != null)
 				{
-					holdingLegAction.StartAction();
-					StartCoroutine(WaitForActionComplete(holdingLegAction));
+					holdLegAction.StartAction();
+					StartCoroutine(WaitForActionComplete(holdLegAction));
 				}
 
+				break;
+			
+			case ActionType.CloseGasValve:
+				if (closeGVAction != null)
+				{
+					closeGVAction.StartAction();
+					StartCoroutine(WaitForActionComplete(closeGVAction));
+				}
+				break;
+			
+			case ActionType.OpenCircuitBox:
+				if (openCBAction != null)
+				{
+					openCBAction.StartAction();
+					StartCoroutine(WaitForActionComplete(openCBAction));
+				}
+				break;
+			
+			case ActionType.LowerCircuitLever:
+				if (lowerCLAction != null)
+				{
+					lowerCLAction.StartAction();
+					StartCoroutine(WaitForActionComplete(lowerCLAction));
+				}
+				break;
+			
+			case ActionType.SelectGuideLine:
+				if (selectLineAction != null)
+				{
+					selectLineAction.StartAction();
+					StartCoroutine(WaitForActionComplete(selectLineAction));
+				}
 				break;
 			
 			case ActionType.EndGame:
