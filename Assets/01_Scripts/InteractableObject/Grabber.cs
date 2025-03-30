@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 [RequireComponent(typeof(SphereCollider))]
 public class Grabber : MonoBehaviour
@@ -137,27 +138,71 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	private void OnRelease()
-	{
-		print("OnRelease");
-		rayInteractor.enabled = true;
-		_handAnimation.enabled = true;
-		if (currentGrabbedObject.isMoving)
-		{
-			currentGrabbedObject.currentGrabber = null;
-		}
-		else
-		{
-			if (isLeft)
-			{
-				_targetFollower.followTargets[2].target =
-					_originalHandTargetTransforms[0];
-			}
-			else
-				_targetFollower.followTargets[3].target =
-					_originalHandTargetTransforms[1];
-		}
+    // 물체 놓기
+    public void OnRelease()
+    {
+        // null 체크 후 초기화
+        if (_handAnimation == null)
+        {
+            _handAnimation = FindObjectOfType<HandAnimation>();
+        }
+        if (_targetFollower == null)
+        {
+            _targetFollower = FindObjectOfType<TargetFollower>();
+        }
 
-		currentGrabbedObject = null;
-	}
+        print("OnRelease");
+
+        if (currentGrabbedObject == null) return;
+
+        rayInteractor.enabled = true;
+
+        currentGrabbedObject.rb.useGravity = true;
+        currentGrabbedObject.rb.isKinematic = false;
+        currentGrabbedObject.isGrabbable = true;
+        currentGrabbedObject.currentGrabber = null;
+
+        _handAnimation.enabled = true;
+
+        if (isLeft)
+        {
+            _handAnimation.animator.SetFloat("Left Trigger", 0);
+            _targetFollower.followTargets[2].target = _originalHandTargetTransforms[0];
+            _targetFollower.followTargets[2].posOffset = Vector3.zero;
+            _targetFollower.followTargets[2].rotOffset = Vector3.zero;
+        }
+        else
+        {
+            _handAnimation.animator.SetFloat("Right Trigger", 0);
+            _targetFollower.followTargets[3].target = _originalHandTargetTransforms[1];
+            _targetFollower.followTargets[3].posOffset = Vector3.zero;
+            _targetFollower.followTargets[3].rotOffset = Vector3.zero;
+        }
+
+        currentGrabbedObject = null;
+    }
 }
+
+//private void OnRelease()
+//{
+//    print("OnRelease");
+//    rayInteractor.enabled = true;
+//    _handAnimation.enabled = true;
+//    if (currentGrabbedObject.isMoving)
+//    {
+//        currentGrabbedObject.currentGrabber = null;
+//    }
+//    else
+//    {
+//        if (isLeft)
+//        {
+//            _targetFollower.followTargets[2].target =
+//                _originalHandTargetTransforms[0];
+//        }
+//        else
+//            _targetFollower.followTargets[3].target =
+//                _originalHandTargetTransforms[1];
+//    }
+
+//    currentGrabbedObject = null;
+//}
