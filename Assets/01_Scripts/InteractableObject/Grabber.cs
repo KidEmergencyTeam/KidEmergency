@@ -57,20 +57,16 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.green;
-		}
-	}
-
 	private void OnTriggerStay(Collider other)
 	{
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
+		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
+		{
+			grabbable.outlinable.OutlineParameters.Color = Color.green;
+		}
+
 		if (controllerButtonClick.action.ReadValue<float>() > 0 && grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
@@ -88,17 +84,18 @@ public class Grabber : MonoBehaviour
 
 	public void OnGrab(Grabbable grabbable)
 	{
-        // null 체크 후 초기화
-        if (_handAnimation == null)
-        {
-            _handAnimation = FindObjectOfType<HandAnimation>();
-        }
-        if (_targetFollower == null)
-        {
-            _targetFollower = FindObjectOfType<TargetFollower>();
-        }
+		// null 체크 후 초기화
+		if (_handAnimation == null)
+		{
+			_handAnimation = FindObjectOfType<HandAnimation>();
+		}
 
-        print("OnGrab");
+		if (_targetFollower == null)
+		{
+			_targetFollower = FindObjectOfType<TargetFollower>();
+		}
+
+		print("OnGrab");
 		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
@@ -107,14 +104,10 @@ public class Grabber : MonoBehaviour
 		currentGrabbedObject = grabbable;
 		if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
 		else _handAnimation.animator.SetFloat("Right Trigger", 1);
+		currentGrabbedObject.isGrabbable = false;
+		currentGrabbedObject.currentGrabber = this;
 
-		if (currentGrabbedObject.isMoving)
-		{
-			currentGrabbedObject.isGrabbable = false;
-			currentGrabbedObject.currentGrabber = this;
-		}
-
-		else
+		if (!currentGrabbedObject.isMoving)
 		{
 			if (isLeft)
 			{
@@ -137,7 +130,7 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	private void OnRelease()
+	public void OnRelease()
 	{
 		print("OnRelease");
 		rayInteractor.enabled = true;
