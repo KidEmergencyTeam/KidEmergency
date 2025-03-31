@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public class FEStateMachine
 {
 	public FEScene owner;
