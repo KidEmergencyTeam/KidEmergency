@@ -10,9 +10,19 @@ public class Grabber : MonoBehaviour
 	public bool isLeft = true;
 	public float detectRadius = 0.05f;
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
-	public XRRayInteractor rayInteractor;
 
-	[HideInInspector] public Grabbable currentGrabbedObject;
+    //public XRRayInteractor rayInteractor;
+    
+	// ture일 경우 레이 스위치 불가 -> 잡은 상태
+	// false일 경우 레이 스위치 가능 -> 놓은 상태
+    [Header("OnGrab 호출 여부")]
+    public bool isOnGrabCalled = false;
+
+    // OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 레이 우측으로 고정
+    public delegate void GrabEvent(Grabbable grabbable);
+    public event GrabEvent OnGrabEvent;
+
+    [HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private HandAnimation _handAnimation;
@@ -100,7 +110,7 @@ public class Grabber : MonoBehaviour
         }
 
         print("OnGrab");
-		rayInteractor.enabled = false;
+		// rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
@@ -136,26 +146,22 @@ public class Grabber : MonoBehaviour
 					currentGrabbedObject.grabRotOffset;
 			}
 		}
-	}
+
+        Debug.Log("[Grabber] OnGrab 이벤트 발생");
+        isOnGrabCalled = true;
+        OnGrabEvent?.Invoke(grabbable);
+    }
 
     // 물체 놓기
     public void OnRelease()
     {
-        // null 체크 후 초기화
-        if (_handAnimation == null)
-        {
-            _handAnimation = FindObjectOfType<HandAnimation>();
-        }
-        if (_targetFollower == null)
-        {
-            _targetFollower = FindObjectOfType<TargetFollower>();
-        }
-
         print("OnRelease");
 
-        //if (currentGrabbedObject == null) return;
+        //if (currentGrabbedObject == null) return; -> 단순하게 GrabStatePersistence.cs에서 OnDestroy 호출될 때 손수건 오브젝트 제거됨에 따라 OnRelease 호출,
+		//따라서 null 처리하면 중간에 멈출수 있기 때문에 주석 처리
 
-        rayInteractor.enabled = true;
+        // 손수건 오브젝트 제거되면 -> 손가락 펴지고 -> 우측 레이 활성화(우측 레이 활성화가 초기값)
+        //rayInteractor.enabled = true;
 
         currentGrabbedObject.rb.useGravity = true;
         currentGrabbedObject.rb.isKinematic = false;
@@ -179,7 +185,9 @@ public class Grabber : MonoBehaviour
             _targetFollower.followTargets[3].rotOffset = Vector3.zero;
         }
 
-        //currentGrabbedObject = null;
+		// 레이 전환 가능
+        isOnGrabCalled = false;
+        //currentGrabbedObject = null; -> GrabStatePersistence.cs에서 OnDestroy 호출될 때 손수건 오브젝트 제거됨에 따라 null 처리 주석 처리
     }
 }
 

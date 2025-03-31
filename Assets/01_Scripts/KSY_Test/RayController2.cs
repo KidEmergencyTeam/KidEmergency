@@ -77,9 +77,15 @@ public class RayController2 : MonoBehaviour
         {
             Debug.LogError("[RayController2] InputActionAsset이 할당되지 않았습니다.");
         }
+
+        // Grabber의 이벤트 구독 (Grabber.cs에서 GrabEvent 이벤트 발생하면 HandleOnGrab 호출)
+        if (leftGrabber != null)
+        {
+            leftGrabber.OnGrabEvent += HandleOnGrab;
+        }
     }
 
-    // 해당 객체가 비활성화 및 제거될 때 또는 씬 전환 시 호출하여 이벤트를 해제한다.
+    // 해당 객체가 비활성화 및 제거될 때 또는 씬 전환 시 호출하여 이벤트를 해제
     private void OnDisable()
     {
         if (leftSelectAction != null)
@@ -92,7 +98,21 @@ public class RayController2 : MonoBehaviour
             rightSelectAction.performed -= OnSelectActionPerformed;
             rightSelectAction.Disable();
         }
+
+        // Grabber 이벤트 구독 해제
+        if (leftGrabber != null)
+        {
+            leftGrabber.OnGrabEvent -= HandleOnGrab;
+        }
     }
+
+    // Grabber의 OnGrab 이벤트를 처리하는 메서드
+    private void HandleOnGrab(Grabbable grabbable)
+    {
+        SwitchRightRay();
+        Debug.Log("[RayController2] OnGrab 이벤트에 의해 우측 레이 활성화");
+    }
+
 
     // 그립 입력에 따라 좌측 레이 활성화 및 우측 레이 비활성화, 우측 레이 활성화 및 좌측 레이 비활성화 처리
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
@@ -100,7 +120,9 @@ public class RayController2 : MonoBehaviour
         // 좌측 그립 입력 시
         if (context.action == leftSelectAction)
         {
-            if (isRightActive)
+            // 우측 레이 활성화 및 isOnGrabCalled false라면 
+            // 좌측 레이 활성화
+            if (isRightActive && !leftGrabber.isOnGrabCalled)
             {
                 SwitchLeftRay();
             }
@@ -108,7 +130,9 @@ public class RayController2 : MonoBehaviour
         // 우측 그립 입력 시
         else if (context.action == rightSelectAction)
         {
-            if (!isRightActive)
+            // 좌측 레이 활성화 및 isOnGrabCalled false라면
+            // 우측 레이 활성화
+            if (!isRightActive && !leftGrabber.isOnGrabCalled)
             {
                 SwitchRightRay();
             }
