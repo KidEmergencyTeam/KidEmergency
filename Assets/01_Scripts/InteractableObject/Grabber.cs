@@ -12,7 +12,7 @@ public class Grabber : MonoBehaviour
 	public float detectRadius = 0.05f;
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
 
-    //public XRRayInteractor rayInteractor;
+    public XRRayInteractor rayInteractor;
     
 	// ture일 경우 레이 스위치 불가 -> 잡은 상태
 	// false일 경우 레이 스위치 가능 -> 놓은 상태
@@ -110,7 +110,7 @@ public class Grabber : MonoBehaviour
         }
 
         print("OnGrab");
-		// rayInteractor.enabled = false;
+		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
