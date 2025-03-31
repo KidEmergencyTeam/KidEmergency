@@ -1,0 +1,28 @@
+using UnityEngine;
+
+public class CircuitTrigger : MonoBehaviour
+{
+    [SerializeField] private bool _isLever; // true면 차단기 레버, false면 차단기
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        if (_isLever)
+        {
+            LowerCLAction lever = FindObjectOfType<LowerCLAction>();
+            if (lever != null)
+            {
+                lever.TriggerLever();
+            }
+        }
+        else
+        {
+            OpenCBAction box = FindObjectOfType<OpenCBAction>();
+            if (box != null)
+            {
+                box.TriggerBox();
+            }
+        }
+    }
+}
