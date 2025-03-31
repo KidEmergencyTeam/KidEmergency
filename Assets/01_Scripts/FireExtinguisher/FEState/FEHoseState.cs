@@ -2,16 +2,15 @@ public class FEHoseState : FEState
 {
 	public override void EnterState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		scene.hose.isGrabbable = true;
 	}
 
 	public override void ExecuteState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		if (scene.hose.IsGrabbed) scene.ChangeState(FEStateType.FEDialog);
 	}
 
 	public override void ExitState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
 	}
 }

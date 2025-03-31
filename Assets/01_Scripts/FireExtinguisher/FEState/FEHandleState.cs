@@ -2,16 +2,15 @@ public class FEHandleState : FEState
 {
 	public override void EnterState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		scene.handle.isGrabbable = true;
 	}
 
 	public override void ExecuteState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		if (scene.handle.IsGrabbed) scene.ChangeState(FEStateType.FEDialog);
 	}
 
 	public override void ExitState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
 	}
 }
