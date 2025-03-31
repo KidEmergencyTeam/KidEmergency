@@ -78,7 +78,7 @@ public class RayController2 : MonoBehaviour
             Debug.LogError("[RayController2] InputActionAsset이 할당되지 않았습니다.");
         }
 
-        // Grabber의 이벤트 구독 (Grabber.cs에서 GrabEvent 이벤트 발생하면 HandleOnGrab 호출)
+        // Grabber 이벤트 구독
         if (leftGrabber != null)
         {
             leftGrabber.OnGrabEvent += HandleOnGrab;
@@ -106,7 +106,7 @@ public class RayController2 : MonoBehaviour
         }
     }
 
-    // Grabber의 OnGrab 이벤트를 처리하는 메서드
+    // Grabber.cs에서 GrabEvent 이벤트 발생 시 HandleOnGrab를 호출하여 우측 레이로 전환
     private void HandleOnGrab(Grabbable grabbable)
     {
         SwitchRightRay();

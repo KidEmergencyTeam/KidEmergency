@@ -18,7 +18,7 @@ public class Grabber : MonoBehaviour
     [Header("OnGrab 호출 여부")]
     public bool isOnGrabCalled = false;
 
-    // OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 레이 우측으로 고정
+    // OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 우측 레이로 전환
     public delegate void GrabEvent(Grabbable grabbable);
     public event GrabEvent OnGrabEvent;
 
@@ -147,22 +147,15 @@ public class Grabber : MonoBehaviour
 			}
 		}
 
+        OnGrabEvent?.Invoke(grabbable);
         Debug.Log("[Grabber] OnGrab 이벤트 발생");
         isOnGrabCalled = true;
-        OnGrabEvent?.Invoke(grabbable);
     }
 
-    // 물체 놓기
+    // 물체 놓기 -> 손 상태 복원
     public void OnRelease()
     {
         print("OnRelease");
-
-        //if (currentGrabbedObject == null) return; -> 단순하게 GrabStatePersistence.cs에서 OnDestroy 호출될 때 손수건 오브젝트 제거됨에 따라 OnRelease 호출,
-		//따라서 null 처리하면 중간에 멈출수 있기 때문에 주석 처리
-
-        // 손수건 오브젝트 제거되면 -> 손가락 펴지고 -> 우측 레이 활성화(우측 레이 활성화가 초기값)
-        //rayInteractor.enabled = true;
-
         currentGrabbedObject.rb.useGravity = true;
         currentGrabbedObject.rb.isKinematic = false;
         currentGrabbedObject.isGrabbable = true;
@@ -187,30 +180,5 @@ public class Grabber : MonoBehaviour
 
 		// 레이 전환 가능
         isOnGrabCalled = false;
-        //currentGrabbedObject = null; -> GrabStatePersistence.cs에서 OnDestroy 호출될 때 손수건 오브젝트 제거됨에 따라 null 처리 주석 처리
     }
 }
-
-//private void OnRelease()
-//{
-//    print("OnRelease");
-//    rayInteractor.enabled = true;
-//    _handAnimation.enabled = true;
-//    if (currentGrabbedObject.isMoving)
-//    {
-//        currentGrabbedObject.currentGrabber = null;
-//    }
-//    else
-//    {
-//        if (isLeft)
-//        {
-//            _targetFollower.followTargets[2].target =
-//                _originalHandTargetTransforms[0];
-//        }
-//        else
-//            _targetFollower.followTargets[3].target =
-//                _originalHandTargetTransforms[1];
-//    }
-
-//    currentGrabbedObject = null;
-//}
