@@ -79,6 +79,7 @@ public class RayController2 : MonoBehaviour
         }
     }
 
+    // 해당 객체가 비활성화 및 제거될 때 또는 씬 전환 시 호출하여 이벤트를 해제한다.
     private void OnDisable()
     {
         if (leftSelectAction != null)
@@ -93,21 +94,9 @@ public class RayController2 : MonoBehaviour
         }
     }
 
-    // 그립 입력 처리 시, 좌측 Grabber의 Grabbed 상태를 확인하여 오브젝트가 잡힌 경우에는 레이 전환을 막고 우측 레이를 고정
+    // 그립 입력에 따라 좌측 레이 활성화 및 우측 레이 비활성화, 우측 레이 활성화 및 좌측 레이 비활성화 처리
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
-        // 좌측 Grabber에서 오브젝트를 잡고 있다면
-        if (leftGrabber != null && leftGrabber.Grabbed)
-        {
-            // 우측 레이가 활성화되지 않았다면 강제로 전환
-            if (!isRightActive)
-            {
-                SwitchRightRay();
-            }
-            Debug.Log("[RayController2] 오브젝트가 잡힌 상태이므로 레이 전환 불가");
-            return;
-        }
-
         // 좌측 그립 입력 시
         if (context.action == leftSelectAction)
         {
