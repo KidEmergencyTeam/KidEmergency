@@ -7,8 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class CloseGVAction : MonoBehaviour, IActionEffect
 {
     [SerializeField] private GameObject _target; // 가스 밸브
-    [SerializeField] private float _limitRot = 90f; // 목표 회전값
-
+    
+    private float _limitRot = 90f;
     private XRGrabInteractable _grabInteractable;
     private Vector3 _originPos;
     private bool _isComplete = false;
