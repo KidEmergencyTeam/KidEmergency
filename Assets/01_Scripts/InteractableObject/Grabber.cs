@@ -153,7 +153,7 @@ public class Grabber : MonoBehaviour
 
         print("OnRelease");
 
-        if (currentGrabbedObject == null) return;
+        //if (currentGrabbedObject == null) return;
 
         rayInteractor.enabled = true;
 
@@ -179,7 +179,7 @@ public class Grabber : MonoBehaviour
             _targetFollower.followTargets[3].rotOffset = Vector3.zero;
         }
 
-        currentGrabbedObject = null;
+        //currentGrabbedObject = null;
     }
 }
 
