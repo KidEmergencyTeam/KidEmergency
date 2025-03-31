@@ -100,7 +100,8 @@ public class Grabber : MonoBehaviour
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
-		_handAnimation.enabled = false;
+		if(isLeft) _handAnimation.isLeftGrabbed = true;
+		else _handAnimation.isRightGrabbed = true;
 		currentGrabbedObject = grabbable;
 		if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
 		else _handAnimation.animator.SetFloat("Right Trigger", 1);
@@ -134,7 +135,8 @@ public class Grabber : MonoBehaviour
 	{
 		print("OnRelease");
 		rayInteractor.enabled = true;
-		_handAnimation.enabled = true;
+		if(isLeft) _handAnimation.isLeftGrabbed = false;
+		else _handAnimation.isRightGrabbed = false;
 		if (currentGrabbedObject.isMoving)
 		{
 			currentGrabbedObject.currentGrabber = null;
