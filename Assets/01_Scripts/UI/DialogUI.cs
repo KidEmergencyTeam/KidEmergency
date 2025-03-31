@@ -10,7 +10,7 @@ public class DialogUI : MonoBehaviour
     
     private void Awake()
     {
-        dialogPanel.SetActive(false);
+        // dialogPanel.SetActive(false);
     }
 
     private void Update()
