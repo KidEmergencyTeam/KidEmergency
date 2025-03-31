@@ -56,23 +56,23 @@ public class TypingEffect : DisableableSingleton<TypingEffect>
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    void Start()
-    {
-        if (typingText == null && !string.IsNullOrEmpty(typingTextTag))
-        {
-            GameObject tmpObj = GameObject.FindGameObjectWithTag(typingTextTag);
-            if (tmpObj != null)
-                typingText = tmpObj.GetComponent<TextMeshProUGUI>();
-        }
-    }
-
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (!string.IsNullOrEmpty(typingTextTag))
         {
-            GameObject tmpObj = GameObject.FindGameObjectWithTag(typingTextTag);
-            if (tmpObj != null)
-                typingText = tmpObj.GetComponent<TextMeshProUGUI>();
+            // 비활성화된 오브젝트도 모두 포함하여 찾기 위해 Resources.FindObjectsOfTypeAll를 사용
+            GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+            foreach (GameObject obj in allObjects)
+            {
+                // 태그가 일치하는지 확인 (비활성화된 오브젝트도 포함)
+                if (obj.CompareTag(typingTextTag))
+                {
+                    typingText = obj.GetComponent<TextMeshProUGUI>();
+                    if (typingText != null)
+                        break;
+                }
+            }
         }
     }
 
