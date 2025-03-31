@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(FEHandle.ExecutionOrder)]
 public class FEHandle : MonoBehaviour
@@ -21,7 +22,7 @@ public class FEHandle : MonoBehaviour
 	private float _currentExtinguishingDamage;
 	private float _fireEndCoolTime = 0f;
 	private Grabbable _grabbable;
-	private InputActionProperty _fireAction;
+	public InputActionProperty fireAction;
 	private FireDetectCollider _fireDetectCollider;
 
 	private void Awake()
@@ -34,7 +35,7 @@ public class FEHandle : MonoBehaviour
 	{
 		_fire = FindObjectOfType<Fire>();
 		_grabbable = GetComponent<Grabbable>();
-		_fireAction = _grabbable.currentGrabber.controllerButtonClick;
+		fireAction = _grabbable.currentGrabber.controllerButtonClick;
 	}
 
 	private void Update()
@@ -58,7 +59,7 @@ public class FEHandle : MonoBehaviour
 			}
 		}
 
-		if (_fireAction.action.ReadValue<float>() > 0)
+		if (fireAction.action.ReadValue<float>() > 0)
 		{
 			print("ButtonClick");
 			if (Time.time > _fireEndCoolTime)
