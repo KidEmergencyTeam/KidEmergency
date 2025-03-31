@@ -107,7 +107,7 @@ public class RayController2 : MonoBehaviour
     }
 
     // Grabber.cs에서 GrabEvent 이벤트 발생 시 HandleOnGrab를 호출하여 우측 레이로 전환
-    private void HandleOnGrab(Grabbable grabbable)
+    private void HandleOnGrab()
     {
         SwitchRightRay();
         Debug.Log("[RayController2] OnGrab 이벤트에 의해 우측 레이 활성화");

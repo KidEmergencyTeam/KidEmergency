@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,8 +20,7 @@ public class Grabber : MonoBehaviour
     public bool isOnGrabCalled = false;
 
     // OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 우측 레이로 전환
-    public delegate void GrabEvent(Grabbable grabbable);
-    public event GrabEvent OnGrabEvent;
+    public event Action OnGrabEvent;
 
     [HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
@@ -147,7 +147,8 @@ public class Grabber : MonoBehaviour
 			}
 		}
 
-        OnGrabEvent?.Invoke(grabbable);
+        // OnGrab 메서드 실행 -> 이벤트가 발생 -> 다른 스크립트에서 OnGrab 메서드가 실행할 때 개별적인 처리가 가능
+        OnGrabEvent?.Invoke();
         Debug.Log("[Grabber] OnGrab 이벤트 발생");
         isOnGrabCalled = true;
     }
