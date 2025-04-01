@@ -440,11 +440,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2879dd583664e69418b13973b4e6e43b, type: 3}
---- !u!4 &63184880 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6314249037568093045, guid: 2879dd583664e69418b13973b4e6e43b, type: 3}
-  m_PrefabInstance: {fileID: 63184879}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &63184881 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8506446536156752101, guid: 2879dd583664e69418b13973b4e6e43b, type: 3}
@@ -814,19 +809,19 @@ MonoBehaviour:
     dialogue: "\uC704\uD5D8\uD574! \uC774\uBBF8 \uCC3D\uBB38\uC73C\uB85C \uC5F0\uAE30\uAC00
       \uB4E4\uC5B4\uC624\uACE0 \uC788\uB2E4\uBA74 \uB354 \uC704\uD5D8\uD574\uC9C8
       \uC218 \uC788\uC5B4"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 61a20befeb686c24d9996331c56666ee, type: 3}
   - dialogIndex: 1
     dialogue: "\uC0C1\uD669\uC5D0 \uB530\uB77C\uC11C \uB300\uCC98\uBC95\uC774 \uB2E4\uB974\uC9C0\uB9CC
       \uC774\uBBF8 \uC9D1\uC548\uC73C\uB85C \uC5F0\uAE30\uAC00 \uB4E4\uC5B4\uC624\uACE0
       \uC788\uB2E4\uBA74"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 778c322863130e542b608bcdc8958283, type: 3}
   - dialogIndex: 2
     dialogue: "\uCD5C\uB300\uD55C \uB300\uD53C\uD558\uB294\uAC8C \uC88B\uC544!"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: a332856fd28bbba4b874765e9eb7b4b4, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1001 &242038217
 PrefabInstance:
@@ -1221,9 +1216,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3369724618933347605, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 539219192}
-    - targetCorrespondingSourceObject: {fileID: 3369724618933347605, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 63184880}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
 --- !u!4 &248633507 stripped
@@ -1403,22 +1395,22 @@ MonoBehaviour:
       \uC544\uD30C\uD2B8\uC5D0\uC11C \uD654\uC7AC\uAC00 \uC77C\uC5B4\uB0AC\uC744
       \uB54C \uC5B4\uB5BB\uAC8C \uD589\uB3D9\uD574\uC57C \uD558\uB294\uC9C0 \uC54C\uC544\uBCF4\uB294
       \uC2DC\uAC04\uC744 \uAC00\uC9C8 \uAC70\uC57C"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: c856496d637ba6e4bb07c3172aa5c568, type: 3}
   - dialogIndex: 1
     dialogue: "\uD6C8\uB828\uC774 \uC2DC\uC791\uB418\uBA74 \uD070 \uC18C\uB9AC\uAC00
       \uB0A0 \uC218\uB3C4 \uC788\uC73C\uB2C8 \uC870\uC2EC\uD574"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 178e8e141fef8924eb130beae13d39cb, type: 3}
   - dialogIndex: 2
     dialogue: "\uADF8\uB9AC\uACE0 \uC18D\uC774 \uC548\uC88B\uAC70\uB098 \uBA40\uBBF8\uAC00
       \uC77C\uC5B4\uB098\uBA74 \uBC14\uB85C \uC120\uC0DD\uB2D8\uC5D0\uAC8C \uB9D0\uD574\uC918"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: e8d1d2dbea7e3ab4498f8e286729d0f6, type: 3}
   - dialogIndex: 3
     dialogue: "\uADF8\uB7FC \uC2DC\uC791\uD574\uBCFC\uAE4C?"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: e43f0517039c6dd4a83427a1e2ec8698, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!4 &352804978
 Transform:
@@ -1799,23 +1791,27 @@ MonoBehaviour:
     textDialogue: {fileID: 1229556810}
   dialogs:
   - dialogIndex: 0
-    dialogue: "\uB9DE\uC558\uC5B4 \uC774\uBBF8 \uC9D1\uC548\uC73C\uB85C \uC5F0\uAE30\uAC00
+    dialogue: "\uB9DE\uC558\uC5B4! \uC774\uBBF8 \uC9D1\uC548\uC73C\uB85C \uC5F0\uAE30\uAC00
       \uB4E4\uC5B4\uC624\uACE0 \uC788\uB2E4\uBA74 \uBC14\uB85C \uB300\uD53C\uD558\uB294\uAC8C
       \uC88B\uC544"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d6b829ba1ab436742b813b0ae52d60f5, type: 3}
   - dialogIndex: 1
     dialogue: "\uD558\uC9C0\uB9CC \uBCF5\uB3C4\uC5D0 \uC774\uBBF8 \uD654\uC5FC\uACFC
       \uC5F0\uAE30\uAC00 \uAC00\uB4DD \uCC28 \uC788\uC5B4 \uB300\uD53C\uAC00 \uC5B4\uB835\uB2E4\uBA74"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 832d57d7e69ed1b4c846c495a10f5460, type: 3}
   - dialogIndex: 2
+    dialogue: "\uBC29\uC5D0 \uB4E4\uC5B4\uAC00\uC11C \uBB38\uD2C8\uC744 \uC816\uC740
+      \uCC9C \uAC19\uC740 \uBB3C\uAC74\uC73C\uB85C \uD2C8\uC744 \uB9C9\uACE0"
+    audioClip: {fileID: 8300000, guid: fe1d212e8fe9809458c88d5c4153fc93, type: 3}
+  - dialogIndex: 3
     dialogue: "\uB0AE\uC740 \uC790\uC138\uB85C \uBC14\uB2E5\uC5D0 \uC5CE\uB4DC\uB824
       \uC228\uC744 \uC9E7\uAC8C \uC26C\uBA70 \uAD6C\uC870\uB97C \uAE30\uB2E4\uB824\uC57C
-      \uD574\n"
-    audioClip: {fileID: 0}
+      \uD574"
+    audioClip: {fileID: 8300000, guid: 04ecab80e0ece0245b9a9f6b62e34cb1, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1001 &494812295
 PrefabInstance:
@@ -3851,15 +3847,15 @@ MonoBehaviour:
   - dialogIndex: 0
     dialogue: "\uAE34\uAE09\uD55C \uC0C1\uD669\uC774\uB2C8\uAE4C \uC218\uAC74\uC740
       \uB0B4\uAC00 \uBB3C\uC5D0 \uC801\uC154 \uB1A8\uC5B4"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d51d2280f47772e41a19140088485109, type: 3}
   - dialogIndex: 1
     dialogue: "\uC2DD\uD0C1 \uC704\uC5D0 \uC788\uB294 \uC218\uAC74\uC744 \uD558\uB098\uC529
       \uB4E4\uC5B4\uC11C \uC785\uC744 \uAC00\uB9AC\uC790"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: e4fd3aa864837a146bafea80b5e9c499, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1001 &1063816322
 PrefabInstance:
@@ -4489,15 +4485,15 @@ MonoBehaviour:
     dialogue: "\uC9C0\uAE08 \uBCF5\uB3C4 \uC0C1\uD669\uC744 \uBCF4\uB2C8\uAE4C \uC5F0\uAE30\uAC00
       \uC870\uAE08 \uC62C\uB77C\uC624\uC9C0\uB9CC \uC9C0\uAE08\uC740 \uB300\uD53C
       \uD560 \uC218 \uC788\uC744 \uAEBC \uAC19\uC544"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 59cd2844e70fb064ebb6507f9e3ba4eb, type: 3}
   - dialogIndex: 1
     dialogue: "\uC218\uAC74\uC774\uB098 \uC190\uC218\uAC74\uC744 \uBB3C\uC5D0 \uC801\uC154\uC11C
       \uD0C8\uCD9C \uC900\uBE44\uB97C \uD558\uC790"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 2eeef9713e8ab85409672a04de0ad990, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1001 &1351179837
 PrefabInstance:
@@ -4633,14 +4629,14 @@ MonoBehaviour:
   dialogs:
   - dialogIndex: 0
     dialogue: "\uC88B\uC544 \uC785\uC774\uB791 \uCF54\uB294 \uB2E4 \uAC00\uB838\uC9C0?"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 39b278a978a9d864086dd30b45198f29, type: 3}
   - dialogIndex: 1
     dialogue: "\uADF8\uB7EC\uBA74 \uC774\uC81C \uBC16\uC73C\uB85C \uB098\uAC00\uBCF4\uC790!"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d0d0a9b062ae26f4baa4bed3419e1c06, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1 &1359563726
 GameObject:
@@ -5606,19 +5602,123 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 576760724998109938, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1487680881}
   m_SourcePrefab: {fileID: 100100000, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
 --- !u!114 &1487680879 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 942389713041380978, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
   m_PrefabInstance: {fileID: 1487680878}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1487680880}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad07e6c50539c344396e1870d6694e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1487680880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 576760724998109938, guid: 2fab339e27b93c54e9e2a210d9ecc098, type: 3}
+  m_PrefabInstance: {fileID: 1487680878}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1487680881
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487680880}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1573523574
 GameObject:
   m_ObjectHideFlags: 0
@@ -6974,14 +7074,14 @@ MonoBehaviour:
   - dialogIndex: 0
     dialogue: "\uD070 \uC77C\uC774\uC57C \uC544\uB7AB \uC9D1\uC5D0\uC11C \uD070 \uBD88\uC774\uB09C\uAC70
       \uAC19\uC544 \uCC3D\uBB38\uC73C\uB85C \uC5F0\uAE30\uAC00 \uB4E4\uC5B4\uC624\uACE0\uC788\uC5B4\u2026"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 1ee927dc7bbe4b7408504b84ed17f028, type: 3}
   - dialogIndex: 1
     dialogue: "\uC774\uB7F4 \uB54C\uB294 \uC5B4\uB5BB\uAC8C \uD574\uC57C\uD560\uAE4C?"
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: eeb32bc433b33224c895f3493d7a68cf, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
   dialogDelay: 2.5
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 1487680881}
   isDialogsEnd: 0
 --- !u!1001 &1928624548
 PrefabInstance:
@@ -7524,3 +7624,4 @@ SceneRoots:
   - {fileID: 909474026}
   - {fileID: 1897747385}
   - {fileID: 1421597480}
+  - {fileID: 63184879}
