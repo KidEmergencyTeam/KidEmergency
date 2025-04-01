@@ -9,7 +9,8 @@ public enum FEStateType
 	FEHandle,
 	FEHose,
 	FEFire,
-	FEExtinguishing
+	FEExtinguishing,
+	FEEnd
 }
 
 public class FEScene : MonoBehaviour
@@ -17,15 +18,16 @@ public class FEScene : MonoBehaviour
 	public static FEScene Instance { get; set; }
 
 	public List<JSWDialog> dialogueData = new List<JSWDialog>();
+	public JSWDialog currentDialogData;
 	public string[] currentDialog;
 	public int currentDialogIndex = 0;
 
 	private FEStateMachine _stateMachine;
-	private FEState _currentState;
 	private FEStateType _startState = FEStateType.FEDialog;
 
 	public Dictionary<FEStateType, FEState> states;
 
+	public FEState currentState;
 	public Grabbable body;
 	public Grabbable pin;
 	public Grabbable handle;
@@ -46,6 +48,7 @@ public class FEScene : MonoBehaviour
 
 	private void Start()
 	{
+		currentDialogData = dialogueData[currentDialogIndex];
 		currentDialog = dialogueData[currentDialogIndex].dialogs;
 		_stateMachine = new FEStateMachine(this);
 		states = new Dictionary<FEStateType, FEState>
@@ -56,7 +59,8 @@ public class FEScene : MonoBehaviour
 			{ FEStateType.FEHandle, new FEHandleState() },
 			{ FEStateType.FEHose, new FEHoseState() },
 			{ FEStateType.FEFire, new FEFireStartState() },
-			{ FEStateType.FEExtinguishing, new FEExtinuishingState() }
+			{ FEStateType.FEExtinguishing, new FEExtinguishingState() },
+			{ FEStateType.FEEnd, new FEEndState() }
 		};
 		ChangeState(_startState);
 		body.isGrabbable = false;
@@ -75,6 +79,6 @@ public class FEScene : MonoBehaviour
 	{
 		states.TryGetValue(newStateType, out FEState newState);
 		_stateMachine.ChangeState(newState);
-		_currentState = newState;
+		currentState = newState;
 	}
 }
