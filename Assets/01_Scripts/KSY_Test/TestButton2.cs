@@ -137,13 +137,13 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
     }
 
-    // 좌측/우측 컨트롤러의 Select 액션 이벤트 처리
+    // 1.그립 버튼 입력 시 ProcessSelectPerformed 호출 
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
         ProcessSelectPerformed();
     }
 
-    // 해당 버튼이 레이가 진입 상태일 경우에만 클릭 처리
+    // 2.버튼에 레이가 진입한 상태일 경우 TriggerButtonAnimationAndClick 호출
     private void ProcessSelectPerformed()
     {
         // 레이가 진입 상태라면 
