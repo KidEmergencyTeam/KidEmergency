@@ -40,4 +40,5 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
             _isTriggered = true;
         }
     }
+    
 }

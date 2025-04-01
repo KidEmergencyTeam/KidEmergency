@@ -10,11 +10,14 @@ public class DeskLeg : MonoBehaviour
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
     [SerializeField] private GameObject[] _legs;
+    [SerializeField] private GameObject _leftHand;
+    [SerializeField] private GameObject _rightHand;
     
     private ActionBasedController _leftController;
     private ActionBasedController _rightController;
     private float _durationTime = 0f; // 지속 시간
     private float _endTime = 5f; // 종료 시간
+    private bool _isTrigger = false;
     public bool isHoldComplete = false;
 
     private void Awake()
@@ -44,8 +47,8 @@ public class DeskLeg : MonoBehaviour
         bool isLeftGrapped = _leftController.selectAction.action.ReadValue<float>() > 0;
         bool isRightGrapped = _rightController.selectAction.action.ReadValue<float>() > 0;
         bool isInteractable =
-            Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped;
-        print(Vector3.Distance(_legs[0].transform.localPosition, _leftController.transform.localPosition));
+            Vector3.Distance(_legs[0].transform.position, _leftHand.transform.position) < 0.05f && isLeftGrapped;
+        print(Vector3.Distance(_legs[0].transform.localPosition, _leftHand.transform.localPosition));
         // bool isInteractable = Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped &&
         //                           Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
         if (isInteractable)
@@ -83,7 +86,17 @@ public class DeskLeg : MonoBehaviour
         Outlinable[] outlinables = GetComponentsInChildren<Outlinable>();
         foreach (Outlinable outline in outlinables)
         {
-            Destroy(outline);
+            outline.enabled = false;
         }
+    }
+
+    public void TriggerLeg()
+    {
+        _isTrigger = true;
+    }
+
+    public void UnTriggerLeg()
+    {
+        _isTrigger = false;
     }
 }
