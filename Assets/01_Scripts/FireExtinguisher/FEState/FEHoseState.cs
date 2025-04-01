@@ -12,5 +12,6 @@ public class FEHoseState : FEState
 
 	public override void ExitState(FEScene scene)
 	{
+		scene.hose.GetComponent<FEHose>().hoseIKChain.data.tipRotationWeight = 1f;
 	}
 }
