@@ -143,6 +143,8 @@ public class Grabber : MonoBehaviour
         // OnGrab 메서드 실행 -> 이벤트가 발생 -> 다른 스크립트에서 OnGrab 메서드가 실행할 때 개별적인 처리가 가능
         OnGrabEvent?.Invoke();
         Debug.Log("[Grabber] OnGrab 이벤트 발생");
+
+		// 레이 전환 불가
         isOnGrabCalled = true;
     }
 
