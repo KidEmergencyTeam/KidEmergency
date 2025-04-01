@@ -4,6 +4,7 @@ using UnityEngine;
 public class JSWDialog : ScriptableObject
 {
 	public string[] dialogs;
+	public AudioClip[] audios;
 	public string emotion;
 	public FEStateType nextState;
 }
