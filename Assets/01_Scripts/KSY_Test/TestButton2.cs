@@ -3,16 +3,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Collections.Generic;
 
-// TestButton2.cs 목적: 할당된 버튼 이벤트 출력
 public enum ButtonType
 {
     A,
-    B,
-    C,
-    D,
-    E,
-    F
+    B
 }
 
 public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -33,12 +29,16 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Pointer 이벤트로 레이의 진입 상태를 관리
     private bool isHovered = false;
 
-    // 버튼 클릭 상태를 관리
+    // 버튼 클릭 상태를 관리 -> JDH 전용
     public bool isClick = false;
+
+    // 딕셔너리를 통한 버튼 타입에 따른
+    // 버튼 클릭 이벤트 처리
+    private Dictionary<ButtonType, System.Action> buttonClickActions;
 
     private void Awake()
     {
-        // 버튼 이벤트 할당
+        // 버튼 클릭 이벤트 할당
         if (button != null)
         {
             button.onClick.AddListener(OnButtonClicked);
@@ -47,17 +47,16 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             Debug.LogError("[TestButton2] Button 컴포넌트가 할당되지 않았습니다.");
         }
-    }
 
-    private void OnDestroy()
-    {
-        // 중간에 버튼이 null 상황일 때, 이벤트 제거
-        if (button != null)
+        // 딕셔너리 등록 -> 버튼 타입에 따른 액션 할당
+        buttonClickActions = new Dictionary<ButtonType, System.Action>
         {
-            button.onClick.RemoveListener(OnButtonClicked);
-        }
+            { ButtonType.A, () => Debug.Log("버튼 A 클릭 이벤트 발생") },
+            { ButtonType.B, () => Debug.Log("버튼 B 클릭 이벤트 발생") }
+        };
     }
 
+    // Select 액션 등록
     private void OnEnable()
     {
         if (inputActionAsset != null)
@@ -94,6 +93,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    // Select 액션 해제
     private void OnDisable()
     {
         if (leftSelectAction != null)
@@ -108,29 +108,31 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    // 해당 객체 제거될 때,
+    // 버튼 클릭 이벤트 제거
+    private void OnDestroy()
+    {
+        if (button != null)
+        {
+            button.onClick.RemoveListener(OnButtonClicked);
+        }
+    }
+
     // IPointerEnterHandler 구현: 레이가 버튼 영역에 있을때 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // 레이가 버튼 영역에 있을때
-        // isHovered 플래그를 true로 설정
         isHovered = true;
-
-        // 어느 버튼에서 레이가 진입했는지 확인
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
     }
 
     // IPointerExitHandler 구현: 레이가 버튼 영역에서 벗어났을 때 호출
     public void OnPointerExit(PointerEventData eventData)
     {
-        // 레이가 버튼 영역에서 벗어났을 때
-        // isHovered 플래그를 false로 설정
         isHovered = false;
-
-        // 어느 버튼에서 레이가 벗어났는지 확인
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
     }
 
-    // 좌측/우측 컨트롤러의 Select 액션 이벤트 처리 (두 액션 모두 동일하게 처리)
+    // 좌측/우측 컨트롤러의 Select 액션 이벤트 처리
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
         ProcessSelectPerformed();
@@ -139,8 +141,10 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 해당 버튼이 레이가 진입 상태일 경우에만 클릭 처리
     private void ProcessSelectPerformed()
     {
+        // 레이가 진입 상태라면 
         if (isHovered)
         {
+            // 코루틴 실행
             StartCoroutine(TriggerButtonAnimationAndClick());
         }
         else
@@ -172,40 +176,24 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 버튼 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
-        // 버튼 이벤트 실행
-        button.onClick.Invoke();
+        // 버튼 이벤트 실행 (딕셔너리로 구현한 OnButtonClicked 호출)
+        OnButtonClicked();
 
-        // 버튼 클릭 했을때 
-        // isClick 플래그를 true로 설정
+        // JDH 전용
         isClick = true;
     }
 
-    // 버튼 클릭 이벤트 처리 (스위치문으로 분기) -> 단순 상태만 표시
+    // 버튼 클릭 이벤트 처리
     private void OnButtonClicked()
     {
-        switch (buttonType)
+        if (buttonClickActions != null && buttonClickActions.TryGetValue(buttonType, out System.Action action))
         {
-            case ButtonType.A:
-                Debug.Log("스위치문: 버튼 A 클릭 이벤트 발생");
-                break;
-            case ButtonType.B:
-                Debug.Log("스위치문: 버튼 B 클릭 이벤트 발생");
-                break;
-            case ButtonType.C:
-                Debug.Log("스위치문: 버튼 C 클릭 이벤트 발생");
-                break;
-            case ButtonType.D:
-                Debug.Log("스위치문: 버튼 D 클릭 이벤트 발생");
-                break;
-            case ButtonType.E:
-                Debug.Log("스위치문: 버튼 E 클릭 이벤트 발생");
-                break;
-            case ButtonType.F:
-                Debug.Log("스위치문: 버튼 F 클릭 이벤트 발생");
-                break;
-            default:
-                Debug.Log("스위치문: 미지정 버튼 클릭 이벤트 발생");
-                break;
+            // 버튼 실행 -> 버튼에서 사용되는 Invoke와 일반적으로 사용되는 Invoke 개념은 다르다.
+            action.Invoke();
+        }
+        else
+        {
+            Debug.Log("미지정 버튼 클릭 이벤트 발생");
         }
     }
 }
