@@ -47,19 +47,19 @@ public class PlayerRig : MonoBehaviour
 		if (isAction)
 		{
 			isAction = false;
-			xrOrigin.localPosition += new Vector3(0, bowYValue, 0);
-			mainCameraTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			leftFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			rightFootIkTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			leftFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			rightFootTarget.localPosition -= new Vector3(0, bowYValue, 0);
-			bodyTarget.localPosition += new Vector3(0, bowYValue, 0);
+			xrOrigin.localPosition += new Vector3(0, downYValue, 0);
+			mainCameraTarget.localPosition -= new Vector3(0, downYValue, 0);
+			leftFootIkTarget.localPosition -= new Vector3(0, downYValue, 0);
+			rightFootIkTarget.localPosition -= new Vector3(0, downYValue, 0);
+			leftFootTarget.localPosition -= new Vector3(0, downYValue, 0);
+			rightFootTarget.localPosition -= new Vector3(0, downYValue, 0);
+			bodyTarget.localPosition += new Vector3(0, downYValue, 0);
 
 			// Hand 위치 조정을 위함
 			playerTargetFollower.followTargets[2].posOffset -=
-				new Vector3(0, bowYValue, 0);
+				new Vector3(0, downYValue, 0);
 			playerTargetFollower.followTargets[3].posOffset -=
-				new Vector3(0, bowYValue, 0);
+				new Vector3(0, downYValue, 0);
 		}
 	}
 
