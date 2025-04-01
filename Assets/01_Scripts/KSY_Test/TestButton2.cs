@@ -36,6 +36,11 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 이벤트 처리
     private Dictionary<ButtonType, System.Action> buttonClickActions;
 
+    // 상수 선언
+    private const string LEFT_SELECT_ACTION = "XRI LeftHand Interaction/Select";
+    private const string RIGHT_SELECT_ACTION = "XRI RightHand Interaction/Select";
+    private const float BUTTON_PRESS_DURATION = 0.1f;
+
     private void Awake()
     {
         // 버튼 클릭 이벤트 할당
@@ -62,7 +67,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (inputActionAsset != null)
         {
             // 좌측 컨트롤러 Select 액션 구독 및 활성화
-            leftSelectAction = inputActionAsset.FindAction("XRI LeftHand Interaction/Select", true);
+            leftSelectAction = inputActionAsset.FindAction(LEFT_SELECT_ACTION, true);
             if (leftSelectAction != null)
             {
                 leftSelectAction.performed += OnSelectActionPerformed;
@@ -75,7 +80,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
 
             // 우측 컨트롤러 Select 액션 구독 및 활성화
-            rightSelectAction = inputActionAsset.FindAction("XRI RightHand Interaction/Select", true);
+            rightSelectAction = inputActionAsset.FindAction(RIGHT_SELECT_ACTION, true);
             if (rightSelectAction != null)
             {
                 rightSelectAction.performed += OnSelectActionPerformed;
@@ -171,13 +176,13 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
 
         // 버튼 눌림 효과 지속 시간
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(BUTTON_PRESS_DURATION);
 
         // 버튼 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
-        // 버튼 이벤트 실행 (딕셔너리로 구현한 OnButtonClicked 호출)
-        OnButtonClicked();
+        // 버튼 이벤트 실행
+        button.onClick.Invoke();
 
         // JDH 전용
         isClick = true;
