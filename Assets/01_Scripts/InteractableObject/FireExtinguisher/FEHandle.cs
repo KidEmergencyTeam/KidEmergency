@@ -15,20 +15,20 @@ public class FEHandle : MonoBehaviour
 	public FEHose hose;
 	public GameObject powderPrefab;
 	public float fireCoolTime = 0.4f;
+	public float currentExtinguishingDamage;
+	public InputActionProperty fireAction;
 
 	private Fire _fire;
 	private float _stopDamage;
-	private float _damageSpeed;
-	private float _currentExtinguishingDamage;
+	public float damageSpeed;
 	private float _fireEndCoolTime = 0f;
 	private Grabbable _grabbable;
-	public InputActionProperty fireAction;
 	private FireDetectCollider _fireDetectCollider;
 
 	private void Awake()
 	{
-		_damageSpeed = (maxExtinguishingDamage - minExtinguishingDamage) / fireCoolTime * Time.deltaTime;
-		_currentExtinguishingDamage = maxExtinguishingDamage;
+		damageSpeed = (maxExtinguishingDamage - minExtinguishingDamage) / fireCoolTime * Time.deltaTime;
+		currentExtinguishingDamage = maxExtinguishingDamage;
 	}
 
 	private void Start()
@@ -72,16 +72,16 @@ public class FEHandle : MonoBehaviour
 			if (!_fireDetectCollider) return;
 			if (currentFire != _fireDetectCollider.firePosition)
 			{
-				_currentExtinguishingDamage = Mathf.MoveTowards(maxExtinguishingDamage, minExtinguishingDamage,
-					_damageSpeed * Time.deltaTime);
+				currentExtinguishingDamage = Mathf.MoveTowards(maxExtinguishingDamage, minExtinguishingDamage,
+					damageSpeed * Time.deltaTime);
 			}
 			else
 			{
-				_currentExtinguishingDamage = Mathf.MoveTowards(_currentExtinguishingDamage, minExtinguishingDamage,
-					_damageSpeed * Time.deltaTime);
+				currentExtinguishingDamage = Mathf.MoveTowards(currentExtinguishingDamage, minExtinguishingDamage,
+					damageSpeed * Time.deltaTime);
 			}
 
-			_fire.TakeDamage(_currentExtinguishingDamage * Time.deltaTime);
+			_fire.TakeDamage(currentExtinguishingDamage * Time.deltaTime);
 		}
 	}
 
