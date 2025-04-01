@@ -165,13 +165,11 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             pointerPress = button.gameObject
         };
 
-        // 버튼 눌림 효과 시작
+        // 그립 버튼을 누르면 버튼 눌림 효과 시작
+        // 그립 버튼을 누르고 있는 동안에는 버튼 눌림 상태가 유지 -> 그립 버튼을 떼면 pointerUpHandler 호출 -> 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerDownHandler);
 
-        // 버튼 눌림 효과 지속 시간
-        yield return new WaitForSeconds(BUTTON_PRESS_DURATION);
-
-        // 버튼 눌림 효과 종료
+        // 그립 버튼을 떼면 버튼 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
         // 버튼 이벤트 실행
