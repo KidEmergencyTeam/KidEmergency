@@ -9,10 +9,10 @@ public class DeskLeg : MonoBehaviour
 {
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
-    [SerializeField] private ActionBasedController _leftController;
-    [SerializeField] private ActionBasedController _rightController;
     [SerializeField] private GameObject[] _legs;
     
+    private ActionBasedController _leftController;
+    private ActionBasedController _rightController;
     private float _durationTime = 0f; // 지속 시간
     private float _endTime = 5f; // 종료 시간
     public bool isHoldComplete = false;
@@ -24,6 +24,9 @@ public class DeskLeg : MonoBehaviour
             _legs[i].GetComponent<Outlinable>().enabled = false;
             _legs[i].GetComponent<BaseOutlineObject>().enabled = false;
         }
+        
+        _leftController = GameObject.Find("Left Controller").GetComponent<ActionBasedController>();
+        _rightController = GameObject.Find("Right Controller").GetComponent<ActionBasedController>();
     }
 
     private void Start()

@@ -10,10 +10,14 @@ public class Bag : Grabbable
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
-    [SerializeField] private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     
+    private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     private string _sceneName;
-    
+
+    private void Awake()
+    {
+        _leftController = GameObject.Find("Left Controller").GetComponent<ActionBasedController>();
+    }
 
     protected override void Start()
     {

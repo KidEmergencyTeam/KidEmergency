@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,8 +13,14 @@ public class ReadyUI : MonoBehaviour
     public string nextScene;
     private bool _isReady = false;
     private bool _isLoading = false;
-    [SerializeField] private ActionBasedController _leftCtrl;
-    [SerializeField] private ActionBasedController _rightCtrl;
+    private ActionBasedController _leftCtrl;
+    private ActionBasedController _rightCtrl;
+
+    private void Awake()
+    {
+        _leftCtrl = GameObject.Find("Left Controller").GetComponent<ActionBasedController>();
+        _rightCtrl = GameObject.Find("Right Controller").GetComponent<ActionBasedController>();
+    }
 
     private void Start()
     {
