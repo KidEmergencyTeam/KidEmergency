@@ -39,7 +39,6 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 상수 선언
     private const string LEFT_SELECT_ACTION = "XRI LeftHand Interaction/Select";
     private const string RIGHT_SELECT_ACTION = "XRI RightHand Interaction/Select";
-    private const float BUTTON_PRESS_DURATION = 0.1f;
 
     private void Awake()
     {
@@ -123,14 +122,16 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // IPointerEnterHandler 구현: 레이가 버튼 영역에 있을때 호출
+    // 스크립트에서 IPointerEnterHandler를 추가했을 경우,
+    // 레이가 버튼 위에 있을 때 OnPointerEnter 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
     }
 
-    // IPointerExitHandler 구현: 레이가 버튼 영역에서 벗어났을 때 호출
+    // 스크립트에서 IPointerExitHandler를 추가했을 경우,
+    // 레이가 버튼 위에 없을 때 OnPointerExit 호출
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovered = false;
@@ -154,14 +155,20 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 이벤트 처리 및 버튼 눌림 효과
     private IEnumerator TriggerButtonAnimationAndClick()
     {
+        // EventSystem.current를 통해 마우스/터치 이벤트를 전달받으므로,
+        // EventSystem.current가 null일 경우에는 이벤트 처리가 불가능하여 코루틴을 종료
         if (EventSystem.current == null)
         {
             Debug.LogError("[TestButton2] EventSystem.current가 null입니다.");
             yield break;
         }
 
+        // 현재 활성화된 EventSystem.current을 사용하여 새로운 PointerEventData 객체를 생성 -> 눌림 효과에서만 사용
+        // 이 객체는 입력 이벤트(예: 포인터 클릭, 드래그 등)에 대한 정보를 담는다.
         PointerEventData pointerData = new PointerEventData(EventSystem.current)
         {
+            // PointerEventData 스크립트 pointerPress 속성에 해당 버튼을 할당
+            // 이를 통해 어느 버튼을 눌렀는지 특정 가능
             pointerPress = button.gameObject
         };
 
