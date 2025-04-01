@@ -1,6 +1,5 @@
 using EPOOutline;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
