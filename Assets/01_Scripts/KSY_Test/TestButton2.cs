@@ -141,14 +141,30 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
-        // 레이가 버튼 영역에 진입한 상태라면 바로 버튼 액션을 실행합니다.
-        if (isHovered)
+        string leftOrRight = "";
+
+        // context.action을 통해 어느쪽에서 호출되었는지 구분
+        if (context.action == leftSelectAction)
         {
-            StartCoroutine(TriggerButtonAnimationAndClick());
+            leftOrRight = "왼쪽";
+        }
+        else if (context.action == rightSelectAction)
+        {
+            leftOrRight = "오른쪽";
         }
         else
         {
-            Debug.Log($"[TestButton2] Select 입력은 감지되었으나, {buttonType} 버튼 위에 레이가 없음");
+            leftOrRight = "알 수 없는";
+        }
+
+        if (isHovered)
+        {
+            StartCoroutine(TriggerButtonAnimationAndClick());
+            Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");
+        }
+        else
+        {
+            Debug.Log($"[TestButton2] {leftOrRight} Select 입력은 감지되었으나, 버튼 위에 레이가 없음");
         }
     }
 
