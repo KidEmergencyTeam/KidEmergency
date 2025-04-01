@@ -137,19 +137,12 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
     }
 
-    // 1.그립 버튼 입력 시 ProcessSelectPerformed 호출 
+    // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
-        ProcessSelectPerformed();
-    }
-
-    // 2.버튼에 레이가 진입한 상태일 경우 TriggerButtonAnimationAndClick 호출
-    private void ProcessSelectPerformed()
-    {
-        // 레이가 진입 상태라면 
+        // 레이가 버튼 영역에 진입한 상태라면 바로 버튼 액션을 실행합니다.
         if (isHovered)
         {
-            // 코루틴 실행
             StartCoroutine(TriggerButtonAnimationAndClick());
         }
         else
@@ -158,7 +151,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 버튼 눌림 효과 및 이벤트 처리
+    // 버튼 클릭 이벤트 처리 및 버튼 눌림 효과
     private IEnumerator TriggerButtonAnimationAndClick()
     {
         if (EventSystem.current == null)
