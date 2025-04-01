@@ -1,7 +1,12 @@
+using UnityEngine;
+
 public class FEDialogState : FEState
 {
 	public override void EnterState(FEScene scene)
 	{
+		scene.currentDialogData = scene.dialogueData[scene.currentDialogIndex];
+		scene.currentDialog = scene.currentDialogData.dialogs;
+		Debug.Log($"currentDialog: {scene.currentDialog}");
 		JSWDialogManager.Instance.DialogStart();
 	}
 
@@ -16,6 +21,5 @@ public class FEDialogState : FEState
 	public override void ExitState(FEScene scene)
 	{
 		scene.currentDialogIndex++;
-		scene.currentDialog = scene.dialogueData[scene.currentDialogIndex].dialogs;
 	}
 }
