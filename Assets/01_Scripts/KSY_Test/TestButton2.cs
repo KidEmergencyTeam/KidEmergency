@@ -152,10 +152,6 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             leftOrRight = "오른쪽";
         }
-        else
-        {
-            leftOrRight = "알 수 없는";
-        }
 
         if (isHovered)
         {
