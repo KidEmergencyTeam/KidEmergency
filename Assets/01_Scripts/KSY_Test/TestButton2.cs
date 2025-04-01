@@ -152,7 +152,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    // 버튼 클릭 이벤트 처리 및 버튼 눌림 효과
+    // 버튼 눌림 효과 및 버튼 클릭 이벤트 실행
     private IEnumerator TriggerButtonAnimationAndClick()
     {
         // EventSystem.current를 통해 마우스/터치 이벤트를 전달받으므로,
@@ -179,14 +179,14 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 그립 버튼을 떼면 버튼 눌림 효과 종료
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
-        // 버튼 이벤트 실행
+        // 버튼 클릭 이벤트 실행
         button.onClick.Invoke();
 
         // JDH 전용
         isClick = true;
     }
 
-    // 버튼 클릭 이벤트 처리
+    // 버튼 클릭 이벤트 
     private void OnButtonClicked()
     {
         if (buttonClickActions != null && buttonClickActions.TryGetValue(buttonType, out System.Action action))
