@@ -9,15 +9,10 @@ public class Bag : Grabbable
 {
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
+    [SerializeField] private Transform _handObject;
     [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
     
-    private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     private string _sceneName;
-
-    private void Awake()
-    {
-        _leftController = GameObject.Find("Left Controller").GetComponent<ActionBasedController>();
-    }
 
     protected override void Start()
     {
@@ -45,6 +40,13 @@ public class Bag : Grabbable
     
     private void Update()
     {
+        if (currentGrabber.currentGrabbedObject == this)
+        {
+            this.transform.SetParent(_handObject);
+            this.transform.localPosition = new Vector3(0.0005f, 0.0008f, -0.0008f);
+            this.transform.localRotation = Quaternion.Euler(-90, -90, -90);
+            this.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
+        }
         _sceneName = SceneManager.GetActiveScene().name;
         if (_sceneName == "Eq_School_4")
         {
@@ -83,7 +85,7 @@ public class Bag : Grabbable
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.localPosition) < 0.2f)
+        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.localPosition) < 0.1f)
         {
             return true;
         }
