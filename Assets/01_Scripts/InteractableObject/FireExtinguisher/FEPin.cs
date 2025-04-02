@@ -4,6 +4,7 @@ public class FEPin : Grabbable
 {
 	public float destroyDistance = 1f;
 	public float originalXPosition;
+	public GameObject pinWire;
 
 	protected override void Start()
 	{
@@ -18,18 +19,20 @@ public class FEPin : Grabbable
 			highlight.SetActive(true);
 			if (_isTrigger)
 			{
-				_highlightMaterial.color = new Color(0, 255, 0, 150);
+				_highlightMaterial.color = new Color(0, 1, 0, 0.7f);
 			}
 			else
 			{
-				_highlightMaterial.color = new Color(255, 255, 0, _currentAlpha);
+				_highlightMaterial.color = new Color(1, 1, 0, _currentAlpha);
 				if (_alphaUp)
 				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 150, Time.deltaTime * 0.5f);
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0.7f, Time.deltaTime * 0.5f);
+					if (_currentAlpha >= 0.69f) _alphaUp = false;
 				}
 				else
 				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0, Time.deltaTime * 0.5f);
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0f, Time.deltaTime * 0.5f);
+					if (_currentAlpha <= 0.01f) _alphaUp = true;
 				}
 			}
 		}
@@ -46,6 +49,7 @@ public class FEPin : Grabbable
 				if (realMovingObject.transform.localPosition.y >= originalXPosition + destroyDistance)
 				{
 					FEScene.Instance.ChangeState(FEStateType.FEDialog);
+					Destroy(pinWire);
 				}
 			}
 		}
