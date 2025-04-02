@@ -20,7 +20,10 @@ public class Grabbable : MonoBehaviour
 	[HideInInspector] public Rigidbody rb;
 	public Grabber currentGrabber;
 
-	public GameObject highlight; //깜빡이는 오브젝트
+	//그랩 가능한 오브젝트 Ctrl+D 하고 메쉬 렌더러와 메쉬 필터를 제외한 컴포넌트 제거
+	//스케일은 1.01
+	////머티리얼은 02_Textures > Materials에 있는 GrabbableHighlight 넣어주기
+	public GameObject highlight;
 
 	protected Material _highlightMaterial;
 	protected bool _alphaUp = false;
@@ -42,9 +45,8 @@ public class Grabbable : MonoBehaviour
 		highlight.SetActive(false);
 	}
 
-	private void OnTriggerEnter(Collider other)
+	private void OnTriggerStay(Collider other)
 	{
-		print(other.name);
 		if (IsGrabbed) return;
 		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
 		if (isGrabbable && grabber.isLeft == isLeft)
@@ -75,7 +77,6 @@ public class Grabbable : MonoBehaviour
 			}
 			else
 			{
-				print("currentAlpha: " + _currentAlpha);
 				_highlightMaterial.color = new Color(1, 1, 0, _currentAlpha);
 				if (_alphaUp)
 				{
