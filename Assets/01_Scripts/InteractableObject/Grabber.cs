@@ -70,24 +70,11 @@ public class Grabber : MonoBehaviour
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.green;
-		}
 
 		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
 		    grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
-		}
-	}
-
-	private void OnTriggerExit(Collider other)
-	{
-		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.yellow;
 		}
 	}
 

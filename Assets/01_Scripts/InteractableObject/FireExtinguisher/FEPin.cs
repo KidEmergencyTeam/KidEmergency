@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class FEPin : Grabbable
 {
 	public float destroyDistance = 1f;
@@ -13,11 +15,27 @@ public class FEPin : Grabbable
 	{
 		if (isGrabbable)
 		{
-			outlinable.enabled = true;
+			highlight.SetActive(true);
+			if (_isTrigger)
+			{
+				_highlightMaterial.color = new Color(0, 255, 0, 150);
+			}
+			else
+			{
+				_highlightMaterial.color = new Color(255, 255, 0, _currentAlpha);
+				if (_alphaUp)
+				{
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 150, Time.deltaTime * 0.5f);
+				}
+				else
+				{
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0, Time.deltaTime * 0.5f);
+				}
+			}
 		}
 		else
 		{
-			outlinable.enabled = false;
+			highlight.SetActive(false);
 
 			if (!IsGrabbed) return;
 

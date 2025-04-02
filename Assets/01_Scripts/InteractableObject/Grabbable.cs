@@ -1,8 +1,7 @@
-using EPOOutline;
 using UnityEngine;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
-[RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Grabbable : MonoBehaviour
 {
 	public const int ExecutionOrder = 100;
@@ -20,7 +19,13 @@ public class Grabbable : MonoBehaviour
 
 	[HideInInspector] public Rigidbody rb;
 	public Grabber currentGrabber;
-	[HideInInspector] public Outlinable outlinable;
+
+	public GameObject highlight; //깜빡이는 오브젝트
+
+	protected Material _highlightMaterial;
+	protected bool _alphaUp = false;
+	protected float _currentAlpha;
+	protected bool _isTrigger = false;
 
 	public bool IsGrabbed => currentGrabber;
 
@@ -32,19 +37,61 @@ public class Grabbable : MonoBehaviour
 		}
 
 		rb = GetComponent<Rigidbody>();
-		outlinable = GetComponent<Outlinable>();
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
+		_highlightMaterial = highlight.GetComponent<Renderer>().material;
+		highlight.SetActive(false);
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		print(other.name);
+		if (IsGrabbed) return;
+		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
+		if (isGrabbable && grabber.isLeft == isLeft)
+		{
+			_isTrigger = true;
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		print(other.name);
+		if (IsGrabbed) return;
+		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
+		if (isGrabbable && grabber.isLeft == isLeft)
+		{
+			_isTrigger = false;
+		}
 	}
 
 	protected virtual void Update()
 	{
 		if (isGrabbable)
 		{
-			outlinable.enabled = true;
+			highlight.SetActive(true);
+			if (_isTrigger)
+			{
+				_highlightMaterial.color = new Color(0, 1, 0, 0.7f);
+			}
+			else
+			{
+				print("currentAlpha: " + _currentAlpha);
+				_highlightMaterial.color = new Color(1, 1, 0, _currentAlpha);
+				if (_alphaUp)
+				{
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0.7f, Time.deltaTime * 0.5f);
+					if (_currentAlpha >= 0.69f) _alphaUp = false;
+				}
+				else
+				{
+					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0f, Time.deltaTime * 0.5f);
+					if (_currentAlpha <= 0.01f) _alphaUp = true;
+				}
+			}
 		}
 		else
 		{
-			outlinable.enabled = false;
+			highlight.SetActive(false);
 
 			if (!IsGrabbed) return;
 
