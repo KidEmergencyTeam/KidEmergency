@@ -10,8 +10,8 @@ public class Bag : Grabbable
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
     [SerializeField] private Transform _handObject;
-    [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
-    
+    [SerializeField] private GameObject _headObject; // 메인 카메라
+
     private string _sceneName;
 
     protected override void Start()
@@ -25,11 +25,13 @@ public class Bag : Grabbable
         else if (SceneManager.GetActiveScene().name == "Eq_School_2")
         {
             currentGrabber.currentGrabbedObject = this;
+            BagInteraction();
         }
         
         else if (SceneManager.GetActiveScene().name == "Eq_School_3")
         {
             currentGrabber.currentGrabbedObject = this;
+            BagInteraction();
         }
     }
 
@@ -42,16 +44,11 @@ public class Bag : Grabbable
     {
         if (currentGrabber.currentGrabbedObject == this)
         {
+            isGrabbable = false;
             this.transform.SetParent(_handObject);
             this.transform.localPosition = new Vector3(0.0005f, 0.0008f, -0.0008f);
             this.transform.localRotation = Quaternion.Euler(-90, -90, -90);
             this.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
-        }
-        _sceneName = SceneManager.GetActiveScene().name;
-        if (_sceneName == "Eq_School_4")
-        {
-            UIManager.Instance.CloseWarningUI();
-            Destroy(this.gameObject);
         }
     }
 
@@ -85,11 +82,11 @@ public class Bag : Grabbable
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.localPosition) < 0.1f)
+        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.1f)
         {
             return true;
         }
 
-        else return false;
+        return false;
     }
 }
