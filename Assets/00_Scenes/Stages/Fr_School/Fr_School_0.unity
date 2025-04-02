@@ -19500,7 +19500,7 @@ GameObject:
   - component: {fileID: 1947265320}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: PanelCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28504,8 +28504,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1698719100019064512}
   - component: {fileID: 6287057018954453117}
-  - component: {fileID: 7222200018461236972}
   - component: {fileID: 3495367187667185878}
+  - component: {fileID: 6287057018954453118}
   m_Layer: 0
   m_Name: VR + Player
   m_TagString: Player
@@ -28860,6 +28860,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c784f1851505d884e9d7ba346cf41094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6287057018954453118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628759743016822263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0cb0af9ef6a4c4f8d7bb9c57989cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  _leftRay: {fileID: 8640351981256487903}
+  _rightRay: {fileID: 961031066192816262}
+  _leftLine: {fileID: 2117205569279959116}
+  _rightLine: {fileID: 5270847304373601475}
+  _leftLineRenderer: {fileID: 7331093375296866743}
+  _rightLineRenderer: {fileID: 5480371415331529092}
+  leftGrabber: {fileID: 7655860267455804103}
 --- !u!114 &6342479551893188969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29796,24 +29816,6 @@ MonoBehaviour:
   m_EnableScaling: 0
   m_MinimumScale: 0.2
   m_MaximumScale: 5
---- !u!114 &7222200018461236972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5628759743016822263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a9171f64ae3f254e8b303d9d9ab4269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _leftController: {fileID: 8766621137844196115}
-  _rightController: {fileID: 7071872226078665218}
-  _leftRay: {fileID: 8640351981256487903}
-  _rightRay: {fileID: 961031066192816262}
-  _leftLine: {fileID: 2117205569279959116}
-  _rightLine: {fileID: 5270847304373601475}
 --- !u!4 &7257568044915729310
 Transform:
   m_ObjectHideFlags: 0
