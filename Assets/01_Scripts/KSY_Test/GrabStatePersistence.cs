@@ -58,5 +58,6 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        grabbableComponent.currentGrabber.OnRelease();
     }
 }
