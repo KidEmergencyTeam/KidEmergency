@@ -127,7 +127,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 레이 들어옴");
     }
 
     // 스크립트에서 IPointerExitHandler를 추가했을 경우,
@@ -135,7 +135,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovered = false;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 레이 나감");
     }
 
     // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
