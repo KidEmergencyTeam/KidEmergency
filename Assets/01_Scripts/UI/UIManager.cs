@@ -121,6 +121,7 @@ public class UIManager : SingletonManager<UIManager>
         else if (SceneManager.GetActiveScene().name == "Eq_School_4")
         {
             DialogPosReset(4);
+            CloseWarningUI();
         }
     }
 
