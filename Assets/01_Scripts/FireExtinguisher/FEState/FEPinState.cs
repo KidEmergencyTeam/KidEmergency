@@ -2,16 +2,17 @@ public class FEPinState : FEState
 {
 	public override void EnterState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		scene.pin.isGrabbable = true;
 	}
 
 	public override void ExecuteState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
 	}
 
 	public override void ExitState(FEScene scene)
 	{
-		throw new System.NotImplementedException();
+		scene.body.currentGrabber.OnRelease();
+		scene.pin.currentGrabber.OnRelease();
+		scene.pin.gameObject.SetActive(false);
 	}
 }

@@ -1,16 +1,17 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ChangeViewAction : MonoBehaviour, IActionEffect
 {
-    public GameObject camOffset;
+    public GameObject player;
     private bool _isComplete = false;
     private Vector3 _originPos;
     public bool IsActionComplete => _isComplete;
 
     private void Start()
     {
-        _originPos = camOffset.transform.localPosition;
+        _originPos = player.transform.localPosition;
     }
 
     public void StartAction()
@@ -24,20 +25,20 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     {
         yield return StartCoroutine(FadeInOut.Instance.FadeOut());
 
-        while (camOffset.transform.localPosition != newPos)
+        while (player.transform.localPosition != newPos)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
             PlayerRig playerState = FindObjectOfType<PlayerRig>();
             if (newPos == _originPos)
             {
-                camOffset.transform.localPosition = newPos;
+                player.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("None");
                 playerState.currentState = PlayerRig.State.None;
             }
             
             else if (newPos != _originPos)
             {
-                camOffset.transform.localPosition = newPos;
+                player.transform.localPosition = newPos;
                 npcCtrl.SetNPCState("DownDesk");
                 playerState.currentState = PlayerRig.State.Down;
             }

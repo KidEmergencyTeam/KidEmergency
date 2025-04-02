@@ -1,6 +1,5 @@
 using EPOOutline;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
 [RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
@@ -20,7 +19,7 @@ public class Grabbable : MonoBehaviour
 	public bool isMoving = true; //손을 따라 움직이는 Object면 true, Object에 손이 박히면 false
 
 	[HideInInspector] public Rigidbody rb;
-	[HideInInspector] public Grabber currentGrabber;
+	public Grabber currentGrabber;
 	[HideInInspector] public Outlinable outlinable;
 
 	public bool IsGrabbed => currentGrabber;

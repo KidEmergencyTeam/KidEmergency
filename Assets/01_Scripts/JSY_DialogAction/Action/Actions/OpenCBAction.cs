@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class OpenCBAction : MonoBehaviour, IActionEffect
 {
-    [SerializeField] private EqHomeTrigger box;
+    [SerializeField] private GameObject _circuitBox;
+
+    private Vector3 _openPos = new Vector3(0, -0.02f, 0.15f);
+    private Vector3 _openRot = new Vector3(-90, 0, 0);
     private bool _isComplete = false;
+    private bool _isTriggered = false;
+    
     public bool IsActionComplete => _isComplete;
 
     public void StartAction()
@@ -17,14 +21,21 @@ public class OpenCBAction : MonoBehaviour, IActionEffect
     {
         while (!_isComplete)
         {
-            box.Corou();
-            if (box.isOpen)
+            if (_isTriggered)
             {
+                _circuitBox.transform.position = _openPos;
+                _circuitBox.transform.rotation = Quaternion.Euler(_openRot);
                 _isComplete = true;
             }
-
             yield return null;
         }
     }
-    
+
+    public void TriggerBox()
+    {
+        if (!_isComplete)
+        {
+            _isTriggered = true;
+        }
+    }
 }

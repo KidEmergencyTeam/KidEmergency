@@ -6,38 +6,30 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class CloseGVAction : MonoBehaviour, IActionEffect
 {
-    public GameObject target; // 가스 밸브
-
-    private XRGrabInteractable _grab;
-    private float _startAngle;
-    private float _currentAngle;
-    private float _limitAngle = 90f;
-
-    [SerializeField] private bool _isComplete = false;
+    [SerializeField] private GameObject _target; // 가스 밸브
+    
+    private float _limitRot = 90f;
+    private XRGrabInteractable _grabInteractable;
+    private Vector3 _originPos;
+    private bool _isComplete = false;
+    
     public bool IsActionComplete => _isComplete;
 
     private void Awake()
     {
-        _grab = GetComponentInChildren<XRGrabInteractable>();
+        _grabInteractable = _target.GetComponent<XRGrabInteractable>();
+        _originPos = _target.transform.position;
     }
 
     private void Start()
     {
-        _startAngle = target.transform.rotation.z;
-        StartCoroutine(TryCloseGV());
-    }
-
-    private void Update()
-    {
-        print(_isComplete);
-        if (target != null && _isComplete)
-        {
-            target.transform.rotation = Quaternion.Euler(0,0,_limitAngle);
-        }
+        _grabInteractable.enabled = false;
     }
 
     public void StartAction()
     {
+        _isComplete = false;
+        _grabInteractable.enabled = true;
         StartCoroutine(TryCloseGV());
     }
 
@@ -45,21 +37,19 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     {
         while (!_isComplete)
         {
-            print("코루틴 시작");
-            _grab.enabled = true;
-            _currentAngle = target.transform.rotation.z;
-            float clampedAngle = Mathf.Clamp(_currentAngle, _startAngle, _startAngle + 90);
-
-            target.transform.rotation = Quaternion.Euler(0, 0, clampedAngle);
-
-            if (_currentAngle >= _limitAngle)
+            _target.transform.position = _originPos;
+            
+            float currentZRotation = _target.transform.rotation.eulerAngles.z;
+            
+            if (currentZRotation >= _limitRot)
             {
                 _isComplete = true;
-                _grab.enabled = false;
+                _grabInteractable.enabled = false;
+                
+                _target.transform.rotation = Quaternion.Euler(0, 0, _limitRot);
             }
             
             yield return null;
         }
     }
-
 }
