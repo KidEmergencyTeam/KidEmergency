@@ -2379,6 +2379,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3915785336585277498, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_SnapTurn
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6036443352724462154, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+      propertyPath: m_Move
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8596779616523189794, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_Name
       value: VR + Player
@@ -2484,7 +2492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7516308db9e2c534ca4652cde1e6ac3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isLeft: 1
+  isLeft: 0
   detectRadius: 0.0008
   setObjectOffset: 0
   rayInteractor: {fileID: 98566708}
@@ -5299,8 +5307,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrabbable: 0
-  grabPosOffset: {x: -0.03, y: 0, z: 0.12}
-  grabRotOffset: {x: 0, y: 0, z: 160}
+  grabPosOffset: {x: 0.01, y: -0.01, z: 0.02}
+  grabRotOffset: {x: 0, y: 0, z: 177}
   isSameMoveAndGrabbable: 0
   realMovingObject: {fileID: 1433492495}
   isLeft: 0
@@ -5811,7 +5819,7 @@ Transform:
   m_GameObject: {fileID: 1433492495}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.006799698, y: 1.145, z: 0}
+  m_LocalPosition: {x: -0.0891, y: 1.2294, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6705,7 +6713,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642679571}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -28.609999, y: 0, z: -4.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19878,8 +19886,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrabbable: 0
-  grabPosOffset: {x: -0.05, y: 0, z: 0}
-  grabRotOffset: {x: 180, y: 0, z: -81}
+  grabPosOffset: {x: -0.12, y: 0.47, z: 0.04}
+  grabRotOffset: {x: 148.8, y: -19.68, z: -81}
   isSameMoveAndGrabbable: 1
   realMovingObject: {fileID: 0}
   isLeft: 1
@@ -20047,7 +20055,7 @@ Transform:
   m_GameObject: {fileID: 3824467108772252811}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.0068, y: -0.545, z: 0}
+  m_LocalPosition: {x: 0.089099616, y: -0.6294001, z: 0}
   m_LocalScale: {x: 0.14999996, y: 0.15, z: 0.14999996}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -25432,6 +25440,7 @@ MonoBehaviour:
   highlight: {fileID: 1614947038}
   destroyDistance: 1
   originalXPosition: 0
+  pinWire: {fileID: 392761570595808106}
 --- !u!137 &9155120995871943964
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
