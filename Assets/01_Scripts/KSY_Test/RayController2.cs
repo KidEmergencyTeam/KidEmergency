@@ -171,6 +171,20 @@ public class RayController2 : MonoBehaviour
         Debug.Log("[RayController2] 우측 레이 활성화");
     }
 
+    // 레이 모두 비활성화 -> 페인드 인 아웃 상황에서 레이 끄는 용도
+    public void DisableBothRays()
+    {
+        _leftRay.enabled = false;
+        _leftLine.enabled = false;
+        _leftLineRenderer.enabled = false;
+
+        _rightRay.enabled = false;
+        _rightLine.enabled = false;
+        _rightLineRenderer.enabled = false;
+
+        Debug.Log("[RayController2] 좌측 및 우측 레이 비활성화");
+    }
+
     // 선택지 처리 후 InputAction을 재활성화
     public void ReactivateInputActions()
     {
