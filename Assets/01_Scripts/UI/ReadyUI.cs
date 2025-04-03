@@ -50,7 +50,7 @@ public class ReadyUI : MonoBehaviour
         {
             _isLoading = true;
             yield return new WaitForSeconds(2f);
-            yield return StartCoroutine(OVRScreenFade.instance.Fade(0, 1));
+            yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
             
             AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
         

@@ -4,7 +4,7 @@ using System.Collections;
 [HelpURL("https://developer.oculus.com/reference/unity/latest/class_o_v_r_screen_fade")]
 public class OVRScreenFade : MonoBehaviour
 {
-    public static OVRScreenFade instance { get; private set; }
+    public static OVRScreenFade Instance { get; private set; }
 
     [Tooltip("Fade duration")]
     public float fadeTime = 1.5f;
@@ -87,15 +87,10 @@ public class OVRScreenFade : MonoBehaviour
 
         if (fadeOnStart)
         {
-            FadeIn();
+            StartCoroutine(Fade(1.0f, 0.0f));
         }
 
-        instance = this;
-    }
-
-    public void FadeIn()
-    {
-        StartCoroutine(Fade(1.0f, 0.0f));
+        Instance = this;
     }
     
     void OnEnable()

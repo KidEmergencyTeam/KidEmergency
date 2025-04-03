@@ -51,7 +51,7 @@ public class TitleUI : MonoBehaviour
         RayController rayController = FindObjectOfType<RayController>();
         rayController.leftLine.gameObject.SetActive(false);
         rayController.rightLine.gameObject.SetActive(false);
-        yield return StartCoroutine(OVRScreenFade.instance.Fade(0, 1));
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
         if (!_isLoading)
         {
