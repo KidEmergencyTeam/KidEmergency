@@ -110,6 +110,16 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             { 38, Step38 }
         };
 
+        // 일정 시간 이후 시나리오 실행
+        StartCoroutine(DelayedScenarioCall(2f));
+    }
+
+    // 일정 시간 이후 시나리오 실행
+    private IEnumerator DelayedScenarioCall(float delay)
+    {
+        // delay 만큼 대기
+        yield return new WaitForSeconds(delay);
+
         // 시나리오 실행
         StartCoroutine(RunScenario());
     }
@@ -242,6 +252,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
+        yield return new WaitForSeconds(2f);
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -251,6 +262,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
+        yield return new WaitForSeconds(2f);
         yield return PlayAndWait(10);
     }
     IEnumerator Step17() { yield return PlayAndWait(11); }
@@ -368,6 +380,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
+        yield return new WaitForSeconds(2f);
         yield return PlayAndWait(19);
     }
 
@@ -413,6 +426,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 씬 이동 이후 -> 손수건 제거
         GrabStatePersistence.Instance.disableSingleton = true;
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
+        yield return new WaitForSeconds(2f);
         yield return PlayAndWait(24);
     }
     IEnumerator Step37() { yield return PlayAndWait(25); }
