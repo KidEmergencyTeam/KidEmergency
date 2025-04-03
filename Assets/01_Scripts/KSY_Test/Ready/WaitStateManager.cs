@@ -90,11 +90,11 @@ public class WaitStateManager : MonoBehaviour
     // 비동기 방식으로 씬 전환
     IEnumerator LoadSceneWithFadeOutAsync()
     {
-        // FadeInOut 싱글톤 인스턴스가 null 상태라면
+        // OVRScreenFade 싱글톤 인스턴스가 null 상태라면
         // 페이드 인/아웃 효과 없이 바로 씬 전환
-        if (FadeInOut.Instance == null)
+        if (OVRScreenFade.Instance == null)
         {
-            Debug.LogError("FadeInOut 싱글톤 인스턴스가 연결되어 있지 않습니다.");
+            Debug.LogError("OVRScreenFade 싱글톤 인스턴스가 연결되어 있지 않습니다.");
 
             // 씬 전환 중에도 게임이 멈추지 않고 계속 실행
             // 추후에 로딩 중 "로딩중"이라는 문구나 로딩바 같은 UI 요소를 표시 가능
@@ -109,9 +109,9 @@ public class WaitStateManager : MonoBehaviour
             yield break;
         }
 
-        // FadeInOut 싱글톤 인스턴스가 정상적으로 존재하는 경우
+        // OVRScreenFade 싱글톤 인스턴스가 정상적으로 존재하는 경우
         // 1. 페이드 아웃 효과 실행
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
         // 2. 씬 전환 
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);

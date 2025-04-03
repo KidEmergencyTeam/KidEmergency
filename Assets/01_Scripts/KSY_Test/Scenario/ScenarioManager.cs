@@ -151,7 +151,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return new WaitUntil(() => sceneLoaded);
 
         // 페이드 인 효과 실행 및 완료 대기
-        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
 
         // 시나리오 실행 시작
         yield return StartCoroutine(RunScenario());
