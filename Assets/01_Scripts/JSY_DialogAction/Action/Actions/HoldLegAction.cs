@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class HoldLegAction : MonoBehaviour, IActionEffect
 {
@@ -32,7 +29,6 @@ public class HoldLegAction : MonoBehaviour, IActionEffect
             {
                 _isComplete = true;
                 _leg.RemoveOutline();
-                _leg.enabled = false;
             }
 
             yield return null;
