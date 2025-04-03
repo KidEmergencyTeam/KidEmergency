@@ -35,7 +35,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 상태를 관리 -> JDH 전용
     public bool isClick = false;
 
-    // 그립 상태를 RayType으로 변환 과정에서 문제가 발생했을 때 버튼 실행을 막기 위한 플래그
+    // 현재 입력된 그립 상태를 RayType으로 변환하는 과정에서 문제가 발생했을 때 버튼 실행을 막기 위한 플래그
     private bool isValidGrip;  
 
     // 딕셔너리를 통한 버튼 타입에 따른
@@ -204,7 +204,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else
         {
-            Debug.Log($"[TestButton2] {leftOrRight} Select 입력은 감지되었으나, 버튼 위에 레이가 없음");
+            Debug.Log("[TestButton2] 버튼 실행 조건 불충족");
             isValidGrip = false;
         }
     }
