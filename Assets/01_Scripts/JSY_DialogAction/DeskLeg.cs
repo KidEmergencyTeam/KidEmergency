@@ -13,6 +13,7 @@ public class DeskLeg : MonoBehaviour
     [SerializeField] private GameObject _leftHand;
     [SerializeField] private GameObject _rightHand;
     
+    private HandAnimation _handAnimation;
     private ActionBasedController _leftController;
     private ActionBasedController _rightController;
     private float _durationTime = 0f; // 지속 시간
@@ -34,6 +35,7 @@ public class DeskLeg : MonoBehaviour
 
     private void Start()
     {
+        _handAnimation = FindObjectOfType<HandAnimation>();
         this.enabled = false;
     }
 
@@ -53,6 +55,8 @@ public class DeskLeg : MonoBehaviour
         //                           Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
         if (isInteractable)
         { 
+            _handAnimation.animator.SetFloat("Left Trigger", 1);
+            _handAnimation.animator.SetFloat("Right Trigger", 1);
             UIManager.Instance.CloseWarningUI();
             
             _durationTime += Time.deltaTime;
