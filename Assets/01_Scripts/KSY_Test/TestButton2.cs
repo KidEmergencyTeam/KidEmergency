@@ -153,9 +153,11 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
+        // 디버그 출력을 위한 문자열 변수 선언
         string leftOrRight = "";
 
-        // context.action을 통해 어느쪽에서 호출되었는지 구분
+        // context.action을 사용하여 어느 쪽에서 호출되었는지 구분하고,
+        // 해당 값을 문자열 변수에 대입한 후, 그에 따라 디버그 메시지를 출력
         if (context.action == leftSelectAction)
         {
             leftOrRight = "왼쪽";
@@ -165,7 +167,26 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             leftOrRight = "오른쪽";
         }
 
-        if (isHovered)
+        // 클래스 밖에서 선언된 개념은 별도로 특정 스크립트를 찾지 않아도 참조 가능
+
+        // leftOrRight 문자열("왼쪽", "오른쪽")을 RayType으로 변환
+        RayType gripType;
+        if (leftOrRight == "왼쪽")
+        {
+            gripType = RayType.Left;
+        }
+        else if (leftOrRight == "오른쪽")
+        {
+            gripType = RayType.Right;
+        }
+        else
+        {
+            Debug.LogError("유효하지 않은 그립 상태");
+            return; 
+        }
+
+        // 버튼 위에 레이가 있고, 현재 활성화된 레이와 그립 상태가 일치할 때만 실행
+        if (isHovered && rayController.ActiveRay == gripType)
         {
             StartCoroutine(TriggerButtonAnimationAndClick());
             Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");
