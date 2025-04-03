@@ -9,7 +9,6 @@ public class Grabber : MonoBehaviour
 {
 	public bool isLeft = true;
 	public float detectRadius = 0.05f;
-	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
 	public XRRayInteractor rayInteractor;
 
 	// ture일 경우 레이 스위치 불가 -> 잡은 상태
@@ -22,9 +21,9 @@ public class Grabber : MonoBehaviour
 	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
+	private SphereCollider _detectCollider;
 	private HandAnimation _handAnimation;
 	private TargetFollower _targetFollower;
-	private SphereCollider _detectCollider;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
 	private List<Vector3> _originalHandTargetPosOffset = new List<Vector3>();
 	private List<Vector3> _originalHandTargetRotOffset = new List<Vector3>();
@@ -37,6 +36,7 @@ public class Grabber : MonoBehaviour
 		_detectCollider.isTrigger = true;
 		_detectCollider.radius = detectRadius;
 
+
 		_handAnimation = FindObjectOfType<HandAnimation>();
 		if (isLeft) controllerButtonClick = _handAnimation.leftGrip;
 		else controllerButtonClick = _handAnimation.rightGrip;
@@ -48,27 +48,6 @@ public class Grabber : MonoBehaviour
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[3].target);
 		_originalHandTargetPosOffset.Add(_targetFollower.followTargets[3].posOffset);
 		_originalHandTargetRotOffset.Add(_targetFollower.followTargets[3].rotOffset);
-	}
-
-	private void Update()
-	{
-		if (!setObjectOffset) return;
-		if (!Grabbed) return;
-		if (currentGrabbedObject.isMoving) return;
-		if (isLeft)
-		{
-			_targetFollower.followTargets[2].posOffset =
-				currentGrabbedObject.grabPosOffset;
-			_targetFollower.followTargets[2].rotOffset =
-				currentGrabbedObject.grabRotOffset;
-		}
-		else
-		{
-			_targetFollower.followTargets[3].posOffset =
-				currentGrabbedObject.grabPosOffset;
-			_targetFollower.followTargets[3].rotOffset =
-				currentGrabbedObject.grabRotOffset;
-		}
 	}
 
 	private void OnTriggerStay(Collider other)

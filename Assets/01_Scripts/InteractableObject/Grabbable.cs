@@ -20,9 +20,10 @@ public class Grabbable : MonoBehaviour
 	[HideInInspector] public Rigidbody rb;
 	public Grabber currentGrabber;
 
-	//그랩 가능한 오브젝트 Ctrl+D 하고 메쉬 렌더러와 메쉬 필터를 제외한 컴포넌트 제거
+	//그랩 가능한 오브젝트 Ctrl+D하고 메쉬 렌더러와 메쉬 필터를 제외한 컴포넌트 제거
 	//스케일은 1.01
-	////머티리얼은 02_Textures > Materials에 있는 GrabbableHighlight 넣어주기
+	//머티리얼은 02_Textures > Materials에 있는 GrabbableHighlight 넣어주기
+	//Highlighter 컴포넌트 추가
 	public GameObject highlight;
 
 	protected Highlighter highlighter;
