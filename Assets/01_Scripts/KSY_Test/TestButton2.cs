@@ -32,6 +32,22 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 상태를 관리 -> JDH 전용
     public bool isClick = false;
 
+    // 레이 전환 여부
+    public bool inputDisabled = false;
+
+    // 레이 전환이 이루어지면 true로 변경되어, 일정 시간 동안 버튼 실행을 막음
+    // 목적: 버튼 위에 레이가 있을 때 레이 전환이 이루어지면 버튼 실행을 막기 위함
+    public void DisableInput()
+    {
+        inputDisabled = true;
+    }
+
+    // 일정 시간 후 false로 변경되어, 조건에 따라 버튼 실행 가능
+    public void EnableInput()
+    {
+        inputDisabled = false;
+    }
+
     // 딕셔너리를 통한 버튼 타입에 따른
     // 버튼 클릭 이벤트 처리
     private Dictionary<ButtonType, System.Action> buttonClickActions;
@@ -153,7 +169,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             leftOrRight = "오른쪽";
         }
 
-        if (isHovered)
+        if (isHovered && !inputDisabled)
         {
             StartCoroutine(TriggerButtonAnimationAndClick());
             Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");

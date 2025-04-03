@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -153,6 +154,18 @@ public class RayController2 : MonoBehaviour
         _leftLineRenderer.enabled = true;
 
         Debug.Log("[RayController2] 좌측 레이 활성화");
+
+        // 레이 전환 동안 버튼 입력을 차단
+        if (ButtonUIManager.Instance != null)
+        {
+            ButtonUIManager.Instance.DisableAllButtonInputs();
+        }
+
+        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
+
+        // 일정 시간 후 버튼 입력 재활성화
+        StartCoroutine(EnableButtonInputsAfterDelay());
+
     }
 
     // 우측 레이 활성화, 좌측 레이 비활성화
@@ -169,6 +182,37 @@ public class RayController2 : MonoBehaviour
         _rightLineRenderer.enabled = true;
 
         Debug.Log("[RayController2] 우측 레이 활성화");
+
+        // 레이 전환 동안 버튼 입력을 차단
+        if (ButtonUIManager.Instance != null)
+        {
+            ButtonUIManager.Instance.DisableAllButtonInputs();
+        }
+
+        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
+        
+        // 레이 전환 동안 버튼 입력을 차단
+        if (ButtonUIManager.Instance != null)
+        {
+            ButtonUIManager.Instance.DisableAllButtonInputs();
+        }
+
+        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
+
+        // 일정 시간 후 버튼 입력 재활성화
+        StartCoroutine(EnableButtonInputsAfterDelay());
+    }
+
+    // 버튼 입력을 일정 시간 후 재활성화
+    private IEnumerator EnableButtonInputsAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (ButtonUIManager.Instance != null)
+        {
+            ButtonUIManager.Instance.EnableAllButtonInputs();
+        }
+        Debug.Log("[RayController2] 버튼 입력 재활성화");
     }
 
     // 레이 모두 비활성화 -> 페인드 인 아웃 상황에서 레이 끄는 용도
