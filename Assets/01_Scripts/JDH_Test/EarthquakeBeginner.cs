@@ -137,7 +137,6 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
-                backpack.GetComponent<Outlinable>().enabled = true;
                 fifthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 지진 종료
