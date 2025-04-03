@@ -22,11 +22,6 @@ public class ReadyUI : MonoBehaviour
         _rightCtrl = GameObject.Find("Right Controller").GetComponent<ActionBasedController>();
     }
 
-    private void Start()
-    {
-        StartCoroutine(FadeInOut.Instance.FadeIn());
-    }
-
     private void Update()
     {
         SetPeopleReady();
@@ -55,7 +50,7 @@ public class ReadyUI : MonoBehaviour
         {
             _isLoading = true;
             yield return new WaitForSeconds(2f);
-            yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+            yield return StartCoroutine(OVRScreenFade.instance.Fade(0, 1));
             
             AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
         
