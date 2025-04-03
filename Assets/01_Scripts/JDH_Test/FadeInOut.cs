@@ -40,17 +40,6 @@ public class FadeInOut : SingletonManager<FadeInOut>
         }
     }
 
-    // 다른 스크립트에서 이미지를 할당할 수 있도록 public 메서드 추가
-    public void SetFadeImage(Image image)
-    {
-        if (fadeInoutImg == null)
-        {
-            // 이미지가 아직 할당되지 않았다면 바로 이미지 할당
-            fadeInoutImg = image;
-            Debug.Log("fadeInoutImg 할당됨");
-        }
-    }
-
     // 화면을 점점 밝게 만드는 코루틴 (페이드 인 효과)
     public IEnumerator FadeIn()
     {
