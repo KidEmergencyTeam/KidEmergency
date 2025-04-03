@@ -272,13 +272,13 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
 
         // 페이드 아웃 효과 실행
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
         // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
         playerPosition.ApplyStep14Positions();
 
         // 페이드 인 효과 실행
-        yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
 
         yield return null;
     }
@@ -483,7 +483,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
 
             // 페이드 아웃 효과 실행
-            yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+            yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
             // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
@@ -495,7 +495,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             }
 
             // 씬 로드 후 페이드 인 효과 실행
-            yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+            yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
         }
         else
         {
