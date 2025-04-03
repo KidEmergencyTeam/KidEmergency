@@ -1,7 +1,12 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
+
+public enum RayType
+{
+    Left,
+    Right
+}
 
 public class RayController2 : MonoBehaviour
 {
@@ -27,21 +32,16 @@ public class RayController2 : MonoBehaviour
     [Header("Grabber")]
     [SerializeField] private Grabber leftGrabber;
 
-    // 현재 활성화된 레이가 오른손인지 여부 (true: 오른손, false: 좌측)
-    private bool isRightActive = true;
+    // 현재 활성화된 레이 상태를 다른 스크립트에서 확인 가능
+    public RayType ActiveRay { get; private set; }
+
+    // 현재 활성화된 레이 상태 (true: 오른손, false: 좌측)
+    private bool isRightActive;
 
     private void Start()
     {
         // 초기 상태: 오른손 관련 컴포넌트만 활성화, 좌측은 비활성화
-        isRightActive = true;
-
-        _rightRay.enabled = true;
-        _rightLine.enabled = true;
-        _rightLineRenderer.enabled = true;
-
-        _leftRay.enabled = false;
-        _leftLine.enabled = false;
-        _leftLineRenderer.enabled = false;
+        SwitchRightRay();
     }
 
     private void OnEnable()
@@ -143,6 +143,8 @@ public class RayController2 : MonoBehaviour
     // 좌측 레이 활성화, 우측 레이 비활성화
     private void SwitchLeftRay()
     {
+        ActiveRay = RayType.Left;
+
         isRightActive = false;
 
         _rightRay.enabled = false;
@@ -154,23 +156,13 @@ public class RayController2 : MonoBehaviour
         _leftLineRenderer.enabled = true;
 
         Debug.Log("[RayController2] 좌측 레이 활성화");
-
-        // 레이 전환 동안 버튼 입력을 차단
-        if (ButtonUIManager.Instance != null)
-        {
-            ButtonUIManager.Instance.DisableAllButtonInputs();
-        }
-
-        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
-
-        // 일정 시간 후 버튼 입력 재활성화
-        StartCoroutine(EnableButtonInputsAfterDelay());
-
     }
 
     // 우측 레이 활성화, 좌측 레이 비활성화
     private void SwitchRightRay()
     {
+        ActiveRay = RayType.Right;
+
         isRightActive = true;
 
         _leftRay.enabled = false;
@@ -182,37 +174,6 @@ public class RayController2 : MonoBehaviour
         _rightLineRenderer.enabled = true;
 
         Debug.Log("[RayController2] 우측 레이 활성화");
-
-        // 레이 전환 동안 버튼 입력을 차단
-        if (ButtonUIManager.Instance != null)
-        {
-            ButtonUIManager.Instance.DisableAllButtonInputs();
-        }
-
-        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
-        
-        // 레이 전환 동안 버튼 입력을 차단
-        if (ButtonUIManager.Instance != null)
-        {
-            ButtonUIManager.Instance.DisableAllButtonInputs();
-        }
-
-        Debug.Log("[RayController2] 좌측 레이 활성화 및 버튼 입력 비활성화");
-
-        // 일정 시간 후 버튼 입력 재활성화
-        StartCoroutine(EnableButtonInputsAfterDelay());
-    }
-
-    // 버튼 입력을 일정 시간 후 재활성화
-    private IEnumerator EnableButtonInputsAfterDelay()
-    {
-        yield return new WaitForSeconds(1f);
-
-        if (ButtonUIManager.Instance != null)
-        {
-            ButtonUIManager.Instance.EnableAllButtonInputs();
-        }
-        Debug.Log("[RayController2] 버튼 입력 재활성화");
     }
 
     // 레이 모두 비활성화 -> 페인드 인 아웃 상황에서 레이 끄는 용도
