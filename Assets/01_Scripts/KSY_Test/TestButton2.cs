@@ -22,6 +22,9 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
+    // RayController2에 대한 참조 (인스펙터에서 할당)
+    public RayController2 rayController;
+
     // 좌측, 우측 컨트롤러의 Select 액션
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
@@ -100,11 +103,14 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Select 액션 해제
     private void OnDisable()
     {
+        // 좌측 해제
         if (leftSelectAction != null)
         {
             leftSelectAction.performed -= OnSelectActionPerformed;
             leftSelectAction.Disable();
         }
+
+        // 우측 해제
         if (rightSelectAction != null)
         {
             rightSelectAction.performed -= OnSelectActionPerformed;
@@ -126,24 +132,32 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 레이가 버튼 위에 있을 때 OnPointerEnter 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 있다.
         isHovered = true;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Enter");
+
+        // RayController2.cs -> ActiveRay를 사용하여 버튼 위에 있는 레이를 판단
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 {rayController.ActiveRay} 레이 들어옴");
     }
 
     // 스크립트에서 IPointerExitHandler를 추가했을 경우,
     // 레이가 버튼 위에 없을 때 OnPointerExit 호출
     public void OnPointerExit(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 없다.
         isHovered = false;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 - Pointer Exit");
+
+        // RayController2.cs -> ActiveRay를 사용하여 버튼 위에 있는 레이를 판단
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 {rayController.ActiveRay} 레이 나감");
     }
 
     // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
+        // 디버그 출력을 위한 문자열 변수 선언
         string leftOrRight = "";
 
-        // context.action을 통해 어느쪽에서 호출되었는지 구분
+        // context.action을 사용하여 어느 쪽에서 호출되었는지 구분하고,
+        // 해당 값을 문자열 변수에 대입한 후, 그에 따라 디버그 메시지를 출력
         if (context.action == leftSelectAction)
         {
             leftOrRight = "왼쪽";
@@ -153,7 +167,26 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             leftOrRight = "오른쪽";
         }
 
-        if (isHovered)
+        // 클래스 밖에서 선언된 개념은 별도로 특정 스크립트를 찾지 않아도 참조 가능
+
+        // leftOrRight 문자열("왼쪽", "오른쪽")을 RayType으로 변환
+        RayType gripType;
+        if (leftOrRight == "왼쪽")
+        {
+            gripType = RayType.Left;
+        }
+        else if (leftOrRight == "오른쪽")
+        {
+            gripType = RayType.Right;
+        }
+        else
+        {
+            Debug.LogError("유효하지 않은 그립 상태");
+            return; 
+        }
+
+        // 버튼 위에 레이가 있고, 현재 활성화된 레이와 그립 상태가 일치할 때만 실행
+        if (isHovered && rayController.ActiveRay == gripType)
         {
             StartCoroutine(TriggerButtonAnimationAndClick());
             Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");

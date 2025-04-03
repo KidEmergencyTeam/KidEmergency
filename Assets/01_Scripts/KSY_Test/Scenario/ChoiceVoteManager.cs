@@ -89,11 +89,11 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
         ChoiceUIPanelSceneReference sceneReference = choicePanelSceneReferences[choicePanelSceneReferenceIndex];
         int tieChoiceIndex = sceneReference.tieChoiceIndex;
 
-        // 씬 내에서 UI 패널이 배치될 캔버스 오브젝트 찾기
-        GameObject canvas = GameObject.Find("Canvas");
+        // 씬 내에서 UI 패널이 배치될 캔버스 태그로 찾기
+        GameObject canvas = GameObject.FindGameObjectWithTag("PanelCanvas");
         if (canvas == null)
         {
-            Debug.LogError("[ChoiceVoteManager] 캔버스를 찾을 수 없습니다. Canvas 이름을 확인하세요.");
+            Debug.LogError("[ChoiceVoteManager] PanelCanvas 태그가 적용된 캔버스를 찾을 수 없습니다. 태그 설정을 확인하세요.");
             onResult?.Invoke(1);
             yield break;
         }

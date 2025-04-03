@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// 화면을 점점 밝게(FadeIn) 혹은 점점 어둡게(FadeOut) 만드는 싱글톤 클래스
+// 화면을 점점 밝게(FadeIn) 혹은 점점 어둡게(FadeOut) 구현
 public class FadeInOut : SingletonManager<FadeInOut>
 {
     // 페이드 효과가 진행되는 시간 
@@ -16,7 +16,7 @@ public class FadeInOut : SingletonManager<FadeInOut>
     public bool isFadeIn;  
     
     [Header("페이드 아웃 진행 여부")]
-    public bool isFadeOut; 
+    public bool isFadeOut;
 
     void Start()
     {

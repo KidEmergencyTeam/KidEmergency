@@ -4,13 +4,13 @@ using System;
 // 충돌 여부를 다른 스크립트에 전달하려는게 목적
 public class FireEvacuationMask : MonoBehaviour
 {
-    // 충돌 대상 태그 (손수건)
+    [Header("충돌 대상 태그 (손수건)")]
     public string targetTag = "Handker";
 
     // 충돌 발생 시 다른 스크립트에 알리기 위한 이벤트
     public event Action OnHandkerchiefCollision;
 
-    // 중복 실행 방지
+    [Header("충돌 여부")]
     [SerializeField]
     private bool stepTriggered = false;
 
