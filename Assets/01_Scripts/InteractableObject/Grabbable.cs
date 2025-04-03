@@ -25,10 +25,8 @@ public class Grabbable : MonoBehaviour
 	////머티리얼은 02_Textures > Materials에 있는 GrabbableHighlight 넣어주기
 	public GameObject highlight;
 
-	protected Material _highlightMaterial;
-	protected bool _alphaUp = false;
-	protected float _currentAlpha;
-	protected bool _isTrigger = false;
+	protected Highlighter highlighter;
+	protected bool isTrigger = false;
 
 	public bool IsGrabbed => currentGrabber;
 
@@ -41,7 +39,7 @@ public class Grabbable : MonoBehaviour
 
 		rb = GetComponent<Rigidbody>();
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
-		_highlightMaterial = highlight.GetComponent<Renderer>().material;
+		highlighter = highlight.GetComponent<Highlighter>();
 		highlight.SetActive(false);
 	}
 
@@ -51,7 +49,7 @@ public class Grabbable : MonoBehaviour
 		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
 		if (isGrabbable && grabber.isLeft == isLeft)
 		{
-			_isTrigger = true;
+			isTrigger = true;
 		}
 	}
 
@@ -62,35 +60,13 @@ public class Grabbable : MonoBehaviour
 		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
 		if (isGrabbable && grabber.isLeft == isLeft)
 		{
-			_isTrigger = false;
+			isTrigger = false;
 		}
 	}
 
 	protected virtual void Update()
 	{
-		if (isGrabbable)
-		{
-			highlight.SetActive(true);
-			if (_isTrigger)
-			{
-				_highlightMaterial.color = new Color(0, 1, 0, 0.7f);
-			}
-			else
-			{
-				_highlightMaterial.color = new Color(1, 1, 0, _currentAlpha);
-				if (_alphaUp)
-				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0.7f, Time.deltaTime * 0.5f);
-					if (_currentAlpha >= 0.69f) _alphaUp = false;
-				}
-				else
-				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0f, Time.deltaTime * 0.5f);
-					if (_currentAlpha <= 0.01f) _alphaUp = true;
-				}
-			}
-		}
-		else
+		if (!isGrabbable)
 		{
 			highlight.SetActive(false);
 
@@ -102,6 +78,20 @@ public class Grabbable : MonoBehaviour
 					currentGrabber.transform.position + grabPosOffset;
 				realMovingObject.transform.rotation =
 					currentGrabber.transform.rotation * Quaternion.Euler(grabRotOffset);
+			}
+		}
+		else
+		{
+			highlight.SetActive(true);
+			if (isTrigger)
+			{
+				highlighter.SetColor(Color.green);
+				highlighter.isBlinking = false;
+			}
+			else
+			{
+				highlighter.SetColor(Color.yellow);
+				highlighter.isBlinking = true;
 			}
 		}
 	}

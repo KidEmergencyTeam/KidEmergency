@@ -17,23 +17,15 @@ public class FEPin : Grabbable
 		if (isGrabbable)
 		{
 			highlight.SetActive(true);
-			if (_isTrigger)
+			if (isTrigger)
 			{
-				_highlightMaterial.color = new Color(0, 1, 0, 0.7f);
+				highlighter.SetColor(Color.green);
+				highlighter.isBlinking = false;
 			}
 			else
 			{
-				_highlightMaterial.color = new Color(1, 1, 0, _currentAlpha);
-				if (_alphaUp)
-				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0.7f, Time.deltaTime * 0.5f);
-					if (_currentAlpha >= 0.69f) _alphaUp = false;
-				}
-				else
-				{
-					_currentAlpha = Mathf.MoveTowards(_currentAlpha, 0f, Time.deltaTime * 0.5f);
-					if (_currentAlpha <= 0.01f) _alphaUp = true;
-				}
+				highlighter.SetColor(Color.yellow);
+				highlighter.isBlinking = true;
 			}
 		}
 		else
