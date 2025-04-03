@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RayController : MonoBehaviour
@@ -9,6 +7,7 @@ public class RayController : MonoBehaviour
     [SerializeField] private ActionBasedController _rightController;
     [SerializeField] private XRRayInteractor _leftRay;
     [SerializeField] private XRRayInteractor _rightRay;
+    [SerializeField] private HandAnimation _handAnim;
     public XRInteractorLineVisual leftLine;
     public XRInteractorLineVisual rightLine;
 
@@ -21,47 +20,52 @@ public class RayController : MonoBehaviour
 
     private void Update()
     {
+        Grabber grabber = FindObjectOfType<Grabber>();
         if (UIActive())
         {
-            if (_leftRay.enabled && _rightRay.enabled)
+            bool isLeft = _leftController.selectAction.action.ReadValue<float>() > 0;
+            bool isRight = _rightController.selectAction.action.ReadValue<float>() > 0;
+            
+            if(isLeft) _handAnim.animator.SetFloat("Left Grip", 1f);
+            if(isRight) _handAnim.animator.SetFloat("Right Grip", 1f);
+
+            if (grabber.isOnGrabCalled)
             {
                 _rightRay.enabled = true;
                 rightLine.enabled = true;
-                
+                        
                 _leftRay.enabled = false;
                 leftLine.enabled = false;
             }
 
             else
             {
-                if (_leftRay.enabled)
+                if (_leftRay.enabled && _rightRay.enabled)
                 {
-                    leftLine.enabled = true;
-                    // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
-                    if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
-                    {
-                        SwitchRightRay();
-                    }
+                    _rightRay.enabled = true;
+                    rightLine.enabled = true;
+                
+                    _leftRay.enabled = false;
+                    leftLine.enabled = false;
                 }
 
-                else
+                else if(_leftRay.enabled || _rightRay.enabled)
                 {
-                    Grabber grabber = GetComponentInChildren<Grabber>();
-                    rightLine.enabled = true;
-
-                    // 오브젝트를 그랩하고 있는 상태라면 레이 스위치 X, 무조건 오른 손에만 Ray 활성화
-                    if (grabber.isOnGrabCalled)
+                    if (_leftRay.enabled)
                     {
-                        _rightRay.enabled = true;
-                        rightLine.enabled = true;
-                        
-                        _leftRay.enabled = false;
-                        leftLine.enabled = false;
+                        leftLine.enabled = true;
+                    
+                        // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
+                        if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
+                        {
+                            SwitchRightRay();
+                        }
                     }
 
-                    // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
-                    else
+                    else if(_rightRay.enabled)
                     {
+                        rightLine.enabled = true;
+                        
                         if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
                         {
                             SwitchLeftRay();
@@ -69,11 +73,10 @@ public class RayController : MonoBehaviour
                     }
                 }
             }
+            
         }
-
         else
         {
-            Grabber grabber = GetComponentInChildren<Grabber>();
             if (grabber.isOnGrabCalled)
             {
                 _rightRay.enabled = true;
