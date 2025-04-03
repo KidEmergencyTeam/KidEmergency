@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// 빌드 세팅 목록
-// 1. 00_Scenes/Tests/KSY/1.Lobby
-// 2. 00_Scenes/Tests/KSY/2.School
-// 3. 00_Scenes/Tests/KSY/3.Hallway
-// 4. 00_Scenes/Tests/KSY/4.Elevator
-// 5. 00_Scenes/Tests/KSY/5.Schoolyard
-// 6. 00_Scenes/Tests/Fire_School_Ready
-// 7. 00_Scenes/Tests/LJW/LJW_Start
-
 // 씬별 파티클 설정
 [Serializable]
 public class ParticleData
@@ -119,44 +110,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             { 38, Step38 }
         };
 
-        // FadeIn 효과 후 시나리오 실행
-        StartCoroutine(StartSequence());
+        // 시나리오 실행
+        StartCoroutine(RunScenario());
     }
-
-    // FadeIn 효과가 완료된 후 시나리오를 실행
-    private IEnumerator StartSequence()
-    {
-        // 씬 로드 여부 체크
-        bool sceneLoaded = false;
-
-        // 씬 로드 완료 이벤트
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            // 이벤트 호출 시 처리 내용
-            sceneLoaded = true;
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        // 씬이 로드 -> OnSceneLoaded 함수 호출
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
-        // 이미 씬이 로드된 상태라면 바로 처리
-        if (SceneManager.GetActiveScene().isLoaded)
-        {
-            sceneLoaded = true;
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-
-        // 씬 로드 완료까지 대기
-        yield return new WaitUntil(() => sceneLoaded);
-
-        // 페이드 인 효과 실행 및 완료 대기
-        yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
-
-        // 시나리오 실행 시작
-        yield return StartCoroutine(RunScenario());
-    }
-
 
     // 시나리오를 순차적으로 실행
     IEnumerator RunScenario()
