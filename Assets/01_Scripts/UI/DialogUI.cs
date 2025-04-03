@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,12 @@ public class DialogUI : MonoBehaviour
     public GameObject dialogPanel;
     public TextMeshProUGUI dialogText;
     public Image colorImage;
-    
+
     private void Awake()
     {
         dialogPanel.SetActive(false);
     }
+    
 
     private void Update()
     {
@@ -20,8 +22,8 @@ public class DialogUI : MonoBehaviour
 
     private void SetColorSameRobot()
     {
-        Rob11ColorManager rob11Color = GameObject.Find("Seti").GetComponent<Rob11ColorManager>();
-        colorImage.color = rob11Color.predefinedColors[rob11Color.colorIndex];
+        Rob11ColorManager seti = FindObjectOfType<Rob11ColorManager>();
+        colorImage.color = seti.predefinedColors[seti.colorIndex];
     }
     
 }
