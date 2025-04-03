@@ -18,6 +18,7 @@ public class FixBagAction : MonoBehaviour, IActionEffect
         Bag bag = FindObjectOfType<Bag>();
         JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
         npcCtrl.SetNPCState("HoldBag");
+        bag.isGrabbable = true;
         bag.BagInteraction();
 
         while (!_isComplete)

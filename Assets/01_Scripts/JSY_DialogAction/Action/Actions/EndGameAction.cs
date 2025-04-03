@@ -15,11 +15,10 @@ public class EndGameAction : MonoBehaviour, IActionEffect
     private IEnumerator BackToStartScene()
     {
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
-
         Destroy(ActionManager.Instance.gameObject);
-        Destroy(FadeInOut.Instance.gameObject);
         Destroy(UIManager.Instance.gameObject);
         SceneManager.LoadScene("Title", LoadSceneMode.Single);
+
     }
 
 }
