@@ -45,6 +45,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 상수 선언
     private const string LEFT_SELECT_ACTION = "XRI LeftHand Interaction/Select";
     private const string RIGHT_SELECT_ACTION = "XRI RightHand Interaction/Select";
+    private const string LEFT_STRING = "Left";
+    private const string RIGHT_STRING = "Right";
 
     private void Awake()
     {
@@ -163,11 +165,11 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 해당 값을 문자열 변수에 대입한 후, 그에 따라 디버그 메시지를 출력
         if (context.action == leftSelectAction)
         {
-            leftOrRight = "Left";
+            leftOrRight = LEFT_STRING;
         }
         else if (context.action == rightSelectAction)
         {
-            leftOrRight = "Right";
+            leftOrRight = RIGHT_STRING;
         }
 
         // 클래스 밖에서 선언된 개념은 별도로 특정 스크립트를 찾지 않아도 참조 가능
@@ -179,12 +181,12 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         RayType gripType;
 
         // leftOrRight 문자열("왼쪽", "오른쪽")을 RayType으로 변환
-        if (leftOrRight == "Left")
+        if (leftOrRight == LEFT_STRING)
         {
             gripType = RayType.Left;
             isValidGrip = true;
         }
-        else if (leftOrRight == "Right")
+        else if (leftOrRight == RIGHT_STRING)
         {
             gripType = RayType.Right;
             isValidGrip = true;
