@@ -22,7 +22,7 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     
     private void Start()
     {
-        _rbObjects = FindObjectsOfType<Rigidbody>();  
+        _rbObjects = FindObjectsOfType<Rigidbody>(); 
     }
 
     public void StartAction()
@@ -51,8 +51,11 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     {
         if (shakeDuration > 0 && cameraParent != null)
         {
-            ActionManager.Instance.actionAudio.clip = eqAudio;
-            ActionManager.Instance.actionAudio.Play();
+            if (ActionManager.Instance.actionAudio.clip == null)
+            {
+                ActionManager.Instance.actionAudio.clip = eqAudio;
+                ActionManager.Instance.actionAudio.Play();
+            }
             cameraParent.localPosition = Random.insideUnitSphere * shakeAmount; 
             shakeDuration -= Time.deltaTime * decreaseFactor;
             SetLight();
@@ -63,7 +66,6 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
             cameraParent.localPosition = Vector3.zero;
             Vector3 newPos = cameraParent.localPosition;
             Mathf.Lerp(originPos.x, newPos.x, 1);
-            ActionManager.Instance.actionAudio.Stop();
             mainLight.intensity = 0.6f;
             for (int i = 0; i < lightObjects.Length; i++)
             {
