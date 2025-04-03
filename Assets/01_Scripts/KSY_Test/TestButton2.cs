@@ -22,6 +22,9 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
+    // RayController2에 대한 참조 (인스펙터에서 할당)
+    public RayController2 rayController;
+
     // 좌측, 우측 컨트롤러의 Select 액션
     private InputAction leftSelectAction;
     private InputAction rightSelectAction;
@@ -31,22 +34,6 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     // 버튼 클릭 상태를 관리 -> JDH 전용
     public bool isClick = false;
-
-    // 레이 전환 여부
-    public bool inputDisabled = false;
-
-    // 레이 전환이 이루어지면 true로 변경되어, 일정 시간 동안 버튼 실행을 막음
-    // 목적: 버튼 위에 레이가 있을 때 레이 전환이 이루어지면 버튼 실행을 막기 위함
-    public void DisableInput()
-    {
-        inputDisabled = true;
-    }
-
-    // 일정 시간 후 false로 변경되어, 조건에 따라 버튼 실행 가능
-    public void EnableInput()
-    {
-        inputDisabled = false;
-    }
 
     // 딕셔너리를 통한 버튼 타입에 따른
     // 버튼 클릭 이벤트 처리
@@ -116,11 +103,14 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Select 액션 해제
     private void OnDisable()
     {
+        // 좌측 해제
         if (leftSelectAction != null)
         {
             leftSelectAction.performed -= OnSelectActionPerformed;
             leftSelectAction.Disable();
         }
+
+        // 우측 해제
         if (rightSelectAction != null)
         {
             rightSelectAction.performed -= OnSelectActionPerformed;
@@ -142,16 +132,22 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 레이가 버튼 위에 있을 때 OnPointerEnter 호출
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 있다.
         isHovered = true;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 레이 들어옴");
+
+        // RayController2.cs -> ActiveRay를 사용하여 버튼 위에 있는 레이를 판단
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 {rayController.ActiveRay} 레이 들어옴");
     }
 
     // 스크립트에서 IPointerExitHandler를 추가했을 경우,
     // 레이가 버튼 위에 없을 때 OnPointerExit 호출
     public void OnPointerExit(PointerEventData eventData)
     {
+        // 버튼 위에 레이가 없다.
         isHovered = false;
-        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 레이 나감");
+
+        // RayController2.cs -> ActiveRay를 사용하여 버튼 위에 있는 레이를 판단
+        Debug.Log($"[TestButton2] {buttonType} 버튼 위에 {rayController.ActiveRay} 레이 나감");
     }
 
     // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
@@ -169,7 +165,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             leftOrRight = "오른쪽";
         }
 
-        if (isHovered && !inputDisabled)
+        if (isHovered)
         {
             StartCoroutine(TriggerButtonAnimationAndClick());
             Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");
