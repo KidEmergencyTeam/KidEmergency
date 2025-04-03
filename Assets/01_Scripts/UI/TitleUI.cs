@@ -48,7 +48,10 @@ public class TitleUI : MonoBehaviour
     
     public IEnumerator ChangeScene()
     {
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+        RayController rayController = FindObjectOfType<RayController>();
+        rayController.leftLine.gameObject.SetActive(false);
+        rayController.rightLine.gameObject.SetActive(false);
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
         if (!_isLoading)
         {

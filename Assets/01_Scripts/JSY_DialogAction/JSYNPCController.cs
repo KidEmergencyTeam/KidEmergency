@@ -21,14 +21,14 @@ public class JSYNPCController : MonoBehaviour
            _originScale[i] = npcs[i].transform.localScale;
         }
         
-        if (SceneManager.GetActiveScene().name == "JSY_School" ||
-            SceneManager.GetActiveScene().name == "JSY_SchoolGround")
+        if (SceneManager.GetActiveScene().name == "Eq_School_1" ||
+            SceneManager.GetActiveScene().name == "Eq_School_4")
         {
             SetNPCState("None");
         } 
         
-        else if (SceneManager.GetActiveScene().name == "JSY_SchoolHall" ||
-              SceneManager.GetActiveScene().name == "JSY_StairEv") 
+        else if (SceneManager.GetActiveScene().name == "Eq_School_2" ||
+              SceneManager.GetActiveScene().name == "Eq_School_3") 
         {
             SetNPCState("HoldBag");
         }

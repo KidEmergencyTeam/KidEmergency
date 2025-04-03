@@ -189,7 +189,7 @@ public class ActionManager : SingletonManager<ActionManager>
 
 	private IEnumerator StartDialog()
 	{
-		yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+		yield return StartCoroutine(OVRScreenFade.Instance.Fade(1f, 0f));
 		DialogManager.Instance.DialogStart();
 	}
 

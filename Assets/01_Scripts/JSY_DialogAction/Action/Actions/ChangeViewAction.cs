@@ -23,7 +23,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     
     private IEnumerator SetView(Vector3 newPos)
     {
-        yield return StartCoroutine(FadeInOut.Instance.FadeOut());
+        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
 
         while (player.transform.localPosition != newPos)
         {
@@ -43,7 +43,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                 playerState.currentState = PlayerRig.State.Down;
             }
             
-            yield return StartCoroutine(FadeInOut.Instance.FadeIn());
+            yield return StartCoroutine(OVRScreenFade.Instance.Fade(1f, 0f));
             _isComplete = true;
         }
     }

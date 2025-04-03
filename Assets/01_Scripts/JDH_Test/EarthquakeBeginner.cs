@@ -1,7 +1,6 @@
 using EPOOutline;
 using System.Collections;
 using TMPro;
-using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

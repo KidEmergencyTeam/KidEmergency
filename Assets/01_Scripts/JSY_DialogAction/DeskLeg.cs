@@ -13,6 +13,7 @@ public class DeskLeg : MonoBehaviour
     [SerializeField] private GameObject _leftHand;
     [SerializeField] private GameObject _rightHand;
     
+    private HandAnimation _handAnimation;
     private ActionBasedController _leftController;
     private ActionBasedController _rightController;
     private float _durationTime = 0f; // 지속 시간
@@ -34,6 +35,7 @@ public class DeskLeg : MonoBehaviour
 
     private void Start()
     {
+        _handAnimation = FindObjectOfType<HandAnimation>();
         this.enabled = false;
     }
 
@@ -45,12 +47,13 @@ public class DeskLeg : MonoBehaviour
     public void Holding()
     {
         bool isLeftGrapped = _leftController.selectAction.action.ReadValue<float>() > 0;
+        if(isLeftGrapped) _handAnimation.animator.SetFloat("Left Trigger", 1);
         bool isRightGrapped = _rightController.selectAction.action.ReadValue<float>() > 0;
-        bool isInteractable =
-            Vector3.Distance(_legs[0].transform.position, _leftHand.transform.position) < 0.05f && isLeftGrapped;
-        print(Vector3.Distance(_legs[0].transform.localPosition, _leftHand.transform.localPosition));
-        // bool isInteractable = Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.1f && isLeftGrapped &&
-        //                           Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.1f && isRightGrapped;
+        if(isRightGrapped) _handAnimation.animator.SetFloat("Right Trigger", 1);
+        // bool isInteractable =
+        //     Vector3.Distance(_legs[0].transform.position, _leftHand.transform.position) < 0.05f && isLeftGrapped;
+        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _leftController.transform.position) < 0.05f && isLeftGrapped &&
+                                  Vector3.Distance(_legs[1].transform.position, _rightController.transform.position) < 0.05f && isRightGrapped;
         if (isInteractable)
         { 
             UIManager.Instance.CloseWarningUI();

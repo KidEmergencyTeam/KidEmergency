@@ -1,23 +1,15 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class Bag : Grabbable
 {
     [SerializeField] private Sprite _warningSprite;
     [SerializeField] private string _warningText;
-    [SerializeField] private GameObject _headObject; // 현재 카메라 오프셋 -> 플레이어 캐릭터 머리 오브젝트로 변경 예정 
+    [SerializeField] private Transform _handObject;
+    [SerializeField] private GameObject _headObject; // 메인 카메라
     
-    private ActionBasedController _leftController; // 왼쪽 컨트롤러 오브젝트
     private string _sceneName;
-
-    private void Awake()
-    {
-        _leftController = GameObject.Find("Left Controller").GetComponent<ActionBasedController>();
-    }
 
     protected override void Start()
     {
@@ -29,12 +21,18 @@ public class Bag : Grabbable
         }
         else if (SceneManager.GetActiveScene().name == "Eq_School_2")
         {
-            currentGrabber.currentGrabbedObject = this;
+            Grabber grabber = FindObjectOfType<Grabber>();
+            grabber.OnGrab(this);
+            isGrabbable = false;
+            BagInteraction();
         }
         
         else if (SceneManager.GetActiveScene().name == "Eq_School_3")
         {
-            currentGrabber.currentGrabbedObject = this;
+            Grabber grabber = FindObjectOfType<Grabber>();
+            grabber.OnGrab(this);
+            isGrabbable = false;
+            BagInteraction();
         }
     }
 
@@ -42,21 +40,28 @@ public class Bag : Grabbable
     { 
         StartCoroutine(ProtectHead());
     }
-    
-    private void Update()
+
+    protected override void Update()
     {
-        _sceneName = SceneManager.GetActiveScene().name;
-        if (_sceneName == "Eq_School_4")
+        base.Update();
+        if (SceneManager.GetActiveScene().name == "Eq_School_1")
         {
-            UIManager.Instance.CloseWarningUI();
-            Destroy(this.gameObject);
+            if (currentGrabber.currentGrabbedObject == this)
+            {
+                isGrabbable = false;
+                if (_handObject != null)
+                {
+                    this.transform.SetParent(_handObject);
+                    this.transform.localPosition = new Vector3(0.0005f, 0.0008f, -0.0008f);
+                    this.transform.localRotation = Quaternion.Euler(-90, -90, -90);
+                    this.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
+                }
+            }
         }
     }
 
     private IEnumerator ProtectHead()
     {
-        isGrabbable = true;
-        
         while (!IsGrabbed)
         {
             UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
@@ -83,11 +88,10 @@ public class Bag : Grabbable
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.localPosition, _headObject.transform.localPosition) < 0.2f)
+        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.1f)
         {
             return true;
         }
-
-        else return false;
+        return false;
     }
 }
