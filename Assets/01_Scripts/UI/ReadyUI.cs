@@ -30,7 +30,7 @@ public class ReadyUI : MonoBehaviour
     private void SetPeopleReady()
     {
         // 준비 버튼(각 그립 버튼)을 눌렀을 때 / 테스트 용으로 오른쪽 버튼만 클릭
-        if (/*_leftCtrl.selectAction.action.ReadValue<float>() > 0 && */ _rightCtrl.selectAction.action.ReadValue<float>() > 0) 
+        if (_leftCtrl.selectAction.action.ReadValue<float>() > 0 &&  _rightCtrl.selectAction.action.ReadValue<float>() > 0) 
         {
             if (!_isReady)
             {
