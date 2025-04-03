@@ -22,8 +22,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    // RayController2에 대한 참조 (인스펙터에서 할당)
-    public RayController2 rayController;
+    // RayController2에 대한 참조 -> 태그로 찾음
+    private RayController2 rayController;
 
     // 좌측, 우측 컨트롤러의 Select 액션
     private InputAction leftSelectAction;
@@ -66,6 +66,20 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             { ButtonType.A, () => Debug.Log("버튼 A 클릭 이벤트 발생") },
             { ButtonType.B, () => Debug.Log("버튼 B 클릭 이벤트 발생") }
         };
+    }
+
+    private void Start()
+    {
+        // "Player" 태그를 사용하여 RayController2.cs 할당
+        GameObject rayControllerObj = GameObject.FindGameObjectWithTag("Player");
+        if (rayControllerObj != null)
+        {
+            rayController = rayControllerObj.GetComponent<RayController2>();
+        }
+        else
+        {
+            Debug.LogWarning("[TestButton2] 'RayController' 태그가 지정된 오브젝트를 찾지 못했습니다.");
+        }
     }
 
     // Select 액션 등록
