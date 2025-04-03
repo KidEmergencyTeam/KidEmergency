@@ -146,8 +146,8 @@ MonoBehaviour:
   _rightController: {fileID: 6590152707799593431}
   _leftRay: {fileID: 5672293573505394698}
   _rightRay: {fileID: 3748963029495984979}
-  _leftLine: {fileID: 2607981752036015001}
-  _rightLine: {fileID: 8103511854709743382}
+  leftLine: {fileID: 2607981752036015001}
+  rightLine: {fileID: 8103511854709743382}
 --- !u!114 &707825293193308931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,7 +352,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6163065769117735951, guid: d20b2427e4d2b3e48a2f46c681e4db4b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5881473742686703312}
   m_SourcePrefab: {fileID: 100100000, guid: d20b2427e4d2b3e48a2f46c681e4db4b, type: 3}
 --- !u!4 &464706129096632483 stripped
 Transform:
@@ -391,6 +394,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4385349180785514058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6163065769117735951, guid: d20b2427e4d2b3e48a2f46c681e4db4b, type: 3}
+  m_PrefabInstance: {fileID: 7592075500972182085}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5881473742686703312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385349180785514058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df8e1d778abf442e4bec449c360e9e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeTime: 1.5
+  fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
+  fadeOnStart: 1
+  renderQueue: 5000
+  fadeShader: {fileID: 4800000, guid: ced943c76cb8fb8489bab18c3dfcdcd3, type: 3}
 --- !u!114 &4682039166337665222 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3000956052257718915, guid: d20b2427e4d2b3e48a2f46c681e4db4b, type: 3}
