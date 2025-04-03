@@ -46,43 +46,27 @@ public class RayController : MonoBehaviour
 
                 else
                 {
+                    Grabber grabber = GetComponentInChildren<Grabber>();
                     rightLine.enabled = true;
-                    // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
-                    if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
+
+                    // 오브젝트를 그랩하고 있는 상태라면 레이 스위치 X, 무조건 오른 손에만 Ray 활성화
+                    if (grabber != null && grabber.isOnGrabCalled)
                     {
-                        for (int i = 0; i < _leftController.transform.childCount; i++)
+                        _rightRay.enabled = true;
+                        rightLine.enabled = true;
+                        
+                        _leftRay.enabled = false;
+                        leftLine.enabled = false;
+                    }
+
+                    // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
+                    else
+                    {
+                        if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
                         {
-                            if (_leftController.transform.GetChild(i).name == "Bag")
-                            {
-                                return;
-                            }
-                            
-                            if(_leftController.transform.GetChild(i).name != "Bag")
-                            {
-                                SwitchLeftRay();
-                            }
+                            SwitchLeftRay();
                         }
                     }
-                }
-            }
-        }
-
-        
-        else
-        {
-            for (int i = 0; i < _leftController.transform.childCount; i++)
-            {
-                if (_leftController.transform.GetChild(i).name == "Bag")
-                {
-                    _leftRay.enabled = false;
-                    leftLine.enabled = false;
-                    rightLine.enabled = false;
-                }
-
-                else
-                {
-                    leftLine.enabled = false;
-                    rightLine.enabled = false;
                 }
             }
         }
@@ -108,8 +92,6 @@ public class RayController : MonoBehaviour
                 return true;
             }   
         }
-        
-        // 타이틀 ui도 추가해야 할듯?
         
         return false;
     }
