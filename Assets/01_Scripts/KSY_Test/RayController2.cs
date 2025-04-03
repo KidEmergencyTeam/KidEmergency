@@ -77,8 +77,15 @@ public class RayController2 : MonoBehaviour
         {
             Debug.LogError("[RayController2] InputActionAsset이 할당되지 않았습니다.");
         }
+
+        // Grabber 이벤트 구독
+        if (leftGrabber != null)
+        {
+            leftGrabber.OnGrabEvent += HandleOnGrab;
+        }
     }
 
+    // 해당 객체가 비활성화 및 제거될 때 또는 씬 전환 시 호출하여 이벤트를 해제
     private void OnDisable()
     {
         if (leftSelectAction != null)
@@ -91,27 +98,31 @@ public class RayController2 : MonoBehaviour
             rightSelectAction.performed -= OnSelectActionPerformed;
             rightSelectAction.Disable();
         }
+
+        // Grabber 이벤트 구독 해제
+        if (leftGrabber != null)
+        {
+            leftGrabber.OnGrabEvent -= HandleOnGrab;
+        }
     }
 
-    // 그립 입력 처리 시, 좌측 Grabber의 Grabbed 상태를 확인하여 오브젝트가 잡힌 경우에는 레이 전환을 막고 우측 레이를 고정
+    // Grabber.cs에서 GrabEvent 이벤트 발생 시 HandleOnGrab를 호출하여 우측 레이로 전환
+    private void HandleOnGrab()
+    {
+        SwitchRightRay();
+        Debug.Log("[RayController2] OnGrab 이벤트에 의해 우측 레이 활성화");
+    }
+
+
+    // 그립 입력에 따라 좌측 레이 활성화 및 우측 레이 비활성화, 우측 레이 활성화 및 좌측 레이 비활성화 처리
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
-        // 좌측 Grabber에서 오브젝트를 잡고 있다면
-        if (leftGrabber != null && leftGrabber.Grabbed)
-        {
-            // 우측 레이가 활성화되지 않았다면 강제로 전환
-            if (!isRightActive)
-            {
-                SwitchRightRay();
-            }
-            Debug.Log("[RayController2] 오브젝트가 잡힌 상태이므로 레이 전환 불가");
-            return;
-        }
-
         // 좌측 그립 입력 시
         if (context.action == leftSelectAction)
         {
-            if (isRightActive)
+            // 우측 레이 활성화 및 isOnGrabCalled false라면 
+            // 좌측 레이 활성화
+            if (isRightActive && !leftGrabber.isOnGrabCalled)
             {
                 SwitchLeftRay();
             }
@@ -119,7 +130,9 @@ public class RayController2 : MonoBehaviour
         // 우측 그립 입력 시
         else if (context.action == rightSelectAction)
         {
-            if (!isRightActive)
+            // 좌측 레이 활성화 및 isOnGrabCalled false라면
+            // 우측 레이 활성화
+            if (!isRightActive && !leftGrabber.isOnGrabCalled)
             {
                 SwitchRightRay();
             }

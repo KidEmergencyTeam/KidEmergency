@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 
 public class HandAnimation : MonoBehaviour
 {
@@ -13,20 +10,28 @@ public class HandAnimation : MonoBehaviour
     public InputActionProperty rightGrip;
 
     public Animator animator;
+    
+    public bool isLeftGrabbed = false;
+    public bool isRightGrabbed = false;
 
     void Update()
     {
-        float leftTriggerValue = leftPinch.action.ReadValue<float>();
-        animator.SetFloat("Left Trigger", leftTriggerValue);
+        if (!isLeftGrabbed)
+        {
+            float leftTriggerValue = leftPinch.action.ReadValue<float>();
+            animator.SetFloat("Left Trigger", leftTriggerValue);
 
-        float leftGripValue = leftGrip.action.ReadValue<float>();
-        animator.SetFloat("Left Grip", leftGripValue);
+            float leftGripValue = leftGrip.action.ReadValue<float>();
+            animator.SetFloat("Left Grip", leftGripValue);
+        }
 
+        if (!isRightGrabbed)
+        {
+            float rightTriggerValue = rightPinch.action.ReadValue<float>();
+            animator.SetFloat("Right Trigger", rightTriggerValue);
 
-        float rightTriggerValue = rightPinch.action.ReadValue<float>();
-        animator.SetFloat("Right Trigger", rightTriggerValue);
-
-        float rightGripValue = rightGrip.action.ReadValue<float>();
-        animator.SetFloat("Right Grip", rightGripValue);
+            float rightGripValue = rightGrip.action.ReadValue<float>();
+            animator.SetFloat("Right Grip", rightGripValue);
+        }
     }
 }

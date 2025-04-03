@@ -1,10 +1,10 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
 public class JSWDialogManager : MonoBehaviour
 {
 	public static JSWDialogManager Instance { get; set; }
+	public float delay = 1f;
 
 	private void Awake()
 	{
@@ -14,18 +14,22 @@ public class JSWDialogManager : MonoBehaviour
 
 	public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
 	{
+		StopAllCoroutines();
 		StartCoroutine(ShowDialog());
 	}
 
 	public IEnumerator ShowDialog()
 	{
 		RobotController robot = FindObjectOfType<RobotController>();
+		AudioSource audio = robot.GetComponent<AudioSource>();
 
 		UIManager.Instance.dialogUI.dialogPanel.SetActive(true);
 
-		foreach (string dialog in FEScene.Instance.currentDialog)
+		for (int i = 0; i < FEScene.Instance.currentDialog.Length; i++)
 		{
-			yield return StartCoroutine(TypingEffect(dialog));
+			audio.clip = FEScene.Instance.currentDialogData.audios[i];
+			audio.Play();
+			yield return StartCoroutine(TypingEffect(FEScene.Instance.currentDialog[i]));
 		}
 
 		UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
@@ -43,6 +47,6 @@ public class JSWDialogManager : MonoBehaviour
 		}
 
 		yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text);
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(delay);
 	}
 }

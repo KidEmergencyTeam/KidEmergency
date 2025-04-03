@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +11,13 @@ public class Grabber : MonoBehaviour
 	public float detectRadius = 0.05f;
 	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
 	public XRRayInteractor rayInteractor;
+
+	// ture일 경우 레이 스위치 불가 -> 잡은 상태
+	// false일 경우 레이 스위치 가능 -> 놓은 상태
+	[Header("OnGrab 호출 여부")] public bool isOnGrabCalled = false;
+
+	// OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 우측 레이로 전환
+	public event Action OnGrabEvent;
 
 	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
@@ -57,21 +65,18 @@ public class Grabber : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.green;
-		}
-	}
-
 	private void OnTriggerStay(Collider other)
 	{
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (controllerButtonClick.action.ReadValue<float>() > 0 && grabbable.isGrabbable && grabbable.isLeft == isLeft)
+		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
+		{
+			grabbable.outlinable.OutlineParameters.Color = Color.green;
+		}
+
+		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
+		    grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
 		}
@@ -88,32 +93,32 @@ public class Grabber : MonoBehaviour
 
 	public void OnGrab(Grabbable grabbable)
 	{
-        // null 체크 후 초기화
-        if (_handAnimation == null)
-        {
-            _handAnimation = FindObjectOfType<HandAnimation>();
-        }
-        if (_targetFollower == null)
-        {
-            _targetFollower = FindObjectOfType<TargetFollower>();
-        }
+		// null 체크 후 초기화
+		if (_handAnimation == null)
+		{
+			_handAnimation = FindObjectOfType<HandAnimation>();
+		}
 
-        print("OnGrab");
+		if (_targetFollower == null)
+		{
+			_targetFollower = FindObjectOfType<TargetFollower>();
+		}
+
+		print("OnGrab");
 		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
-		_handAnimation.enabled = false;
+		if (isLeft) _handAnimation.isLeftGrabbed = true;
+		else _handAnimation.isRightGrabbed = true;
 		currentGrabbedObject = grabbable;
-		if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
-		else _handAnimation.animator.SetFloat("Right Trigger", 1);
-
+		currentGrabbedObject.isGrabbable = false;
+		currentGrabbedObject.currentGrabber = this;
 		if (currentGrabbedObject.isMoving)
 		{
-			currentGrabbedObject.isGrabbable = false;
-			currentGrabbedObject.currentGrabber = this;
+			if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
+			else _handAnimation.animator.SetFloat("Right Trigger", 1);
 		}
-
 		else
 		{
 			if (isLeft)
@@ -135,13 +140,21 @@ public class Grabber : MonoBehaviour
 					currentGrabbedObject.grabRotOffset;
 			}
 		}
+
+		// OnGrab 메서드 실행 -> 이벤트가 발생 -> 다른 스크립트에서 OnGrab 메서드가 실행할 때 개별적인 처리가 가능
+		OnGrabEvent?.Invoke();
+		Debug.Log("[Grabber] OnGrab 이벤트 발생");
+
+		// 레이 전환 불가
+		isOnGrabCalled = true;
 	}
 
-	private void OnRelease()
+	public void OnRelease()
 	{
 		print("OnRelease");
 		rayInteractor.enabled = true;
-		_handAnimation.enabled = true;
+		if (isLeft) _handAnimation.isLeftGrabbed = false;
+		else _handAnimation.isRightGrabbed = false;
 		if (currentGrabbedObject.isMoving)
 		{
 			currentGrabbedObject.currentGrabber = null;
@@ -159,5 +172,8 @@ public class Grabber : MonoBehaviour
 		}
 
 		currentGrabbedObject = null;
+
+		// 레이 전환 가능
+		isOnGrabCalled = false;
 	}
 }
