@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -8,8 +9,8 @@ public class RayController : MonoBehaviour
     [SerializeField] private ActionBasedController _rightController;
     [SerializeField] private XRRayInteractor _leftRay;
     [SerializeField] private XRRayInteractor _rightRay;
-    [SerializeField] private XRInteractorLineVisual _leftLine;
-    [SerializeField] private XRInteractorLineVisual _rightLine;
+    public XRInteractorLineVisual leftLine;
+    public XRInteractorLineVisual rightLine;
 
     private void Start()
     {
@@ -25,17 +26,17 @@ public class RayController : MonoBehaviour
             if (_leftRay.enabled && _rightRay.enabled)
             {
                 _rightRay.enabled = true;
-                _rightLine.enabled = true;
+                rightLine.enabled = true;
                 
                 _leftRay.enabled = false;
-                _leftLine.enabled = false;
+                leftLine.enabled = false;
             }
 
             else
             {
                 if (_leftRay.enabled)
                 {
-                    _leftLine.enabled = true;
+                    leftLine.enabled = true;
                     // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
                     if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
                     {
@@ -45,7 +46,7 @@ public class RayController : MonoBehaviour
 
                 else
                 {
-                    _rightLine.enabled = true;
+                    rightLine.enabled = true;
                     // 오른쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 왼쪽 레이로 스위치
                     if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
                     {
@@ -74,14 +75,14 @@ public class RayController : MonoBehaviour
                 if (_leftController.transform.GetChild(i).name == "Bag")
                 {
                     _leftRay.enabled = false;
-                    _leftLine.enabled = false;
-                    _rightLine.enabled = false;
+                    leftLine.enabled = false;
+                    rightLine.enabled = false;
                 }
 
                 else
                 {
-                    _leftLine.enabled = false;
-                    _rightLine.enabled = false;
+                    leftLine.enabled = false;
+                    rightLine.enabled = false;
                 }
             }
         }
@@ -118,8 +119,8 @@ public class RayController : MonoBehaviour
         _rightRay.enabled = false;
         _leftRay.enabled = true;
         
-        _rightLine.enabled = false;
-        _leftLine.enabled = true;
+        rightLine.enabled = false;
+        leftLine.enabled = true;
     }
 
     private void SwitchRightRay()
@@ -127,8 +128,8 @@ public class RayController : MonoBehaviour
         _leftRay.enabled = false;
         _rightRay.enabled = true;
         
-        _leftLine.enabled = false;
-        _rightLine.enabled = true;
+        leftLine.enabled = false;
+        rightLine.enabled = true;
     }
 
 }
