@@ -43,7 +43,7 @@ public class JSWDialogManager : MonoBehaviour
 		foreach (char letter in text.ToCharArray())
 		{
 			UIManager.Instance.dialogUI.dialogText.text += letter;
-			yield return new WaitForSeconds(0.1f);
+			yield return new WaitForSeconds(0.16f);
 		}
 
 		yield return new WaitUntil(() => UIManager.Instance.dialogUI.dialogText.text == text);

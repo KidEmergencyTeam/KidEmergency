@@ -1,7 +1,10 @@
+using UnityEngine;
+
 public class FEPin : Grabbable
 {
 	public float destroyDistance = 1f;
 	public float originalXPosition;
+	public GameObject pinWire;
 
 	protected override void Start()
 	{
@@ -13,11 +16,21 @@ public class FEPin : Grabbable
 	{
 		if (isGrabbable)
 		{
-			outlinable.enabled = true;
+			highlight.SetActive(true);
+			if (isTrigger)
+			{
+				highlighter.SetColor(Color.green);
+				highlighter.isBlinking = false;
+			}
+			else
+			{
+				highlighter.SetColor(Color.yellow);
+				highlighter.isBlinking = true;
+			}
 		}
 		else
 		{
-			outlinable.enabled = false;
+			highlight.SetActive(false);
 
 			if (!IsGrabbed) return;
 
@@ -28,6 +41,7 @@ public class FEPin : Grabbable
 				if (realMovingObject.transform.localPosition.y >= originalXPosition + destroyDistance)
 				{
 					FEScene.Instance.ChangeState(FEStateType.FEDialog);
+					Destroy(pinWire);
 				}
 			}
 		}

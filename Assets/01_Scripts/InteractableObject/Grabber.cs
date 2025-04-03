@@ -9,10 +9,7 @@ public class Grabber : MonoBehaviour
 {
 	public bool isLeft = true;
 	public float detectRadius = 0.05f;
-	public bool setObjectOffset = false; //오브젝트 오프셋 맞추는 용도
-
-    [Header("Grabber 추가한 쪽")]
-    public XRRayInteractor rayInteractor;
+	public XRRayInteractor rayInteractor;
 
 	// ture일 경우 레이 스위치 불가 -> 잡은 상태
 	// false일 경우 레이 스위치 가능 -> 놓은 상태
@@ -25,10 +22,12 @@ public class Grabber : MonoBehaviour
 	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
+	private SphereCollider _detectCollider;
 	private HandAnimation _handAnimation;
 	private TargetFollower _targetFollower;
-	private SphereCollider _detectCollider;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
+	private List<Vector3> _originalHandTargetPosOffset = new List<Vector3>();
+	private List<Vector3> _originalHandTargetRotOffset = new List<Vector3>();
 
 	public bool Grabbed => currentGrabbedObject;
 
@@ -38,34 +37,18 @@ public class Grabber : MonoBehaviour
 		_detectCollider.isTrigger = true;
 		_detectCollider.radius = detectRadius;
 
+
 		_handAnimation = FindObjectOfType<HandAnimation>();
 		if (isLeft) controllerButtonClick = _handAnimation.leftGrip;
 		else controllerButtonClick = _handAnimation.rightGrip;
 
 		_targetFollower = FindObjectOfType<TargetFollower>();
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[2].target);
+		_originalHandTargetPosOffset.Add(_targetFollower.followTargets[2].posOffset);
+		_originalHandTargetRotOffset.Add(_targetFollower.followTargets[2].rotOffset);
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[3].target);
-	}
-
-	private void Update()
-	{
-		if (!setObjectOffset) return;
-		if (!Grabbed) return;
-		if (currentGrabbedObject.isMoving) return;
-		if (isLeft)
-		{
-			_targetFollower.followTargets[2].posOffset =
-				currentGrabbedObject.grabPosOffset;
-			_targetFollower.followTargets[2].rotOffset =
-				currentGrabbedObject.grabRotOffset;
-		}
-		else
-		{
-			_targetFollower.followTargets[3].posOffset =
-				currentGrabbedObject.grabPosOffset;
-			_targetFollower.followTargets[3].rotOffset =
-				currentGrabbedObject.grabRotOffset;
-		}
+		_originalHandTargetPosOffset.Add(_targetFollower.followTargets[3].posOffset);
+		_originalHandTargetRotOffset.Add(_targetFollower.followTargets[3].rotOffset);
 	}
 
 	private void OnTriggerStay(Collider other)
@@ -73,24 +56,11 @@ public class Grabber : MonoBehaviour
 		print(other.name);
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.green;
-		}
 
 		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
 		    grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
-		}
-	}
-
-	private void OnTriggerExit(Collider other)
-	{
-		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
-		if (grabbable.isGrabbable && grabbable.isLeft == isLeft)
-		{
-			grabbable.outlinable.OutlineParameters.Color = Color.yellow;
 		}
 	}
 
@@ -119,8 +89,8 @@ public class Grabber : MonoBehaviour
 		currentGrabbedObject.currentGrabber = this;
 		if (currentGrabbedObject.isMoving)
 		{
-			if (isLeft) _handAnimation.animator.SetFloat("Left Trigger", 1);
-			else _handAnimation.animator.SetFloat("Right Trigger", 1);
+			if (isLeft) _handAnimation.animator.SetFloat("Left Grip", 1);
+			else _handAnimation.animator.SetFloat("Right Grip", 1);
 		}
 		else
 		{
@@ -166,12 +136,16 @@ public class Grabber : MonoBehaviour
 		{
 			if (isLeft)
 			{
-				_targetFollower.followTargets[2].target =
-					_originalHandTargetTransforms[0];
+				_targetFollower.followTargets[2].target = _originalHandTargetTransforms[0];
+				_targetFollower.followTargets[2].posOffset = _originalHandTargetPosOffset[0];
+				_targetFollower.followTargets[2].rotOffset = _originalHandTargetRotOffset[0];
 			}
 			else
-				_targetFollower.followTargets[3].target =
-					_originalHandTargetTransforms[1];
+			{
+				_targetFollower.followTargets[3].target = _originalHandTargetTransforms[1];
+				_targetFollower.followTargets[3].posOffset = _originalHandTargetPosOffset[1];
+				_targetFollower.followTargets[3].rotOffset = _originalHandTargetRotOffset[1];
+			}
 		}
 
 		currentGrabbedObject = null;

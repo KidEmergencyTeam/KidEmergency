@@ -1,8 +1,7 @@
-using EPOOutline;
 using UnityEngine;
 
 [DefaultExecutionOrder(Grabbable.ExecutionOrder)]
-[RequireComponent(typeof(Outlinable), typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class Grabbable : MonoBehaviour
 {
 	public const int ExecutionOrder = 100;
@@ -20,7 +19,15 @@ public class Grabbable : MonoBehaviour
 
 	[HideInInspector] public Rigidbody rb;
 	public Grabber currentGrabber;
-	[HideInInspector] public Outlinable outlinable;
+
+	//그랩 가능한 오브젝트 Ctrl+D하고 메쉬 렌더러와 메쉬 필터를 제외한 컴포넌트 제거
+	//스케일은 1.01
+	//머티리얼은 02_Textures > Materials에 있는 GrabbableHighlight 넣어주기
+	//Highlighter 컴포넌트 추가
+	public GameObject highlight;
+
+	protected Highlighter highlighter;
+	protected bool isTrigger = false;
 
 	public bool IsGrabbed => currentGrabber;
 
@@ -32,19 +39,37 @@ public class Grabbable : MonoBehaviour
 		}
 
 		rb = GetComponent<Rigidbody>();
-		outlinable = GetComponent<Outlinable>();
 		if (isSameMoveAndGrabbable) realMovingObject = this.gameObject;
+		highlighter = highlight.GetComponent<Highlighter>();
+		highlight.SetActive(false);
+	}
+
+	private void OnTriggerStay(Collider other)
+	{
+		if (IsGrabbed) return;
+		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
+		if (isGrabbable && grabber.isLeft == isLeft)
+		{
+			isTrigger = true;
+		}
+	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		print(other.name);
+		if (IsGrabbed) return;
+		if (!other.TryGetComponent<Grabber>(out Grabber grabber)) return;
+		if (isGrabbable && grabber.isLeft == isLeft)
+		{
+			isTrigger = false;
+		}
 	}
 
 	protected virtual void Update()
 	{
-		if (isGrabbable)
+		if (!isGrabbable)
 		{
-			outlinable.enabled = true;
-		}
-		else
-		{
-			outlinable.enabled = false;
+			highlight.SetActive(false);
 
 			if (!IsGrabbed) return;
 
@@ -54,6 +79,20 @@ public class Grabbable : MonoBehaviour
 					currentGrabber.transform.position + grabPosOffset;
 				realMovingObject.transform.rotation =
 					currentGrabber.transform.rotation * Quaternion.Euler(grabRotOffset);
+			}
+		}
+		else
+		{
+			highlight.SetActive(true);
+			if (isTrigger)
+			{
+				highlighter.SetColor(Color.green);
+				highlighter.isBlinking = false;
+			}
+			else
+			{
+				highlighter.SetColor(Color.yellow);
+				highlighter.isBlinking = true;
 			}
 		}
 	}
