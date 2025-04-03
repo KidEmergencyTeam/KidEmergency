@@ -50,7 +50,7 @@ public class RayController : MonoBehaviour
                     rightLine.enabled = true;
 
                     // 오브젝트를 그랩하고 있는 상태라면 레이 스위치 X, 무조건 오른 손에만 Ray 활성화
-                    if (grabber != null && grabber.isOnGrabCalled)
+                    if (grabber.isOnGrabCalled)
                     {
                         _rightRay.enabled = true;
                         rightLine.enabled = true;
@@ -69,6 +69,29 @@ public class RayController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        else
+        {
+            Grabber grabber = GetComponentInChildren<Grabber>();
+            if (grabber.isOnGrabCalled)
+            {
+                _rightRay.enabled = true;
+                _leftRay.enabled = false;
+                
+                leftLine.enabled = false;
+                rightLine.enabled = false;
+            }
+
+            else
+            {
+                _leftRay.enabled = true;
+                _rightRay.enabled = true;
+
+                leftLine.enabled = false;
+                rightLine.enabled = false;
+            }
+
         }
     }
 
