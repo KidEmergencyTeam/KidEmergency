@@ -100,11 +100,9 @@ public class UIManager : SingletonManager<UIManager>
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
-            
-            else return;
         }
 
-        if(SceneManager.GetActiveScene().name == "Eq_School_2")
+        else if(SceneManager.GetActiveScene().name == "Eq_School_2")
         {
             DialogPosReset(2);
             OptionPosReset(1);

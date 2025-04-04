@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Linq;
 using EPOOutline;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class OutlineObjectAction : MonoBehaviour, IActionEffect
 {

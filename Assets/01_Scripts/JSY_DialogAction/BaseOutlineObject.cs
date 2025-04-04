@@ -1,7 +1,4 @@
-using System;
-using EPOOutline;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class BaseOutlineObject : MonoBehaviour
 {
