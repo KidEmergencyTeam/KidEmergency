@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
-	public float fireHp = 100f;
+	public float startFireHp = 100f;
+	public float fireHp;
 	public Vector3 originalScale;
 	public bool is30 = false;
 
 	private void Awake()
 	{
 		originalScale = transform.localScale;
+		fireHp = startFireHp;
 	}
 
 	public void TakeDamage(float damage)
@@ -23,6 +25,6 @@ public class Fire : MonoBehaviour
 			Destroy(gameObject);
 		}
 
-		transform.localScale = originalScale * fireHp / 100f;
+		transform.localScale = originalScale * fireHp / startFireHp;
 	}
 }
