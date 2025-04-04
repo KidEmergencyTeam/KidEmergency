@@ -7,7 +7,6 @@ public class RayController : MonoBehaviour
     [SerializeField] private ActionBasedController _rightController;
     [SerializeField] private XRRayInteractor _leftRay;
     [SerializeField] private XRRayInteractor _rightRay;
-    [SerializeField] private HandAnimation _handAnim;
     public XRInteractorLineVisual leftLine;
     public XRInteractorLineVisual rightLine;
 
@@ -21,14 +20,9 @@ public class RayController : MonoBehaviour
     private void Update()
     {
         Grabber grabber = FindObjectOfType<Grabber>();
+        
         if (UIActive())
         {
-            bool isLeft = _leftController.selectAction.action.ReadValue<float>() > 0;
-            bool isRight = _rightController.selectAction.action.ReadValue<float>() > 0;
-            
-            if(isLeft) _handAnim.animator.SetFloat("Left Grip", 1f);
-            if(isRight) _handAnim.animator.SetFloat("Right Grip", 1f);
-
             if (grabber.isOnGrabCalled)
             {
                 _rightRay.enabled = true;
@@ -98,7 +92,7 @@ public class RayController : MonoBehaviour
         }
     }
 
-    private bool UIActive()
+    public bool UIActive()
     {
         if (UIManager.Instance != null)
         {
