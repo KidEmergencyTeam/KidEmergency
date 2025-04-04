@@ -14,7 +14,6 @@ public class DeskLeg : MonoBehaviour
     [SerializeField] private GameObject _rightHand;
     [SerializeField] private GameObject[] _legsHighlight;
     
-    private HandAnimation _handAnimation;
     private ActionBasedController _leftController;
     private ActionBasedController _rightController;
     private float _durationTime = 0f; // 지속 시간
@@ -29,7 +28,12 @@ public class DeskLeg : MonoBehaviour
 
     private void Start()
     {
-        _handAnimation = FindObjectOfType<HandAnimation>();
+        for (int i = 0; i < _legsHighlight.Length; i++)
+        {
+            _legsHighlight[i].SetActive(false);
+            _legs[i].GetComponent<BaseOutlineObject>().enabled = false;
+        }
+
         this.enabled = false;
     }
 
@@ -43,12 +47,9 @@ public class DeskLeg : MonoBehaviour
         for (int i = 0; i < _legsHighlight.Length; i++)
         {
             _legsHighlight[i].SetActive(true);
-        }
-        
-        for (int i = 0; i < _legs.Length; i++)
-        {
             _legs[i].GetComponent<BaseOutlineObject>().enabled = true;
         }
+        
         
         bool isLeftGrapped = _leftController.selectAction.action.ReadValue<float>() > 0;
         bool isRightGrapped = _rightController.selectAction.action.ReadValue<float>() > 0;
