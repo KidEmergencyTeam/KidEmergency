@@ -213,7 +213,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 5. 충돌 체크 
         bool collisionOccurred = false;
         // 6. 충돌이 발생하면 collisionOccurred를 true로 변경
-        fireEvacuationMask.OnHandkerchiefCollision += () => collisionOccurred = true;
+        fireEvacuationMask.OnHandkerchiefEnter += () => collisionOccurred = true;
         // 7. 충돌이 발생할 때까지 대기 
         yield return new WaitUntil(() => collisionOccurred);
         Debug.Log("손수건과 입 콜라이더가 충돌 - 다음 단계 실행");
