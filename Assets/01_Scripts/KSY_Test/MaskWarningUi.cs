@@ -34,7 +34,7 @@ public class MaskWarningUI : MonoBehaviour
             leftGrabber.OnGrabEvent += HandkerGrab;
 
             // 손수건을 놓을 때 HandkerRelease 실행
-            leftGrabber.OnReleaseEvent += HandkerRelease;
+            //leftGrabber.OnReleaseEvent += HandkerRelease;
         }
         else
         {
@@ -57,7 +57,7 @@ public class MaskWarningUI : MonoBehaviour
     }
 
     // 손수건과 충돌할 때 실행
-    private void HandkerEnter()
+    private void HandkerEnter() // 의존
     {
         // 패널 비활성화
         maskWarningPanel.SetActive(false);
@@ -65,14 +65,14 @@ public class MaskWarningUI : MonoBehaviour
     }
 
     // 손수건과 충돌 종료할 때 실행
-    private void HandkerExit()
+    private void HandkerExit() // 의존
     {
         // 패널 활성화
         maskWarningPanel.SetActive(true);
         Debug.Log("손수건과 충돌 종료할 때 실행");
     }
 
-    // 손수건을 잡을 때 실행
+    // 손수건을 잡을 때 실행 -> 호출은 한번만 합니다. 한번 잡을때 호출하고 나면
     private void HandkerGrab()
     {
         // 패널 활성화
