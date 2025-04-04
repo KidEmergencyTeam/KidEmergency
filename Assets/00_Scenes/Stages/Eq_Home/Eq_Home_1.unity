@@ -2733,7 +2733,6 @@ MonoBehaviour:
   earthquakeAction: {fileID: 896760781}
   changeViewAction: {fileID: 896760780}
   placeObjectAction: {fileID: 896760779}
-  outlineObjectAction: {fileID: 896760777}
   fixBagAction: {fileID: 896760775}
   holdLegAction: {fileID: 896760776}
   closeGVAction: {fileID: 896760772}
@@ -2764,7 +2763,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 982539642}
     m_Modifications:
     - target: {fileID: 567733418053057094, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2796,7 +2795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5836216951392746870, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5836216951392746870, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
       propertyPath: m_LocalRotation.y
@@ -2804,7 +2803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5836216951392746870, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5836216951392746870, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2837,6 +2836,11 @@ GameObject:
 --- !u!4 &163002311 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6285132003513616029, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
+  m_PrefabInstance: {fileID: 163002309}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &163002312 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5836216951392746870, guid: ea4a7a0af0fd26944931fcdcfcf18d85, type: 3}
   m_PrefabInstance: {fileID: 163002309}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &167578416
@@ -11546,6 +11550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380968794e8dc634496d9a1624703ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isComplete: 0
 --- !u!4 &896760778
 Transform:
   m_ObjectHideFlags: 0
@@ -12917,6 +12922,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 335599714}
+  - {fileID: 163002312}
+  - {fileID: 543450651639849439}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984605299
@@ -30154,7 +30161,7 @@ Transform:
   - {fileID: 3637906945216376502}
   - {fileID: 2124245154947736053}
   - {fileID: 3409650883147485836}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 982539642}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!4 &656342141023550955
 Transform:
@@ -30421,14 +30428,13 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132147900676965}
   m_Mesh: {fileID: -4419839362809119323, guid: 70d03508feb6b854a8aea0b220a2fc21, type: 3}
---- !u!4 &3637906945216376502
-Transform:
+--- !u!224 &3637906945216376502
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7987454739329176886}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -30436,6 +30442,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 543450651639849439}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!33 &7311757878758018375
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -30497,6 +30508,7 @@ GameObject:
   - component: {fileID: 3637906945216376502}
   - component: {fileID: 7311757878758018375}
   - component: {fileID: 3071433894433541012}
+  - component: {fileID: 7987454739329176888}
   - component: {fileID: 7987454739329176887}
   m_Layer: 0
   m_Name: fusebox01_1.001
@@ -30518,6 +30530,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isLever: 1
+--- !u!64 &7987454739329176888
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987454739329176886}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1971899102789610311, guid: 70d03508feb6b854a8aea0b220a2fc21, type: 3}
 --- !u!33 &8087840350556266263
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -30537,6 +30571,7 @@ GameObject:
   - component: {fileID: 2124245154947736053}
   - component: {fileID: 434798443966688352}
   - component: {fileID: 7538028154171266723}
+  - component: {fileID: 8214045582178290834}
   - component: {fileID: 8214045582178290833}
   m_Layer: 0
   m_Name: fusebox01_1.002
@@ -30558,6 +30593,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isLever: 0
+--- !u!64 &8214045582178290834
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8214045582178290832}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9027904438082038923, guid: 70d03508feb6b854a8aea0b220a2fc21, type: 3}
 --- !u!1 &9010662932830063578
 GameObject:
   m_ObjectHideFlags: 0
@@ -30582,8 +30639,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1823068401}
   - {fileID: 1402723835}
-  - {fileID: 163002309}
-  - {fileID: 543450651639849439}
   - {fileID: 323990903}
   - {fileID: 161718024}
   - {fileID: 1014292828}
