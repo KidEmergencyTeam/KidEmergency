@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MaskWarningUi : MonoBehaviour
+public class MaskWarningUI : MonoBehaviour
 {
     [Header("경고창")]
     public GameObject maskWarningPanel;
