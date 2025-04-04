@@ -440,6 +440,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
         ChoiceVoteManager.Instance.disableSingleton = true;
         TypingEffect.Instance.disableSingleton = true;
+
+        // 시나리오 매니저 인스터스 제거
         disableSingleton = true;
     }
     #endregion
@@ -453,7 +455,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
 
             // 페이드 아웃 효과 실행
-            yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
+            // yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
             // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
