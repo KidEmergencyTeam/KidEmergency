@@ -38,7 +38,7 @@ public class FEPin : Grabbable
 			{
 				realMovingObject.transform.position =
 					currentGrabber.transform.position + grabPosOffset;
-				if (realMovingObject.transform.localPosition.y >= originalXPosition + destroyDistance)
+				if (realMovingObject.transform.localPosition.z <= originalXPosition + destroyDistance)
 				{
 					FEScene.Instance.ChangeState(FEStateType.FEDialog);
 					Destroy(pinWire);
