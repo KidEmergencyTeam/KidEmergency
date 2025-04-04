@@ -1,5 +1,9 @@
 using UnityEngine;
 
+// Grabbable 스크립트를 할당
+// public bool isGrabbable = false;면 -> 경고창 비활성화
+// 메서드를 만들어서 -> Start에서 처리
+
 public class MaskWarningUI : MonoBehaviour
 {
     [Header("경고창")]
@@ -8,22 +12,11 @@ public class MaskWarningUI : MonoBehaviour
     [Header("FireEvacuationMask")]
     public FireEvacuationMask fireEvacuationMask;
 
+    [Header("Grabber")]
+    public Grabber leftGrabber;
+
     private void Start()
     {
-        // FireEvacuationMask 이벤트에 핸들러 등록
-        if (fireEvacuationMask != null)
-        {
-            // 손수건 충돌
-            fireEvacuationMask.OnHandkerchiefEnter += HandleEnter;
-
-            // 손수건 충돌 종료
-            fireEvacuationMask.OnHandkerchiefExit += HandleExit;
-        }
-        else
-        {
-            Debug.LogError("FireEvacuationMask.cs -> null");
-        }
-
         // 기본적으로 패널은 비활성화
         if (maskWarningPanel != null)
         {
@@ -33,25 +26,65 @@ public class MaskWarningUI : MonoBehaviour
         {
             Debug.LogError("maskWarningPanel -> null");
         }
+
+        //// Grabber 이벤트에 핸들러 등록
+        if (leftGrabber != null)
+        {
+            // 손수건을 잡을 때 HandkerGrab 실행
+            leftGrabber.OnGrabEvent += HandkerGrab;
+
+            // 손수건을 놓을 때 HandkerRelease 실행
+            leftGrabber.OnReleaseEvent += HandkerRelease;
+        }
+        else
+        {
+            Debug.LogError("grabber.cs -> null");
+        }
+
+        // FireEvacuationMask 이벤트에 핸들러 등록
+        if (fireEvacuationMask != null)
+        {
+            // 손수건과 충돌할 때 HandkerEnter 실행
+            fireEvacuationMask.OnHandkerchiefEnter += HandkerEnter;
+
+            // 손수건과 충돌 종료할 때 HandkerExit 실행
+            fireEvacuationMask.OnHandkerchiefExit += HandkerExit;
+        }
+        else
+        {
+            Debug.LogError("FireEvacuationMask.cs -> null");
+        }
     }
 
     // 손수건과 충돌할 때 실행
-    private void HandleEnter()
+    private void HandkerEnter()
     {
         // 패널 비활성화
         maskWarningPanel.SetActive(false);
+        Debug.Log("손수건과 충돌할 때 실행");
     }
 
     // 손수건과 충돌 종료할 때 실행
-    private void HandleExit()
+    private void HandkerExit()
     {
         // 패널 활성화
         maskWarningPanel.SetActive(true);
+        Debug.Log("손수건과 충돌 종료할 때 실행");
     }
 
-    // 해당 객체 삭제
-    public void OnDestroy()
+    // 손수건을 잡을 때 실행
+    private void HandkerGrab()
     {
-        // 언제까지 유지하는데???
+        // 패널 활성화
+        maskWarningPanel.SetActive(true);
+        Debug.Log("손수건을 잡을 때 실행");
+    }
+
+    // 손수건을 놓을 때 실행
+    private void HandkerRelease()
+    {
+        // 패널 비활성화
+        maskWarningPanel.SetActive(false);
+        Debug.Log("손수건을 놓을 때 실행");
     }
 }
