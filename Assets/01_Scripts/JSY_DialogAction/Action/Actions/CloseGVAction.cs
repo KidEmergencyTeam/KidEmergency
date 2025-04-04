@@ -7,10 +7,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class CloseGVAction : MonoBehaviour, IActionEffect
 {
     [SerializeField] private GameObject _target; // 가스 밸브
+    [SerializeField] private GameObject[] _hand; // 0 왼, 1 오
     
     private float _limitRot = 90f;
     private XRGrabInteractable _grabInteractable;
-    private Vector3 _originPos;
     private bool _isComplete = false;
     
     public bool IsActionComplete => _isComplete;
@@ -18,7 +18,6 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     private void Awake()
     {
         _grabInteractable = _target.GetComponent<XRGrabInteractable>();
-        _originPos = _target.transform.position;
     }
 
     private void Start()
@@ -29,7 +28,6 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        _grabInteractable.enabled = true;
         StartCoroutine(TryCloseGV());
     }
 
@@ -37,19 +35,22 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     {
         while (!_isComplete)
         {
-            _target.transform.position = _originPos;
-            
-            float currentZRotation = _target.transform.rotation.eulerAngles.z;
-            
-            if (currentZRotation >= _limitRot)
+            if (Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.05f
+                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f)
             {
-                _isComplete = true;
-                _grabInteractable.enabled = false;
-                
-                _target.transform.rotation = Quaternion.Euler(0, 0, _limitRot);
+                _grabInteractable.enabled = true;
+                float currentZRotation = _target.transform.rotation.eulerAngles.z;
+
+                if (currentZRotation == _limitRot)
+                {
+                    _grabInteractable.enabled = false;
+                    _target.transform.rotation = Quaternion.Euler(0, 0, _limitRot);
+
+                    _isComplete = true;
+                }
+
+                yield return null;
             }
-            
-            yield return null;
         }
     }
 }
