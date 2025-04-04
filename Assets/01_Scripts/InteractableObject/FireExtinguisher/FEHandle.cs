@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 [DefaultExecutionOrder(FEHandle.ExecutionOrder)]
 public class FEHandle : MonoBehaviour
@@ -14,7 +13,7 @@ public class FEHandle : MonoBehaviour
 	public Transform muzzle;
 	public FEHose hose;
 	public GameObject powderPrefab;
-	public float fireCoolTime = 0.4f;
+	public float fireCoolTime = 0.2f;
 	public float currentExtinguishingDamage;
 	public InputActionProperty fireAction;
 
@@ -40,7 +39,7 @@ public class FEHandle : MonoBehaviour
 
 	private void Update()
 	{
-		if (!hose.grabbable.currentGrabber) return;
+		if (!hose.currentGrabber) return;
 		RaycastHit[] hits = Physics.RaycastAll(muzzle.position, muzzle.forward, extinguisherDistance);
 		if (hits.Length > 0)
 		{
@@ -74,6 +73,7 @@ public class FEHandle : MonoBehaviour
 			{
 				currentExtinguishingDamage = Mathf.MoveTowards(maxExtinguishingDamage, minExtinguishingDamage,
 					damageSpeed * Time.deltaTime);
+				currentFire = _fireDetectCollider.firePosition;
 			}
 			else
 			{
