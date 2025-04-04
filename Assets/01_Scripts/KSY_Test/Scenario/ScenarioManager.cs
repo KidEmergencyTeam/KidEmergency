@@ -143,7 +143,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             // 다음 스텝으로 넘김 (없으면 같은 스텝에서 무한 반복됨)
             currentStep++;
 
-            // 한 프레임 대기 (모든 로직 실행 후 다음 프레임에서 루프 재시작)
             yield return null;
         }
     }
@@ -158,6 +157,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     #region 시나리오 스텝
 
     IEnumerator Step1() { yield return PlayAndWait(0); }
+
     IEnumerator Step2() { yield return PlayAndWait(1); }
 
     // 교실 씬 -> 연기 파티클 처리
@@ -165,8 +165,11 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
     }
+
     IEnumerator Step4() { yield return PlayAndWait(2); }
+
     IEnumerator Step5() { yield return PlayAndWait(3); }
+
     IEnumerator Step6() { yield return PlayAndWait(4); }
 
     // Step7 선택지: 손 vs 손수건
@@ -184,7 +187,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 11;
     }
+
     IEnumerator Step8() { yield return null; }
+
     IEnumerator Step9() { yield return PlayAndWait(5); }
 
     // Step10 대사 출력 -> Step13 진행
@@ -194,59 +199,38 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         currentStep = 12;
     }
     IEnumerator Step11() { yield return null; }
+
     IEnumerator Step12() { yield return PlayAndWait(7); }
 
     // Step13: NPC 상태를 Hold로 변경
     // 사용자 손수건 처리
     IEnumerator Step13()
     {
-        // 대사 출력 -> 모두 책상 위에 있는 손수건을 사용해서 입과 코를 가리고 교실 문 앞에 2 줄로 서 줘! 
         yield return PlayAndWait(8);
-        // 1. "HandkerActivation" 태그를 가진 객체에서 HandkerActivation.cs 가져오기
-        HandkerActivation handkerActivation = GameObject.FindGameObjectWithTag("HandkerActivation")?.GetComponent<HandkerActivation>();
-        // 2. 손수건 활성화
-        handkerActivation.ActivateHandkerObject();
-        // 3. NPC들의 상태를 Hold로 변경
+
+        // 비활성화된 손수건 활성화
+        yield return StartCoroutine(Handker());
+
+        // NPC들의 상태를 Hold로 변경
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        // 4. "Head" 태그를 가진 객체에서 FireEvacuationMask.cs 가져오기
-        FireEvacuationMask fireEvacuationMask = GameObject.FindGameObjectWithTag("Head")?.GetComponent<FireEvacuationMask>();
-        // 5. 충돌 체크 
-        bool collisionOccurred = false;
-        // 6. 충돌이 발생하면 collisionOccurred를 true로 변경
-        fireEvacuationMask.OnHandkerchiefEnter += () => collisionOccurred = true;
-        // 7. 충돌이 발생할 때까지 대기 
-        yield return new WaitUntil(() => collisionOccurred);
-        Debug.Log("손수건과 입 콜라이더가 충돌 - 다음 단계 실행");
+
+        // 손수건 충돌 확인 -> 확인되면 다음 스텝으로 넘어감
+        yield return StartCoroutine(Mask());
     }
 
-    // Step14에서는 PlayerPosition.cs를 이용하여 플레이어를 각 슬롯의 스텝14 위치로 이동
+    // Step14에서 페이드 효과 + 문 앞으로 이동
     IEnumerator Step14()
     {
-        // PlayerPosition.cs 가져오기
-        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
-        if (playerPosition == null)
-        {
-            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // playerEntries 리스트 유효성 검사
-        if (playerPosition.playerEntries == null || playerPosition.playerEntries.Count == 0)
-        {
-            Debug.LogError("playerEntries 리스트가 비어있습니다.");
-            yield break;
-        }
+        yield return new WaitForSeconds(1f);
 
         // 페이드 아웃 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
-        // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
-        playerPosition.ApplyStep14Positions();
+        // 문 앞으로 이동
+        yield return StartCoroutine(Positions());
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
-
-        yield return null;
     }
 
     // Step15 -> 페이드 아웃 효과 필수
@@ -265,26 +249,36 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return new WaitForSeconds(2f);
         yield return PlayAndWait(10);
     }
+
     IEnumerator Step17() { yield return PlayAndWait(11); }
 
     // Step18: 화재 경보벨 연출 -> 버튼 클릭 대기 후 화재 경보벨 재생
     // Step35까지 화재 경보벨 사운드 출력
+    // 코루틴 처리 안한 이유: 중단 없이 전 스텝에 출력하기 위해
     IEnumerator Step18()
     {
+        // 화재 경보벨 누름
         // 버튼 클릭할 때까지 대기
         bool buttonClicked = false;
+
         // 콜백 등록 
         Action callback = () => buttonClicked = true;
+
         // 버튼 클릭 이벤트에 콜백 등록 -> 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
         EmergencyBellButton.OnEmergencyBellClicked += callback;
+
         // buttonClicked = true가 될 때까지 대기
         yield return new WaitUntil(() => buttonClicked);
+
         // 콜백 제거
         EmergencyBellButton.OnEmergencyBellClicked -= callback;
+
+        Debug.Log("비상벨을 누름");
+
         // 화재 경보벨 재생
         TypingEffect.Instance.StartContinuousSeparateTypingClip();
-        yield return null;
     }
+
     IEnumerator Step19() { yield return PlayAndWait(12); }
 
     // 연기 파티클 강조
@@ -299,24 +293,24 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 피난 유도선 아웃라인 효과 실행 -> Emergency_Exit 오브젝트 대상
     IEnumerator Step21()
     {
-        // 태그가 "SafetyLine"인 오브젝트들을 모두 찾음
-        GameObject[] safetyLineObjects = GameObject.FindGameObjectsWithTag("SafetyLine");
+        //// 태그가 "SafetyLine"인 오브젝트들을 모두 찾음
+        //GameObject[] safetyLineObjects = GameObject.FindGameObjectsWithTag("SafetyLine");
 
-        foreach (GameObject obj in safetyLineObjects)
-        {
-            // 각 오브젝트에서 ToggleOutlinable.cs 가져오기
-            ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
+        //foreach (GameObject obj in safetyLineObjects)
+        //{
+        //    // 각 오브젝트에서 ToggleOutlinable.cs 가져오기
+        //    ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
 
-            if (toggleComp != null)
-            {
-                // Outlinable 활성화 (false에서 true로 전환)
-                toggleComp.OutlinableEnabled = true;
-            }
-            else
-            {
-                Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
-            }
-        }
+        //    if (toggleComp != null)
+        //    {
+        //        // Outlinable 활성화 (false에서 true로 전환)
+        //        toggleComp.OutlinableEnabled = true;
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
+        //    }
+        //}
         yield return PlayAndWait(14);
     }
 
@@ -324,18 +318,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 사용자 낮은 자세로 숙이기
     IEnumerator Step22()
     {
-        // 1. NPC들의 상태를 Bow(숙임)으로 변경
-        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-
-        // "MainCamera" 태그가 붙은 오브젝트를 찾습니다.
-        GameObject vrCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-
-        // 높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달할 때까지 대기
-        yield return new WaitUntil(() =>
-    vrCameraObj.transform.localPosition.y >= -0.3f &&
-    vrCameraObj.transform.localPosition.y <= -0.2f);
-
-        Debug.Log("높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달하여 다음 스텝으로 진행합니다.");
+        yield return StartCoroutine(VRCamera());
     }
 
     IEnumerator Step23() { yield return PlayAndWait(15); }
@@ -363,7 +346,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return PlayAndWait(16);
         currentStep = 27;
     }
+
     IEnumerator Step26() { yield return null; }
+
     IEnumerator Step27() { yield return PlayAndWait(17); }
 
     // Step28 -> 페이드 아웃 효과 필수
@@ -409,7 +394,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return PlayAndWait(21);
         currentStep = 34;
     }
+
     IEnumerator Step33() { yield return null; }
+
     IEnumerator Step34() { yield return PlayAndWait(22); }
 
     // Step35까지 연기 파티클 유지
@@ -429,12 +416,14 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return new WaitForSeconds(2f);
         yield return PlayAndWait(24);
     }
+
     IEnumerator Step37() { yield return PlayAndWait(25); }
 
     // 마지막 대사 출력 -> 마지막 씬 이동
     IEnumerator Step38()
     {
         yield return PlayAndWait(26);
+        yield return new WaitForSeconds(3000000f);// 손수건 제거시 경고창 처리 상태 확인
         yield return StartCoroutine(ChangeScene(3));
 
         // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
@@ -453,9 +442,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         if (sceneIndex >= 0 && sceneIndex < sceneNames.Count)
         {
             Debug.Log($"씬 전환: {sceneNames[sceneIndex]}");
-
-            // 페이드 아웃 효과 실행
-            // yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
             // 씬 전환 
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNames[sceneIndex]);
@@ -490,7 +476,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             }
         }
 
-        // 모든 NPC 한 번에 상태 전환 -> 많은 NPC가 있을 경우, 약간 버벅거릴 수 있음
         yield return null;
     }
 
@@ -540,6 +525,102 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
                 ps.transform.position = pos;
             }
         }
+
         yield return null;
+    }
+
+    // 문 앞으로 이동
+    public IEnumerator Positions()
+    {
+        // PlayerPosition 컴포넌트 가져오기
+        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
+        if (playerPosition == null)
+        {
+            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // playerEntries 리스트 유효성 검사
+        if (playerPosition.playerEntries == null || playerPosition.playerEntries.Count == 0)
+        {
+            Debug.LogError("playerEntries 리스트가 비어있습니다.");
+            yield break;
+        }
+
+        // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
+        playerPosition.ApplyStep14Positions();
+
+        Debug.Log("문 앞으로 이동");
+    }
+
+    // 비활성화된 손수건 활성화
+    public IEnumerator Handker()
+    {
+        // 1."HandkerActivation" 태그를 가진 객체에서 HandkerActivation.cs 가져오기
+        HandkerActivation handkerActivation = GameObject.FindGameObjectWithTag("HandkerActivation")?.GetComponent<HandkerActivation>();
+
+        if (handkerActivation == null)
+        {
+            Debug.LogError("HandkerActivation 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 2.손수건 활성화
+        handkerActivation.ActivateHandkerObject();
+
+        Debug.Log("손수건 활성화");
+    }
+
+    // 손수건 충돌 확인
+    public IEnumerator Mask()
+    {
+        // 1."Head" 태그를 가진 객체에서 FireEvacuationMask 컴포넌트 가져오기
+        FireEvacuationMask fireEvacuationMask = GameObject.FindGameObjectWithTag("Head")?.GetComponent<FireEvacuationMask>();
+        if (fireEvacuationMask == null)
+        {
+            Debug.LogError("FireEvacuationMask 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 2.충돌 체크를 위한 변수
+        bool collisionOccurred = false;
+
+        // 3.충돌이 발생하면 collisionOccurred를 true로 변경
+        void OnHandkerEnterHandler()
+        {
+            collisionOccurred = true;
+        }
+
+        // 4.손수건과 충돌할 때 OnHandkerEnterHandler 실행
+        fireEvacuationMask.OnHandkerchiefEnter += OnHandkerEnterHandler;
+
+        // 5.충돌이 발생할 때까지 대기 
+        yield return new WaitUntil(() => collisionOccurred);
+        Debug.Log("손수건과 입 콜라이더가 충돌 - 다음 단계 실행");
+
+        // 6.이벤트 해제
+        fireEvacuationMask.OnHandkerchiefEnter -= OnHandkerEnterHandler;
+    }
+
+    // 플레이어 높낮이 체크
+    public IEnumerator VRCamera()
+    {
+        // 1."MainCamera" 태그가 붙은 오브젝트를 찾습니다.
+        GameObject vrCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
+
+        if (vrCameraObj == null)
+        {
+            Debug.LogError("MainCamera 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달할 때까지 대기
+        yield return new WaitUntil(() =>
+
+    vrCameraObj.transform.localPosition.y >= -0.3f &&
+
+    vrCameraObj.transform.localPosition.y <= -0.2f);
+
+        Debug.Log("높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달하여 다음 스텝으로 진행합니다.");
     }
 }
