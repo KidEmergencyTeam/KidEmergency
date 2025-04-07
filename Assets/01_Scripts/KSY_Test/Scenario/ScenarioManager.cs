@@ -175,17 +175,27 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step7 선택지: 손 vs 손수건
     IEnumerator Step7()
     {
+        // 패널에서 설정한 정답
         int selected = 0;
-        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, (result) => {
-            selected = result;
-        }));
 
-        // 정답: 손 선택 시 Step9로 이동
-        if (selected == 1)
-            currentStep = 8;
-        // 오답: 손수건 선택 시 Step12로 이동
-        else
+        // 선택지 정답 -> 두 값을 비교해서 일치하면 세티 표정을 변경하기 위해 2개의 값이 존재
+        // 만약 값이 1개만 존재하면 정답이 1일 수도 있고, 2일 수도 있는데
+        // 이것을 구분하여 SetHappy을 호출하기 어렵다.
+        int correct = 2;
+
+        yield return StartCoroutine(
+            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
+        );
+
+        // 일치 -> 정답, 스텝 12 이동
+        if (selected == correct)
             currentStep = 11;
+
+        // 불일치 -> 오답, 스텝 9 이동
+        else
+            currentStep = 8;
+
+        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
     }
 
     IEnumerator Step8() { yield return null; }
@@ -326,18 +336,25 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
     IEnumerator Step24()
     {
+        // 패널에서 설정한 정답
         int selected = 0;
-        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(1, r => {
-            selected = r;
-        }));
 
-        // 정답: 피난 유도선 선택 시 Step25로 이동
-        if (selected == 1)
+        // 선택지 정답
+        int correct = 1;
+
+        yield return StartCoroutine(
+            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
+        );
+
+        // 일치 -> 정답, 스텝 25 이동
+        if (selected == correct)
             currentStep = 24;
 
-        // 오답: 익숙한 길 선택 시 Step27로 이동
+        // 불일치 -> 오답, 스텝 27 이동
         else
             currentStep = 26;
+
+        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -374,18 +391,25 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step31: 선택지 처리 (계단 VS 엘베)
     IEnumerator Step31()
     {
+        // 패널에서 설정한 정답
         int selected = 0;
-        yield return StartCoroutine(ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, r => {
-            selected = r;
-        }));
 
-        // 정답: 계단 선택 시 Step32로 이동
-        if (selected == 1)
+        // 선택지 정답
+        int correct = 1;
+
+        yield return StartCoroutine(
+            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
+        );
+
+        // 일치 -> 정답, 스텝 32 이동
+        if (selected == correct)
             currentStep = 31;
 
-        // 오답: 엘리베이터 선택 시 Step34로 이동
+        // 불일치 -> 오답, 스텝 34 이동
         else
             currentStep = 33;
+
+        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
     }
 
     // Step32 대사 출력 -> Step35 진행
@@ -621,5 +645,34 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     vrCameraObj.transform.localPosition.y <= -0.2f);
 
         Debug.Log("높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달하여 다음 스텝으로 진행합니다.");
+    }
+
+    // 세티 표정 초기화
+    private IEnumerator SetiResetRobotAfterDelay(float delay, int panelChoice, int choiceResult)
+    {
+        // "Seti" 태그가 붙은 오브젝트 찾기
+        RobotController robotController = GameObject.FindGameObjectWithTag("Seti")?.GetComponent<RobotController>();
+        if (robotController == null)
+        {
+            Debug.LogError("RobotController 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 정답이면 SetHappy 호출
+        if (panelChoice == choiceResult)
+        {
+            robotController.SetHappy();
+        }
+        // 오답이면 SetAngry 호출
+        else
+        {
+            robotController.SetAngry();
+        }
+
+        // 딜레이 적용
+        yield return new WaitForSeconds(delay);
+
+        // 세티 표정 복구
+        robotController?.SetBasic();
     }
 }

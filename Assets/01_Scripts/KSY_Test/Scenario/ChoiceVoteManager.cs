@@ -58,28 +58,6 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
     // 투표 완료 후 최종 결과를 전달할 콜백 함수
     private Action<int> resultCallback;
 
-    // RobotController 스크립트
-    private RobotController robotController;
-
-    private void Start()
-    {
-        // "Seti" 태그가 붙은 오브젝트 찾기
-        GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
-        if (setiObj != null)
-        {
-            // RobotController.cs 가져오기
-            robotController = setiObj.GetComponent<RobotController>();
-            if (robotController == null)
-            {
-                Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
-            }
-        }
-        else
-        {
-            Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
-        }
-    }
-
     // 모든 플레이어에게 공통된 선택지 UI 패널을 사용하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
     public IEnumerator ShowChoiceAndGetResult(int choicePanelSceneReferenceIndex, Action<int> onResult)
@@ -166,21 +144,6 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
         // 모든 투표를 집계하여 최종 선택 결정 (동률 시 tieChoiceIndex 사용)
         finalVoteResult = CalculateMajorityWithTie(tieChoiceIndex);
 
-        // 최종 결과에 따른 로봇 애니메이션 처리 
-        if (robotController != null)
-        {
-            // 정답이면 SetHappy 호출
-            if (finalVoteResult == tieChoiceIndex)
-            {
-                robotController.SetHappy();
-            }
-            // 오답이면 SetAngry 호출
-            else
-            {
-                robotController.SetAngry();
-            }
-        }
-
         // 최종 결과 반영: 공용 패널 업데이트 후 파괴 처리
         UpdateVoteUI(commonPanel);
         Destroy(commonPanel.panel);
@@ -195,8 +158,6 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
 
         // 최종 결과 콜백 호출 (다른 로직으로 최종 결과 전달)
         resultCallback?.Invoke(finalVoteResult);
-
-        StartCoroutine(ResetRobotAfterDelay(3f));
     }
 
     // 특정 플레이어의 투표를 기록 (중복 투표는 무시)
@@ -312,12 +273,5 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
                 panel.voteCountTexts[i].text = $"{label}: 0/{total}";
             }
         }
-    }
-
-    // 세티 표정 초기화
-    private IEnumerator ResetRobotAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        robotController?.SetBasic();
     }
 }
