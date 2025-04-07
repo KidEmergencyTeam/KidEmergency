@@ -4828,6 +4828,7 @@ GameObject:
   - component: {fileID: 714653810}
   - component: {fileID: 714653809}
   - component: {fileID: 714653808}
+  - component: {fileID: 714653812}
   m_Layer: 5
   m_Name: Left_Desc_Img
   m_TagString: Untagged
@@ -4952,6 +4953,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 714653806}
   m_CullTransparentMesh: 1
+--- !u!114 &714653812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714653806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &719211075
 GameObject:
   m_ObjectHideFlags: 0
@@ -6765,7 +6779,7 @@ GameObject:
   - component: {fileID: 930297603}
   - component: {fileID: 930297602}
   - component: {fileID: 930297601}
-  - component: {fileID: 930297600}
+  - component: {fileID: 930297605}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -6793,47 +6807,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &930297600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930297598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets: []
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &930297601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6932,6 +6905,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930297598}
   m_CullTransparentMesh: 1
+--- !u!114 &930297605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930297598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &935237342
 GameObject:
   m_ObjectHideFlags: 0
@@ -7345,6 +7331,7 @@ GameObject:
   - component: {fileID: 1010775692}
   - component: {fileID: 1010775691}
   - component: {fileID: 1010775690}
+  - component: {fileID: 1010775694}
   m_Layer: 5
   m_Name: Right_Desc_Img
   m_TagString: Untagged
@@ -7469,6 +7456,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1010775688}
   m_CullTransparentMesh: 1
+--- !u!114 &1010775694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010775688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &1018369417
 GameObject:
   m_ObjectHideFlags: 0
@@ -9540,7 +9540,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5

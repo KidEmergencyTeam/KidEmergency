@@ -3471,6 +3471,7 @@ GameObject:
   - component: {fileID: 564186315}
   - component: {fileID: 564186314}
   - component: {fileID: 564186313}
+  - component: {fileID: 564186317}
   m_Layer: 5
   m_Name: Left_Desc_Img
   m_TagString: Untagged
@@ -3595,6 +3596,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564186311}
   m_CullTransparentMesh: 1
+--- !u!114 &564186317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564186311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1001 &577856771
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5490,6 +5504,7 @@ GameObject:
   - component: {fileID: 926571016}
   - component: {fileID: 926571015}
   - component: {fileID: 926571014}
+  - component: {fileID: 926571018}
   m_Layer: 5
   m_Name: Right_Desc_Img
   m_TagString: Untagged
@@ -5614,6 +5629,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926571012}
   m_CullTransparentMesh: 1
+--- !u!114 &926571018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926571012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &944840065
 GameObject:
   m_ObjectHideFlags: 0
@@ -8475,7 +8503,7 @@ GameObject:
   - component: {fileID: 1468756637}
   - component: {fileID: 1468756636}
   - component: {fileID: 1468756635}
-  - component: {fileID: 1468756634}
+  - component: {fileID: 1468756639}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -8503,47 +8531,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1468756634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468756632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets: []
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &1468756635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8642,6 +8629,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468756632}
   m_CullTransparentMesh: 1
+--- !u!114 &1468756639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468756632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1001 &1484933019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9300,7 +9300,7 @@ MonoBehaviour:
   outlinable: {fileID: 0}
 --- !u!114 &1664488369
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}

@@ -1406,6 +1406,7 @@ GameObject:
   - component: {fileID: 173084530}
   - component: {fileID: 173084532}
   - component: {fileID: 173084531}
+  - component: {fileID: 173084533}
   m_Layer: 5
   m_Name: Right_Desc_Img
   m_TagString: Untagged
@@ -1470,6 +1471,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 173084529}
   m_CullTransparentMesh: 1
+--- !u!114 &173084533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173084529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &173307276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,7 +1746,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -1748,7 +1762,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -10730,6 +10744,7 @@ GameObject:
   - component: {fileID: 1606703035}
   - component: {fileID: 1606703037}
   - component: {fileID: 1606703036}
+  - component: {fileID: 1606703038}
   m_Layer: 5
   m_Name: Left_Desc_Img
   m_TagString: Untagged
@@ -10794,6 +10809,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1606703034}
   m_CullTransparentMesh: 1
+--- !u!114 &1606703038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606703034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1001 &1610591621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11508,38 +11536,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1678308285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets: []
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &1726005937
 GameObject:
   m_ObjectHideFlags: 0

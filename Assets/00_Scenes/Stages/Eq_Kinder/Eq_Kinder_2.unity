@@ -8196,6 +8196,7 @@ GameObject:
   - component: {fileID: 1242210255}
   - component: {fileID: 1242210254}
   - component: {fileID: 1242210253}
+  - component: {fileID: 1242210257}
   m_Layer: 5
   m_Name: Left_Desc_Img
   m_TagString: Untagged
@@ -8320,6 +8321,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242210251}
   m_CullTransparentMesh: 1
+--- !u!114 &1242210257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242210251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &1242713017
 GameObject:
   m_ObjectHideFlags: 0
@@ -8333,6 +8347,7 @@ GameObject:
   - component: {fileID: 1242713021}
   - component: {fileID: 1242713020}
   - component: {fileID: 1242713019}
+  - component: {fileID: 1242713023}
   m_Layer: 5
   m_Name: Right_Desc_Img
   m_TagString: Untagged
@@ -8457,6 +8472,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242713017}
   m_CullTransparentMesh: 1
+--- !u!114 &1242713023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242713017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &1255067653
 GameObject:
   m_ObjectHideFlags: 0
@@ -13829,7 +13857,7 @@ GameObject:
   - component: {fileID: 1979200715}
   - component: {fileID: 1979200714}
   - component: {fileID: 1979200713}
-  - component: {fileID: 1979200712}
+  - component: {fileID: 1979200717}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -13857,47 +13885,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1979200712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1979200710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets: []
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &1979200713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13996,6 +13983,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979200710}
   m_CullTransparentMesh: 1
+--- !u!114 &1979200717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979200710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &2028832812
 GameObject:
   m_ObjectHideFlags: 0
