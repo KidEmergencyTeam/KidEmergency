@@ -17,35 +17,64 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     public void StartAction()
     {
         _isComplete = false;
-        StartCoroutine(SetView(ActionManager.Instance.beforeDialog.changePos));
+        StartCoroutine(SetView(ActionManager.Instance.beforeDialog.changePos, ActionManager.Instance.beforeDialog.changeRot));
     }
     
     
-    private IEnumerator SetView(Vector3 newPos)
+    private IEnumerator SetView(Vector3 newPos, Vector3 newRot)
     {
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
 
         while (player.transform.localPosition != newPos)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
-            PlayerRig playerState = FindObjectOfType<PlayerRig>();
             if (newPos == _originPos)
             {
-                player.transform.localPosition = newPos;
-                npcCtrl.SetNPCState("None");
-                playerState.currentState = PlayerRig.State.None;
+                SetNewView(newPos, newRot, PlayerRig.State.None);
+                if (npcCtrl != null)
+                {
+                    npcCtrl.SetNPCState("None");
+                }
             }
             
-            else if (newPos != _originPos)
+            else if (newRot != _originPos && ActionManager.Instance.beforeDialog.name == "School4_Dialog" )
             {
-                player.transform.localPosition = newPos;
-                npcCtrl.SetNPCState("DownDesk");
-                playerState.currentState = PlayerRig.State.Down;
+                // 지진 학교 - 책상 다리로 시점 변경
+                SetNewView(newPos, newRot, PlayerRig.State.Down);
+                if (npcCtrl != null)
+                {
+                    npcCtrl.SetNPCState("DownDesk");
+                }
+            }
+            
+            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "EqHome5_Dialog")
+            {
+                // 지진 집 - 책상 다리로 시점 변경
+                SetNewView(newPos, newRot, PlayerRig.State.Down);
+            }
+            
+            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "EqHome7_Dialog")
+            {
+                // 지진 집 - 가스 밸브 앞으로 시점 변경
+                SetNewView(newPos, newRot, PlayerRig.State.None);
+            }
+            
+            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "EqHome9_Dialog")
+            {
+                // 지진 집 - 전기 차단기 앞으로 시점 변경
+                SetNewView(newPos, newRot, PlayerRig.State.None);
             }
             
             yield return StartCoroutine(OVRScreenFade.Instance.Fade(1f, 0f));
             _isComplete = true;
         }
     }
-    
+
+    private void SetNewView(Vector3 pos, Vector3 rot, PlayerRig.State state)
+    {
+        PlayerRig playerState = FindObjectOfType<PlayerRig>();
+        player.transform.localPosition = pos;
+        player.transform.localRotation = Quaternion.Euler(rot);
+        playerState.currentState = state;
+    }
 }

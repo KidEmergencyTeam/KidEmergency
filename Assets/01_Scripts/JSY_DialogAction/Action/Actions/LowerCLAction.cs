@@ -4,6 +4,7 @@ using System.Collections;
 public class LowerCLAction : MonoBehaviour, IActionEffect
 {
     [SerializeField] private GameObject _lever;
+    [SerializeField] private AudioClip audio;
 
     private Vector3 _lowPos = new Vector3(0, 0.093f, 0.08f);
     private Vector3 _lowRot = new Vector3(90, 0, 0);
@@ -25,6 +26,8 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
         {
             if (_isTriggered)
             {
+                ActionManager.Instance.actionAudio.clip = audio;
+                ActionManager.Instance.actionAudio.Play();
                 _lever.transform.position = _lowPos;
                 _lever.transform.rotation = Quaternion.Euler(_lowRot);
                 _isComplete = true;

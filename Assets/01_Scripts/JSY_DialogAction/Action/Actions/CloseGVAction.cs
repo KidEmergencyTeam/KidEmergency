@@ -39,6 +39,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
                 || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f)
             {
                 _grabInteractable.enabled = true;
+                
                 float currentZRotation = _target.transform.rotation.eulerAngles.z;
 
                 if (currentZRotation == _limitRot)
