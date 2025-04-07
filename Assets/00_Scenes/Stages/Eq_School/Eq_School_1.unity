@@ -4299,7 +4299,6 @@ MonoBehaviour:
   earthquakeAction: {fileID: 1593997551}
   changeViewAction: {fileID: 1593997550}
   placeObjectAction: {fileID: 1593997549}
-  outlineObjectAction: {fileID: 1593997548}
   fixBagAction: {fileID: 1593997547}
   holdLegAction: {fileID: 1593997546}
   closeGVAction: {fileID: 0}
@@ -11150,11 +11149,15 @@ MonoBehaviour:
   _legs:
   - {fileID: 142871865}
   - {fileID: 765651603}
-  _leftHand: {fileID: 1051585439}
-  _rightHand: {fileID: 887853428}
+  _hand:
+  - {fileID: 1051585439}
+  - {fileID: 887853428}
   _legsHighlight:
   - {fileID: 1224901143}
   - {fileID: 2141643728}
+  _controller:
+  - {fileID: 1916510174}
+  - {fileID: 1916510173}
   isHoldComplete: 0
 --- !u!1 &1401301439
 GameObject:
@@ -15899,6 +15902,28 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6924875836153452258, guid: 01f6cabf292308746bc848aa9eaf6cbf, type: 3}
+--- !u!114 &1916510173 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6590152707799593431, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+  m_PrefabInstance: {fileID: 631110519}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caff514de9b15ad48ab85dcff5508221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1916510174 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4682039166337665222, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
+  m_PrefabInstance: {fileID: 631110519}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caff514de9b15ad48ab85dcff5508221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1919552110
 PrefabInstance:
   m_ObjectHideFlags: 0
