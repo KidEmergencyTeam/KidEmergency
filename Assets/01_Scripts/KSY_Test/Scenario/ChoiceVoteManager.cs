@@ -195,6 +195,8 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
 
         // 최종 결과 콜백 호출 (다른 로직으로 최종 결과 전달)
         resultCallback?.Invoke(finalVoteResult);
+
+        StartCoroutine(ResetRobotAfterDelay(3f));
     }
 
     // 특정 플레이어의 투표를 기록 (중복 투표는 무시)
@@ -310,5 +312,12 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
                 panel.voteCountTexts[i].text = $"{label}: 0/{total}";
             }
         }
+    }
+
+    // 세티 표정 초기화
+    private IEnumerator ResetRobotAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        robotController?.SetBasic();
     }
 }
