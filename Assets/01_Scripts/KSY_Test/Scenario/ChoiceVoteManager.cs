@@ -58,6 +58,28 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
     // 투표 완료 후 최종 결과를 전달할 콜백 함수
     private Action<int> resultCallback;
 
+    // RobotController 스크립트
+    private RobotController robotController;
+
+    private void Start()
+    {
+        // "Seti" 태그가 붙은 오브젝트 찾기
+        GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
+        if (setiObj != null)
+        {
+            // RobotController.cs 가져오기
+            robotController = setiObj.GetComponent<RobotController>();
+            if (robotController == null)
+            {
+                Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
+            }
+        }
+        else
+        {
+            Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
+        }
+    }
+
     // 모든 플레이어에게 공통된 선택지 UI 패널을 사용하여 투표를 받고,
     // 투표가 완료되면 집계하여 최종 결과를 반환하는 코루틴
     public IEnumerator ShowChoiceAndGetResult(int choicePanelSceneReferenceIndex, Action<int> onResult)
