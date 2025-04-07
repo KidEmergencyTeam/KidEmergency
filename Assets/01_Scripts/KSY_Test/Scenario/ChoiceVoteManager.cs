@@ -166,6 +166,21 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
         // 모든 투표를 집계하여 최종 선택 결정 (동률 시 tieChoiceIndex 사용)
         finalVoteResult = CalculateMajorityWithTie(tieChoiceIndex);
 
+        // 최종 결과에 따른 로봇 애니메이션 처리 
+        if (robotController != null)
+        {
+            // 정답이면 SetHappy 호출
+            if (finalVoteResult == tieChoiceIndex)
+            {
+                robotController.SetHappy();
+            }
+            // 오답이면 SetAngry 호출
+            else
+            {
+                robotController.SetAngry();
+            }
+        }
+
         // 최종 결과 반영: 공용 패널 업데이트 후 파괴 처리
         UpdateVoteUI(commonPanel);
         Destroy(commonPanel.panel);
