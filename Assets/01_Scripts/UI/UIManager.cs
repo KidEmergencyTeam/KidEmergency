@@ -176,6 +176,7 @@ public class UIManager : SingletonManager<UIManager>
         dialogUI.transform.SetParent(dialogPos[index]);
         dialogUI.transform.localPosition = Vector3.zero;
         dialogUI.transform.localEulerAngles = Vector3.zero;
+        dialogUI.transform.localScale = Vector3.one;
     }
 
     private void OptionPosReset(int index)

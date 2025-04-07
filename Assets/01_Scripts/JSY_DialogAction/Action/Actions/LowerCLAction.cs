@@ -26,8 +26,11 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
         {
             if (_isTriggered)
             {
-                ActionManager.Instance.actionAudio.clip = audio;
-                ActionManager.Instance.actionAudio.Play();
+                if (audio != null)
+                { 
+                    ActionManager.Instance.actionAudio.clip = audio;
+                    ActionManager.Instance.actionAudio.Play();
+                } 
                 _lever.transform.position = _lowPos;
                 _lever.transform.rotation = Quaternion.Euler(_lowRot);
                 _isComplete = true;
