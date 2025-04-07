@@ -48,7 +48,7 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
     }
 
     // 이벤트 제거
-    private void OnDestroy()
+    private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         grabbableComponent.currentGrabber.OnRelease();
