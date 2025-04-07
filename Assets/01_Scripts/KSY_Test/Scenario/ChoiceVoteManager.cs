@@ -14,7 +14,7 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
         // 모든 플레이어가 사용할 공용 UI 패널 프리팹 (프리팹은 에셋이므로 직접 수정할 수 없으며, 인스턴스화해서 사용)
         public GameObject panelPrefab;
 
-        // 동률 발생 시 우선할 선택.
+        // 동률 발생 시 우선할 선택 -> 정답 선택지 처리
         // 예를 들어 1이면 첫 번째 선택지, 2면 두 번째 선택지를 우선 처리
         [Header("동률 발생 시 우선할 선택")]
         public int tieChoiceIndex;
