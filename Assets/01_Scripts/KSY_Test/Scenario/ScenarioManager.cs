@@ -423,7 +423,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step38()
     {
         yield return PlayAndWait(26);
-        yield return new WaitForSeconds(3000000f);// 손수건 제거시 경고창 처리 상태 확인
         yield return StartCoroutine(ChangeScene(3));
 
         // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
