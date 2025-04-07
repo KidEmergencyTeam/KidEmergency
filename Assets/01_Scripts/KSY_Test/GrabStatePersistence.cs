@@ -40,10 +40,7 @@ public class GrabStatePersistence : DisableableSingleton<GrabStatePersistence>
                 return;
             }
 
-            // 손수건 오브젝트에 추가된
-            // Grabbable 컴포넌트에서 currentGrabber를 갱신하면
-            // Grabbable 컴포넌트에서 손수건의 위치와 방향을
-            // Grabber 컴포넌트가 추가된 오브젝트의 위치와 방향으로 처리
+            // 씬마다 손 위치와 방향 갱신
             grabbableComponent.currentGrabber = newGrabber;
 
             // grabbableComponent.isGrabbable가 false일 경우에만 Grab 실행
