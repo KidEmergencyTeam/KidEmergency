@@ -18,7 +18,11 @@ public class MaskWarningUI : MonoBehaviour
     {
         // Grabber 이벤트 등록
         if (leftGrabber != null)
+        {
             leftGrabber.OnGrabEvent += HandkerGrab;
+            leftGrabber.OnReleaseEvent += HandkerRelease;
+        }
+
         else
             Debug.LogError("[MaskWarningUI] leftGrabber -> null");
     }
@@ -39,7 +43,10 @@ public class MaskWarningUI : MonoBehaviour
     {
         // Grabber 이벤트 해제
         if (leftGrabber != null)
+        {
             leftGrabber.OnGrabEvent -= HandkerGrab;
+            leftGrabber.OnReleaseEvent -= HandkerRelease;
+        }
 
         // FireEvacuationMask 이벤트 해제
         if (fireEvacuationMask != null)
