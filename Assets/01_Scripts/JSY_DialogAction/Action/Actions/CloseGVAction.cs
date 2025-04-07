@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -35,8 +33,9 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     {
         while (!_isComplete)
         {
-            if (Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.05f
-                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f)
+            bool isInteractable = Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.05f
+                                  || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f;
+            if (isInteractable)
             {
                 _grabInteractable.enabled = true;
                 
@@ -49,9 +48,15 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
 
                     _isComplete = true;
                 }
-
-                yield return null;
             }
+
+            else
+            {
+                _grabInteractable.enabled = false;
+            }
+            
+            yield return null;
+
         }
     }
 }

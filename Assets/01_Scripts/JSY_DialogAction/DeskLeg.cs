@@ -47,59 +47,31 @@ public class DeskLeg : MonoBehaviour
         
         bool isLeftGrapped = _controller[0].selectAction.action.ReadValue<float>() > 0;
         bool isRightGrapped = _controller[1].selectAction.action.ReadValue<float>() > 0;
-        bool isInteractable;
         
-        if (SceneManager.GetActiveScene().name == "Eq_School_1")
-        {
-            isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.05f &&
+        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.05f &&
                              isLeftGrapped &&
                              Vector3.Distance(_legs[1].transform.position, _hand[1].transform.position) < 0.05f &&
                              isRightGrapped;
-            
-            if (isInteractable)
-            { 
-                UIManager.Instance.CloseWarningUI();
-            
-                _durationTime += Time.deltaTime;
-                if (_durationTime >= _endTime)
-                { 
-                    isHoldComplete = true;
-                }
-            }
         
-            else
-            {
-                _durationTime = 0f;
-                UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
-                UIManager.Instance.OpenWarningUI(); 
-                isHoldComplete = false;
+        if (isInteractable)
+        { 
+            UIManager.Instance.CloseWarningUI();
+            _durationTime += Time.deltaTime;
+            if (_durationTime >= _endTime)
+            { 
+                isHoldComplete = true;
             }
         }
         
-        else if (SceneManager.GetActiveScene().name == "Eq_Home_1")
+        else
         {
-            isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.1f && isLeftGrapped &&
-                Vector3.Distance(_legs[1].transform.position, _hand[1].transform.position) < 0.1f && isRightGrapped;
-            if (isInteractable)
-            { 
-                UIManager.Instance.CloseWarningUI();
-            
-                _durationTime += Time.deltaTime;
-                if (_durationTime >= _endTime)
-                { 
-                    isHoldComplete = true;
-                }
-            }
-        
-            else
-            {
-                _durationTime = 0f;
-                UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
-                UIManager.Instance.OpenWarningUI(); 
-                isHoldComplete = false;
-            }
+            _durationTime = 0f;
+            UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
+            UIManager.Instance.OpenWarningUI(); 
+            isHoldComplete = false;
         }
     }
+    
     
     public bool IsHoldComplete()
     {
