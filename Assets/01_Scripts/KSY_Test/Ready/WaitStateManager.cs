@@ -19,6 +19,9 @@ public class WaitStateManager : MonoBehaviour
     // 대기 중인 플레이어들의 PlayerReady.cs를 저장할 리스트
     private List<PlayerReady> playerReadyList = new List<PlayerReady>();
 
+    // RobotController 스크립트
+    private RobotController robotController;
+
     void Start()
     {
         // 태그가 "Player"인 모든 오브젝트에서 PlayerReady.cs 찾기
@@ -31,6 +34,22 @@ public class WaitStateManager : MonoBehaviour
                 playerReadyList.Add(pr);
                 pr.onPlayerReady += OnPlayerReady;
             }
+        }
+
+        // "Seti" 태그가 붙은 오브젝트 찾기
+        GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
+        if (setiObj != null)
+        {
+            // RobotController.cs 가져오기
+            robotController = setiObj.GetComponent<RobotController>();
+            if (robotController == null)
+            {
+                Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
+            }
+        }
+        else
+        {
+            Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
         }
     }
 
@@ -50,6 +69,15 @@ public class WaitStateManager : MonoBehaviour
             else
             {
                 Debug.LogWarning("readyIndicatorImage가 할당되어 있지 않습니다.");
+            }
+
+            if (robotController != null)
+            {
+                robotController.SetHappy();
+            }
+            else
+            {
+                Debug.LogWarning("robotController가 할당되어 있지 않습니다.");
             }
 
             // 코루틴을 통해 일정 시간 대기 후 씬 전환 실행
