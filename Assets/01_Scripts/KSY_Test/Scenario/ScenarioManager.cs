@@ -150,6 +150,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 텍스트 출력과 사운드 재생이 모두 완료될 때까지 대기
     public IEnumerator PlayAndWait(int index)
     {
+        // 만약에 세티 표정 변화를 제대로 반영하겠다 싶으면 
+        // 여기서 처리하면 된다.
         typingEffect.PlayTypingAtIndex(index);
         yield return new WaitUntil(() => !typingEffect.IsTyping);
     }
@@ -200,7 +202,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 8;
 
-        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     IEnumerator Step8() { yield return null; }
@@ -362,7 +364,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 26;
 
-        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -420,7 +422,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 33;
 
-        StartCoroutine(SetiResetRobotAfterDelay(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step32 대사 출력 -> Step35 진행
@@ -461,6 +463,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step38()
     {
         yield return PlayAndWait(26);
+        StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
 
         // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
@@ -662,7 +665,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // 세티 표정 초기화
-    private IEnumerator SetiResetRobotAfterDelay(float delay, int panelChoice, int choiceResult)
+    private IEnumerator ApplySelectionAndDelayedReset(float delay, int panelChoice, int choiceResult)
     {
         // "Seti" 태그가 붙은 오브젝트 찾기
         RobotController robotController = GameObject.FindGameObjectWithTag("Seti")?.GetComponent<RobotController>();
@@ -688,6 +691,24 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 세티 표정 복구
         robotController?.SetBasic();
+    }
+
+    // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영
+    private IEnumerator SetRobotState(float delay)
+    {
+        // "Seti" 태그가 붙은 오브젝트 찾기
+        RobotController robotController = GameObject.FindGameObjectWithTag("Seti")?.GetComponent<RobotController>();
+        if (robotController == null)
+        {
+            Debug.LogError("RobotController 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // 세티 표정 SetHappy 반영
+        robotController.SetHappy();
+
+        // 딜레이 적용
+        yield return new WaitForSeconds(delay);
     }
 
     // DialogUI 활성화
