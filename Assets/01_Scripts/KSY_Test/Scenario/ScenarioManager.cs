@@ -463,6 +463,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step38()
     {
         yield return PlayAndWait(26);
+
+        // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
 
