@@ -6,8 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerEntry
 {
-    [Header("플레이어")]
-    public GameObject player;
+    [Header("플레이어 및 NPC")]
+    public GameObject playerNpc;
 
     [Header("초기 위치와 회전")]
     public Vector3 initialPosition;
@@ -37,7 +37,7 @@ public class PlayerPosition : MonoBehaviour
     {
         foreach (PlayerEntry entry in playerEntries)
         {
-            if (entry.player == null)
+            if (entry.playerNpc == null)
             {
                 return true;
             }
@@ -75,16 +75,16 @@ public class PlayerPosition : MonoBehaviour
         }
 
         // 이미 할당된 플레이어인지 확인
-        if (playerEntries.Exists(entry => entry.player == newPlayer))
+        if (playerEntries.Exists(entry => entry.playerNpc == newPlayer))
         {
             return;
         }
 
         // 빈 슬롯 찾기
-        PlayerEntry freeEntry = playerEntries.Find(entry => entry.player == null);
+        PlayerEntry freeEntry = playerEntries.Find(entry => entry.playerNpc == null);
         if (freeEntry != null)
         {
-            freeEntry.player = newPlayer;
+            freeEntry.playerNpc = newPlayer;
             newPlayer.transform.position = freeEntry.initialPosition;
             newPlayer.transform.rotation = Quaternion.Euler(freeEntry.initialRotation);
             Debug.Log($"플레이어 추가됨: {newPlayer.name}");
@@ -100,10 +100,10 @@ public class PlayerPosition : MonoBehaviour
     {
         foreach (PlayerEntry entry in playerEntries)
         {
-            if (entry.player != null)
+            if (entry.playerNpc != null)
             {
-                entry.player.transform.position = entry.initialPosition;
-                entry.player.transform.rotation = Quaternion.Euler(entry.initialRotation);
+                entry.playerNpc.transform.position = entry.initialPosition;
+                entry.playerNpc.transform.rotation = Quaternion.Euler(entry.initialRotation);
             }
         }
         Debug.Log("초기 위치 적용 완료");
@@ -115,10 +115,10 @@ public class PlayerPosition : MonoBehaviour
     {
         foreach (PlayerEntry entry in playerEntries)
         {
-            if (entry.player != null)
+            if (entry.playerNpc != null)
             {
-                entry.player.transform.position = entry.step14Position;
-                entry.player.transform.rotation = Quaternion.Euler(entry.step14Rotation);
+                entry.playerNpc.transform.position = entry.step14Position;
+                entry.playerNpc.transform.rotation = Quaternion.Euler(entry.step14Rotation);
             }
         }
         Debug.Log("스텝14 위치 적용 완료");
