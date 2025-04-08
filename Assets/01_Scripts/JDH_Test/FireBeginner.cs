@@ -369,29 +369,29 @@ public class FireBeginner : MonoBehaviour
 
 		DetectHeadLowering(); // 머리 숙임 감지
 	}
-	//이동 후 Ui위치 변경
+    //이동 후 Ui위치 변경
 
-	public void AdjustUiTransform()
-	{
-		if (playerUi == null || player == null) return;
+    public void AdjustUiTransform()
+    {
+        if (playerUi == null || player == null) return;
 
-		RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
-		if (rectTransform == null) return;
+        RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
+        if (rectTransform == null) return;
 
-		// 월드 기준 위치 설정
-		Vector3 worldPosition = player.transform.position +
-		                        player.transform.TransformDirection(
-			                        new Vector3(0.75f, 1.5f, 0.5f));
-		rectTransform.position = worldPosition;
+        // 월드 기준 위치 설정
+        Vector3 worldPosition = player.transform.position +
+                                player.transform.TransformDirection(
+                                    new Vector3(0f, 1f, 0.6f));
+        rectTransform.position = worldPosition;
 
-		// 로컬 회전 설정 (주어진 값 그대로 적용)
-		rectTransform.localRotation =
-			Quaternion.Euler(-20, 50, 0); // 월드 기준이 아닌, 그대로 적용
+        // 로컬 회전 설정 (주어진 값 그대로 적용)
+        rectTransform.localRotation =
+            Quaternion.Euler(0f, 0f, 0f); // 월드 기준이 아닌, 그대로 적용
 
-		Debug.Log("playerUi 위치 및 회전 변경 완료 (Local Space)");
-	}
+        Debug.Log("playerUi 위치 및 회전 변경 완료 (Local Space)");
+    }
 
-	private void TeleportCharacters()
+    private void TeleportCharacters()
 	{
 		// 플레이어 이동
 		if (playerMovPos != null)

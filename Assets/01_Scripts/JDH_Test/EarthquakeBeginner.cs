@@ -248,27 +248,6 @@ public class EarthquakeBeginner : MonoBehaviour
         DetectHeadLowering(); // 고개 숙임 감지
     }
 
-    // 이동 후 UI 위치 조정
-    public void AdjustUiTransform()
-	{
-		if (playerUi == null || player == null) return;
-
-		RectTransform rectTransform = playerUi.GetComponent<RectTransform>();
-		if (rectTransform == null) return;
-
-		// UI의 월드 위치 설정
-		Vector3 worldPosition = player.transform.position +
-								player.transform.TransformDirection(
-									new Vector3(0.75f, 1.5f, 0.5f));
-		rectTransform.position = worldPosition;
-
-		// UI 회전 설정 (임의의 값 적용)
-		rectTransform.localRotation =
-			Quaternion.Euler(-20, 50, 0); // 플레이어를 따라가는 것이 아니라 고정된 회전
-
-		Debug.Log("playerUi 위치 및 회전 조정 완료 (Local Space)");
-	}
-
 	// 캐릭터 순간이동 함수
 	private void TeleportCharacters()
 	{

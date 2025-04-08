@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 26888842}
   - component: {fileID: 26888841}
   - component: {fileID: 26888840}
-  - component: {fileID: 26888839}
+  - component: {fileID: 26888844}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -163,47 +163,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &26888839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 26888837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fe91dc294731a9428c0941ea7579110, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  complexMaskingMode: 0
-  drawingMode: 1
-  outlineLayer: 0
-  outlineTargets: []
-  renderStyle: 1
-  outlineParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  backParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
-  frontParameters:
-    enabled: 1
-    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-    dilateShift: 1
-    blurShift: 1
-    fillPass:
-      shader: {fileID: 0}
-      serializedProperties: []
 --- !u!114 &26888840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,6 +261,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 26888837}
   m_CullTransparentMesh: 1
+--- !u!114 &26888844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26888837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1001 &30038746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1376,7 +1348,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -1392,7 +1364,7 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 1
+  - IsVisible: 0
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
@@ -4570,7 +4542,7 @@ MonoBehaviour:
       \uC798 \uAC00\uB9AC\uACE0 \uC788\uB098 \uD655\uC778\uD574\uC918!"
     audioClip: {fileID: 8300000, guid: d3ae441c292cc2545bca1e5b877b80a3, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.15
   dialogDelay: 2.5
   audioSource: {fileID: 5706606046099872071}
   isDialogsEnd: 0
@@ -6863,6 +6835,7 @@ GameObject:
   - component: {fileID: 850090517}
   - component: {fileID: 850090516}
   - component: {fileID: 850090515}
+  - component: {fileID: 850090519}
   m_Layer: 5
   m_Name: Left_Desc_Img
   m_TagString: Untagged
@@ -6987,6 +6960,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 850090513}
   m_CullTransparentMesh: 1
+--- !u!114 &850090519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850090513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &852142152
 GameObject:
   m_ObjectHideFlags: 0
@@ -7961,6 +7947,7 @@ GameObject:
   - component: {fileID: 985468041}
   - component: {fileID: 985468040}
   - component: {fileID: 985468039}
+  - component: {fileID: 985468043}
   m_Layer: 5
   m_Name: Right_Desc_Img
   m_TagString: Untagged
@@ -8085,6 +8072,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985468037}
   m_CullTransparentMesh: 1
+--- !u!114 &985468043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985468037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineDistance: {x: 5, y: 5}
 --- !u!1 &996285360
 GameObject:
   m_ObjectHideFlags: 0
@@ -16641,7 +16641,7 @@ MonoBehaviour:
   drawingMode: 1
   outlineLayer: 0
   outlineTargets:
-  - IsVisible: 0
+  - IsVisible: 1
     CutoutMask: 8
     edgeDilateAmount: 5
     frontEdgeDilateAmount: 5
