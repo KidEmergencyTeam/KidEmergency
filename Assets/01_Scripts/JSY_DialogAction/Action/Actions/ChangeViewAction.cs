@@ -25,7 +25,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     {
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
 
-        while (player.transform.localPosition != newPos)
+        while (!_isComplete)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
             if (newPos == _originPos)
