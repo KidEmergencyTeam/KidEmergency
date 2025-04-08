@@ -21,6 +21,8 @@ public class NpcRig : MonoBehaviour
 		public Vector3 leftHandRot;
 		public Vector3 rightHandPos;
 		public Vector3 rightHandRot;
+		public Vector3 leftFingerPos;
+		public Vector3 rightFingerPos;
 
 		public bool isHandkerchiefActive;
 		public bool isBagActive;
@@ -34,6 +36,8 @@ public class NpcRig : MonoBehaviour
 	public Transform body;
 	public Transform leftHandTarget;
 	public Transform rightHandTarget;
+	public Transform leftFingerTarget;
+	public Transform rightFingerTarget;
 
 	[Header("Pose Data")] [SerializeField] private PoseData noneState;
 	[SerializeField] private PoseData holdState;
@@ -77,6 +81,9 @@ public class NpcRig : MonoBehaviour
 
 		rightHandTarget.localPosition = pose.rightHandPos;
 		rightHandTarget.localRotation = Quaternion.Euler(pose.rightHandRot);
+
+		leftFingerTarget.localPosition = pose.leftFingerPos;
+		rightFingerTarget.localPosition = pose.rightFingerPos;
 
 		handkerchief.gameObject.SetActive(pose.isHandkerchiefActive);
 		bag.gameObject.SetActive(pose.isBagActive);
