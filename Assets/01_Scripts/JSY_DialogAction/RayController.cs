@@ -24,10 +24,10 @@ public class RayController : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
                 _rightRay.enabled = true;
-                _leftRay.enabled = true;
-            
+                _leftRay.enabled = false;
+                
                 rightLine.enabled = true;
-                leftLine.enabled = true;
+                leftLine.enabled = false;
         }
         
         else
