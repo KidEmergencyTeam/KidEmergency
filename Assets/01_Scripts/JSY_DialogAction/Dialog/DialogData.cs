@@ -29,7 +29,7 @@ public class DialogData : ScriptableObject
 
     [Tooltip("대화가 끝난 후 실행될 선택지 설정(없으면 비워두세요)")]
     public DialogChoice[] choices;
-    [Tooltip("대화가 끝난 후 생성될 오브젝트의 이름(없으면 비워두세요)")]
+    [Tooltip("대화가 끝난 후 생성될 오브젝트의 부모 이름(없으면 비워두세요)")]
     public string objectName;
     [Tooltip("대화가 끝난 후 로드할 씬 이름 설정(없으면 비워두세요)")]
     public string nextScene;
