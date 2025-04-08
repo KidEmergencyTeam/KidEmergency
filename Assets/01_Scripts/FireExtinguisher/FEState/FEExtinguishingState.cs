@@ -14,23 +14,20 @@ public class FEExtinguishingState : FEState
 	{
 		if (handle.fireAction.action.ReadValue<float>() == 0 || handle.currentFire == FirePosition.None)
 		{
-			JSWDialogManager.Instance.delay = 3f;
-			scene.currentDialogIndex = 11;
+			scene.currentDialogIndex = 12;
 			scene.ChangeState(FEStateType.FEDialog);
 		}
-		else if (scene.handle.GetComponent<FEHandle>().currentExtinguishingDamage < 4f)
+		else if (handle.currentExtinguishingDamage < 2f)
 		{
-			Debug.Log($"빗자루 CurrentDamage : {handle.GetComponent<FEHandle>().currentExtinguishingDamage}");
-			JSWDialogManager.Instance.delay = 3f;
-			scene.currentDialogIndex = 12;
+			Debug.Log($"빗자루 CurrentDamage : {handle.currentExtinguishingDamage}");
+			scene.currentDialogIndex = 13;
 			scene.ChangeState(FEStateType.FEDialog);
 		}
 		else if (!scene.fire.is30 && scene.fire.fireHp <= 30f)
 		{
 			Debug.Log($"Fire HP : {scene.fire.fireHp}");
 			scene.fire.is30 = true;
-			JSWDialogManager.Instance.delay = 3f;
-			scene.currentDialogIndex = 13;
+			scene.currentDialogIndex = 14;
 			scene.ChangeState(FEStateType.FEDialog);
 		}
 		else
