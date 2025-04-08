@@ -17,14 +17,16 @@ public class Fire : MonoBehaviour
 	{
 		fireHp -= damage;
 
-		if (fireHp < 10)
+		if (fireHp > 20)
+		{
+			transform.localScale = originalScale * fireHp / startFireHp;
+		}
+		else if (FEScene.Instance.currentState != FEScene.Instance.states[FEStateType.FEDialog])
 		{
 			JSWDialogManager.Instance.delay = 1f;
-			FEScene.Instance.currentDialogIndex = 14;
+			FEScene.Instance.currentDialogIndex = 15;
 			FEScene.Instance.ChangeState(FEStateType.FEDialog);
 			Destroy(gameObject);
 		}
-
-		transform.localScale = originalScale * fireHp / startFireHp;
 	}
 }
