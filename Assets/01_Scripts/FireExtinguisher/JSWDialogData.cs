@@ -1,10 +1,14 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "JSWDialog", menuName = "DialogSystem/JSWDialog")]
-public class JSWDialog : ScriptableObject
+public class JSWDialogData : ScriptableObject
 {
 	public string[] dialogs;
 	public AudioClip[] audios;
-	public string emotion;
+	public bool isAnimation;
+	public string animationName;
+	public int emotionEye;
+	public int emotionMouth;
+	public int emotionColor;
 	public FEStateType nextState;
 }
