@@ -21,5 +21,6 @@ public class FEDialogState : FEState
 	public override void ExitState(FEScene scene)
 	{
 		scene.currentDialogIndex++;
+		JSWDialogManager.Instance.startDelay = 0f;
 	}
 }
