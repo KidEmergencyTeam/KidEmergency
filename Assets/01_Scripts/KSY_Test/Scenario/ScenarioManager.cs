@@ -251,6 +251,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 문 앞으로 이동
         yield return StartCoroutine(Positions());
 
+        // 세티 이동
+        yield return StartCoroutine(SetiPosition());
+
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
     }
@@ -752,6 +755,22 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         {
             // 텍스트 내용 초기화: 기존 대사 내용을 빈 문자열로 설정
             dialogText.text = "";
+        }
+    }
+
+    // 세티 위치 변경
+    private IEnumerator SetiPosition()
+    {
+        // "SetiPosition" 태그가 붙은 오브젝트 찾기
+        SetiPosition setiPosition = GameObject.FindGameObjectWithTag("SetiPosition")?.GetComponent<SetiPosition>();
+        if (setiPosition == null)
+        {
+            Debug.LogError("SetiPosition 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            setiPosition.UpdatePosition();
         }
     }
 }
