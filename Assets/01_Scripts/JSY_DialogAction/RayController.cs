@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class RayController : MonoBehaviour
@@ -20,75 +21,87 @@ public class RayController : MonoBehaviour
     private void Update()
     {
         Grabber grabber = FindObjectOfType<Grabber>();
-        
-        if (UIActive())
+        if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
-            if (grabber.isOnGrabCalled)
-            {
                 _rightRay.enabled = true;
+                _leftRay.enabled = true;
+            
                 rightLine.enabled = true;
-                        
-                _leftRay.enabled = false;
-                leftLine.enabled = false;
-            }
-
-            else
+                leftLine.enabled = true;
+        }
+        
+        else
+        {
+            if (UIActive())
             {
-                if (_leftRay.enabled && _rightRay.enabled)
+                if (grabber.isOnGrabCalled)
                 {
                     _rightRay.enabled = true;
                     rightLine.enabled = true;
-                
+
                     _leftRay.enabled = false;
                     leftLine.enabled = false;
                 }
 
-                else if(_leftRay.enabled || _rightRay.enabled)
+                else
                 {
-                    if (_leftRay.enabled)
+                    if (_leftRay.enabled && _rightRay.enabled)
                     {
-                        leftLine.enabled = true;
-                    
-                        // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
-                        if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
-                        {
-                            SwitchRightRay();
-                        }
+                        _rightRay.enabled = true;
+                        rightLine.enabled = true;
+
+                        _leftRay.enabled = false;
+                        leftLine.enabled = false;
                     }
 
-                    else if(_rightRay.enabled)
+                    else if (_leftRay.enabled || _rightRay.enabled)
                     {
-                        rightLine.enabled = true;
-                        
-                        if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
+                        if (_leftRay.enabled)
                         {
-                            SwitchLeftRay();
+                            leftLine.enabled = true;
+
+                            // 왼쪽 레이가 켜져있는 상태에서 왼쪽 컨트롤러의 그립 버튼을 눌렀으면 오른쪽 레이로 스위치
+                            if (_rightController.selectAction.action.ReadValue<float>() > 0 && _leftRay.enabled)
+                            {
+                                SwitchRightRay();
+                            }
+                        }
+
+                        else if (_rightRay.enabled)
+                        {
+                            rightLine.enabled = true;
+
+                            if (_leftController.selectAction.action.ReadValue<float>() > 0 && _rightRay.enabled)
+                            {
+                                SwitchLeftRay();
+                            }
                         }
                     }
                 }
-            }
-            
-        }
-        else
-        {
-            if (grabber.isOnGrabCalled)
-            {
-                _rightRay.enabled = true;
-                _leftRay.enabled = false;
-                
-                leftLine.enabled = false;
-                rightLine.enabled = false;
+
             }
 
             else
             {
-                _leftRay.enabled = true;
-                _rightRay.enabled = true;
+                if (grabber.isOnGrabCalled)
+                {
+                    _rightRay.enabled = true;
+                    _leftRay.enabled = false;
 
-                leftLine.enabled = false;
-                rightLine.enabled = false;
+                    leftLine.enabled = false;
+                    rightLine.enabled = false;
+                }
+
+                else
+                {
+                    _leftRay.enabled = true;
+                    _rightRay.enabled = true;
+
+                    leftLine.enabled = false;
+                    rightLine.enabled = false;
+                }
+
             }
-
         }
     }
 
