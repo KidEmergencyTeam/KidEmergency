@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // 씬별 파티클 설정
 [Serializable]
@@ -121,7 +123,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return new WaitForSeconds(delay);
 
         // 시나리오 실행
-        StartCoroutine(RunScenario());
+        yield return StartCoroutine(RunScenario());
     }
 
     // 시나리오를 순차적으로 실행
@@ -182,6 +184,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step7 선택지: 손 vs 손수건
     IEnumerator Step7()
     {
+        // 텍스트 초기화
+        yield return StartCoroutine(DialogTextReset());
+
         // 패널에서 설정한 정답
         int selected = 0;
 
@@ -202,7 +207,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 8;
 
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     IEnumerator Step8() { yield return null; }
@@ -346,6 +351,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
     IEnumerator Step24()
     {
+        yield return StartCoroutine(DialogTextReset());
+
         // 패널에서 설정한 정답
         int selected = 0;
 
@@ -364,7 +371,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 26;
 
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -404,6 +411,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step31: 선택지 처리 (계단 VS 엘베)
     IEnumerator Step31()
     {
+        yield return StartCoroutine(DialogTextReset());
+
         // 패널에서 설정한 정답
         int selected = 0;
 
@@ -422,7 +431,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 33;
 
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step32 대사 출력 -> Step35 진행
@@ -726,6 +735,23 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
         {
             dialogUI.dialogPanel.SetActive(true);
+        }
+    }
+
+    // DialogText 초기화
+    private IEnumerator DialogTextReset()
+    {
+        // "DialogUI" 태그가 붙은 오브젝트 찾기
+        TextMeshProUGUI dialogText = GameObject.FindGameObjectWithTag("Typing")?.GetComponent<TextMeshProUGUI>();
+        if (dialogText == null)
+        {
+            Debug.LogError("Text 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            // 텍스트 내용 초기화: 기존 대사 내용을 빈 문자열로 설정
+            dialogText.text = "";
         }
     }
 }
