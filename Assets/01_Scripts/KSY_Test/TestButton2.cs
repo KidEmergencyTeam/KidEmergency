@@ -22,8 +22,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
 
-    // RayController2에 대한 참조 (인스펙터에서 할당)
-    public RayController2 rayController;
+    // RayController2에 대한 참조 -> 태그로 찾음
+    private RayController2 rayController;
 
     // 좌측, 우측 컨트롤러의 Select 액션
     private InputAction leftSelectAction;
@@ -35,6 +35,9 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 상태를 관리 -> JDH 전용
     public bool isClick = false;
 
+    // 현재 입력된 그립 상태를 RayType으로 변환하는 과정에서 문제가 발생했을 때 버튼 실행을 막기 위한 플래그
+    private bool isValidGrip;  
+
     // 딕셔너리를 통한 버튼 타입에 따른
     // 버튼 클릭 이벤트 처리
     private Dictionary<ButtonType, System.Action> buttonClickActions;
@@ -42,6 +45,8 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 상수 선언
     private const string LEFT_SELECT_ACTION = "XRI LeftHand Interaction/Select";
     private const string RIGHT_SELECT_ACTION = "XRI RightHand Interaction/Select";
+    private const string LEFT_STRING = "Left";
+    private const string RIGHT_STRING = "Right";
 
     private void Awake()
     {
@@ -61,6 +66,20 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             { ButtonType.A, () => Debug.Log("버튼 A 클릭 이벤트 발생") },
             { ButtonType.B, () => Debug.Log("버튼 B 클릭 이벤트 발생") }
         };
+    }
+
+    private void Start()
+    {
+        // "Player" 태그를 사용하여 RayController2.cs 할당
+        GameObject rayControllerObj = GameObject.FindGameObjectWithTag("Player");
+        if (rayControllerObj != null)
+        {
+            rayController = rayControllerObj.GetComponent<RayController2>();
+        }
+        else
+        {
+            Debug.LogWarning("[TestButton2] 'RayController' 태그가 지정된 오브젝트를 찾지 못했습니다.");
+        }
     }
 
     // Select 액션 등록
@@ -150,7 +169,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Debug.Log($"[TestButton2] {buttonType} 버튼 위에 {rayController.ActiveRay} 레이 나감");
     }
 
-    // 그립 버튼 입력 시 TriggerButtonAnimationAndClick 호출
+    // 조건을 만족하면 버튼 실행
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
         // 디버그 출력을 위한 문자열 변수 선언
@@ -160,40 +179,49 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         // 해당 값을 문자열 변수에 대입한 후, 그에 따라 디버그 메시지를 출력
         if (context.action == leftSelectAction)
         {
-            leftOrRight = "왼쪽";
+            leftOrRight = LEFT_STRING;
         }
         else if (context.action == rightSelectAction)
         {
-            leftOrRight = "오른쪽";
+            leftOrRight = RIGHT_STRING;
         }
 
         // 클래스 밖에서 선언된 개념은 별도로 특정 스크립트를 찾지 않아도 참조 가능
 
-        // leftOrRight 문자열("왼쪽", "오른쪽")을 RayType으로 변환
+        // 버튼 실행 조건문에서
+        // 현재 활성화된 레이의 RayType 열거형 변수와
+        // 현재 입력된 그립 상태를 비교하기 위해
+        // 현재 입력된 그립 상태를 RayType 열거형 변수로 저장
         RayType gripType;
-        if (leftOrRight == "왼쪽")
+
+        // leftOrRight 문자열("왼쪽", "오른쪽")을 RayType으로 변환
+        if (leftOrRight == LEFT_STRING)
         {
             gripType = RayType.Left;
+            isValidGrip = true;
         }
-        else if (leftOrRight == "오른쪽")
+        else if (leftOrRight == RIGHT_STRING)
         {
             gripType = RayType.Right;
+            isValidGrip = true;
         }
         else
         {
-            Debug.LogError("유효하지 않은 그립 상태");
-            return; 
+            Debug.LogError("현재 입력된 그립 상태를 RayType으로 변환 실패");
+            isValidGrip = false;  
+            return;
         }
 
         // 버튼 위에 레이가 있고, 현재 활성화된 레이와 그립 상태가 일치할 때만 실행
         if (isHovered && rayController.ActiveRay == gripType)
         {
             StartCoroutine(TriggerButtonAnimationAndClick());
-            Debug.Log($"[TestButton2] {leftOrRight} Select 입력을 통해 버튼 실행");
+            Debug.Log($"[TestButton2] 입력된 {leftOrRight} 그립과 활성화된 {rayController.ActiveRay} 레이가 일치하여 버튼 실행");
         }
         else
         {
-            Debug.Log($"[TestButton2] {leftOrRight} Select 입력은 감지되었으나, 버튼 위에 레이가 없음");
+            Debug.Log("[TestButton2] 버튼 실행 조건 불충족");
+            isValidGrip = false;
         }
     }
 
@@ -225,7 +253,7 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ExecuteEvents.Execute(button.gameObject, pointerData, ExecuteEvents.pointerUpHandler);
 
         // 버튼 클릭 이벤트 실행
-        button.onClick.Invoke();
+        OnButtonClicked();
 
         // JDH 전용
         isClick = true;
@@ -234,6 +262,13 @@ public class TestButton2 : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 버튼 클릭 이벤트 
     private void OnButtonClicked()
     {
+        // 그립 상태가 유효하지 않으면, 버튼 실행 중단
+        if (!isValidGrip)
+        {
+            Debug.Log("[TestButton2] 현재 입력된 그립 상태를 RayType으로 변환 실패 따라서 버튼 클릭 이벤트 중단");
+            return;
+        }
+
         if (buttonClickActions != null && buttonClickActions.TryGetValue(buttonType, out System.Action action))
         {
             // 버튼 실행 -> 버튼에서 사용되는 Invoke와 일반적으로 사용되는 Invoke 개념은 다르다.

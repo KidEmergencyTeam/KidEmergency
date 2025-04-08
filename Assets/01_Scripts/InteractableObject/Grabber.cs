@@ -16,10 +16,13 @@ public class Grabber : MonoBehaviour
 	[Header("OnGrab 호출 여부")] 
 	public bool isOnGrabCalled = false;
 
-	// OnGrab 메서드 호출 시 실행되는 이벤트 -> 이벤트 실행 시 -> RayController2.cs에서 우측 레이로 전환
+	// OnGrab 메서드 호출 시 실행 -> 실행되었음을 전달 -> RayController2.cs에서 우측 레이로 전환
 	public event Action OnGrabEvent;
 
-	[HideInInspector] public Grabbable currentGrabbedObject;
+    // OnRelease 메서드 호출 시 실행 -> 실행되었음을 전달 -> MaskWarningUI.cs에서 경고창 비활성화
+    public event Action OnReleaseEvent;
+
+    [HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private SphereCollider _detectCollider;
@@ -114,7 +117,6 @@ public class Grabber : MonoBehaviour
 			}
 		}
 
-		// OnGrab 메서드 실행 -> 이벤트가 발생 -> 다른 스크립트에서 OnGrab 메서드가 실행할 때 개별적인 처리가 가능
 		OnGrabEvent?.Invoke();
 		Debug.Log("[Grabber] OnGrab 이벤트 발생");
 
@@ -150,7 +152,10 @@ public class Grabber : MonoBehaviour
 
 		currentGrabbedObject = null;
 
-		// 레이 전환 가능
-		isOnGrabCalled = false;
+        OnReleaseEvent?.Invoke();
+        Debug.Log("[Grabber] OnRelease 이벤트 발생");
+
+        // 레이 전환 가능
+        isOnGrabCalled = false;
 	}
 }

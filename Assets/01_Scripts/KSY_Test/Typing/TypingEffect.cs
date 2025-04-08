@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+// 시나리오 진행 중 타이핑 효과 및 사운드 효과
 [System.Serializable]
 public class MultilineString
 {
