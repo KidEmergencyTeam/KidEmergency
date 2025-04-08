@@ -17,8 +17,8 @@ public class FEScene : MonoBehaviour
 {
 	public static FEScene Instance { get; set; }
 
-	public List<JSWDialog> dialogueData = new List<JSWDialog>();
-	public JSWDialog currentDialogData;
+	public List<JSWDialogData> dialogueData = new List<JSWDialogData>();
+	public JSWDialogData currentDialogData;
 	public string[] currentDialog;
 	public int currentDialogIndex = 0;
 
