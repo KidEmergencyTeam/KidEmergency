@@ -5,6 +5,7 @@ public enum FirePosition
 	Left,
 	Middle,
 	Right,
+	Aim,
 	None
 }
 
