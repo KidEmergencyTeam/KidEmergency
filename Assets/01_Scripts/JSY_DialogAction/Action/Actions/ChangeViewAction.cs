@@ -37,7 +37,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                 }
             }
             
-            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "School4_Dialog")
+            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "School4_Dialog" || ActionManager.Instance.beforeDialog.name == "School3_Dialog")
             {
                 // 지진 학교 - 책상 다리로 시점 변경
                 SetNewView(newPos, newRot, PlayerRig.State.Down);
