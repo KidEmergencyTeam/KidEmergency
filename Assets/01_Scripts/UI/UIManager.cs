@@ -40,8 +40,6 @@ public class UIManager : SingletonManager<UIManager>
                 optionUI[i].optionImage.sprite = choice.optionSprite;
                 optionUI[i].SetChoice(choice);
                 optionUI[i].gameObject.SetActive(true);
-
-                print($"옵션 UI {i}번 세팅 완료");
             }
         }
     }
