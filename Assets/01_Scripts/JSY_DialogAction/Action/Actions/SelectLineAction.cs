@@ -4,22 +4,27 @@ using UnityEngine;
 
 public class SelectLineAction : MonoBehaviour, IActionEffect
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    private bool _isComplete = false;
+    public bool IsActionComplete => _isComplete;    
     public void StartAction()
     {
-        throw new System.NotImplementedException();
+        _isComplete = false;
+        StartCoroutine(SelectLineCoroutine());
     }
 
-    public bool IsActionComplete { get; }
+    private IEnumerator SelectLineCoroutine()
+    {
+        ExitLine line = FindObjectOfType<ExitLine>();
+        line.ExitLineInteraction();
+        
+        while (!_isComplete)
+        {
+            if (line.isSelected)
+            {
+                _isComplete = true;
+            }
+            
+            yield return null;
+        }
+    }
 }
