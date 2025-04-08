@@ -6,27 +6,27 @@ public class FEHandle : MonoBehaviour
 {
 	private const int ExecutionOrder = Grabbable.ExecutionOrder + 10;
 
-	public float maxExtinguishingDamage = 10f;
-	public float minExtinguishingDamage = 2f;
+	public float maxExtinguishingDamage = 5f;
+	public float minExtinguishingDamage = 1f;
 	public float extinguisherDistance = 10f;
 	public FirePosition currentFire = FirePosition.None;
 	public Transform muzzle;
 	public FEHose hose;
 	public GameObject powderPrefab;
-	public float fireCoolTime = 0.2f;
+	public float fireCoolTime = 0.1f;
 	public float currentExtinguishingDamage;
 	public InputActionProperty fireAction;
 
 	private Fire _fire;
 	private float _stopDamage;
-	public float damageSpeed;
+	private float _decreaseSpeed;
 	private float _fireEndCoolTime = 0f;
 	private Grabbable _grabbable;
 	private FireDetectCollider _fireDetectCollider;
 
 	private void Awake()
 	{
-		damageSpeed = (maxExtinguishingDamage - minExtinguishingDamage) / fireCoolTime * Time.deltaTime;
+		_decreaseSpeed = (maxExtinguishingDamage - minExtinguishingDamage) / fireCoolTime * Time.deltaTime;
 		currentExtinguishingDamage = maxExtinguishingDamage;
 	}
 
@@ -48,7 +48,8 @@ public class FEHandle : MonoBehaviour
 				if (hit.transform.TryGetComponent<FireDetectCollider>(out FireDetectCollider fireCollider))
 				{
 					_fireDetectCollider = fireCollider;
-					break;
+					if (fireCollider.firePosition != FirePosition.Aim) break;
+					currentFire = FirePosition.Aim;
 				}
 				else
 				{
@@ -72,16 +73,20 @@ public class FEHandle : MonoBehaviour
 			if (currentFire != _fireDetectCollider.firePosition)
 			{
 				currentExtinguishingDamage = Mathf.MoveTowards(maxExtinguishingDamage, minExtinguishingDamage,
-					damageSpeed * Time.deltaTime);
+					_decreaseSpeed * Time.deltaTime);
 				currentFire = _fireDetectCollider.firePosition;
 			}
 			else
 			{
 				currentExtinguishingDamage = Mathf.MoveTowards(currentExtinguishingDamage, minExtinguishingDamage,
-					damageSpeed * Time.deltaTime);
+					_decreaseSpeed * Time.deltaTime);
 			}
 
-			_fire.TakeDamage(currentExtinguishingDamage * Time.deltaTime);
+			if (currentFire != FirePosition.None && currentFire != FirePosition.Aim)
+			{
+				_fire.TakeDamage(currentExtinguishingDamage * Time.deltaTime);
+				print($"current damage : {currentExtinguishingDamage * Time.deltaTime}");
+			}
 		}
 	}
 
