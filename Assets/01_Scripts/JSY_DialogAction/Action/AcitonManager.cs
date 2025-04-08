@@ -41,7 +41,6 @@ public class ActionManager : SingletonManager<ActionManager>
 
 	public void UpdateAction()
 	{
-		print($"상태 업데이트 성공! 현재 상태: {currentAction}");
 		switch (currentAction)
 		{
 			case ActionType.Basic:

@@ -7,9 +7,20 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class ExitLine : MonoBehaviour
 {
     public Highlighter highlighter;
+    private XRGrabInteractable _grab;
     [SerializeField] private ActionBasedController[] _ctrl;
     [SerializeField] private XRRayInteractor[] _ray;
     public bool isSelected = false;
+
+    private void Awake()
+    {
+        _grab = GetComponent<XRGrabInteractable>();
+    }
+
+    private void Start()
+    {
+        _grab.enabled = false;
+    }
 
     public void ExitLineInteraction()
     {
@@ -18,7 +29,8 @@ public class ExitLine : MonoBehaviour
 
     private IEnumerator ExitLineCoroutine()
     {
-        highlighter.gameObject.SetActive(true);
+        highlighter.gameObject. SetActive(true);
+        _grab.enabled = true;
         
         while (!isSelected)
         {
@@ -27,6 +39,7 @@ public class ExitLine : MonoBehaviour
             if (isLeftSelected || isRightSelected)
             {
                 highlighter.gameObject.SetActive(false);
+                _grab.enabled = false;
                 isSelected = true;
             }
             
