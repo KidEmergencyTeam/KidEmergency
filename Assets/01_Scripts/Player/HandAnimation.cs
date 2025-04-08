@@ -16,22 +16,47 @@ public class HandAnimation : MonoBehaviour
 
     void Update()
     {
+        RayController ray = FindObjectOfType<RayController>();
+
         if (!isLeftGrabbed)
         {
-            float leftTriggerValue = leftPinch.action.ReadValue<float>();
-            animator.SetFloat("Left Trigger", leftTriggerValue);
+            if (ray.UIActive())
+            {
+                float leftTriggerValue = leftPinch.action.ReadValue<float>();
+                animator.SetFloat("Left Grip", leftTriggerValue);
 
-            float leftGripValue = leftGrip.action.ReadValue<float>();
-            animator.SetFloat("Left Grip", leftGripValue);
+                float leftGripValue = leftGrip.action.ReadValue<float>();
+                animator.SetFloat("Left Trigger", leftGripValue);
+            }
+            
+            else
+            {
+                float leftTriggerValue = leftPinch.action.ReadValue<float>();
+                animator.SetFloat("Left Trigger", leftTriggerValue);
+
+                float leftGripValue = leftGrip.action.ReadValue<float>();
+                animator.SetFloat("Left Grip", leftGripValue);
+            }
         }
 
         if (!isRightGrabbed)
         {
-            float rightTriggerValue = rightPinch.action.ReadValue<float>();
-            animator.SetFloat("Right Trigger", rightTriggerValue);
+            if (ray.UIActive())
+            {
+                float rightTriggerValue = rightPinch.action.ReadValue<float>();
+                animator.SetFloat("Right Grip", rightTriggerValue);
 
-            float rightGripValue = rightGrip.action.ReadValue<float>();
-            animator.SetFloat("Right Grip", rightGripValue);
+                float rightGripValue = rightGrip.action.ReadValue<float>();
+                animator.SetFloat("Right Trigger", rightGripValue);
+            }
+            else
+            {
+                float rightTriggerValue = rightPinch.action.ReadValue<float>();
+                animator.SetFloat("Right Trigger", rightTriggerValue);
+
+                float rightGripValue = rightGrip.action.ReadValue<float>();
+                animator.SetFloat("Right Grip", rightGripValue);
+            }
         }
     }
 }

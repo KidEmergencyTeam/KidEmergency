@@ -12,14 +12,14 @@ public class UIManager : SingletonManager<UIManager>
     public Transform[] optionPos;
     public Transform[] warningPos;
 
-    private GameObject camOffset;
+    private GameObject player;
     private Vector3 _originPos;
 
     protected override void Awake()
     {
         base.Awake();
-        camOffset = GameObject.Find("Camera Offset");
-        _originPos = camOffset.transform.position;
+        player = GameObject.Find("VR + Player");
+        _originPos = player.transform.position;
     }
 
     private void Update()
@@ -83,10 +83,10 @@ public class UIManager : SingletonManager<UIManager>
     {
         if (SceneManager.GetActiveScene().name == "Eq_School_1")
         {
-            if (camOffset != null)
+            if (player != null)
             {
                 RobotController seti = FindObjectOfType<RobotController>();
-                if (camOffset.transform.position == _originPos)
+                if (player.transform.position == _originPos)
                 {
                     DialogPosReset(0);
                     WarningPosReset(1);
@@ -100,11 +100,9 @@ public class UIManager : SingletonManager<UIManager>
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
-            
-            else return;
         }
 
-        if(SceneManager.GetActiveScene().name == "Eq_School_2")
+        else if(SceneManager.GetActiveScene().name == "Eq_School_2")
         {
             DialogPosReset(2);
             OptionPosReset(1);
@@ -123,6 +121,54 @@ public class UIManager : SingletonManager<UIManager>
             DialogPosReset(4);
             CloseWarningUI();
         }
+        
+        else if (SceneManager.GetActiveScene().name == "Eq_Home_1")
+        {
+            if (player != null)
+            {
+                RobotController seti = FindObjectOfType<RobotController>();
+                if (player.transform.position == _originPos)
+                {
+                    DialogPosReset(0);
+                    WarningPosReset(1);
+                    seti.SetRobotPos(seti.setiPos[0]);
+                }
+
+                else if(player.transform.position != _originPos && ActionManager.Instance.beforeDialog.name == "EqHome5_Dialog")
+                {
+                    DialogPosReset(1);
+                    WarningPosReset(0);
+                    seti.SetRobotPos(seti.setiPos[1]);
+                }
+                
+                else if (player.transform.position != _originPos &&
+                         ActionManager.Instance.beforeDialog.name == "EqHome7_Dialog")
+                {
+                    DialogPosReset(2);
+                    WarningPosReset(0);
+                    seti.SetRobotPos(seti.setiPos[2]);
+                }
+                
+                else if (player.transform.position != _originPos &&
+                         ActionManager.Instance.beforeDialog.name == "EqHome9_Dialog")
+                {
+                    DialogPosReset(3);
+                    seti.SetRobotPos(seti.setiPos[3]);
+                }
+                        
+            }
+        }
+        
+        else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
+        {
+            DialogPosReset(4);
+            OptionPosReset(1);
+        }
+        
+        else if (SceneManager.GetActiveScene().name == "Eq_Home_3")
+        {
+            DialogPosReset(5);
+        }
     }
 
     private void DialogPosReset(int index)
@@ -130,6 +176,7 @@ public class UIManager : SingletonManager<UIManager>
         dialogUI.transform.SetParent(dialogPos[index]);
         dialogUI.transform.localPosition = Vector3.zero;
         dialogUI.transform.localEulerAngles = Vector3.zero;
+        dialogUI.transform.localScale = Vector3.one;
     }
 
     private void OptionPosReset(int index)

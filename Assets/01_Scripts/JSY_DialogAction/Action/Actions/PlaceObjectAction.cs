@@ -14,19 +14,19 @@ public class PlaceObjectAction : MonoBehaviour, IActionEffect
 
     private IEnumerator SetObjects(DialogData dialogData)
     {
-        if (dialogData.parentName != null)
+        if (dialogData.objectName != null)
         {
-            for (int i = 0; i < dialogData.parentName.Length; i++)
+            GameObject obj = GameObject.Find(dialogData.objectName);
+            if (obj != null)
             {
-                GameObject obj = GameObject.Find(dialogData.parentName[i]);
-                for (int j = 0; j < obj.transform.childCount; j++)
-                {
-                    obj.transform.GetChild(j).gameObject.SetActive(true);
-                    yield return null;
-                }
+                obj.transform.gameObject.SetActive(true);
+                yield return null;
             }
-            
-            _isComplete = true;
+
+            if (obj.activeSelf)
+            {
+                _isComplete = true;
+            }
         }
     
         else

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CircuitTrigger : MonoBehaviour
 {
-    [SerializeField] private bool _isLever; // true¸é Â÷´Ü±â ·¹¹ö, false¸é Â÷´Ü±â
+    [SerializeField] private bool _isLever; // trueë©´ ë ˆë²„, falseë¨„ ë²„íŠ¼
 
     private void OnTriggerEnter(Collider other)
     {

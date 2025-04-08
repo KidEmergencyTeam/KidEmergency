@@ -59,6 +59,8 @@ public class RobotController : MonoBehaviour
     {
         this.transform.SetParent(parent);
         this.transform.localPosition = Vector3.zero;
+        this.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
     }
 }
 

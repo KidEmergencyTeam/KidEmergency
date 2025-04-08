@@ -29,12 +29,14 @@ public class DialogData : ScriptableObject
 
     [Tooltip("대화가 끝난 후 실행될 선택지 설정(없으면 비워두세요)")]
     public DialogChoice[] choices;
-    [Tooltip("대화가 끝난 후 강조될 오브젝트들의 부모 이름(없으면 비워두세요)")]
-    public string[] parentName;
+    [Tooltip("대화가 끝난 후 생성될 오브젝트의 이름(없으면 비워두세요)")]
+    public string objectName;
     [Tooltip("대화가 끝난 후 로드할 씬 이름 설정(없으면 비워두세요)")]
     public string nextScene;
-    [Tooltip("대화가 끝난 후 변경될 시점값(없으면 비워두세요)")]
+    [Tooltip("대화가 끝난 후 변경될 시점 Postion(없으면 비워두세요)")]
     public Vector3 changePos;
+    [Tooltip("대화가 끝난 후 변경될 시점 Rotation(없으면 비워두세요)")]
+    public Vector3 changeRot;
     [Tooltip("대화가 끝난 후 실행할 다음 대화(Dialog Data) 설정(선택지가 있으면 비워두세요)")]
     public DialogData nextDialog;
     [Tooltip("대화가 끝난 후 실행할 다음 액션(Action Type) 설정(선택지가 있으면 비워두세요)")]

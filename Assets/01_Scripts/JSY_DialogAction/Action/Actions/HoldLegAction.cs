@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class HoldLegAction : MonoBehaviour, IActionEffect
 {
@@ -27,7 +24,10 @@ public class HoldLegAction : MonoBehaviour, IActionEffect
         {
             _leg.enabled = true;
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
-            npcCtrl.SetNPCState("HoldDesk");
+            if (npcCtrl != null)
+            {
+                npcCtrl.SetNPCState("HoldDesk");
+            }
             if (_leg.IsHoldComplete())
             {
                 _isComplete = true;

@@ -6,7 +6,6 @@ public enum ActionType
     ChangeScene, // 씬 전환
     Earthquake, // 지진 시작
     ChangeView, // 시점 변경
-    OutlineObject, // 오브젝트 아웃라인 강조
     HoldLeg, // 책상 다리 잡기
     PlaceObject, // 오브젝트 배치
     FixBag, // 가방 고정

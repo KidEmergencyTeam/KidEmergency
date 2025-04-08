@@ -15,7 +15,6 @@ public class ActionManager : SingletonManager<ActionManager>
 	public EarthquakeAction earthquakeAction;
 	public ChangeViewAction changeViewAction;
 	public PlaceObjectAction placeObjectAction;
-	public OutlineObjectAction outlineObjectAction;
 	public FixBagAction fixBagAction;
 	public HoldLegAction holdLegAction;
 	public CloseGVAction closeGVAction;
@@ -101,15 +100,6 @@ public class ActionManager : SingletonManager<ActionManager>
 				{
 					placeObjectAction.StartAction();
 					StartCoroutine(WaitForActionComplete(placeObjectAction));
-				}
-
-				break;
-
-			case ActionType.OutlineObject:
-				if (outlineObjectAction != null)
-				{
-					outlineObjectAction.StartAction();
-					StartCoroutine(WaitForActionComplete(outlineObjectAction));
 				}
 
 				break;

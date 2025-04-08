@@ -52,7 +52,7 @@ public class Bag : Grabbable
                 if (_handObject != null)
                 {
                     this.transform.SetParent(_handObject);
-                    this.transform.localPosition = new Vector3(0.0005f, 0.0008f, -0.0008f);
+                    this.transform.localPosition = new Vector3(0.00022f, 0.00106f, 0.00014f);
                     this.transform.localRotation = Quaternion.Euler(-90, -90, -90);
                     this.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
                 }
