@@ -156,7 +156,12 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
     #region 시나리오 스텝
 
-    IEnumerator Step1() { yield return PlayAndWait(0); }
+    IEnumerator Step1() 
+    {
+        // DialogUI 활성화
+        yield return StartCoroutine(DialogUIActivation());
+        yield return PlayAndWait(0); 
+    }
 
     IEnumerator Step2() { yield return PlayAndWait(1); }
 
@@ -231,7 +236,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step14에서 페이드 효과 + 문 앞으로 이동
     IEnumerator Step14()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // 페이드 아웃 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
@@ -246,7 +251,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -256,7 +261,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
+
+        // DialogUI 활성화
+        yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(10);
     }
 
@@ -343,7 +351,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         int correct = 1;
 
         yield return StartCoroutine(
-            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
+            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(1, result => selected = result)
         );
 
         // 일치 -> 정답, 스텝 25 이동
@@ -382,7 +390,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
+
+        // DialogUI 활성화
+        yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(19);
     }
 
@@ -398,7 +409,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         int correct = 1;
 
         yield return StartCoroutine(
-            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
+            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, result => selected = result)
         );
 
         // 일치 -> 정답, 스텝 32 이동
@@ -437,7 +448,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 씬 이동 이후 -> 손수건 제거
         GrabStatePersistence.Instance.disableSingleton = true;
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
+
+        // DialogUI 활성화
+        yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(24);
     }
 
@@ -674,5 +688,21 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 세티 표정 복구
         robotController?.SetBasic();
+    }
+
+    // DialogUI 활성화
+    private IEnumerator DialogUIActivation()
+    {
+        // "DialogUI" 태그가 붙은 오브젝트 찾기
+        DialogUI dialogUI = GameObject.FindGameObjectWithTag("DialogUI")?.GetComponent<DialogUI>();
+        if (dialogUI == null)
+        {
+            Debug.LogError("DialogUI 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            dialogUI.dialogPanel.SetActive(true);
+        }
     }
 }
