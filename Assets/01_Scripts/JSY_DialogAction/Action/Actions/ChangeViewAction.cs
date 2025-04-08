@@ -25,7 +25,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
     {
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
 
-        while (player.transform.localPosition != newPos)
+        while (!_isComplete)
         {
             JSYNPCController npcCtrl = FindObjectOfType<JSYNPCController>();
             if (newPos == _originPos)
@@ -37,7 +37,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                 }
             }
             
-            else if (newRot != _originPos && ActionManager.Instance.beforeDialog.name == "School4_Dialog" )
+            else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "School4_Dialog" || ActionManager.Instance.beforeDialog.name == "School3_Dialog")
             {
                 // 지진 학교 - 책상 다리로 시점 변경
                 SetNewView(newPos, newRot, PlayerRig.State.Down);

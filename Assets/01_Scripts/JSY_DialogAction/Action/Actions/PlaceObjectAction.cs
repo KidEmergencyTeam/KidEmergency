@@ -19,13 +19,12 @@ public class PlaceObjectAction : MonoBehaviour, IActionEffect
             GameObject obj = GameObject.Find(dialogData.objectName);
             if (obj != null)
             {
-                obj.transform.gameObject.SetActive(true);
+                for (int i = 0; i < obj.transform.childCount; i++)
+                {
+                    obj.transform.GetChild(i).gameObject.SetActive(true);
+                    _isComplete = true;
+                }
                 yield return null;
-            }
-
-            if (obj.activeSelf)
-            {
-                _isComplete = true;
             }
         }
     
