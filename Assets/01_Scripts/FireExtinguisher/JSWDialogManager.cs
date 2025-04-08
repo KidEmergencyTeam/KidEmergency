@@ -5,11 +5,14 @@ public class JSWDialogManager : MonoBehaviour
 {
 	public static JSWDialogManager Instance { get; set; }
 	public float delay = 1f;
+	public float startDelay = 1f;
+	private FEScene _scene;
 
 	private void Awake()
 	{
 		if (Instance) Destroy(gameObject);
 		else Instance = this;
+		_scene = FEScene.Instance;
 	}
 
 	public void DialogStart() // 첫 장면이 시작될 때 사용되는 메서드
@@ -22,14 +25,20 @@ public class JSWDialogManager : MonoBehaviour
 	{
 		RobotController robot = FindObjectOfType<RobotController>();
 		AudioSource audio = robot.GetComponent<AudioSource>();
-
+		
 		UIManager.Instance.dialogUI.dialogPanel.SetActive(true);
+		
+		yield return new WaitForSeconds(startDelay);
+		
+		robot.emotionChanger.SetEmotionEyes(_scene.currentDialogData.emotionEye);
+		robot.emotionChanger.SetEmotionMouth(_scene.currentDialogData.emotionMouth);
+		if(_scene.currentDialogData.isAnimation) robot.SetAnimaiton(_scene.currentDialogData.animationName);
 
-		for (int i = 0; i < FEScene.Instance.currentDialog.Length; i++)
+		for (int i = 0; i < _scene.currentDialog.Length; i++)
 		{
-			audio.clip = FEScene.Instance.currentDialogData.audios[i];
+			audio.clip = _scene.currentDialogData.audios[i];
 			audio.Play();
-			yield return StartCoroutine(TypingEffect(FEScene.Instance.currentDialog[i]));
+			yield return StartCoroutine(TypingEffect(_scene.currentDialog[i]));
 		}
 
 		UIManager.Instance.dialogUI.dialogPanel.SetActive(false);
