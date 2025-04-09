@@ -7,7 +7,7 @@ public class ToggleHighlighter : MonoBehaviour
 
     private void Start()
     {
-        ToggleHighlighter toggleHighlighter = GameObject.FindGameObjectWithTag("SafetyLine")?.GetComponent<ToggleHighlighter>();
+        ToggleHighlighter toggleHighlighter = GameObject.FindGameObjectWithTag("ToggleHighlighter")?.GetComponent<ToggleHighlighter>();
 
         if (toggleHighlighter == null)
         {
