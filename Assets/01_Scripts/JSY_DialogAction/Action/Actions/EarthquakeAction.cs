@@ -27,7 +27,6 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
 
     public void StartAction()
     {
-        print("액션 시작");
         _isComplete = false;
         StartCoroutine(EarthquakeRoutine());
     }

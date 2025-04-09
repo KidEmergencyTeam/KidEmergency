@@ -40,8 +40,6 @@ public class UIManager : SingletonManager<UIManager>
                 optionUI[i].optionImage.sprite = choice.optionSprite;
                 optionUI[i].SetChoice(choice);
                 optionUI[i].gameObject.SetActive(true);
-
-                print($"옵션 UI {i}번 세팅 완료");
             }
         }
     }
@@ -145,7 +143,6 @@ public class UIManager : SingletonManager<UIManager>
                          ActionManager.Instance.beforeDialog.name == "EqHome7_Dialog")
                 {
                     DialogPosReset(2);
-                    WarningPosReset(0);
                     seti.SetRobotPos(seti.setiPos[2]);
                 }
                 
@@ -162,6 +159,7 @@ public class UIManager : SingletonManager<UIManager>
         else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
             DialogPosReset(4);
+            WarningPosReset(2);
             OptionPosReset(1);
         }
         
