@@ -32,8 +32,8 @@ public class FEExtinguishingState : FEState
 		}
 		else
 		{
-			JSWDialogManager.Instance.delay = 3f;
-			scene.currentDialogIndex = Random.Range(9, 11);
+			JSWDialogManager.Instance.delay = 5f;
+			scene.currentDialogIndex = Random.Range(10, 12);
 			scene.ChangeState(FEStateType.FEDialog);
 		}
 	}

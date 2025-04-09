@@ -38,11 +38,30 @@ public class HandAnimation : MonoBehaviour
             
             else
             {
-                float leftTriggerValue = leftPinch.action.ReadValue<float>();
-                animator.SetFloat("Left Trigger", leftTriggerValue);
+                if (ActionManager.Instance != null)
+                {
+                    if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
+                        || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+                    {
+                        animator.SetFloat("Left Trigger", 1);  
+                    }
+                    else
+                    {
+                        float leftTriggerValue = leftPinch.action.ReadValue<float>();
+                        animator.SetFloat("Left Trigger", leftTriggerValue);
 
-                float leftGripValue = leftGrip.action.ReadValue<float>();
-                animator.SetFloat("Left Grip", leftGripValue);
+                        float leftGripValue = leftGrip.action.ReadValue<float>();
+                        animator.SetFloat("Left Grip", leftGripValue);     
+                    }
+                }
+                else
+                {
+                    float leftTriggerValue = leftPinch.action.ReadValue<float>();
+                    animator.SetFloat("Left Trigger", leftTriggerValue);
+
+                    float leftGripValue = leftGrip.action.ReadValue<float>();
+                    animator.SetFloat("Left Grip", leftGripValue);   
+                }
             }
         }
 
@@ -58,11 +77,30 @@ public class HandAnimation : MonoBehaviour
             }
             else
             {
-                float rightTriggerValue = rightPinch.action.ReadValue<float>();
-                animator.SetFloat("Right Trigger", rightTriggerValue);
+                if (ActionManager.Instance != null)
+                {
+                    if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
+                        || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+                    {
+                        animator.SetFloat("Right Trigger", 1);  
+                    }
+                    else
+                    {
+                        float rightTriggerValue = rightPinch.action.ReadValue<float>();
+                        animator.SetFloat("Right Trigger", rightTriggerValue);
 
-                float rightGripValue = rightGrip.action.ReadValue<float>();
-                animator.SetFloat("Right Grip", rightGripValue);
+                        float rightGripValue = rightGrip.action.ReadValue<float>();
+                        animator.SetFloat("Right Grip", rightGripValue);  
+                    }
+                }
+                else
+                {
+                    float rightTriggerValue = rightPinch.action.ReadValue<float>();
+                    animator.SetFloat("Right Trigger", rightTriggerValue);
+
+                    float rightGripValue = rightGrip.action.ReadValue<float>();
+                    animator.SetFloat("Right Grip", rightGripValue);
+                }
             }
         }
     }
