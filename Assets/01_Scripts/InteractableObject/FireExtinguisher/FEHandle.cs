@@ -48,8 +48,7 @@ public class FEHandle : MonoBehaviour
 				if (hit.transform.TryGetComponent<FireDetectCollider>(out FireDetectCollider fireCollider))
 				{
 					_fireDetectCollider = fireCollider;
-					if (fireCollider.firePosition != FirePosition.Aim) break;
-					currentFire = FirePosition.Aim;
+					break;
 				}
 				else
 				{
@@ -82,7 +81,7 @@ public class FEHandle : MonoBehaviour
 					_decreaseSpeed * Time.deltaTime);
 			}
 
-			if (currentFire != FirePosition.None && currentFire != FirePosition.Aim)
+			if (currentFire != FirePosition.None)
 			{
 				_fire.TakeDamage(currentExtinguishingDamage * Time.deltaTime);
 				print($"current damage : {currentExtinguishingDamage * Time.deltaTime}");
