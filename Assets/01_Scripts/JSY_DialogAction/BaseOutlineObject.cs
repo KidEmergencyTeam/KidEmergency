@@ -32,8 +32,8 @@ public class BaseOutlineObject : MonoBehaviour
         
         else
         {
-            if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.05f
-               || Vector3.Distance(this.gameObject.transform.position, _rightHand.transform.position) < 0.05f)
+            if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.1f
+               || Vector3.Distance(this.gameObject.transform.position, _rightHand.transform.position) < 0.1f)
             {
                 _highlighter.SetColor(Color.green);
                 _highlighter.isBlinking = false;

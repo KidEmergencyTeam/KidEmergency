@@ -35,32 +35,32 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     {
         while (!_isComplete)
         {
-            _highlighter.SetActive(true);
-            _target.GetComponent<BaseOutlineObject>().enabled = true;
-            bool isInteractable = Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.05f
-                                  || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f;
-            if (isInteractable)
-            {
-                _grabInteractable.enabled = true;
-                
-                float currentZRotation = _target.transform.rotation.eulerAngles.z;
-
-                if (currentZRotation == _limitRot)
-                {
-                    _grabInteractable.enabled = false;
-                    _target.transform.rotation = Quaternion.Euler(0, 0, _limitRot);
-
-                    _target.GetComponent<BaseOutlineObject>().enabled = false;
-                    _highlighter.SetActive(false);
-                    _isComplete = true;
-                }
-            }
-
-            else
-            {
-                _grabInteractable.enabled = false;
-            }
-            
+            // _highlighter.SetActive(true);
+            // _target.GetComponent<BaseOutlineObject>().enabled = true;
+            // bool isInteractable = Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.05f
+            //                       || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.05f;
+            // if (isInteractable)
+            // {
+            //     _grabInteractable.enabled = true;
+            //     
+            //     float currentZRotation = _target.transform.rotation.eulerAngles.z;
+            //
+            //     if (currentZRotation == _limitRot)
+            //     {
+            //         _grabInteractable.enabled = false;
+            //         _target.transform.rotation = Quaternion.Euler(0, 0, _limitRot);
+            //
+            //         _target.GetComponent<BaseOutlineObject>().enabled = false;
+            //         _highlighter.SetActive(false);
+            //         _isComplete = true;
+            //     }
+            // }
+            //
+            // else
+            // {
+            //     _grabInteractable.enabled = false;
+            // }
+            _isComplete = true;
             yield return null;
 
         }

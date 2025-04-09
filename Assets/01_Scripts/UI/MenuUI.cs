@@ -61,6 +61,7 @@ public class MenuUI : OutlineHighlight
         
         else if (_menuName == "Exit")
         {
+            TitleUI.Instance.currentMenu = _menuName;
             TitleUI.Instance.SetPopup("게임을 종료하시겠습니까?", null, null);
             TitleUI.Instance.popup.gameObject.SetActive(true);
         }

@@ -20,14 +20,17 @@ public class PopupButtonUI : OutlineHighlight
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-#endif
+#elif UNITY_ANDROID
                 Application.Quit();
+#else
+                Application.Quit();
+#endif
             }
+            
             else
             {
                 if (TitleUI.Instance.nextScene != "")
                 {
-                    print(TitleUI.Instance.nextScene);
                     StartCoroutine(TitleUI.Instance.ChangeScene());
                 }
 
