@@ -20,6 +20,7 @@ public class Bag : Grabbable
             isGrabbable = false;
             currentGrabber.currentGrabbedObject = null;
         }
+        
         else if (SceneManager.GetActiveScene().name == "Eq_School_2")
         {
             Grabber grabber = FindObjectOfType<Grabber>();
@@ -59,6 +60,7 @@ public class Bag : Grabbable
             if (currentGrabber.currentGrabbedObject == this)
             {
                 isGrabbable = false;
+                
                 if (_handObject != null)
                 {
                     this.transform.SetParent(_handObject);
