@@ -266,6 +266,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
     IEnumerator Step16()
     {
+        yield return StartCoroutine(OnGrab());
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
 
@@ -382,6 +383,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
     IEnumerator Step29()
     {
+        yield return StartCoroutine(OnGrab());
+
         // 안전 유도선 활성화
         yield return StartCoroutine(SafetyLine());
         // 파티클 활성화
@@ -449,6 +452,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
+
         yield return PlayAndWait(24);
     }
 
@@ -773,6 +777,30 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
         {
             toggleHighlighter.Toggle();
+        }
+    }
+
+    // 잡는 손 유지
+    private IEnumerator OnGrab()
+    {
+        // "Handker" 태그가 붙은 오브젝트 찾기,GrabReleaseCall
+        Grabbable grabbable = GameObject.FindGameObjectWithTag("Handker")?.GetComponent<Grabbable>();
+        if (grabbable == null)
+        {
+            Debug.LogError("Grabbable 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+
+        // "Hand" 태그가 붙은 오브젝트 찾기
+        Grabber grabber = GameObject.FindGameObjectWithTag("Hand")?.GetComponent<Grabber>();
+        if (grabber == null)
+        {
+            Debug.LogError("Grabber 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            grabber.OnGrab(grabbable);
         }
     }
 }
