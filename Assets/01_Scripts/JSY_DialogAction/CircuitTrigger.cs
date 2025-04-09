@@ -31,7 +31,7 @@ public class CircuitTrigger : MonoBehaviour
             }
         }
         
-        else if (other.CompareTag("Right Hand"))
+        if (other.CompareTag("Right Hand"))
         {
             if (ActionManager.Instance != null)
             {
@@ -74,7 +74,7 @@ public class CircuitTrigger : MonoBehaviour
             }
         }
         
-        else if (other.CompareTag("Right Hand"))
+        if (other.CompareTag("Right Hand"))
         {
             if (ActionManager.Instance != null)
             {

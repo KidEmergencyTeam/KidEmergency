@@ -1,15 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class BaseOutlineObject : MonoBehaviour
 {
      public Highlighter _highlighter;
+     public CircuitTrigger box;
+     public CircuitTrigger lever;
 
      [SerializeField] private XRRayInteractor _leftRay;
      [SerializeField] private XRRayInteractor _rightRay;
      [SerializeField] private GameObject _leftHand;
      [SerializeField] private GameObject _rightHand;
+     
      
     private void Update()
     {
@@ -32,11 +36,23 @@ public class BaseOutlineObject : MonoBehaviour
         
         else if (SceneManager.GetActiveScene().name == "Eq_Home_1")
         {
-            if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
-                || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+            if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox)
             {
-                CircuitTrigger trigger = FindObjectOfType<CircuitTrigger>();
-                if (trigger.isTriggered)
+                if (box.isTriggered)
+                {
+                    _highlighter.SetColor(Color.green);
+                    _highlighter.isBlinking = false;
+                }
+                else
+                {
+                    _highlighter.SetColor(Color.yellow);
+                    _highlighter.isBlinking = true; 
+                }
+            }
+            
+            else if (ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+            {
+                if (lever.isTriggered)
                 {
                     _highlighter.SetColor(Color.green);
                     _highlighter.isBlinking = false;
