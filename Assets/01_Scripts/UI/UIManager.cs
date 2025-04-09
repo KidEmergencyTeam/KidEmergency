@@ -158,9 +158,20 @@ public class UIManager : SingletonManager<UIManager>
         
         else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
-            DialogPosReset(4);
-            WarningPosReset(2);
-            OptionPosReset(1);
+            if (player == null)
+            {
+                RobotController seti = FindObjectOfType<RobotController>();
+                player = GameObject.Find("VR + Player");
+                Vector3 playerPos = player.transform.position;
+                DialogPosReset(4);
+                WarningPosReset(2);
+                OptionPosReset(1);
+                if (player.transform.position != playerPos)
+                {
+                    WarningPosReset(3);
+                    seti.SetRobotPos(seti.setiPos[1]);
+                }
+            }
         }
         
         else if (SceneManager.GetActiveScene().name == "Eq_Home_3")
