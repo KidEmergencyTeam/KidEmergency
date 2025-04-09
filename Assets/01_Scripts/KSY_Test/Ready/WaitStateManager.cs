@@ -71,14 +71,14 @@ public class WaitStateManager : MonoBehaviour
                 Debug.LogWarning("readyIndicatorImage가 할당되어 있지 않습니다.");
             }
 
-            if (robotController != null)
-            {
-                robotController.SetHappy();
-            }
-            else
-            {
-                Debug.LogWarning("robotController가 할당되어 있지 않습니다.");
-            }
+            //if (robotController != null)
+            //{
+            //    robotController.SetHappy();
+            //}
+            //else
+            //{
+            //    Debug.LogWarning("robotController가 할당되어 있지 않습니다.");
+            //}
 
             // 코루틴을 통해 일정 시간 대기 후 씬 전환 실행
             StartCoroutine(WaitAndStartGame());
