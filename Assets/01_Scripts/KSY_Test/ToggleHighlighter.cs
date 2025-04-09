@@ -11,7 +11,7 @@ public class ToggleHighlighter : MonoBehaviour
 
         if (toggleHighlighter == null)
         {
-            Debug.LogError("ToggleOutlinable 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("ToggleHighlighter 컴포넌트를 찾을 수 없습니다.");
         }
     }
 
