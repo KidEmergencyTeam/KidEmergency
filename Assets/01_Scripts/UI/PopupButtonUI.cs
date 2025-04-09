@@ -43,8 +43,27 @@ public class PopupButtonUI : OutlineHighlight
         
         else if (this.transform.name == "No")
         {
-            TitleUI.Instance.popup.gameObject.SetActive(false);
-            outline.color = _originalOutlineColor;
+            if (TitleUI.Instance.currentMenu == "Exit")
+            {                  
+                if (TitleUI.Instance.hardPanel.activeSelf)
+                {
+                    TitleUI.Instance.currentMenu = "Hard";
+                }
+                else if (TitleUI.Instance.normalPanel.activeSelf)
+                {
+                    TitleUI.Instance.currentMenu = "Normal";
+                }
+                                                        
+                TitleUI.Instance.popup.gameObject.SetActive(false);
+                outline.color = _originalOutlineColor;
+            }
+
+            else
+            {
+                TitleUI.Instance.popup.gameObject.SetActive(false);
+                outline.color = _originalOutlineColor;
+            }
+
         }
     }
     
