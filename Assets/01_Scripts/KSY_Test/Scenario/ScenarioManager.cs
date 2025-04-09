@@ -113,7 +113,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         };
 
         // 일정 시간 이후 시나리오 실행
-        StartCoroutine(DelayedScenarioCall(2f));
+        StartCoroutine(DelayedScenarioCall(0.5f));
     }
 
     // 일정 시간 이후 시나리오 실행
@@ -207,7 +207,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 8;
 
-        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     IEnumerator Step8() { yield return null; }
@@ -236,15 +236,13 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // NPC들의 상태를 Hold로 변경
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
 
-        // 손수건 충돌 확인 -> 확인되면 다음 스텝으로 넘어감
-        yield return StartCoroutine(Mask());
+        // 손수건 충돌 확인되면 0.5초 대기 후 -> 다음 스텝으로 넘어감
+        yield return StartCoroutine(Mask(0.5f));
     }
 
     // Step14에서 페이드 효과 + 문 앞으로 이동
     IEnumerator Step14()
     {
-        yield return new WaitForSeconds(0.5f);
-
         // 페이드 아웃 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
@@ -261,7 +259,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
-        yield return new WaitForSeconds(0.5f);
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -271,7 +268,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        yield return new WaitForSeconds(0.5f);
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -318,27 +314,11 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // Step21 대사 출력 이후
-    // 피난 유도선 아웃라인 효과 실행 -> Emergency_Exit 오브젝트 대상
+    // Emergency_Exit 오브젝트 대상 -> 안전 유도선 활성화
     IEnumerator Step21()
     {
-        //// 태그가 "SafetyLine"인 오브젝트들을 모두 찾음
-        //GameObject[] safetyLineObjects = GameObject.FindGameObjectsWithTag("SafetyLine");
-
-        //foreach (GameObject obj in safetyLineObjects)
-        //{
-        //    // 각 오브젝트에서 ToggleOutlinable.cs 가져오기
-        //    ToggleOutlinable toggleComp = obj.GetComponent<ToggleOutlinable>();
-
-        //    if (toggleComp != null)
-        //    {
-        //        // Outlinable 활성화 (false에서 true로 전환)
-        //        toggleComp.OutlinableEnabled = true;
-        //    }
-        //    else
-        //    {
-        //        Debug.LogError("오브젝트 '" + obj.name + "'에 ToggleOutlinable 컴포넌트가 존재하지 않습니다.");
-        //    }
-        //}
+        // 안전 유도선 활성화
+        yield return StartCoroutine(SafetyLine());
         yield return PlayAndWait(14);
     }
 
@@ -346,6 +326,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 사용자 낮은 자세로 숙이기
     IEnumerator Step22()
     {
+        // 플레이어 높이 체크
         yield return StartCoroutine(VRCamera());
     }
 
@@ -374,7 +355,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 26;
 
-        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        // 세티 표정 선택지에 따라 변화
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -400,7 +382,11 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
     IEnumerator Step29()
     {
+        // 안전 유도선 활성화
+        yield return StartCoroutine(SafetyLine());
+        // 파티클 활성화
         yield return StartCoroutine(PlaySmokeParticles());
+        // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
         yield return new WaitForSeconds(0.5f);
 
@@ -434,7 +420,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
             currentStep = 33;
 
-        yield return StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
     }
 
     // Step32 대사 출력 -> Step35 진행
@@ -459,10 +445,11 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step36: 연속 재생 종료 후 타이핑 실행
     IEnumerator Step36()
     {
-        // 씬 이동 이후 -> 손수건 제거
+        // 손수건 제거
         GrabStatePersistence.Instance.disableSingleton = true;
+
+        // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
-        yield return new WaitForSeconds(0.5f);
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -626,7 +613,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // 손수건 충돌 확인
-    public IEnumerator Mask()
+    public IEnumerator Mask(float delay)
     {
         // 1."Head" 태그를 가진 객체에서 FireEvacuationMask 컴포넌트 가져오기
         FireEvacuationMask fireEvacuationMask = GameObject.FindGameObjectWithTag("Head")?.GetComponent<FireEvacuationMask>();
@@ -654,6 +641,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 6.이벤트 해제
         fireEvacuationMask.OnHandkerchiefEnter -= OnHandkerEnterHandler;
+
+        // 7.딜레이 적용
+        yield return new WaitForSeconds(delay);
     }
 
     // 플레이어 높낮이 체크
@@ -771,6 +761,22 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
         {
             setiPosition.UpdatePosition();
+        }
+    }
+
+    // 안전 유도선 활성화
+    private IEnumerator SafetyLine()
+    {
+        // "ToggleHighlighter" 태그가 붙은 오브젝트 찾기
+        ToggleHighlighter toggleHighlighter = GameObject.FindGameObjectWithTag("ToggleHighlighter")?.GetComponent<ToggleHighlighter>();
+        if (toggleHighlighter == null)
+        {
+            Debug.LogError("ToggleHighlighter 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            toggleHighlighter.Toggle();
         }
     }
 }
