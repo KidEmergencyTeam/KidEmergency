@@ -6159,7 +6159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &393429770
 Transform:
   m_ObjectHideFlags: 0
@@ -11557,7 +11557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLeft: 1
-  detectRadius: 0.05
+  detectRadius: 0.0002
   rayInteractor: {fileID: 883118411}
   isOnGrabCalled: 0
   currentGrabbedObject: {fileID: 0}
@@ -11592,7 +11592,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.0002
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &814430698
 PrefabInstance:
@@ -12361,7 +12361,11 @@ MonoBehaviour:
   _lever: {fileID: 7987454739329176886}
   _highlighter: {fileID: 9623799}
   audio: {fileID: 0}
-  isLeverTriggered: 0
+  _controller:
+  - {fileID: 1279492079}
+  - {fileID: 1374095066}
+  isLvLeftTrigger: 0
+  isLvRightTrigger: 0
 --- !u!114 &896760774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12377,7 +12381,11 @@ MonoBehaviour:
   _cb: {fileID: 8214045582178290832}
   _circuitBox: {fileID: 687789433242617580}
   _highlighter: {fileID: 512497594}
-  isButtonTriggered: 0
+  _controller:
+  - {fileID: 1279492079}
+  - {fileID: 1374095066}
+  isBtLeftTrigger: 0
+  isBtRightTrigger: 0
 --- !u!114 &896760775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29116,7 +29124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6559494972279484185, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Left Hand
       objectReference: {fileID: 0}
     - target: {fileID: 6632672494508516299, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_IsActive
@@ -29128,7 +29136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6746514769239113685, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Right Hand
       objectReference: {fileID: 0}
     - target: {fileID: 8596779616523189794, guid: 32dac1706289b4d4fa0b61dcf3faf9d5, type: 3}
       propertyPath: m_Name
@@ -31654,6 +31662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isLever: 1
+  isTriggered: 0
   box: {fileID: 896760774}
   lever: {fileID: 896760773}
 --- !u!64 &7987454739329176888
@@ -31765,6 +31774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isLever: 0
+  isTriggered: 0
   box: {fileID: 896760774}
   lever: {fileID: 896760773}
 --- !u!64 &8214045582178290834

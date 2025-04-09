@@ -30,6 +30,41 @@ public class BaseOutlineObject : MonoBehaviour
             }
         }
         
+        else if (SceneManager.GetActiveScene().name == "Eq_Home_1")
+        {
+            if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
+                || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+            {
+                CircuitTrigger trigger = FindObjectOfType<CircuitTrigger>();
+                if (trigger.isTriggered)
+                {
+                    _highlighter.SetColor(Color.green);
+                    _highlighter.isBlinking = false;
+                }
+                else
+                {
+                    _highlighter.SetColor(Color.yellow);
+                    _highlighter.isBlinking = true; 
+                }
+            }
+
+            else
+            {
+                if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.1f
+                   || Vector3.Distance(this.gameObject.transform.position, _rightHand.transform.position) < 0.1f)
+                {
+                    _highlighter.SetColor(Color.green);
+                    _highlighter.isBlinking = false;
+                }
+        
+                else
+                {
+                    _highlighter.SetColor(Color.yellow);
+                    _highlighter.isBlinking = true; 
+                } 
+            }
+        }
+        
         else
         {
             if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.1f
@@ -45,7 +80,6 @@ public class BaseOutlineObject : MonoBehaviour
                 _highlighter.isBlinking = true; 
             }   
         }
-        
     }
     
 }
