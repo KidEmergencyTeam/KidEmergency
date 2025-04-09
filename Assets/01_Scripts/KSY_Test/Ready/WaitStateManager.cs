@@ -36,21 +36,21 @@ public class WaitStateManager : MonoBehaviour
             }
         }
 
-        // "Seti" 태그가 붙은 오브젝트 찾기
-        GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
-        if (setiObj != null)
-        {
-            // RobotController.cs 가져오기
-            robotController = setiObj.GetComponent<RobotController>();
-            if (robotController == null)
-            {
-                Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
-            }
-        }
-        else
-        {
-            Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
-        }
+        //// "Seti" 태그가 붙은 오브젝트 찾기
+        //GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
+        //if (setiObj != null)
+        //{
+        //    // RobotController.cs 가져오기
+        //    robotController = setiObj.GetComponent<RobotController>();
+        //    if (robotController == null)
+        //    {
+        //        Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
+        //}
     }
 
     // 전체 준비 완료 시 이미지 처리 및 일정 시간 대기 후 씬 전환 실행
