@@ -14,7 +14,8 @@ public class Bag : Grabbable
     protected override void Start()
     {
         base.Start();
-        if (SceneManager.GetActiveScene().name == "Eq_School_1")
+        if (SceneManager.GetActiveScene().name == "Eq_School_1" ||
+            SceneManager.GetActiveScene().name == "Eq_Home_1")
         {
             isGrabbable = false;
             currentGrabber.currentGrabbedObject = null;
@@ -34,6 +35,14 @@ public class Bag : Grabbable
             isGrabbable = false;
             BagInteraction();
         }
+        
+        else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
+        {
+            Grabber grabber = FindObjectOfType<Grabber>();
+            grabber.OnGrab(this);
+            isGrabbable = false;
+            BagInteraction();
+        }
     }
 
     public void BagInteraction()
@@ -44,7 +53,8 @@ public class Bag : Grabbable
     protected override void Update()
     {
         base.Update();
-        if (SceneManager.GetActiveScene().name == "Eq_School_1")
+        if (SceneManager.GetActiveScene().name == "Eq_School_1"
+            || SceneManager.GetActiveScene().name == "Eq_Home_1")
         {
             if (currentGrabber.currentGrabbedObject == this)
             {
@@ -88,7 +98,7 @@ public class Bag : Grabbable
 
     public bool IsProtect()
     {
-        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.1f)
+        if (Vector3.Distance(this.transform.position, _headObject.transform.position) < 0.2f)
         {
             return true;
         }
