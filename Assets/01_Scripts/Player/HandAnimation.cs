@@ -14,9 +14,16 @@ public class HandAnimation : MonoBehaviour
     public bool isLeftGrabbed = false;
     public bool isRightGrabbed = false;
 
+    private RayController ray;
+
+    private void Start()
+    {
+        ray = FindObjectOfType<RayController>();
+    }
+
     void Update()
     {
-        RayController ray = FindObjectOfType<RayController>();
+        //RayController ray = FindObjectOfType<RayController>();
 
         if (!isLeftGrabbed)
         {
