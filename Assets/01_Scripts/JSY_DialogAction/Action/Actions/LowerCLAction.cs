@@ -23,7 +23,7 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
     private IEnumerator LowerCircuitLever()
     {
         _highlighter.SetActive(true);
-        BaseOutlineObject outline = GetComponent<BaseOutlineObject>();
+        BaseOutlineObject outline = _lever.GetComponent<BaseOutlineObject>();
         outline.enabled = true;
         
         while (!_isComplete)
