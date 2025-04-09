@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class ChangeViewAction : MonoBehaviour, IActionEffect
@@ -62,6 +63,11 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
             else if (newPos != _originPos && ActionManager.Instance.beforeDialog.name == "EqHome9_Dialog")
             {
                 // 지진 집 - 전기 차단기 앞으로 시점 변경
+                SetNewView(newPos, newRot, PlayerRig.State.None);
+            }
+
+            else if(SceneManager.GetActiveScene().name == "Eq_Home_2")
+            {
                 SetNewView(newPos, newRot, PlayerRig.State.None);
             }
             

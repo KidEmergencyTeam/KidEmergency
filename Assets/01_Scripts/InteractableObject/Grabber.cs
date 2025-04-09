@@ -60,7 +60,7 @@ public class Grabber : MonoBehaviour
 		if (Grabbed) return;
 		if (!other.TryGetComponent<Grabbable>(out Grabbable grabbable)) return;
 
-		if (controllerButtonClick.action.ReadValue<float>() > 0 &&
+		if (controllerButtonClick.action.ReadValue<float>() >= 1 &&
 		    grabbable.isGrabbable && grabbable.isLeft == isLeft)
 		{
 			OnGrab(grabbable);
