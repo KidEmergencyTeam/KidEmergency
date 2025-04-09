@@ -24,7 +24,7 @@ public class ChoiceVoteManager : DisableableSingleton<ChoiceVoteManager>
     public List<ChoiceUIPanelSceneReference> choicePanelSceneReferences;
 
     [Header("선택지 처리 대기 시간")]
-    public float choiceDelay = 0.5f;
+    public float choiceDelay = 0.1f;
 
     // 선택지 라벨 배열. 예: 첫 번째 선택지는 "A", 두 번째 선택지는 "B"
     private string[] choiceLabels = { "A", "B" };
