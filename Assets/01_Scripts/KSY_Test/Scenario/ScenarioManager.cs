@@ -113,7 +113,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         };
 
         // 일정 시간 이후 시나리오 실행
-        StartCoroutine(DelayedScenarioCall(0.5f));
+        StartCoroutine(DelayedScenarioCall(1.6f));
     }
 
     // 일정 시간 이후 시나리오 실행
@@ -388,7 +388,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(PlaySmokeParticles());
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-        yield return new WaitForSeconds(0.5f);
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
