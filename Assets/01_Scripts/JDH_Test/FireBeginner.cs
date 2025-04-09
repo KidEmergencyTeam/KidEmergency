@@ -70,6 +70,7 @@ public class FireBeginner : MonoBehaviour
 	public bool isInLivingRoom;
 	public bool isInKitchen;
 	public bool ruleCheck; //손수건을 획득한 후 경고창을 띄우기 위해 경고 지점을 설정하는 변수 (해당 변수가 true된 시점부터 경고가 출력)
+    public bool canGetItems;    //아이템을 잡을 수 있는 상황
 
 	[Header("대화 시스템")] [SerializeField] private BeginnerDialogSystem firstDialog;
 
@@ -427,14 +428,14 @@ public class FireBeginner : MonoBehaviour
 
 		foreach (Transform child in parent.GetComponentsInChildren<Transform>())
 		{
-			Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+			Highlighter highlighter = child.gameObject.GetComponent<Highlighter>();
 
-			if (outline == null)
+			if (highlighter == null)
 			{
-				outline = child.gameObject.AddComponent<Outlinable>();
+                highlighter = child.gameObject.AddComponent<Highlighter>();
 			}
-
-			outline.enabled = true; // Outlinable 활성화
+            highlighter.SetColor(Color.yellow);
+            highlighter.isBlinking = true; // Highlighter 활성화
 		}
 	}
 
