@@ -23,27 +23,28 @@ public class RayController : MonoBehaviour
         Grabber grabber = FindObjectOfType<Grabber>();
         if (_rightRay != null && _leftRay != null)
         {
-              if (SceneManager.GetActiveScene().name == "Eq_Home_2")
-        {
-            if (UIActive() || ActionManager.Instance.currentAction == ActionType.SelectGuideLine)
+            if (SceneManager.GetActiveScene().name == "Eq_Home_2")
             {
-                _rightRay.enabled = true;
-                _leftRay.enabled = false;
-                
-                rightLine.enabled = true;
-                leftLine.enabled = false;
-            }
+                if (UIActive() || ActionManager.Instance.currentAction == ActionType.SelectGuideLine)
+                {
+                    _rightRay.enabled = true;
+                    _leftRay.enabled = false;
 
-            else
-            {
-                _rightRay.enabled = true;
-                _leftRay.enabled = false;
-                
-                rightLine.enabled = false;
-                leftLine.enabled = false;
+                    rightLine.enabled = true;
+                    leftLine.enabled = false;
+                }
+
+                else
+                {
+                    _rightRay.enabled = true;
+                    _leftRay.enabled = false;
+
+                    rightLine.enabled = false;
+                    leftLine.enabled = false;
+                }
             }
         }
-        
+
         else
         {
             if (UIActive())
@@ -116,7 +117,6 @@ public class RayController : MonoBehaviour
                 }
 
             }
-        }
         }
     }
 
