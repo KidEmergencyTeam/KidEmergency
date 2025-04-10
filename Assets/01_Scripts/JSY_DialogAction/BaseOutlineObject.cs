@@ -9,8 +9,8 @@ public class BaseOutlineObject : MonoBehaviour
      public CircuitTrigger box;
      public CircuitTrigger lever;
 
-     [SerializeField] private XRRayInteractor _leftRay;
-     [SerializeField] private XRRayInteractor _rightRay;
+     public XRRayInteractor _leftRay;
+     public XRRayInteractor _rightRay;
      [SerializeField] private GameObject _leftHand;
      [SerializeField] private GameObject _rightHand;
      

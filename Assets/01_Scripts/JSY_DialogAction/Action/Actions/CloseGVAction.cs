@@ -20,29 +20,7 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
     {
         _knob.enabled = false;
     }
-
-    private void Update()
-    {
-        if (!_isComplete)
-        {
-            _highlighter.SetActive(true);
-            _target.GetComponent<BaseOutlineObject>().enabled = true;
-
-                _knob.enabled = true;
-                print($"knob enable {_knob.enabled} ~");
-                if (_knob.value >= 0.99f)
-                {
-                    _knob.enabled = false;
-                    _knob.value = 1f;
-                    _target.GetComponent<BaseOutlineObject>().enabled = false;
-                    _highlighter.SetActive(false);
-        
-                    _isComplete = true;
-                }
-            
-        }
-    }
-
+    
     public void StartAction()
     {
         _isComplete = false;
@@ -56,17 +34,27 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
         
         while (!_isComplete)
         {
-            _knob.enabled = true;
-            if(_knob.value >= 0.99f)
-            { 
+            if (_target.GetComponent<BaseOutlineObject>()._leftRay.hasHover ||
+                _target.GetComponent<BaseOutlineObject>()._rightRay.hasHover)
+            {
+                _knob.enabled = true;
+                if (_knob.value >= 0.99f)
+                {
+                    _knob.enabled = false;
+                    _knob.value = 1f;
+                    _target.GetComponent<BaseOutlineObject>().enabled = false;
+                    _highlighter.SetActive(false);
+
+                    _isComplete = true;
+                }
+
+            }
+
+            else
+            {
                 _knob.enabled = false;
-                _knob.value = 1f;
-                _target.GetComponent<BaseOutlineObject>().enabled = false;
-                _highlighter.SetActive(false);
-                        
-                _isComplete = true;
-            } 
-            
+            }
+
             yield return null; 
         }
     }

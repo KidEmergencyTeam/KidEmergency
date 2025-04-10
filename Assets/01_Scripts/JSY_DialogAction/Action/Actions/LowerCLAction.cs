@@ -37,9 +37,12 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
                 if (_controller[0].selectAction.action.ReadValue<float>() >= 1)
                 {
                     if (audio != null)
-                    { 
-                        ActionManager.Instance.actionAudio.clip = audio;
-                        ActionManager.Instance.actionAudio.Play();
+                    {
+                        if (ActionManager.Instance.actionAudio.clip != audio)
+                        {
+                            ActionManager.Instance.actionAudio.clip = audio;
+                            ActionManager.Instance.actionAudio.Play();
+                        }
                     } 
                     print("레버 위치 바뀐다~");
                     _lever.transform.localPosition = new Vector3(0, 0.093f, 0.08f);
