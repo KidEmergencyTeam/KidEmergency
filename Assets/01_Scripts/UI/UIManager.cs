@@ -11,14 +11,13 @@ public class UIManager : SingletonManager<UIManager>
     public Transform[] dialogPos;
     public Transform[] optionPos;
     public Transform[] warningPos;
-
-    private GameObject player;
+    public GameObject player;
+    
     private Vector3 _originPos;
 
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.Find("VR + Player");
         _originPos = player.transform.position;
     }
 
