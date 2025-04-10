@@ -51,10 +51,11 @@ public class TitleUI : MonoBehaviour
         RayController rayController = FindObjectOfType<RayController>();
         rayController.leftLine.gameObject.SetActive(false);
         rayController.rightLine.gameObject.SetActive(false);
-        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
         if (!_isLoading)
         {
+            yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
+
             _isLoading = true;
             AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
         
