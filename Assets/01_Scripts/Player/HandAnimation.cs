@@ -23,7 +23,7 @@ public class HandAnimation : MonoBehaviour
 
     void Update()
     {
-        //RayController ray = FindObjectOfType<RayController>();
+        //RayController ray = FindObjectOfType<RayController>();    
 
         if (!isLeftGrabbed)
         {

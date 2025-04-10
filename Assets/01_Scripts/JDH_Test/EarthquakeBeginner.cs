@@ -70,6 +70,8 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool ruleCheck;
     public bool doProtectedHead;    //머리를 보호하고 있어야 하는 구간
     public bool isprotectedHead;    //머리를 잘 보호하는지 확인하는 변수
+    public GameObject deskLegObj;  //책상 다리 잡기 오브젝트
+    public GameObject bagObj;  //가방 오브젝트
 
     [Header("대화 시스템")]
     [SerializeField] private BeginnerDialogSystem firstDialog;
@@ -131,9 +133,15 @@ public class EarthquakeBeginner : MonoBehaviour
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
-                //책상 다리를 잡을때까지 대기
+
+
+                //책상 다리를 잡을때까지 대기 ->5초
+                yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
+                deskLegObj.GetComponent<DeskLeg>().enabled = false;
 
                 // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
+                bagObj.GetComponent<Bag>().enabled = true;
+                bagObj.GetComponentInChildren<GameObject>().SetActive(true);
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
                 fifthDialog.gameObject.SetActive(true);
