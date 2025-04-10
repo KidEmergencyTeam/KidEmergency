@@ -266,7 +266,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
     IEnumerator Step16()
     {
-        yield return StartCoroutine(OnGrab());
+        // yield return StartCoroutine(OnGrab());
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
 
@@ -383,7 +383,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
     IEnumerator Step29()
     {
-        yield return StartCoroutine(OnGrab());
+        // yield return StartCoroutine(OnGrab());
 
         // 안전 유도선 활성화
         yield return StartCoroutine(SafetyLine());
@@ -441,12 +441,17 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step35()
     {
         yield return PlayAndWait(23);
+
+        // 운동장 씬 
         yield return StartCoroutine(ChangeScene(2));
     }
 
     // Step36: 연속 재생 종료 후 타이핑 실행
     IEnumerator Step36()
     {
+        // 경고창 제거
+        MaskWarningUIStateManager.Instance.disableSingleton = true;
+
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
 
@@ -467,8 +472,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
 
-        // 마지막 씬 이동 이후 -> 싱글톤 매니저를 상속받는 객체 개별적으로 Destroy
+        // 로비 씬 이동 이후 -> ChoiceVoteManager 제거
         ChoiceVoteManager.Instance.disableSingleton = true;
+        // 로비 씬 이동 이후 -> TypingEffect 제거
         TypingEffect.Instance.disableSingleton = true;
 
         // 시나리오 매니저 인스터스 제거
