@@ -13,19 +13,17 @@ public class Grabber : MonoBehaviour
 
 	// ture일 경우 레이 스위치 불가 -> 잡은 상태
 	// false일 경우 레이 스위치 가능 -> 놓은 상태
-	[Header("OnGrab 호출 여부")] 
-	public bool isOnGrabCalled = false;
+	[Header("OnGrab 호출 여부")] public bool isOnGrabCalled = false;
 
 	// OnGrab 메서드 호출 시 실행 -> 실행되었음을 전달 -> RayController2.cs에서 우측 레이로 전환
 	public event Action OnGrabEvent;
 
-    [HideInInspector] public Grabbable currentGrabbedObject;
+	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private SphereCollider _detectCollider;
 	private HandAnimation _handAnimation;
-    private HandAnimation2 _handAnimation2;
-    private TargetFollower _targetFollower;
+	private TargetFollower _targetFollower;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
 	private List<Vector3> _originalHandTargetPosOffset = new List<Vector3>();
 	private List<Vector3> _originalHandTargetRotOffset = new List<Vector3>();
@@ -40,17 +38,15 @@ public class Grabber : MonoBehaviour
 
 
 		_handAnimation = FindObjectOfType<HandAnimation>();
-        _handAnimation2 = FindObjectOfType<HandAnimation2>();
+		_handAnimation = FindObjectOfType<HandAnimation2>();
 		if (isLeft)
 		{
 			controllerButtonClick = _handAnimation.leftGrip;
-			controllerButtonClick = _handAnimation2.leftGrip;
 		}
 		else
 		{
-			controllerButtonClick = _handAnimation.rightGrip; 
-			controllerButtonClick = _handAnimation2.leftGrip;
-        }
+			controllerButtonClick = _handAnimation.rightGrip;
+		}
 
 		_targetFollower = FindObjectOfType<TargetFollower>();
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[2].target);
@@ -84,14 +80,13 @@ public class Grabber : MonoBehaviour
 		if (isLeft)
 		{
 			_handAnimation.isLeftGrabbed = true;
-			_handAnimation2.isLeftGrabbed = true;
 		}
 		else
 		{
 			_handAnimation.isRightGrabbed = true;
-			_handAnimation2.isRightGrabbed = true;
 		}
-        currentGrabbedObject = grabbable;
+
+		currentGrabbedObject = grabbable;
 		currentGrabbedObject.isGrabbable = false;
 		currentGrabbedObject.currentGrabber = this;
 		if (currentGrabbedObject.isMoving)
@@ -99,15 +94,12 @@ public class Grabber : MonoBehaviour
 			if (isLeft)
 			{
 				_handAnimation.animator.SetFloat("Left Grip", 1);
-				_handAnimation2.animator.SetFloat("Left Grip", 1);
 			}
 
 			else
 			{
 				_handAnimation.animator.SetFloat("Right Grip", 1);
-                _handAnimation2.animator.SetFloat("Right Grip", 1);
-            }
-
+			}
 		}
 		else
 		{
@@ -145,13 +137,12 @@ public class Grabber : MonoBehaviour
 		if (isLeft)
 		{
 			_handAnimation.isLeftGrabbed = false;
-            _handAnimation2.isLeftGrabbed = false;
-        }
+		}
 		else
 		{
-            _handAnimation.isRightGrabbed = false;
-            _handAnimation2.isRightGrabbed = false;
-        }
+			_handAnimation.isRightGrabbed = false;
+		}
+
 		if (currentGrabbedObject.isMoving)
 		{
 			currentGrabbedObject.currentGrabber = null;
@@ -174,7 +165,7 @@ public class Grabber : MonoBehaviour
 
 		currentGrabbedObject = null;
 
-        // 레이 전환 가능
-        isOnGrabCalled = false;
+		// 레이 전환 가능
+		isOnGrabCalled = false;
 	}
 }
