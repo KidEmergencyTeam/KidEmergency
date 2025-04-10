@@ -29,7 +29,9 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
                 }
         
                 _isComplete = true;
-            }   
+            }
+
+            yield return null;
         }
     }
     

@@ -175,6 +175,22 @@ public class UIManager : SingletonManager<UIManager>
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
+
+            else
+            {
+                if (_originPos == player.transform.position)
+                {
+                    DialogPosReset(4);
+                    WarningPosReset(2);
+                    OptionPosReset(1);
+                }
+
+                else
+                {
+                    WarningPosReset(3); 
+                    seti.SetRobotPos(seti.setiPos[1]);
+                }
+            }
         }
         
         
