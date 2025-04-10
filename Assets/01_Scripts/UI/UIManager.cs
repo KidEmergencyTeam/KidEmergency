@@ -158,24 +158,26 @@ public class UIManager : SingletonManager<UIManager>
         
         else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
+            RobotController seti = FindObjectOfType<RobotController>();
             if (player == null)
             {
-                RobotController seti = FindObjectOfType<RobotController>();
-                Vector3 setiPos = seti.transform.position;
-                if(setiPos == seti.transform.position)
+                player = GameObject.Find("VR + Player");
+                Vector3 pos = player.transform.position;
+                if (pos == player.transform.position)
                 {
                     DialogPosReset(4);
                     WarningPosReset(2);
                     OptionPosReset(1);
-                    seti.SetRobotPos(seti.setiPos[0]);
                 }
-                if (setiPos != seti.transform.position)
+
+                if (pos != player.transform.position)
                 {
-                    WarningPosReset(3);
+                    WarningPosReset(3); 
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
         }
+        
         
         else if (SceneManager.GetActiveScene().name == "Eq_Home_3")
         {
