@@ -81,4 +81,9 @@ public class FEScene : MonoBehaviour
 		_stateMachine.ChangeState(newState);
 		currentState = newState;
 	}
+
+	public void FadeOut()
+	{
+		StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
+	}
 }
