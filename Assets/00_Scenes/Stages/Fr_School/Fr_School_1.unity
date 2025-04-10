@@ -1121,18 +1121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cfa96e2ef753874c8d01142a6916bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 66b2823d-c949-40a8-bd5a-9476d2200a0e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   leftGrip:
     m_UseReference: 1
     m_Action:
@@ -1145,18 +1133,6 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 91b30d91-073d-4fe4-a14a-7b5eec1f0943
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightGrip:
     m_UseReference: 1
     m_Action:
@@ -1184,18 +1160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82ed36db4d497b4ead79ca35d261021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 42ff4a76-c0ef-430b-a280-82280e7df48e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   leftGrip:
     m_UseReference: 1
     m_Action:
@@ -1208,18 +1172,6 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec18a641-ad79-4944-8c22-a45c8b051082
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightGrip:
     m_UseReference: 1
     m_Action:
@@ -4085,8 +4037,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 353400046}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.025}
-  m_LocalScale: {x: 0.000375, y: 0.000375, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 298404752}
@@ -6826,50 +6778,6 @@ Transform:
   m_Children:
   - {fileID: 1999552752}
   m_Father: {fileID: 805687573}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &670651329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 670651331}
-  - component: {fileID: 670651330}
-  m_Layer: 0
-  m_Name: MaskWarningUIStateManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &670651330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 670651329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7af1e229c6373d34d8f761cad61551ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &670651331
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 670651329}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.81992865, y: 0.97611177, z: 3.4350102}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &696437569
 PrefabInstance:
@@ -19684,7 +19592,6 @@ SceneRoots:
   - {fileID: 1296830807}
   - {fileID: 812006879}
   - {fileID: 2094478426}
-  - {fileID: 670651331}
   - {fileID: 1110185838}
   - {fileID: 1085814015}
   - {fileID: 317766720}
