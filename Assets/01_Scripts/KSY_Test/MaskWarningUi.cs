@@ -12,36 +12,6 @@ public class MaskWarningUI : MonoBehaviour
     [Header("Grabber")]
     public Grabber leftGrabber;
 
-    private void Awake()
-    {
-        if (MaskWarningUIStateManager.Instance != null)
-        {
-            // 충돌 상태 불러오기
-            bool currentState = MaskWarningUIStateManager.Instance.GetCollisionState();
-            Debug.Log("충돌 상태 불러오기 완료");
-
-            // 충돌 상태라면 -> true를 불러오면
-            if (currentState)
-            {
-                // 경고창 비활성화
-                maskWarningPanel.SetActive(false);
-                Debug.Log("경고창 비활성화");
-            }
-
-            // 충돌 종료 상태라면 -> false를 불러오면
-            else
-            {
-                // 경고창 활성화
-                maskWarningPanel.SetActive(true);
-                Debug.Log("경고창 활성화");
-            }
-        }
-        else
-        {
-            Debug.LogError("MaskWarningUIStateManager -> null");
-        }
-    }
-
     private void OnEnable()
     {
         // Grabber 이벤트 등록
@@ -76,6 +46,36 @@ public class MaskWarningUI : MonoBehaviour
         {
             fireEvacuationMask.OnHandkerchiefEnter -= HandkerEnter;
             fireEvacuationMask.OnHandkerchiefExit -= HandkerExit;
+        }
+    }
+
+    private void Start()
+    {
+        if (MaskWarningUIStateManager.Instance != null)
+        {
+            // 충돌 상태 불러오기
+            bool currentState = MaskWarningUIStateManager.Instance.GetCollisionState();
+            Debug.Log("충돌 상태 불러오기 완료");
+
+            // 충돌 상태라면 -> true를 불러오면
+            if (currentState)
+            {
+                // 경고창 비활성화
+                maskWarningPanel.SetActive(false);
+                Debug.Log("경고창 비활성화");
+            }
+
+            // 충돌 종료 상태라면 -> false를 불러오면
+            else
+            {
+                // 경고창 활성화
+                maskWarningPanel.SetActive(true);
+                Debug.Log("경고창 활성화");
+            }
+        }
+        else
+        {
+            Debug.LogError("MaskWarningUIStateManager -> null");
         }
     }
 
