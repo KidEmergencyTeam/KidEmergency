@@ -17,18 +17,17 @@ public class MaskWarningUI : MonoBehaviour
         if (MaskWarningUIStateManager.Instance != null)
         {
             // 충돌 상태 불러오기
-            bool currentState = MaskWarningUIStateManager.Instance.GetCollisionState();
-            Debug.Log("충돌 상태 불러오기 완료");
+            bool State = MaskWarningUIStateManager.Instance.GetCollisionState(true);
 
-            // 충돌 상태라면 -> true를 불러오면
-            if (currentState)
+            // 충돌 상태라면 
+            if (State)
             {
                 // 경고창 비활성화
                 maskWarningPanel.SetActive(false);
                 Debug.Log("경고창 비활성화");
             }
 
-            // 충돌 종료 상태라면 -> false를 불러오면
+            // 충돌 종료 상태라면
             else
             {
                 // 경고창 활성화
