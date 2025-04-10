@@ -11,7 +11,7 @@ public class ToggleHighlighter : MonoBehaviour
 
         if (objects.Length == 0)
         {
-            Debug.LogWarning("오브젝트를 찾을 수 없습니다.");
+            Debug.LogWarning("SafetyLine 오브젝트를 찾을 수 없습니다.");
             return;
         }
 
