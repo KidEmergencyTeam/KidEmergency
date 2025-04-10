@@ -12,23 +12,17 @@ public class MaskWarningUI : MonoBehaviour
     [Header("Grabber")]
     public Grabber leftGrabber;
 
-    // GrabStatePersistence.cs -> OnEnable에서 OnGrabEvent 호출
-    // 따라서 Awake에서 Grabber 이벤트 등록 
-    private void Awake()
+    private void OnEnable()
     {
         // Grabber 이벤트 등록
         if (leftGrabber != null)
         {
             leftGrabber.OnGrabEvent += HandkerGrab;
-            leftGrabber.OnReleaseEvent += HandkerRelease;
         }
 
         else
             Debug.LogError("[MaskWarningUI] leftGrabber -> null");
-    }
 
-    private void OnEnable()
-    {
         // FireEvacuationMask 이벤트 등록
         if (fireEvacuationMask != null)
         {
@@ -45,7 +39,6 @@ public class MaskWarningUI : MonoBehaviour
         if (leftGrabber != null)
         {
             leftGrabber.OnGrabEvent -= HandkerGrab;
-            leftGrabber.OnReleaseEvent -= HandkerRelease;
         }
 
         // FireEvacuationMask 이벤트 해제
@@ -78,13 +71,5 @@ public class MaskWarningUI : MonoBehaviour
         // 패널 활성화
         maskWarningPanel.SetActive(true);
         Debug.Log("손수건을 잡을 때 실행");
-    }
-
-    // 손수건을 놓을 때 실행
-    private void HandkerRelease()
-    {
-        // 패널 비활성화
-        maskWarningPanel.SetActive(false);
-        Debug.Log("손수건을 놓을 때 실행");
     }
 }

@@ -9,7 +9,7 @@ public class VRUIOutline : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private Color outlineColor = Color.green;
 
     [Header("두께")]
-    public Vector2 outlineDistance = new Vector2(5, 5);
+    public Vector2 outlineDistance = new Vector2(20, 20);
 
     void Awake()
     {

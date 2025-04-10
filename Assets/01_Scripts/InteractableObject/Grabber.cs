@@ -19,15 +19,13 @@ public class Grabber : MonoBehaviour
 	// OnGrab 메서드 호출 시 실행 -> 실행되었음을 전달 -> RayController2.cs에서 우측 레이로 전환
 	public event Action OnGrabEvent;
 
-    // OnRelease 메서드 호출 시 실행 -> 실행되었음을 전달 -> MaskWarningUI.cs에서 경고창 비활성화
-    public event Action OnReleaseEvent;
-
     [HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private SphereCollider _detectCollider;
 	private HandAnimation _handAnimation;
-	private TargetFollower _targetFollower;
+    private HandAnimation2 _handAnimation2;
+    private TargetFollower _targetFollower;
 	private List<Transform> _originalHandTargetTransforms = new List<Transform>();
 	private List<Vector3> _originalHandTargetPosOffset = new List<Vector3>();
 	private List<Vector3> _originalHandTargetRotOffset = new List<Vector3>();
@@ -42,8 +40,17 @@ public class Grabber : MonoBehaviour
 
 
 		_handAnimation = FindObjectOfType<HandAnimation>();
-		if (isLeft) controllerButtonClick = _handAnimation.leftGrip;
-		else controllerButtonClick = _handAnimation.rightGrip;
+        _handAnimation2 = FindObjectOfType<HandAnimation2>();
+		if (isLeft)
+		{
+			controllerButtonClick = _handAnimation.leftGrip;
+			controllerButtonClick = _handAnimation2.leftGrip;
+		}
+		else
+		{
+			controllerButtonClick = _handAnimation.rightGrip; 
+			controllerButtonClick = _handAnimation2.leftGrip;
+        }
 
 		_targetFollower = FindObjectOfType<TargetFollower>();
 		_originalHandTargetTransforms.Add(_targetFollower.followTargets[2].target);
@@ -69,31 +76,38 @@ public class Grabber : MonoBehaviour
 
 	public void OnGrab(Grabbable grabbable)
 	{
-		// null 체크 후 초기화
-		if (_handAnimation == null)
-		{
-			_handAnimation = FindObjectOfType<HandAnimation>();
-		}
-
-		if (_targetFollower == null)
-		{
-			_targetFollower = FindObjectOfType<TargetFollower>();
-		}
-
 		print("OnGrab");
 		rayInteractor.enabled = false;
 		grabbable.rb.useGravity = false;
 		grabbable.rb.isKinematic = true;
 		grabbable.isGrabbable = false;
-		if (isLeft) _handAnimation.isLeftGrabbed = true;
-		else _handAnimation.isRightGrabbed = true;
-		currentGrabbedObject = grabbable;
+		if (isLeft)
+		{
+			_handAnimation.isLeftGrabbed = true;
+			_handAnimation2.isLeftGrabbed = true;
+		}
+		else
+		{
+			_handAnimation.isRightGrabbed = true;
+			_handAnimation2.isRightGrabbed = true;
+		}
+        currentGrabbedObject = grabbable;
 		currentGrabbedObject.isGrabbable = false;
 		currentGrabbedObject.currentGrabber = this;
 		if (currentGrabbedObject.isMoving)
 		{
-			if (isLeft) _handAnimation.animator.SetFloat("Left Grip", 1);
-			else _handAnimation.animator.SetFloat("Right Grip", 1);
+			if (isLeft)
+			{
+				_handAnimation.animator.SetFloat("Left Grip", 1);
+				_handAnimation2.animator.SetFloat("Left Grip", 1);
+			}
+
+			else
+			{
+				_handAnimation.animator.SetFloat("Right Grip", 1);
+                _handAnimation2.animator.SetFloat("Right Grip", 1);
+            }
+
 		}
 		else
 		{
@@ -128,8 +142,16 @@ public class Grabber : MonoBehaviour
 	{
 		print("OnRelease");
 		rayInteractor.enabled = true;
-		if (isLeft) _handAnimation.isLeftGrabbed = false;
-		else _handAnimation.isRightGrabbed = false;
+		if (isLeft)
+		{
+			_handAnimation.isLeftGrabbed = false;
+            _handAnimation2.isLeftGrabbed = false;
+        }
+		else
+		{
+            _handAnimation.isRightGrabbed = false;
+            _handAnimation2.isRightGrabbed = false;
+        }
 		if (currentGrabbedObject.isMoving)
 		{
 			currentGrabbedObject.currentGrabber = null;
@@ -151,9 +173,6 @@ public class Grabber : MonoBehaviour
 		}
 
 		currentGrabbedObject = null;
-
-        OnReleaseEvent?.Invoke();
-        Debug.Log("[Grabber] OnRelease 이벤트 발생");
 
         // 레이 전환 가능
         isOnGrabCalled = false;
