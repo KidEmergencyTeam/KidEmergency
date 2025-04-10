@@ -181,6 +181,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
+                ActiveOutlineToChildren(emergencyExit);
 
 
                 // 씬 전환
@@ -306,15 +307,15 @@ public class EarthquakeBeginner : MonoBehaviour
 
 		foreach (Transform child in parent.GetComponentsInChildren<Transform>())
 		{
-			Outlinable outline = child.gameObject.GetComponent<Outlinable>();
+            Highlighter highlighter = child.gameObject.GetComponent<Highlighter>();
 
-			if (outline == null)
+			if (highlighter == null)
 			{
-				outline = child.gameObject.AddComponent<Outlinable>();
+                highlighter = child.gameObject.AddComponent<Highlighter>();
 			}
-
-			outline.enabled = true; // Outlinable 활성화
-		}
+            highlighter.SetColor(Color.yellow);
+            highlighter.isBlinking = true; // Highlighter 활성화
+        }
 	}
 
 

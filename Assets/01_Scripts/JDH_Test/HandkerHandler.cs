@@ -12,7 +12,7 @@ public class HandkerHandler : MonoBehaviour
     // Player가 손수건을 잡았을 때 (fireBeginner와 earthBeginner 각각 null 여부에 따라 다르게 처리)
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Head"))
         {
             // fireBeginner가 null이 아니면, 입과 코를 잘 가리기
             if (fireBeginner != null)
@@ -41,7 +41,7 @@ public class HandkerHandler : MonoBehaviour
     // Player가 손수건을 계속 잡고 있을 때 (fireBeginner와 earthBeginner 각각 null 여부에 따라 다르게 처리)
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Head"))
         {
             // fireBeginner가 null이 아니면, 계속 입과 코를 잘 가리기
             if (fireBeginner != null)
@@ -70,7 +70,7 @@ public class HandkerHandler : MonoBehaviour
     // Player가 손수건을 놓았을 때 (fireBeginner와 earthBeginner 각각 null 여부에 따라 다르게 처리)
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Head"))
         {
             // fireBeginner가 null이 아니면, 입과 코를 가리기 비활성화
             if (fireBeginner != null)

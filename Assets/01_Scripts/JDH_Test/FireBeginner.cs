@@ -108,6 +108,7 @@ public class FireBeginner : MonoBehaviour
                     Debug.Log("화재 경보 작동.");
                     SmokeObjsActive(); //모든 연기 파티클 활성화
                     seti.SetLookingFor();
+                    handkerchief.SetActive(true);
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                     // 3. OK 버튼 활성화 및 버튼 클릭 대기
@@ -158,9 +159,9 @@ public class FireBeginner : MonoBehaviour
                 case PLACE.HALLWAY:
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
-                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
                     ruleCheck = true;
                     hasHandkerchief = true;
+                    yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
                     // 1. 첫 번째 대화 종료 대기
                     yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
@@ -182,11 +183,11 @@ public class FireBeginner : MonoBehaviour
 
                 // 계단/엘리베이터
                 case PLACE.STAIRS_ELEVATOR:
+                    ruleCheck = true;
+                    hasHandkerchief = true;
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     SetAllNpcState(NpcRig.State.Bow); // 모든 NPC 상태를 Bow로 설정
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeIn == false);
-                    ruleCheck = true;
-                    hasHandkerchief = true;
                     // 1. 첫 번째 대화 종료 대기
                     yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
@@ -271,7 +272,6 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 					forthDialog.gameObject.SetActive(true);
                     //손수건 활성화
-                    handkerchief.GetComponent<Outlinable>().enabled = true;
                     yield return new WaitUntil(() => forthDialog.isDialogsEnd == true && iscoverFace == true);
 
                     //마지막 대사 출력 후 이동
