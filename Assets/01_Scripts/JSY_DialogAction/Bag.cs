@@ -82,7 +82,7 @@ public class Bag : Grabbable
             yield return null;
         }
 
-        while (_sceneName != "Eq_School_4" && IsGrabbed)
+        while ((_sceneName != "Eq_School_4" || _sceneName != "Eq_Home_3") && IsGrabbed)
         {
             if (!IsProtect())
             {

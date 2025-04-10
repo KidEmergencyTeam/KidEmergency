@@ -3,10 +3,8 @@ using UnityEngine.InputSystem;
 
 public class HandAnimation : MonoBehaviour
 {
-    public InputActionProperty leftPinch;
     public InputActionProperty leftGrip;
 
-    public InputActionProperty rightPinch;
     public InputActionProperty rightGrip;
 
     public Animator animator;
@@ -23,83 +21,61 @@ public class HandAnimation : MonoBehaviour
 
     void Update()
     {
-        //RayController ray = FindObjectOfType<RayController>();
-
-        if (!isLeftGrabbed)
+        if (ray.UIActive())
         {
-            if (ray.UIActive())
+            animator.SetFloat("Left Trigger", 1f);
+            animator.SetFloat("Right Trigger", 1f);
+            animator.SetFloat("Left Grip", 0);
+            animator.SetFloat("Right Grip", 0);
+        }
+            
+        else
+        {
+            if (ActionManager.Instance != null)
             {
-                float leftTriggerValue = leftPinch.action.ReadValue<float>();
-                animator.SetFloat("Left Grip", leftTriggerValue);
+                if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox ||
+                    ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
+                {
+                    animator.SetFloat("Left Trigger", 1f);
+                    animator.SetFloat("Right Trigger", 1f);
+                    animator.SetFloat("Left Grip", 0);
+                    animator.SetFloat("Right Grip", 0);
+                }
+                
+                else
+                {
+                    animator.SetFloat("Left Trigger", 0);
+                    animator.SetFloat("Right Trigger", 0);
+            
+                    if (!isLeftGrabbed)
+                    {
+                        float leftGripValue = leftGrip.action.ReadValue<float>();
+                        animator.SetFloat("Left Grip", leftGripValue);  
+                    }
 
-                float leftGripValue = leftGrip.action.ReadValue<float>();
-                animator.SetFloat("Left Trigger", leftGripValue);
+                    if (!isRightGrabbed)
+                    {
+                        float rightGripValue = rightGrip.action.ReadValue<float>();
+                        animator.SetFloat("Right Grip", rightGripValue);   
+                    }
+                }
             }
             
             else
             {
-                if (ActionManager.Instance != null)
+                animator.SetFloat("Left Trigger", 0);
+                animator.SetFloat("Right Trigger", 0);
+            
+                if (!isLeftGrabbed)
                 {
-                    if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
-                        || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
-                    {
-                        animator.SetFloat("Left Trigger", 1);  
-                    }
-                    else
-                    {
-                        float leftTriggerValue = leftPinch.action.ReadValue<float>();
-                        animator.SetFloat("Left Trigger", leftTriggerValue);
-
-                        float leftGripValue = leftGrip.action.ReadValue<float>();
-                        animator.SetFloat("Left Grip", leftGripValue);     
-                    }
-                }
-                else
-                {
-                    float leftTriggerValue = leftPinch.action.ReadValue<float>();
-                    animator.SetFloat("Left Trigger", leftTriggerValue);
-
                     float leftGripValue = leftGrip.action.ReadValue<float>();
-                    animator.SetFloat("Left Grip", leftGripValue);   
+                    animator.SetFloat("Left Grip", leftGripValue);  
                 }
-            }
-        }
 
-        if (!isRightGrabbed)
-        {
-            if (ray.UIActive())
-            {
-                float rightTriggerValue = rightPinch.action.ReadValue<float>();
-                animator.SetFloat("Right Grip", rightTriggerValue);
-
-                float rightGripValue = rightGrip.action.ReadValue<float>();
-                animator.SetFloat("Right Trigger", rightGripValue);
-            }
-            else
-            {
-                if (ActionManager.Instance != null)
+                if (!isRightGrabbed)
                 {
-                    if (ActionManager.Instance.currentAction == ActionType.OpenCircuitBox
-                        || ActionManager.Instance.currentAction == ActionType.LowerCircuitLever)
-                    {
-                        animator.SetFloat("Right Trigger", 1);  
-                    }
-                    else
-                    {
-                        float rightTriggerValue = rightPinch.action.ReadValue<float>();
-                        animator.SetFloat("Right Trigger", rightTriggerValue);
-
-                        float rightGripValue = rightGrip.action.ReadValue<float>();
-                        animator.SetFloat("Right Grip", rightGripValue);  
-                    }
-                }
-                else
-                {
-                    float rightTriggerValue = rightPinch.action.ReadValue<float>();
-                    animator.SetFloat("Right Trigger", rightTriggerValue);
-
                     float rightGripValue = rightGrip.action.ReadValue<float>();
-                    animator.SetFloat("Right Grip", rightGripValue);
+                    animator.SetFloat("Right Grip", rightGripValue);   
                 }
             }
         }

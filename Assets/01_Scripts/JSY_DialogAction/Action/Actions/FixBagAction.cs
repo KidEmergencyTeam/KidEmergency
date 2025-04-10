@@ -21,6 +21,7 @@ public class FixBagAction : MonoBehaviour, IActionEffect
         {
             npcCtrl.SetNPCState("HoldBag");   
         }
+        
         bag.isGrabbable = true;
         bag.BagInteraction();
 
