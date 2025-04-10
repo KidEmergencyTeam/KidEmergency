@@ -161,12 +161,15 @@ public class UIManager : SingletonManager<UIManager>
             if (player == null)
             {
                 RobotController seti = FindObjectOfType<RobotController>();
-                player = GameObject.Find("VR + Player");
-                Vector3 playerPos = player.transform.position;
-                DialogPosReset(4);
-                WarningPosReset(2);
-                OptionPosReset(1);
-                if (player.transform.position != playerPos)
+                Vector3 setiPos = seti.transform.position;
+                if(setiPos == seti.transform.position)
+                {
+                    DialogPosReset(4);
+                    WarningPosReset(2);
+                    OptionPosReset(1);
+                    seti.SetRobotPos(seti.setiPos[0]);
+                }
+                if (setiPos != seti.transform.position)
                 {
                     WarningPosReset(3);
                     seti.SetRobotPos(seti.setiPos[1]);
