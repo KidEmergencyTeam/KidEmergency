@@ -36,21 +36,21 @@ public class WaitStateManager : MonoBehaviour
             }
         }
 
-        // "Seti" 태그가 붙은 오브젝트 찾기
-        GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
-        if (setiObj != null)
-        {
-            // RobotController.cs 가져오기
-            robotController = setiObj.GetComponent<RobotController>();
-            if (robotController == null)
-            {
-                Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
-            }
-        }
-        else
-        {
-            Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
-        }
+        //// "Seti" 태그가 붙은 오브젝트 찾기
+        //GameObject setiObj = GameObject.FindGameObjectWithTag("Seti");
+        //if (setiObj != null)
+        //{
+        //    // RobotController.cs 가져오기
+        //    robotController = setiObj.GetComponent<RobotController>();
+        //    if (robotController == null)
+        //    {
+        //        Debug.LogError("[ChoiceVoteManager] Seti 오브젝트에 RobotController -> null");
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.LogError("[ChoiceVoteManager] 'Seti' 태그가 붙은 오브젝트 -> null");
+        //}
     }
 
     // 전체 준비 완료 시 이미지 처리 및 일정 시간 대기 후 씬 전환 실행
@@ -71,14 +71,14 @@ public class WaitStateManager : MonoBehaviour
                 Debug.LogWarning("readyIndicatorImage가 할당되어 있지 않습니다.");
             }
 
-            if (robotController != null)
-            {
-                robotController.SetHappy();
-            }
-            else
-            {
-                Debug.LogWarning("robotController가 할당되어 있지 않습니다.");
-            }
+            //if (robotController != null)
+            //{
+            //    robotController.SetHappy();
+            //}
+            //else
+            //{
+            //    Debug.LogWarning("robotController가 할당되어 있지 않습니다.");
+            //}
 
             // 코루틴을 통해 일정 시간 대기 후 씬 전환 실행
             StartCoroutine(WaitAndStartGame());
