@@ -32,6 +32,12 @@ public class PopupButtonUI : OutlineHighlight
                 if (TitleUI.Instance.nextScene != "")
                 {
                     StartCoroutine(TitleUI.Instance.ChangeScene());
+                    PopupButtonUI[] bt = FindObjectsOfType<PopupButtonUI>();
+                    for (int i = 0; i < bt.Length; i++)
+                    {
+                        print(bt[i].transform.name);
+                        bt[i]._button.interactable = false;
+                    }
                 }
 
                 else

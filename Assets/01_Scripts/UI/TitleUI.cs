@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,21 +17,25 @@ public class TitleUI : MonoBehaviour
     public GameObject normalPanel;
     public GameObject hardPanel;
 
+    private RayController _rayController;
     private bool _isLoading;
 
     private void Awake()
     {
+        _rayController = FindObjectOfType<RayController>();
         if (Instance == null)
         {
             Instance = this;
         }
     }
 
+
     private void Start()
     {
         hardPanel.SetActive(false);
         currentMenu = "Normal";
     }
+
     public void SetCurrentMenuUI()
     {
         for (int i = 0; i < menus.Count; i++)
@@ -48,16 +53,15 @@ public class TitleUI : MonoBehaviour
     
     public IEnumerator ChangeScene()
     {
-        RayController rayController = FindObjectOfType<RayController>();
-        rayController.leftLine.gameObject.SetActive(false);
-        rayController.rightLine.gameObject.SetActive(false);
+        Destroy(_rayController.leftLine.gameObject);
+        Destroy(_rayController.rightLine.gameObject);
 
         if (!_isLoading)
         {
             yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
 
             _isLoading = true;
-            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene);
+            AsyncOperation asyncChange = SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Single);
         
             while(!asyncChange.isDone)
             {

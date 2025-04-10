@@ -21,7 +21,9 @@ public class RayController : MonoBehaviour
     private void Update()
     {
         Grabber grabber = FindObjectOfType<Grabber>();
-        if (SceneManager.GetActiveScene().name == "Eq_Home_2")
+        if (_rightRay != null && _leftRay != null)
+        {
+              if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
             if (UIActive() || ActionManager.Instance.currentAction == ActionType.SelectGuideLine)
             {
@@ -114,6 +116,7 @@ public class RayController : MonoBehaviour
                 }
 
             }
+        }
         }
     }
 
