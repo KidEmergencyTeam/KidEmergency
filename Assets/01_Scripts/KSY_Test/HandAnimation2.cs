@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class HandAnimation2 : HandAnimation
 {
-	void Update()
+	protected override void Update()
 	{
 		if (!isLeftGrabbed)
 		{

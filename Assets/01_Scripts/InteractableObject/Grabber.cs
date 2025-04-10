@@ -37,8 +37,8 @@ public class Grabber : MonoBehaviour
 		_detectCollider.radius = detectRadius;
 
 
-		_handAnimation = FindObjectOfType<HandAnimation>();
 		_handAnimation = FindObjectOfType<HandAnimation2>();
+		if (_handAnimation == null) _handAnimation = FindObjectOfType<HandAnimation>();
 		if (isLeft)
 		{
 			controllerButtonClick = _handAnimation.leftGrip;
