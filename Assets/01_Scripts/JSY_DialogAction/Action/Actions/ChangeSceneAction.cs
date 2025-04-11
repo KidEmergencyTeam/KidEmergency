@@ -15,16 +15,22 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
     
     private IEnumerator ChangeScene()
     {
-        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
-        
-        AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene, LoadSceneMode.Single);
-        
-        while(!asyncChange.isDone)
+        while (!_isComplete)
         {
-            yield return null;
-        }
+            if (!UIManager.Instance.warningUI.gameObject.activeSelf)
+            {
+                yield return StartCoroutine(OVRScreenFade.Instance.Fade(0f, 1f));
         
-        _isComplete = true;
+                AsyncOperation asyncChange = SceneManager.LoadSceneAsync(ActionManager.Instance.beforeDialog.nextScene, LoadSceneMode.Single);
+        
+                while(!asyncChange.isDone)
+                {
+                    yield return null;
+                }
+        
+                _isComplete = true;
+            }   
+        }
     }
     
     

@@ -48,9 +48,9 @@ public class DeskLeg : MonoBehaviour
         bool isLeftGrapped = _controller[0].selectAction.action.ReadValue<float>() >= 1;
         bool isRightGrapped = _controller[1].selectAction.action.ReadValue<float>() >= 1;
         
-        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.1f &&
+        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.15f &&
                              isLeftGrapped &&
-                             Vector3.Distance(_legs[1].transform.position, _hand[1].transform.position) < 0.1f &&
+                             Vector3.Distance(_legs[1].transform.position, _hand[1].transform.position) < 0.15f &&
                              isRightGrapped;
         
         if (isInteractable)
