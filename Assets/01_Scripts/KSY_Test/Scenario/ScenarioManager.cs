@@ -249,8 +249,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 문 앞으로 이동
         yield return StartCoroutine(Positions());
 
-        // 세티 이동
-        yield return StartCoroutine(SetiPosition());
+        // UI 이동
+        yield return StartCoroutine(UIPosition(1,1));
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -754,19 +754,23 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
     }
 
-    // 세티 위치 변경
-    private IEnumerator SetiPosition()
+    // UI 위치 변경 -> 매개변수로 조절
+    private IEnumerator UIPosition(int uiPosIndex, int robotPosIndex)
     {
-        // "SetiPosition" 태그가 붙은 오브젝트 찾기
-        SetiPosition setiPosition = GameObject.FindGameObjectWithTag("SetiPosition")?.GetComponent<SetiPosition>();
-        if (setiPosition == null)
+        // "seti" 태그가 붙은 오브젝트 찾기
+        RobotController seti = GameObject.FindGameObjectWithTag("seti")?.GetComponent<RobotController>();
+        if (seti == null)
         {
-            Debug.LogError("SetiPosition 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("seti 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         else
         {
-            setiPosition.UpdatePosition();
+            UIManager.Instance.DialogPosReset(uiPosIndex);
+            UIManager.Instance.OptionPosReset(uiPosIndex);
+            UIManager.Instance.WarningPosReset(uiPosIndex);
+            seti.SetRobotPos(seti.setiPos[robotPosIndex]);
+            Debug.Log("UI 위치 변경됨");
         }
     }
 
