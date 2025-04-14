@@ -11,20 +11,11 @@ public class UIManager : SingletonManager<UIManager>
     public Transform[] dialogPos;
     public Transform[] optionPos;
     public Transform[] warningPos;
-    public GameObject player;
-    
-    private Vector3 _originPos;
-
     protected override void Awake()
     {
         base.Awake();
-        _originPos = player.transform.position;
     }
-
-    private void Update()
-    {
-    }
-
+    
     #region Option
 
     public void SetOptionUI()
