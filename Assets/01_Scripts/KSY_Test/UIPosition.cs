@@ -35,6 +35,7 @@ public class UIPosition : MonoBehaviour
         {
             optionPanel.transform.position = optionPanelChangePosition;
             optionPanel.transform.eulerAngles = optionPanelChangelRotation;
+            Debug.Log("optionPanel -> 위치 및 회전 변경 완료");
         }
         else
         {
@@ -46,6 +47,7 @@ public class UIPosition : MonoBehaviour
         {
             dialogUI.transform.position = dialogUIChangePosition;
             dialogUI.transform.eulerAngles = dialogUIChangeRotation;
+            Debug.Log("dialogUI -> 위치 및 회전 변경 완료");
         }
         else
         {
@@ -57,6 +59,7 @@ public class UIPosition : MonoBehaviour
         {
             warningUI.transform.position = warningUIChangePosition;
             warningUI.transform.eulerAngles = warningUIChangeRotation;
+            Debug.Log("warningUI -> 위치 및 회전 변경 완료");
         }
         else
         {
