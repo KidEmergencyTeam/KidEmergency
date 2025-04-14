@@ -48,11 +48,6 @@ public class UIPosition : MonoBehaviour
     [Header("상세 설정")]
     public List<UIData> uIDatas = new List<UIData>();
 
-    private void Start()
-    {
-        UpdatePosition(0);
-    }
-
     // 다른 스크립트에서 호출 시 입력한 매개변수에 따라 위치 및 회전값을 반영
     public void UpdatePosition(int index)
     {
