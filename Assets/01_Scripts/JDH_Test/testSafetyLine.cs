@@ -1,53 +1,78 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 
 public class testSafetyLine : MonoBehaviour
 {
-    [Header("자동 할당된 Highlighter")]
-    private Highlighter highlighter;
+    [Header("하이라이터 (필수)")]
+    [SerializeField] private Highlighter highlighter;
 
-    [Header("XR 컨트롤러 및 레이 자동 탐색")]
-    private XRRayInteractor rightRayInteractor;
-    private ActionBasedController rightController;
+    [Header("XR 컨트롤러와 레이 (필수)")]
+    [SerializeField] private ActionBasedController rightController;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
 
-    private bool hasSelected = false;
+    public bool objSelected = false;
 
-    void Awake()
+    private void OnEnable()
     {
-        // 자기 자신에서 Highlighter 컴포넌트 자동 할당
-        highlighter = GetComponent<Highlighter>();
-
-        // 씬에서 첫 번째 XRRayInteractor와 ActionBasedController를 자동 할당
-        rightRayInteractor = FindObjectOfType<XRRayInteractor>();
-        rightController = FindObjectOfType<ActionBasedController>();
-
-        if (highlighter == null)
-            Debug.LogWarning("[testSafetyLine] Highlighter 컴포넌트를 찾을 수 없습니다.");
-
-        if (rightRayInteractor == null)
-            Debug.LogWarning("[testSafetyLine] XRRayInteractor를 찾을 수 없습니다.");
-
-        if (rightController == null)
-            Debug.LogWarning("[testSafetyLine] ActionBasedController를 찾을 수 없습니다.");
-    }
-
-    void Update()
-    {
-        if (hasSelected || highlighter == null || rightRayInteractor == null || rightController == null) return;
-
-        bool isHovered = rightRayInteractor.hasHover;
-        bool isSelectPressed = rightController.selectAction.action.ReadValue<float>() > 0.5f;
-
-        if (isHovered && isSelectPressed)
+        if (rightController != null &&
+            rightController.selectAction != null &&
+            rightController.selectAction.action != null)
         {
-            ActivateHighlighter();
+            rightController.selectAction.action.performed += OnSelectPerformed;
+            Debug.Log("[testSafetyLine] Select 이벤트 연결됨.");
         }
     }
 
-    private void ActivateHighlighter()
+    private void OnDisable()
     {
-        hasSelected = true;
-        highlighter.isBlinking = true;
-        Debug.Log($"[testSafetyLine] '{gameObject.name}' 하이라이터 활성화됨! (Blinking ON)");
+        if (rightController != null &&
+            rightController.selectAction != null &&
+            rightController.selectAction.action != null)
+        {
+            rightController.selectAction.action.performed -= OnSelectPerformed;
+            Debug.Log("[testSafetyLine] Select 이벤트 해제됨.");
+        }
     }
+
+    private void Start()
+    {
+        if (highlighter == null || rightController == null || rightRayInteractor == null)
+        {
+            Debug.LogError("[testSafetyLine] 필수 컴포넌트가 누락되었습니다!");
+            enabled = false;
+            return;
+        }
+
+        Debug.Log("[testSafetyLine] 컴포넌트 초기화 완료. 이벤트 대기 중...");
+    }
+
+    private void OnSelectPerformed(InputAction.CallbackContext context)
+    {
+        if (rightRayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit hit))
+        {
+            Debug.DrawLine(rightRayInteractor.transform.position, hit.point, Color.green);
+
+            if (hit.transform == transform)
+            {
+                Debug.Log("[testSafetyLine] Select 입력 발생 + Ray로 오브젝트 선택됨 → 하이라이터 비활성화");
+                DisableHighlighter();
+            }
+            else
+            {
+                Debug.Log($"[testSafetyLine] Ray는 '{hit.transform.name}'을 가리키고 있음 (대상 아님)");
+            }
+        }
+        else
+        {
+            Debug.Log("[testSafetyLine] Select 입력은 발생했지만, Ray가 아무 대상도 가리키지 않음.");
+        }
+    }
+
+    private void DisableHighlighter()
+    {
+        highlighter.gameObject.SetActive(false);
+        objSelected = true;
+    }
+
 }

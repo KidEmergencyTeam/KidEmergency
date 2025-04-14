@@ -58,11 +58,10 @@ public class FireBeginner : MonoBehaviour
 	[Header("예제 UI 이미지")] 
 	[SerializeField] private Image LeftImg;
 	[SerializeField] private Image RightImg;
-	[SerializeField] private TestButton2 LeftBtn;
-	[SerializeField] private TestButton2 RightBtn;
+	[SerializeField] private Button LeftBtn;
+	[SerializeField] private Button RightBtn;
 	[SerializeField] private Sprite leftChangeImg;
 	[SerializeField] private Sprite rightChangeImg;
-	[SerializeField] private TextMeshProUGUI descriptionText;
 
 	[Header("상황 진행 체크")] public bool isFirstStepRdy;
 	public bool isSecondStepRdy;
