@@ -8,24 +8,24 @@ public class UIPosition : MonoBehaviour
     public GameObject optionPanel;
 
     [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 optionPanelInitialPosition;
-    public Vector3 optionPanelInitialRotation;
+    public Vector3 optionPanelChangePosition;
+    public Vector3 optionPanelChangelRotation;
 
     // dialogUI
     [Header("dialogUI")]
-    public DialogUI dialogUI;
+    public GameObject dialogUI;
 
     [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 dialogUIInitialPosition;
-    public Vector3 dialogUIInitialRotation;
+    public Vector3 dialogUIChangePosition;
+    public Vector3 dialogUIChangeRotation;
 
     // warningUI
     [Header("warningUI")]
-    public WarningUI warningUI;
+    public GameObject warningUI;
 
     [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 warningUIInitialPosition;
-    public Vector3 warningUIInitialRotation;
+    public Vector3 warningUIChangePosition;
+    public Vector3 warningUIChangeRotation;
 
     // 다른 스크립트에서 메서드를 호출할 때 각 오브젝트의 위치 및 회전값 적용
     public void UpdatePosition()
@@ -33,8 +33,8 @@ public class UIPosition : MonoBehaviour
         // optionPanel 위치 및 회전값 적용
         if (optionPanel != null)
         {
-            optionPanel.transform.position = optionPanelInitialPosition;
-            optionPanel.transform.eulerAngles = optionPanelInitialRotation;
+            optionPanel.transform.position = optionPanelChangePosition;
+            optionPanel.transform.eulerAngles = optionPanelChangelRotation;
         }
         else
         {
@@ -44,8 +44,8 @@ public class UIPosition : MonoBehaviour
         // dialogUI 위치 및 회전값 적용
         if (dialogUI != null)
         {
-            dialogUI.transform.position = dialogUIInitialPosition;
-            dialogUI.transform.eulerAngles = dialogUIInitialRotation;
+            dialogUI.transform.position = dialogUIChangePosition;
+            dialogUI.transform.eulerAngles = dialogUIChangeRotation;
         }
         else
         {
@@ -55,8 +55,8 @@ public class UIPosition : MonoBehaviour
         // warningUI 위치 및 회전값 적용
         if (warningUI != null)
         {
-            warningUI.transform.position = warningUIInitialPosition;
-            warningUI.transform.eulerAngles = warningUIInitialRotation;
+            warningUI.transform.position = warningUIChangePosition;
+            warningUI.transform.eulerAngles = warningUIChangeRotation;
         }
         else
         {
