@@ -27,6 +27,14 @@ public class UIPosition : MonoBehaviour
     public Vector3 warningUIChangePosition;
     public Vector3 warningUIChangeRotation;
 
+    // 세티
+    [Header("세티")]
+    public GameObject seti;
+
+    [Header("변경될 위치와 회전")]
+    public Vector3 setiChangePosition;
+    public Vector3 setiChangeRotation;
+
     // 다른 스크립트에서 메서드를 호출할 때 각 오브젝트의 위치 및 회전값 적용
     public void UpdatePosition()
     {
@@ -55,7 +63,7 @@ public class UIPosition : MonoBehaviour
         }
 
         // warningUI 위치 및 회전값 적용
-        if (warningUI != null)
+        if (warningUI != null)  
         {
             warningUI.transform.position = warningUIChangePosition;
             warningUI.transform.eulerAngles = warningUIChangeRotation;
@@ -64,6 +72,18 @@ public class UIPosition : MonoBehaviour
         else
         {
             Debug.LogError("warningUI -> null");
+        }
+
+        // seti 위치 및 회전값 적용
+        if (seti != null)
+        {
+            seti.transform.position = setiChangePosition;
+            seti.transform.eulerAngles = setiChangeRotation;
+            Debug.Log("seti -> 위치 및 회전 변경 완료");
+        }
+        else
+        {
+            Debug.LogError("seti -> null");
         }
     }
 }
