@@ -928,8 +928,7 @@ GameObject:
   - component: {fileID: 120946312}
   - component: {fileID: 120946311}
   - component: {fileID: 120946310}
-  - component: {fileID: 120946309}
-  - component: {fileID: 120946308}
+  - component: {fileID: 120946313}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -957,35 +956,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &120946308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120946306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineDistance: {x: 5, y: 5}
---- !u!114 &120946309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120946306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 942b486f5f7e70a47b4afcf7d786a483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 120946310}
-  buttonType: 0
-  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  isClick: 0
 --- !u!114 &120946310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,6 +1038,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 120946306}
   m_CullTransparentMesh: 1
+--- !u!114 &120946313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120946306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d02139bf328acd4eaf353217bc4576a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 120946311}
+  _originalOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  optionText: {fileID: 190410286}
+  highlightText: 
+  optionImage: {fileID: 120946311}
+  highlightColor: {r: 0.5186512, g: 1, b: 0.15566039, a: 0}
 --- !u!1 &133452457
 GameObject:
   m_ObjectHideFlags: 0
@@ -10341,7 +10329,7 @@ MonoBehaviour:
   - {fileID: 2032765588}
   - {fileID: 686388531}
   fadeInOutImg: {fileID: 2042630426}
-  okBtn: {fileID: 120946309}
+  okBtn: {fileID: 0}
   warningUi: {fileID: 568537537}
   exampleDescUi: {fileID: 1791174012}
   leftHand: {fileID: 0}

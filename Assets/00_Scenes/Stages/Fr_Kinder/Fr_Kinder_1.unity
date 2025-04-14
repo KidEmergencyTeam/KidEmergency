@@ -5359,12 +5359,12 @@ MonoBehaviour:
   - {fileID: 881316485}
   - {fileID: 981734734}
   fadeInOutImg: {fileID: 1636215198}
-  okBtn: {fileID: 833531086}
+  okBtn: {fileID: 833531083}
   warningUi: {fileID: 1814569733}
   exampleDescUi: {fileID: 927232435}
-  leftHand: {fileID: 0}
   playerUi: {fileID: 256032621}
   emergencyExit: {fileID: 0}
+  advEmergencyExitLine: {fileID: 0}
   handkerchief: {fileID: 6571364414742954190}
   fireAlarm: {fileID: 473359770}
   isHeadDown: 0
@@ -5384,7 +5384,6 @@ MonoBehaviour:
   RightBtn: {fileID: 0}
   leftChangeImg: {fileID: 21300000, guid: cfa663a1a97148d4493d6d0f68c26f16, type: 3}
   rightChangeImg: {fileID: 21300000, guid: 1ab8436a8153361418e99680a18eb534, type: 3}
-  descriptionText: {fileID: 518355756}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
   hasHandkerchief: 0
@@ -5393,6 +5392,7 @@ MonoBehaviour:
   isInKitchen: 0
   ruleCheck: 0
   canGetItems: 0
+  isButtonClick: 0
   firstDialog: {fileID: 1321544152}
   secondDialog: {fileID: 327445259}
   thirdDialog: {fileID: 761118860}
@@ -6650,7 +6650,6 @@ GameObject:
   - component: {fileID: 833531084}
   - component: {fileID: 833531083}
   - component: {fileID: 833531086}
-  - component: {fileID: 833531087}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -6769,26 +6768,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 833531081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 942b486f5f7e70a47b4afcf7d786a483, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d02139bf328acd4eaf353217bc4576a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 833531083}
-  buttonType: 0
-  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  isClick: 0
---- !u!114 &833531087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 833531081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineDistance: {x: 5, y: 5}
+  outline: {fileID: 833531084}
+  _originalOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  optionText: {fileID: 198238255}
+  highlightText: 
+  optionImage: {fileID: 833531084}
+  highlightColor: {r: 0.5186512, g: 1, b: 0.15566039, a: 0}
 --- !u!1 &845376232
 GameObject:
   m_ObjectHideFlags: 0
