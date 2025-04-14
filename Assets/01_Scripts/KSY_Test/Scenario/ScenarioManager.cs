@@ -240,7 +240,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(Positions());
 
         // UI 이동
-        yield return StartCoroutine(UIPosition());
+        yield return StartCoroutine(UIPosition(1));
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -709,7 +709,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // 주요 UI 위치 및 회전값을 변경
-    private IEnumerator UIPosition()
+    private IEnumerator UIPosition(int index)
     {
         // "UIPosition" 태그가 붙은 오브젝트 찾기
         UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
@@ -720,7 +720,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
         else
         {
-            uIPosition.UpdatePosition();
+            uIPosition.UpdatePosition(index);
             Debug.Log("주요 UI 변경될 위치 및 회전값을 변경 완료");
         }
     }
