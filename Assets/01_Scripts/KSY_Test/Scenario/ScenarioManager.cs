@@ -162,6 +162,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
     IEnumerator Step1() 
     {
+        // UI 이동
+        yield return StartCoroutine(UIPosition(0));
+
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(0); 
@@ -259,6 +262,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // yield return StartCoroutine(OnGrab());
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
+
+        // UI 이동
+        yield return StartCoroutine(UIPosition(2));
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -374,6 +380,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
 
+        // UI 이동
+        yield return StartCoroutine(UIPosition(3));
+
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(19);
@@ -429,6 +438,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
+
+        // UI 이동
+        yield return StartCoroutine(UIPosition(4));
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -672,7 +684,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 세티 표정 복구
         robotController.SetBasic();
     }
-
 
     // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영
     private IEnumerator SetRobotState(float delay)
