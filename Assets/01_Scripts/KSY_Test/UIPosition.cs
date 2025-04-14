@@ -1,85 +1,90 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-// 주요 UI 위치 및 회전값을 변경 해주는 스크립트
+[System.Serializable]
+public class UIData
+{
+    [Header("오브젝트 이름(디버그용)")]
+    public string objectName;
+
+    [Header("UI 및 세티")]
+    public GameObject uiObject;
+
+    [Header("위치값")]
+    public List<Vector3> changePositions = new List<Vector3>();
+
+    [Header("회전값")]
+    public List<Vector3> changeRotations = new List<Vector3>();
+
+    [Header("true: 로컬 좌표 기준, false: 월드 좌표 기준")]
+    public bool useLocal;
+
+    // index에 해당하는 위치값을 반환
+    public Vector3 GetPosition(int index)
+    {
+        if (changePositions != null && index >= 0 && index < changePositions.Count)
+        {
+            return changePositions[index];
+        }
+        Debug.LogWarning(objectName + "의 changePositions 리스트에 인덱스 " + index + "가 존재하지 않습니다.");
+        return Vector3.zero;
+    }
+
+    // index에 해당하는 회전값을 반환
+    public Vector3 GetRotation(int index)
+    {
+        if (changeRotations != null && index >= 0 && index < changeRotations.Count)
+        {
+            return changeRotations[index];
+        }
+        Debug.LogWarning(objectName + "의 changeRotations 리스트에 인덱스 " + index + "가 존재하지 않습니다.");
+        return Vector3.zero;
+    }
+}
+
 public class UIPosition : MonoBehaviour
 {
-    // OptionPos
-    [Header("OptionPos")]
-    public GameObject optionPos;
+    [Header("상세 설정")]
+    public List<UIData> uIDatas = new List<UIData>();
 
-    [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 optionPosChangePosition;
-    public Vector3 optionPosChangelRotation;
-
-    // DialogPos
-    [Header("DialogPos")]
-    public GameObject dialogPos;
-
-    [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 dialogPosChangePosition;
-    public Vector3 dialogPosChangeRotation;
-
-    // WarningPos
-    [Header("WarningPos")]
-    public GameObject warningPos;
-
-    [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 warningPosChangePosition;
-    public Vector3 warningPosChangeRotation;
-
-    // SetiPos
-    [Header("SetiPos")]
-    public GameObject setiPos;
-
-    [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 setiPosChangePosition;
-    public Vector3 setiPosChangeRotation;
-
-    // 다른 스크립트에서 메서드를 호출할 때 각 오브젝트의 위치 및 회전값 적용
-    public void UpdatePosition()
+    // 다른 스크립트에서 호출 시 입력한 매개변수에 따라 위치 및 회전값을 반영
+    public void UpdatePosition(int index)
     {
-        // OptionPos 변경될 위치 및 회전값 적용
-        if (optionPos != null)
+        foreach (UIData uIData in uIDatas)
         {
-            optionPos.transform.localPosition = optionPosChangePosition;
-            optionPos.transform.localRotation = Quaternion.Euler(optionPosChangelRotation);
-        }
-        else
-        {
-            Debug.LogError("OptionPos -> null");
-        }
+            // index에 해당하는 오브젝트가 존재하면 실행
+            if (uIData.uiObject != null)
+            {
+                // 대상 오브젝트 위치값 설정
+                Vector3 targetPosition = uIData.GetPosition(index);
 
-        // DialogPos 변경될 위치 및 회전값 적용
-        if (dialogPos != null)
-        {
-            dialogPos.transform.localPosition = dialogPosChangePosition;
-            dialogPos.transform.localRotation = Quaternion.Euler(dialogPosChangeRotation);
-        }
-        else
-        {
-            Debug.LogError("DialogPos -> null");
-        }
+                // 대상 오브젝트 회전값 설정
+                Vector3 targetRotation = uIData.GetRotation(index);
 
-        // WarningPos 변경될 위치 및 회전값 적용
-        if (warningPos != null)  
-        {
-            warningPos.transform.localPosition = warningPosChangePosition;
-            warningPos.transform.localRotation = Quaternion.Euler(warningPosChangeRotation);
-        }
-        else
-        {
-            Debug.LogError("WarningPos -> null");
-        }
+                // 로컬 좌표 기준
+                if (uIData.useLocal)
+                {
+                    // 위치값 반영
+                    uIData.uiObject.transform.localPosition = targetPosition;
 
-        // setiPos 변경될 위치 및 회전값 적용
-        if (setiPos != null)
-        {
-            setiPos.transform.position = setiPosChangePosition;
-            setiPos.transform.rotation = Quaternion.Euler(setiPosChangeRotation);
-        }
-        else
-        {
-            Debug.LogError("setiPos -> null");
+                    // 회전값 반영
+                    uIData.uiObject.transform.localRotation = Quaternion.Euler(targetRotation);
+                }
+
+                // 월드 좌표 기준
+                else
+                {
+                    // 위치값 반영
+                    uIData.uiObject.transform.position = targetPosition;
+
+                    // 회전값 반영
+                    uIData.uiObject.transform.rotation = Quaternion.Euler(targetRotation);
+                }
+            }
+            else
+            {
+                Debug.LogError(uIData.objectName + " -> null");
+            }
         }
     }
 }
