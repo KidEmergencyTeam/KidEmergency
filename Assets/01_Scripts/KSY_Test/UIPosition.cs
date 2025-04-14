@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class UIData
         {
             return changePositions[index];
         }
-        Debug.LogWarning(objectName + "의 changePositions 리스트에 인덱스 " + index + "가 존재하지 않습니다.");
+        Debug.LogWarning(objectName + "의 changePositions 리스트 " + index + "번 index -> null");
         return Vector3.zero;
     }
 
@@ -37,7 +38,7 @@ public class UIData
         {
             return changeRotations[index];
         }
-        Debug.LogWarning(objectName + "의 changeRotations 리스트에 인덱스 " + index + "가 존재하지 않습니다.");
+        Debug.LogWarning(objectName + "의 changeRotations 리스트 " + index + "번 index -> null.");
         return Vector3.zero;
     }
 }
@@ -46,6 +47,11 @@ public class UIPosition : MonoBehaviour
 {
     [Header("상세 설정")]
     public List<UIData> uIDatas = new List<UIData>();
+
+    private void Start()
+    {
+        UpdatePosition(0);
+    }
 
     // 다른 스크립트에서 호출 시 입력한 매개변수에 따라 위치 및 회전값을 반영
     public void UpdatePosition(int index)
