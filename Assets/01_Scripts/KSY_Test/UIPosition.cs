@@ -3,87 +3,83 @@ using UnityEngine;
 // 주요 UI 위치 및 회전값을 변경 해주는 스크립트
 public class UIPosition : MonoBehaviour
 {
-    // optionPanel
-    [Header("optionPanel")]
-    public GameObject optionPanel;
+    // OptionPos
+    [Header("OptionPos")]
+    public GameObject optionPos;
 
     [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 optionPanelChangePosition;
-    public Vector3 optionPanelChangelRotation;
+    public Vector3 optionPosChangePosition;
+    public Vector3 optionPosChangelRotation;
 
-    // dialogUI
-    [Header("dialogUI")]
-    public GameObject dialogUI;
-
-    [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 dialogUIChangePosition;
-    public Vector3 dialogUIChangeRotation;
-
-    // warningUI
-    [Header("warningUI")]
-    public GameObject warningUI;
+    // DialogPos
+    [Header("DialogPos")]
+    public GameObject dialogPos;
 
     [Header("변경될 위치 및 회전값 할당")]
-    public Vector3 warningUIChangePosition;
-    public Vector3 warningUIChangeRotation;
+    public Vector3 dialogPosChangePosition;
+    public Vector3 dialogPosChangeRotation;
 
-    // 세티
-    [Header("세티")]
-    public GameObject seti;
+    // WarningPos
+    [Header("WarningPos")]
+    public GameObject warningPos;
 
-    [Header("변경될 위치와 회전")]
-    public Vector3 setiChangePosition;
-    public Vector3 setiChangeRotation;
+    [Header("변경될 위치 및 회전값 할당")]
+    public Vector3 warningPosChangePosition;
+    public Vector3 warningPosChangeRotation;
+
+    // SetiPos
+    [Header("SetiPos")]
+    public GameObject setiPos;
+
+    [Header("변경될 위치 및 회전값 할당")]
+    public Vector3 setiPosChangePosition;
+    public Vector3 setiPosChangeRotation;
 
     // 다른 스크립트에서 메서드를 호출할 때 각 오브젝트의 위치 및 회전값 적용
     public void UpdatePosition()
     {
-        // optionPanel 위치 및 회전값 적용
-        if (optionPanel != null)
+        // OptionPos 변경될 위치 및 회전값 적용
+        if (optionPos != null)
         {
-            optionPanel.transform.position = optionPanelChangePosition;
-            optionPanel.transform.eulerAngles = optionPanelChangelRotation;
-            Debug.Log("optionPanel -> 위치 및 회전 변경 완료");
+            optionPos.transform.localPosition = optionPosChangePosition;
+            optionPos.transform.localRotation = Quaternion.Euler(optionPosChangelRotation);
         }
         else
         {
-            Debug.LogError("optionPanel -> null");
+            Debug.LogError("OptionPos -> null");
         }
 
-        // dialogUI 위치 및 회전값 적용
-        if (dialogUI != null)
+        // DialogPos 변경될 위치 및 회전값 적용
+        if (dialogPos != null)
         {
-            dialogUI.transform.position = dialogUIChangePosition;
-            dialogUI.transform.eulerAngles = dialogUIChangeRotation;
-            Debug.Log("dialogUI -> 위치 및 회전 변경 완료");
+            dialogPos.transform.localPosition = dialogPosChangePosition;
+            dialogPos.transform.localRotation = Quaternion.Euler(dialogPosChangeRotation);
         }
         else
         {
-            Debug.LogError("dialogUI -> null");
+            Debug.LogError("DialogPos -> null");
         }
 
-        // warningUI 위치 및 회전값 적용
-        if (warningUI != null)  
+        // WarningPos 변경될 위치 및 회전값 적용
+        if (warningPos != null)  
         {
-            warningUI.transform.position = warningUIChangePosition;
-            warningUI.transform.eulerAngles = warningUIChangeRotation;
-            Debug.Log("warningUI -> 위치 및 회전 변경 완료");
+            warningPos.transform.localPosition = warningPosChangePosition;
+            warningPos.transform.localRotation = Quaternion.Euler(warningPosChangeRotation);
         }
         else
         {
-            Debug.LogError("warningUI -> null");
+            Debug.LogError("WarningPos -> null");
         }
 
-        // seti 위치 및 회전값 적용
-        if (seti != null)
+        // setiPos 변경될 위치 및 회전값 적용
+        if (setiPos != null)
         {
-            seti.transform.position = setiChangePosition;
-            seti.transform.eulerAngles = setiChangeRotation;
-            Debug.Log("seti -> 위치 및 회전 변경 완료");
+            setiPos.transform.position = setiPosChangePosition;
+            setiPos.transform.rotation = Quaternion.Euler(setiPosChangeRotation);
         }
         else
         {
-            Debug.LogError("seti -> null");
+            Debug.LogError("setiPos -> null");
         }
     }
 }
