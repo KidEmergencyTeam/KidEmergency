@@ -9455,26 +9455,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1164377516}
   m_Mesh: {fileID: 5067664274139631928, guid: b47ee7e21355ad94b9128dd099329700, type: 3}
---- !u!114 &1175296522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8596779615348024362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f0cb0af9ef6a4c4f8d7bb9c57989cfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  _leftRay: {fileID: 5672293574478705154}
-  _rightRay: {fileID: 3748963030669699419}
-  _leftLine: {fileID: 2607981750860849553}
-  _rightLine: {fileID: 8103511853602800926}
-  _leftLineRenderer: {fileID: 6696285570636712042}
-  _rightLineRenderer: {fileID: 8457349358950572121}
-  leftGrabber: {fileID: 6012216386432070426}
 --- !u!1 &1185169214
 GameObject:
   m_ObjectHideFlags: 0
@@ -24309,14 +24289,32 @@ GameObject:
   - component: {fileID: 3369724617758654237}
   - component: {fileID: 7931023278037143968}
   - component: {fileID: 707825294301425931}
-  - component: {fileID: 1175296522}
+  - component: {fileID: 8596779615348024363}
   m_Layer: 0
-  m_Name: VR + Player (1)
+  m_Name: VR + Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8596779615348024363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8596779615348024362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9171f64ae3f254e8b303d9d9ab4269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leftController: {fileID: 4682039167310910158}
+  _rightController: {fileID: 6590152708906593247}
+  _leftRay: {fileID: 5672293574478705154}
+  _rightRay: {fileID: 3748963030669699419}
+  leftLine: {fileID: 2607981750860849553}
+  rightLine: {fileID: 8103511853602800926}
 --- !u!114 &8601055826501928032
 MonoBehaviour:
   m_ObjectHideFlags: 0
