@@ -184,9 +184,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step7 선택지: 손 vs 손수건
     IEnumerator Step7()
     {
-        // 텍스트 초기화
-        yield return StartCoroutine(DialogTextReset());
-
         // 정답 여부를 저장할 변수
         bool isCorrect = false;
         // 플레이어의 투표 결과를 받아 정답 여부 저장
@@ -243,7 +240,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(Positions());
 
         // UI 이동
-        yield return StartCoroutine(UIPosition(1,1));
+        yield return StartCoroutine(UIPosition());
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -329,8 +326,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
     IEnumerator Step24()
     {
-        yield return StartCoroutine(DialogTextReset());
-
         // 정답 여부를 저장할 변수
         bool isCorrect = false;
         // 플레이어의 투표 결과를 받아 정답 여부 저장
@@ -389,8 +384,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step31: 선택지 처리 (계단 VS 엘베)
     IEnumerator Step31()
     {
-        yield return StartCoroutine(DialogTextReset());
-
         // 정답 여부를 저장할 변수
         bool isCorrect = false;
         // 플레이어의 투표 결과를 받아 정답 여부 저장
@@ -715,40 +708,20 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
     }
 
-    // DialogText 초기화
-    private IEnumerator DialogTextReset()
+    // 주요 UI 위치 및 회전값을 변경
+    private IEnumerator UIPosition()
     {
-        // "DialogUI" 태그가 붙은 오브젝트 찾기
-        TextMeshProUGUI dialogText = GameObject.FindGameObjectWithTag("Typing")?.GetComponent<TextMeshProUGUI>();
-        if (dialogText == null)
+        // "UIPosition" 태그가 붙은 오브젝트 찾기
+        UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
+        if (uIPosition == null)
         {
-            Debug.LogError("Text 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("uIPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         else
         {
-            // 텍스트 내용 초기화: 기존 대사 내용을 빈 문자열로 설정
-            dialogText.text = "";
-        }
-    }
-
-    // UI 위치 변경 -> 매개변수로 조절
-    private IEnumerator UIPosition(int uiPosIndex, int robotPosIndex)
-    {
-        // "seti" 태그가 붙은 오브젝트 찾기
-        RobotController seti = GameObject.FindGameObjectWithTag("seti")?.GetComponent<RobotController>();
-        if (seti == null)
-        {
-            Debug.LogError("seti 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-        else
-        {
-            UIManager.Instance.DialogPosReset(uiPosIndex);
-            UIManager.Instance.OptionPosReset(uiPosIndex);
-            UIManager.Instance.WarningPosReset(uiPosIndex);
-            // seti.SetRobotPos(seti.setiPos[robotPosIndex]);
-            Debug.Log("UI 위치 변경됨");
+            uIPosition.UpdatePosition();
+            Debug.Log("주요 UI 변경될 위치 및 회전값을 변경 완료");
         }
     }
 
