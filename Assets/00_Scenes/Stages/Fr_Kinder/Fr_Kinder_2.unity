@@ -3511,8 +3511,7 @@ GameObject:
   - component: {fileID: 382843602}
   - component: {fileID: 382843601}
   - component: {fileID: 382843600}
-  - component: {fileID: 382843599}
-  - component: {fileID: 382843598}
+  - component: {fileID: 382843603}
   m_Layer: 5
   m_Name: Ok_Btn
   m_TagString: Button
@@ -3540,35 +3539,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 320, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &382843598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382843596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f691e2f98c371a44fac2f8958458fde4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineDistance: {x: 5, y: 5}
---- !u!114 &382843599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382843596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 942b486f5f7e70a47b4afcf7d786a483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 382843600}
-  buttonType: 0
-  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  isClick: 0
 --- !u!114 &382843600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3651,6 +3621,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 382843596}
   m_CullTransparentMesh: 1
+--- !u!114 &382843603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382843596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d02139bf328acd4eaf353217bc4576a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outline: {fileID: 382843601}
+  _originalOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+  optionText: {fileID: 1994416834}
+  highlightText: 
+  optionImage: {fileID: 382843601}
+  highlightColor: {r: 0.5186512, g: 1, b: 0.15566039, a: 0}
 --- !u!1 &384484669
 GameObject:
   m_ObjectHideFlags: 0
@@ -9097,12 +9085,12 @@ MonoBehaviour:
   - {fileID: 830068748}
   - {fileID: 384484669}
   fadeInOutImg: {fileID: 1576260306}
-  okBtn: {fileID: 382843599}
+  okBtn: {fileID: 0}
   warningUi: {fileID: 1116955767}
   exampleDescUi: {fileID: 1705472408}
-  leftHand: {fileID: 0}
   playerUi: {fileID: 661472654}
   emergencyExit: {fileID: 1770275438}
+  advEmergencyExitLine: {fileID: 0}
   handkerchief: {fileID: 0}
   fireAlarm: {fileID: 1397079268}
   isHeadDown: 0
@@ -9115,11 +9103,10 @@ MonoBehaviour:
   smokeParticles: {fileID: 0}
   LeftImg: {fileID: 1548346300}
   RightImg: {fileID: 2089749719}
-  LeftBtn: {fileID: 1548346298}
-  RightBtn: {fileID: 2089749717}
+  LeftBtn: {fileID: 0}
+  RightBtn: {fileID: 0}
   leftChangeImg: {fileID: 21300000, guid: cfa663a1a97148d4493d6d0f68c26f16, type: 3}
   rightChangeImg: {fileID: 21300000, guid: 1ab8436a8153361418e99680a18eb534, type: 3}
-  descriptionText: {fileID: 430911433}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
   hasHandkerchief: 0
@@ -9128,6 +9115,7 @@ MonoBehaviour:
   isInKitchen: 0
   ruleCheck: 0
   canGetItems: 0
+  isButtonClick: 0
   firstDialog: {fileID: 823183684}
   secondDialog: {fileID: 1671671207}
   thirdDialog: {fileID: 27465845}
@@ -12433,34 +12421,14 @@ GameObject:
   - component: {fileID: 1429651201}
   - component: {fileID: 1429651200}
   - component: {fileID: 1429651199}
-  - component: {fileID: 1429651198}
+  - component: {fileID: 1429651202}
   m_Layer: 0
-  m_Name: VR + Player (1)
+  m_Name: VR + Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1429651198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1429651197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f0cb0af9ef6a4c4f8d7bb9c57989cfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputActionAsset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  _leftRay: {fileID: 2874546167527762972}
-  _rightRay: {fileID: 6726836821413132101}
-  _leftLine: {fileID: 5579135184964976527}
-  _rightLine: {fileID: 1812995070393244416}
-  _leftLineRenderer: {fileID: 3869019025784395380}
-  _rightLineRenderer: {fileID: 2018441799262748231}
-  leftGrabber: {fileID: 2040060749}
 --- !u!114 &1429651199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12516,6 +12484,24 @@ Transform:
   - {fileID: 661472650}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1429651202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429651197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9171f64ae3f254e8b303d9d9ab4269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leftController: {fileID: 3000956052997082320}
+  _rightController: {fileID: 3614302018850518465}
+  _leftRay: {fileID: 2874546167527762972}
+  _rightRay: {fileID: 6726836821413132101}
+  leftLine: {fileID: 5579135184964976527}
+  rightLine: {fileID: 1812995070393244416}
 --- !u!1 &1434262315
 GameObject:
   m_ObjectHideFlags: 0

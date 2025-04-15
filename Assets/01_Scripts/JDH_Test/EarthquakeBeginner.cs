@@ -27,7 +27,7 @@ public class EarthquakeBeginner : MonoBehaviour
     public RobotController seti;
     public GameObject[] NPC; // NPC 캐릭터 오브젝트 배열
     public FadeInOut fadeInOutImg;
-    public TestButton2 okBtn;
+    public Button okBtn;
     public GameObject warningUi;
     public GameObject exampleDescUi;
     public GameObject leftHand; // 메뉴 조작 핸드 오브젝트
@@ -37,6 +37,7 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private GameObject backpack;
     [SerializeField] private GameObject emergencyExit; // 비상 출구 (Outlinable 컴포넌트 추가 필요)
     [SerializeField] private GameObject fireAlarm;
+    [SerializeField] private ExitLine advEmergencyExitLine;
     public EarthquakeSystem earthquake;
 
     [Header("고개 숙임 여부 체크")]
@@ -57,11 +58,10 @@ public class EarthquakeBeginner : MonoBehaviour
     [Header("선택 UI 이미지 및 버튼")]
     [SerializeField] private Image LeftImg;
     [SerializeField] private Image RightImg;
-    [SerializeField] private TestButton2 LeftBtn;
-    [SerializeField] private TestButton2 RightBtn;
+    [SerializeField] private Button LeftBtn;
+    [SerializeField] private Button RightBtn;
     [SerializeField] private Sprite leftChangeImg;
     [SerializeField] private Sprite rightChangeImg;
-    [SerializeField] private TextMeshProUGUI descriptionText;
 
     [Header("진행 상태 체크 변수")]
     public bool isFirstStepRdy;
@@ -70,6 +70,11 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool ruleCheck;
     public bool doProtectedHead;    //머리를 보호하고 있어야 하는 구간
     public bool isprotectedHead;    //머리를 잘 보호하는지 확인하는 변수
+    public bool isButtonClick;
+    public GameObject deskLegObj;  //책상 다리 잡기 오브젝트
+    public GameObject bagObj;  //가방 오브젝트
+    public GameObject leftDeskLeg;
+    public GameObject rightDeskLeg;
 
     [Header("대화 시스템")]
     [SerializeField] private BeginnerDialogSystem firstDialog;
@@ -79,6 +84,7 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private BeginnerDialogSystem fifthDialog;
     [SerializeField] private BeginnerDialogSystem sixthDialog;
     [SerializeField] private BeginnerDialogSystem seventhDialog;
+    [SerializeField] private BeginnerDialogSystem eighthDialog;
     [SerializeField] private BeginnerDialogSystem leftChoiceDialog;
     [SerializeField] private BeginnerDialogSystem rightChoiceDialog;
 
@@ -113,10 +119,11 @@ public class EarthquakeBeginner : MonoBehaviour
                 seti.SetBasic();
                 // 4. 책상 밑으로 들어가라는 메시지를 띄우는 UI 활성화
                 okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밑으로";
+                okBtn.GetComponent<Button>().onClick.AddListener(() => OkBtnClick());
                 okBtn.gameObject.SetActive(true);
-                yield return new WaitUntil(() => okBtn.isClick == true);
+                yield return new WaitUntil(() => isButtonClick == true);
                 okBtn.gameObject.SetActive(false);
-                okBtn.isClick = false;
+                isButtonClick = false;
 
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -131,11 +138,18 @@ public class EarthquakeBeginner : MonoBehaviour
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
-                //책상 다리를 잡을때까지 대기
+                deskLegObj.GetComponent<DeskLeg>().enabled = true;
+                leftDeskLeg.SetActive(true);
+                rightDeskLeg.SetActive(true);
+                //책상 다리를 잡을때까지 대기 ->5초
+                yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
+                deskLegObj.GetComponent<DeskLeg>().enabled = false;
 
-                // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
+                // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
+                bagObj.GetComponent<Bag>().enabled = true;
+                //bagObj.GetComponentInChildren<GameObject>().SetActive(true);
                 fifthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 지진 종료
@@ -148,7 +162,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 책상 밖으로 이동을 위해 버튼 다시 활성화
                 okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밖으로";
                 okBtn.gameObject.SetActive(true);
-                yield return new WaitUntil(() => okBtn.isClick == true);
+                yield return new WaitUntil(() => isButtonClick == true);
                 okBtn.gameObject.SetActive(false);
 
                 // 플레이어와 NPC를 원래 위치로 이동
@@ -159,11 +173,16 @@ public class EarthquakeBeginner : MonoBehaviour
                 SetAllNpcState(NpcRig.State.None);
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
+
+                //가방을 줍도록 하는 대사 출력
+                seventhDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+
                 //가방을 주운뒤 머리 위에 올릴 때 까지 대기
                 yield return new WaitUntil(() => isprotectedHead == true);
                 //8. 마지막 대사가 끝난 후 복도로 이동
-                seventhDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
+                eighthDialog.gameObject.SetActive(true);
+                yield return new WaitUntil(() => eighthDialog.isDialogsEnd == true);
                 //다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -181,8 +200,11 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
 
                 //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
-                ActiveOutlineToChildren(emergencyExit);
+                advEmergencyExitLine.ExitLineInteraction();
 
+                // 선택 완료까지 대기
+                yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
+                Debug.Log("비상구 유도선 선택 완료!");
 
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -367,4 +389,13 @@ public class EarthquakeBeginner : MonoBehaviour
 			Debug.Log("오른쪽 선택지가 선택됨");
 		}
 	}
+    void OkBtnClick()
+    {
+        if (isButtonClick == false)
+        {
+            isButtonClick = true;
+            Debug.Log("버튼이 클릭되었습니다.");
+        }
+
+    }
 }

@@ -30,14 +30,15 @@ public class FireBeginner : MonoBehaviour
 	public RobotController seti;
 	public GameObject[] NPC; // 기타 NPC들의 시작 위치
 	public FadeInOut fadeInOutImg;
-	public TestButton2 okBtn;
+	public Button okBtn;
 	public GameObject warningUi;
 	public GameObject exampleDescUi;
-	public GameObject leftHand; // 왼손 관련 오브젝트
 	public Canvas playerUi; //플레이어 UI Canvas
 
 	[SerializeField]
-	private GameObject emergencyExit; // 비상구 오브젝트 (Outlinable 컴포넌트를 추가할 대상)
+	private GameObject emergencyExit; // 비상구 오브젝트 
+    [SerializeField]
+    private ExitLine advEmergencyExitLine;
 
 	[SerializeField] private GameObject handkerchief;
 	[SerializeField] private GameObject fireAlarm;
@@ -57,11 +58,10 @@ public class FireBeginner : MonoBehaviour
 	[Header("예제 UI 이미지")] 
 	[SerializeField] private Image LeftImg;
 	[SerializeField] private Image RightImg;
-	[SerializeField] private TestButton2 LeftBtn;
-	[SerializeField] private TestButton2 RightBtn;
+	[SerializeField] private Button LeftBtn;
+	[SerializeField] private Button RightBtn;
 	[SerializeField] private Sprite leftChangeImg;
 	[SerializeField] private Sprite rightChangeImg;
-	[SerializeField] private TextMeshProUGUI descriptionText;
 
 	[Header("상황 진행 체크")] public bool isFirstStepRdy;
 	public bool isSecondStepRdy;
@@ -71,6 +71,7 @@ public class FireBeginner : MonoBehaviour
 	public bool isInKitchen;
 	public bool ruleCheck; //손수건을 획득한 후 경고창을 띄우기 위해 경고 지점을 설정하는 변수 (해당 변수가 true된 시점부터 경고가 출력)
     public bool canGetItems;    //아이템을 잡을 수 있는 상황
+    public bool isButtonClick;  // 눌렸는지 확인하는 변수 
 
 	[Header("대화 시스템")] [SerializeField] private BeginnerDialogSystem firstDialog;
 
@@ -114,7 +115,8 @@ public class FireBeginner : MonoBehaviour
                     // 3. OK 버튼 활성화 및 버튼 클릭 대기
                     okBtn.gameObject.SetActive(true);
                     Debug.Log("OK 버튼 활성화");
-                    yield return new WaitUntil(() => okBtn.isClick == true);
+                    okBtn.GetComponent<Button>().onClick.AddListener(() => OkBtnClick());
+                    yield return new WaitUntil(() => isButtonClick == true);
                     seti.SetBasic();
                     // 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
                     LeftImg.sprite = leftChangeImg;
@@ -193,7 +195,8 @@ public class FireBeginner : MonoBehaviour
 
                     // 2. OK 버튼 활성화 후 클릭 대기
                     okBtn.gameObject.SetActive(true);
-                    yield return new WaitUntil(() => okBtn.isClick == true);
+                    okBtn.GetComponent<Button>().onClick.AddListener(() => OkBtnClick());
+                    yield return new WaitUntil(() => isButtonClick == true);
                     okBtn.gameObject.SetActive(false);
                     // 머리 숙이기와 얼굴 가리기 완료 대기 후 씬 전환
                     yield return new WaitUntil(() =>
@@ -306,13 +309,17 @@ public class FireBeginner : MonoBehaviour
                     //3. 피난 유도선 Ray로 선택 시 Outline 강조, 대사종료 후 놀이터 Scene으로 이동
                     secondDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd);
+                    // ExitLineInteraction 호출
+                    advEmergencyExitLine.ExitLineInteraction();
 
-                    //피난 유도선 Ray감지까지 대기
+                    // 선택 완료까지 대기
+                    yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
+                    Debug.Log("비상구 유도선 선택 완료!");
+
+
                     thirdDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => thirdDialog.isDialogsEnd);
-                    //피난 유도선 선택 시 Outline 강조
 
-                    ActiveOutlineToChildren(emergencyExit);
 					isSecondStepRdy = true;
 					yield return new WaitUntil(() => isSecondStepRdy == true);
 
@@ -506,5 +513,14 @@ public class FireBeginner : MonoBehaviour
             seti.SetHappy();
             Debug.Log("오른쪽 선택지 대사 출력");
         }
+    }
+    void OkBtnClick()
+    {
+        if(isButtonClick == false)
+        {
+            isButtonClick = true;
+            Debug.Log("버튼이 클릭되었습니다.");
+        }
+
     }
 }
