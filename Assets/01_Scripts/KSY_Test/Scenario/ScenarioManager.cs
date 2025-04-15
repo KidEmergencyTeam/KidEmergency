@@ -249,6 +249,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -257,9 +259,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step16()
     {
         // yield return StartCoroutine(OnGrab());
+        // 연기 파티클 실행
         yield return StartCoroutine(PlaySmokeParticles());
+        // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(10);
@@ -375,6 +378,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(19);
     }
 
@@ -432,6 +437,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
 
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(24);
     }
 
@@ -703,6 +710,23 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         else
         {
             dialogUI.dialogPanel.SetActive(true);
+        }
+    }
+
+    // DialogText 초기화
+    private IEnumerator DialogTextReset()
+    {
+        // "DialogUI" 태그가 붙은 오브젝트 찾기
+        TextMeshProUGUI dialogText = GameObject.FindGameObjectWithTag("Typing")?.GetComponent<TextMeshProUGUI>();
+        if (dialogText == null)
+        {
+            Debug.LogError("Text 컴포넌트를 찾을 수 없습니다.");
+            yield break;
+        }
+        else
+        {
+            // 텍스트 내용 초기화: 기존 대사 내용을 빈 문자열로 설정
+            dialogText.text = "";
         }
     }
 
