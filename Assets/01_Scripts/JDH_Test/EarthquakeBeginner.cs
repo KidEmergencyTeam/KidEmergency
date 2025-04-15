@@ -62,6 +62,9 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private Button RightBtn;
     [SerializeField] private Sprite leftChangeImg;
     [SerializeField] private Sprite rightChangeImg;
+    [SerializeField] private Image warningImg;
+    [SerializeField] private Sprite protectedHeadImg;
+    [SerializeField] private Sprite grabDeskLegImg;
 
     [Header("진행 상태 체크 변수")]
     public bool isFirstStepRdy;
@@ -140,6 +143,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
                 /*
+                warningImg.sprite = grabDeskLegImg;
                 warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "가방 주변의 책상 다리를 5초간 잡으세요!";
                 warningUi.SetActive(true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = true;
@@ -197,6 +201,9 @@ public class EarthquakeBeginner : MonoBehaviour
 
             // 복도
             case PLACE.HALLWAY:
+                //머리 보호구간
+                ruleCheck = true;
+                doProtectedHead = true;
                 SetAllNpcState(NpcRig.State.HoldBag);
 
                 // 첫 번째 대화 후 씬 이동
@@ -209,7 +216,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 advEmergencyExitLine.ExitLineInteraction();
 
                 // 선택 완료까지 대기
-                yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
+                yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true && isprotectedHead == true);
                 Debug.Log("비상구 유도선 선택 완료!");
 
                 // 씬 전환
@@ -220,6 +227,9 @@ public class EarthquakeBeginner : MonoBehaviour
 
             // 계단과 엘리베이터
             case PLACE.STAIRS_ELEVATOR:
+                //머리 보호구간
+                ruleCheck = true;
+                doProtectedHead = true;
                 SetAllNpcState(NpcRig.State.HoldBag);
 
                 // 1. 첫 번째 대화 시작
@@ -276,6 +286,7 @@ public class EarthquakeBeginner : MonoBehaviour
     {
         if (ruleCheck == true && doProtectedHead == true && isprotectedHead == false)
         {
+            warningImg.sprite = protectedHeadImg;
             warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "가방으로 머리를 보호하세요!";
             warningUi.SetActive(true);
         }

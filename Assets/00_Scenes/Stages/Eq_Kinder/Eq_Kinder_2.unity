@@ -604,6 +604,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1091032675}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -955,6 +957,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7315814010928607826, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
   m_PrefabInstance: {fileID: 54663383}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &54663386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2213344147194867528, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
+  m_PrefabInstance: {fileID: 54663383}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &60514310
 GameObject:
   m_ObjectHideFlags: 0
@@ -2068,6 +2081,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1109231136}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -5652,6 +5667,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1549020892}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -11945,6 +11962,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1920287650}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -12414,6 +12433,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 192658564}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -14410,6 +14431,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 773173647}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -19122,6 +19145,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 65488428}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -19927,6 +19952,9 @@ MonoBehaviour:
   RightBtn: {fileID: 173505097}
   leftChangeImg: {fileID: 0}
   rightChangeImg: {fileID: 0}
+  warningImg: {fileID: 54663386}
+  protectedHeadImg: {fileID: 21300000, guid: 107439c11d29bc34986dbd902c62e778, type: 3}
+  grabDeskLegImg: {fileID: 0}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
   hasHandkerchief: 0
@@ -19934,8 +19962,11 @@ MonoBehaviour:
   doProtectedHead: 0
   isprotectedHead: 0
   isButtonClick: 0
+  doGrapDeskLeg: 0
   deskLegObj: {fileID: 0}
   bagObj: {fileID: 0}
+  leftDeskLeg: {fileID: 0}
+  rightDeskLeg: {fileID: 0}
   firstDialog: {fileID: 148890330}
   secondDialog: {fileID: 0}
   thirdDialog: {fileID: 0}
@@ -22580,6 +22611,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1093883318}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -23168,6 +23201,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 104903446}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -24054,6 +24089,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1405775821}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -24654,8 +24691,8 @@ MonoBehaviour:
   isLeft: 1
   detectRadius: 0.05
   rayInteractor: {fileID: 1172352207}
-  isOnGrabCalled: 0
   currentGrabbedObject: {fileID: 0}
+  isOnGrabCalled: 0
   controllerButtonClick:
     m_UseReference: 0
     m_Action:
@@ -25854,18 +25891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82ed36db4d497b4ead79ca35d261021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 42ff4a76-c0ef-430b-a280-82280e7df48e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   leftGrip:
     m_UseReference: 1
     m_Action:
@@ -25878,18 +25903,6 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec18a641-ad79-4944-8c22-a45c8b051082
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightGrip:
     m_UseReference: 1
     m_Action:
@@ -26222,6 +26235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 393899116}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
@@ -27363,6 +27378,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highlighter: {fileID: 1560666280}
+  box: {fileID: 0}
+  lever: {fileID: 0}
   _leftRay: {fileID: 1172352207}
   _rightRay: {fileID: 1171611995}
   _leftHand: {fileID: 1838225841}
