@@ -136,7 +136,6 @@ public class FireBeginner : MonoBehaviour
                         hasHandkerchief == true && iscoverFace == true);
                     Debug.Log("손수건 사용 및 얼굴 가리기 완료");
                     exampleDescUi.SetActive(false);
-                    ruleCheck = true; //해당 시점부터 손수건 경고 출력
 
                     // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
                     StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -150,6 +149,7 @@ public class FireBeginner : MonoBehaviour
 
                     // 7. 추가 대화 진행 후 얼굴 가리기 완료 대기, 페이드 아웃 후 씬 전환
                     thirdDialog.gameObject.SetActive(true);
+                    ruleCheck = true; //해당 시점부터 손수건 경고 출력
                     yield return new WaitUntil(() =>thirdDialog.isDialogsEnd == true && iscoverFace == true);
                     fadeInOutImg.gameObject.SetActive(true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -376,12 +376,12 @@ public class FireBeginner : MonoBehaviour
         }
         else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == true && isHeadDown == false)
         {
-            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "머리를 숙이세요!";
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "몸을 숙이세요!";
             warningUi.SetActive(true);
         }
         else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == false && isHeadDown == false)
         {
-            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막고 머리를 숙이세요!";
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막고 몸을 숙이세요!";
             warningUi.SetActive(true);
         }
         else
