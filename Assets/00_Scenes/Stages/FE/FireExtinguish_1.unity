@@ -530,7 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeft: 1
   detectRadius: 0.0008
-  rayInteractor: {fileID: 0}
+  rayInteractor: {fileID: 5672293572882823687}
   isOnGrabCalled: 0
   currentGrabbedObject: {fileID: 0}
   controllerButtonClick:
@@ -3605,12 +3605,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1035881571}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.84, z: -1.0079999}
+  m_LocalScale: {x: 1.0080003, y: 1.68, z: 1.6800005}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3538570809759935932}
+  m_Father: {fileID: 1195292000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1035881573
 BoxCollider:
@@ -4708,6 +4708,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187299080}
   m_Mesh: {fileID: -8114813628093905460, guid: e7275950ede5e6c46af366a5f009269d, type: 3}
+--- !u!1 &1195291999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1195292000}
+  m_Layer: 0
+  m_Name: Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1195292000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195291999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -22.01, y: 0, z: -4.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1746720079}
+  - {fileID: 1472549027}
+  - {fileID: 1035881572}
+  - {fileID: 3538570809759935932}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1206333818
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5769,12 +5804,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1472549026}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.84, z: 0}
+  m_LocalScale: {x: 1.0080003, y: 1.68, z: 1.6800005}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3538570809759935932}
+  m_Father: {fileID: 1195292000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1472549028
 BoxCollider:
@@ -6931,12 +6966,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746720078}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6, y: 0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.84, z: 1.0080001}
+  m_LocalScale: {x: 1.0080003, y: 1.68, z: 1.6800005}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3538570809759935932}
+  m_Father: {fileID: 1195292000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1746720080
 BoxCollider:
@@ -7066,7 +7101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeft: 0
   detectRadius: 0.0008
-  rayInteractor: {fileID: 0}
+  rayInteractor: {fileID: 3748963029052711262}
   isOnGrabCalled: 0
   currentGrabbedObject: {fileID: 0}
   controllerButtonClick:
@@ -9184,12 +9219,12 @@ GameObject:
   - component: {fileID: 5281240904587551036}
   - component: {fileID: 5281240904587551037}
   m_Layer: 0
-  m_Name: Fire
+  m_Name: FireParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &887004937375188537
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15591,10 +15626,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  m_StartingInteractionOverridesMap:
-  - groupMember: {fileID: 0}
-    overrideGroupMembers:
-    - {fileID: 0}
+  m_StartingInteractionOverridesMap: []
 --- !u!1 &2831473109217541599
 GameObject:
   m_ObjectHideFlags: 0
@@ -16289,17 +16321,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842019140975697830}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -22.01, y: 0, z: -4.57}
-  m_LocalScale: {x: 1.68, y: 1.68, z: 1.68}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.6800001, y: 1.68, z: 1.6800001}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6362622412218796251}
   - {fileID: 4513455230361014988}
-  - {fileID: 1746720079}
-  - {fileID: 1472549027}
-  - {fileID: 1035881572}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1195292000}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &3538582788467686569
 Transform:
@@ -21590,7 +21619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ManipulationInteractionGroup: {fileID: 6654111878803934651}
   m_DirectInteractor: {fileID: 0}
-  m_RayInteractor: {fileID: 0}
+  m_RayInteractor: {fileID: 3748963029052711262}
   m_TeleportInteractor: {fileID: 0}
   m_TeleportModeActivate: {fileID: -8061240218431744966, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_TeleportModeCancel: {fileID: 2307464322626738743, guid: c348712bda248c246b8c49b3db54643f, type: 3}
@@ -24543,7 +24572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ManipulationInteractionGroup: {fileID: 2817467043565873807}
   m_DirectInteractor: {fileID: 0}
-  m_RayInteractor: {fileID: 0}
+  m_RayInteractor: {fileID: 5672293572882823687}
   m_TeleportInteractor: {fileID: 0}
   m_TeleportModeActivate: {fileID: 1263111715868034790, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_TeleportModeCancel: {fileID: 737890489006591557, guid: c348712bda248c246b8c49b3db54643f, type: 3}
@@ -25546,10 +25575,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  m_StartingInteractionOverridesMap:
-  - groupMember: {fileID: 0}
-    overrideGroupMembers:
-    - {fileID: 0}
+  m_StartingInteractionOverridesMap: []
 --- !u!1 &6661677112446723969
 GameObject:
   m_ObjectHideFlags: 0
@@ -33513,7 +33539,7 @@ SceneRoots:
   - {fileID: 203887525}
   - {fileID: 3369724618314446616}
   - {fileID: 1642679572}
-  - {fileID: 3538570809759935932}
+  - {fileID: 1195292000}
   - {fileID: 455270146}
   - {fileID: 1503248999}
   - {fileID: 313920121}

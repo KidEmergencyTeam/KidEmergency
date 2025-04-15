@@ -10,6 +10,7 @@ public class Grabber : MonoBehaviour
 	public bool isLeft = true;
 	public float detectRadius = 0.05f;
 	public XRRayInteractor rayInteractor;
+	public Grabbable currentGrabbedObject;
 
 	// ture일 경우 레이 스위치 불가 -> 잡은 상태
 	// false일 경우 레이 스위치 가능 -> 놓은 상태
@@ -18,7 +19,6 @@ public class Grabber : MonoBehaviour
 	// OnGrab 메서드 호출 시 실행 -> 실행되었음을 전달 -> RayController2.cs에서 우측 레이로 전환
 	public event Action OnGrabEvent;
 
-	[HideInInspector] public Grabbable currentGrabbedObject;
 	[HideInInspector] public InputActionProperty controllerButtonClick;
 
 	private SphereCollider _detectCollider;
@@ -57,6 +57,29 @@ public class Grabber : MonoBehaviour
 		_originalHandTargetRotOffset.Add(_targetFollower.followTargets[3].rotOffset);
 	}
 
+	private void Update()
+	{
+		if (Grabbed)
+		{
+			if (isLeft)
+			{
+				_handAnimation.isLeftGrabbed = true;
+				_handAnimation.animator.SetFloat("Left Grip", 1);
+			}
+
+			else
+			{
+				_handAnimation.isRightGrabbed = true;
+				_handAnimation.animator.SetFloat("Right Grip", 1);
+			}
+		}
+		else
+		{
+			_handAnimation.isLeftGrabbed = false;
+			_handAnimation.isRightGrabbed = false;
+		}
+	}
+
 	private void OnTriggerStay(Collider other)
 	{
 		print(other.name);
@@ -89,19 +112,7 @@ public class Grabber : MonoBehaviour
 		currentGrabbedObject = grabbable;
 		currentGrabbedObject.isGrabbable = false;
 		currentGrabbedObject.currentGrabber = this;
-		if (currentGrabbedObject.isMoving)
-		{
-			if (isLeft)
-			{
-				_handAnimation.animator.SetFloat("Left Grip", 1);
-			}
-
-			else
-			{
-				_handAnimation.animator.SetFloat("Right Grip", 1);
-			}
-		}
-		else
+		if (!currentGrabbedObject.isMoving)
 		{
 			if (isLeft)
 			{
