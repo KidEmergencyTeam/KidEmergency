@@ -12,6 +12,7 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
     public float objectShakeDuration = 4f; // 물체 흔들림 지속 시간
     public Light[] lightObjects;
     public Light mainLight; // 영향을 제일 많이 주는 메인 조명
+    public RobotController seti;
 
     [Header("오디오 클립")] public AudioClip eqAudio;
     
@@ -33,17 +34,15 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
 
     private IEnumerator EarthquakeRoutine()
     {
-        RobotController robot = FindObjectOfType<RobotController>();
-        while (shakeDuration > 0 || objectShakeDuration > 0)
+        while (shakeDuration > 0)
         {
-            robot.SetAnimaiton("LookingFor");
-            robot.SetLookingFor();
+            seti.SetLookingFor();
             EarthquakeStart();
             yield return null;
         }
         
+        seti.SetAnimaiton("LookingFor");
         _isComplete = true;
-        robot.SetLookingFor();
     }
 
     private void EarthquakeStart()
