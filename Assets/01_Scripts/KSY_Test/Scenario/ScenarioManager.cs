@@ -184,30 +184,20 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step7 선택지: 손 vs 손수건
     IEnumerator Step7()
     {
-        // 텍스트 초기화
-        yield return StartCoroutine(DialogTextReset());
-
-        // 패널에서 설정한 정답
-        int selected = 0;
-
-        // 선택지 정답 -> 두 값을 비교해서 일치하면 세티 표정을 변경하기 위해 2개의 값이 존재
-        // 만약 값이 1개만 존재하면 정답이 1일 수도 있고, 2일 수도 있는데
-        // 이것을 구분하여 SetHappy을 호출하기 어렵다.
-        int correct = 2;
-
-        yield return StartCoroutine(
-            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(0, result => selected = result)
-        );
+        // 정답 여부를 저장할 변수
+        bool isCorrect = false;
+        // 플레이어의 투표 결과를 받아 정답 여부 저장
+        yield return StartCoroutine(OptionChoice.Instance.StartVote(result => isCorrect = result));
 
         // 일치 -> 정답, 스텝 12 이동
-        if (selected == correct)
+        if (isCorrect)
             currentStep = 11;
-
         // 불일치 -> 오답, 스텝 9 이동
         else
             currentStep = 8;
 
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        // 세티 표정 선택지에 따라 변화
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, isCorrect));
     }
 
     IEnumerator Step8() { yield return null; }
@@ -249,8 +239,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // 문 앞으로 이동
         yield return StartCoroutine(Positions());
 
-        // 세티 이동
-        yield return StartCoroutine(SetiPosition());
+        // UI 이동
+        yield return StartCoroutine(UIPosition(1));
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -259,6 +249,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -267,9 +259,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step16()
     {
         // yield return StartCoroutine(OnGrab());
+        // 연기 파티클 실행
         yield return StartCoroutine(PlaySmokeParticles());
+        // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(10);
@@ -336,28 +329,20 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step24: 선택지 처리 (피난유도선 vs 익숙한 길)
     IEnumerator Step24()
     {
-        yield return StartCoroutine(DialogTextReset());
-
-        // 패널에서 설정한 정답
-        int selected = 0;
-
-        // 선택지 정답
-        int correct = 1;
-
-        yield return StartCoroutine(
-            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(1, result => selected = result)
-        );
-
+        // 정답 여부를 저장할 변수
+        bool isCorrect = false;
+        // 플레이어의 투표 결과를 받아 정답 여부 저장
+        yield return StartCoroutine(OptionChoice.Instance.StartVote(result => isCorrect = result));
+        
         // 일치 -> 정답, 스텝 25 이동
-        if (selected == correct)
+        if (isCorrect)
             currentStep = 24;
-
         // 불일치 -> 오답, 스텝 27 이동
         else
             currentStep = 26;
 
         // 세티 표정 선택지에 따라 변화
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, isCorrect));
     }
 
     // Step25 대사 출력 -> Step28 진행
@@ -391,9 +376,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(PlaySmokeParticles());
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(19);
     }
 
@@ -402,27 +388,20 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step31: 선택지 처리 (계단 VS 엘베)
     IEnumerator Step31()
     {
-        yield return StartCoroutine(DialogTextReset());
+        // 정답 여부를 저장할 변수
+        bool isCorrect = false;
+        // 플레이어의 투표 결과를 받아 정답 여부 저장
+        yield return StartCoroutine(OptionChoice.Instance.StartVote(result => isCorrect = result));
 
-        // 패널에서 설정한 정답
-        int selected = 0;
-
-        // 선택지 정답
-        int correct = 1;
-
-        yield return StartCoroutine(
-            ChoiceVoteManager.Instance.ShowChoiceAndGetResult(2, result => selected = result)
-        );
 
         // 일치 -> 정답, 스텝 32 이동
-        if (selected == correct)
+        if (isCorrect)
             currentStep = 31;
-
         // 불일치 -> 오답, 스텝 34 이동
         else
             currentStep = 33;
 
-        StartCoroutine(ApplySelectionAndDelayedReset(3f, selected, correct));
+        StartCoroutine(ApplySelectionAndDelayedReset(3f, isCorrect));
     }
 
     // Step32 대사 출력 -> Step35 진행
@@ -458,6 +437,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
 
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(24);
     }
 
@@ -472,8 +453,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
 
-        // 로비 씬 이동 이후 -> ChoiceVoteManager 제거
-        ChoiceVoteManager.Instance.disableSingleton = true;
+        // 로비 씬 이동 이후 -> OptionChoice 제거
+        OptionChoice.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> TypingEffect 제거
         TypingEffect.Instance.disableSingleton = true;
 
@@ -675,7 +656,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // 세티 표정 초기화
-    private IEnumerator ApplySelectionAndDelayedReset(float delay, int panelChoice, int choiceResult)
+    private IEnumerator ApplySelectionAndDelayedReset(float delay, bool isCorrect)
     {
         // "Seti" 태그가 붙은 오브젝트 찾기
         RobotController robotController = GameObject.FindGameObjectWithTag("Seti")?.GetComponent<RobotController>();
@@ -685,22 +666,17 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
             yield break;
         }
 
-        // 정답이면 SetHappy 호출
-        if (panelChoice == choiceResult)
-        {
+        // 정답이면 SetHappy 호출, 오답이면 SetAngry 호출
+        if (isCorrect)
             robotController.SetHappy();
-        }
-        // 오답이면 SetAngry 호출
         else
-        {
             robotController.SetAngry();
-        }
 
         // 딜레이 적용
         yield return new WaitForSeconds(delay);
 
         // 세티 표정 복구
-        robotController?.SetBasic();
+        robotController.SetBasic();
     }
 
     // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영
@@ -754,19 +730,20 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
     }
 
-    // 세티 위치 변경
-    private IEnumerator SetiPosition()
+    // 주요 UI 위치 및 회전값을 변경
+    private IEnumerator UIPosition(int index)
     {
-        // "SetiPosition" 태그가 붙은 오브젝트 찾기
-        SetiPosition setiPosition = GameObject.FindGameObjectWithTag("SetiPosition")?.GetComponent<SetiPosition>();
-        if (setiPosition == null)
+        // "UIPosition" 태그가 붙은 오브젝트 찾기
+        UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
+        if (uIPosition == null)
         {
-            Debug.LogError("SetiPosition 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("UIPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         else
         {
-            setiPosition.UpdatePosition();
+            uIPosition.UpdatePosition(index);
+            Debug.Log("주요 UI 변경될 위치 및 회전값을 변경 완료");
         }
     }
 

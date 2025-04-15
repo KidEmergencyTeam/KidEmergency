@@ -40,15 +40,10 @@ public class PlayerReady : MonoBehaviour
         if (IsReady)
             return;
 
-        // 만약 VR 컨트롤러 입력이 유효하지 않다면 (즉, VR 컨트롤러가 없거나 사용 불가능한 상태)
-        // 키보드의 스페이스바 입력을 확인하여 준비 처리를 진행
-        // 주의: 이 경우 여러 플레이어가 있더라도 한 명이 스페이스바를 누르면 해당 스크립트가 실행 -> 키보드 입력은 개별 처리를 위해 별도의 로직이 필요
+        // 컨트롤러가 사용 불가능한 상태 -> 준비 완료 처리
         if (!leftDevice.isValid && !rightDevice.isValid)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RegisterReady();
-            }
+            RegisterReady();
         }
         else
         {
