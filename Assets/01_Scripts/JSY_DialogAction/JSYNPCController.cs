@@ -51,7 +51,7 @@ public class JSYNPCController : MonoBehaviour
                 Vector3 changePos = npcs[i].transform.localPosition;
                 changePos.z += 0.4f;
                 npcs[i].transform.localPosition = changePos;
-                npcs[i].transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                npcs[i].transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
             }
 			
             else if (st == "HoldDesk")

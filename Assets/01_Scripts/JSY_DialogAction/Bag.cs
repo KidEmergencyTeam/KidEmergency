@@ -21,7 +21,8 @@ public class Bag : Grabbable
             currentGrabber.currentGrabbedObject = null;
         }
         
-        else if (SceneManager.GetActiveScene().name == "Eq_School_2")
+        else if (SceneManager.GetActiveScene().name == "Eq_School_2" || SceneManager.GetActiveScene().name == "Eq_School_3" || 
+                 SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
             Grabber grabber = FindObjectOfType<Grabber>();
             grabber.OnGrab(this);
@@ -29,21 +30,6 @@ public class Bag : Grabbable
             BagInteraction();
         }
         
-        else if (SceneManager.GetActiveScene().name == "Eq_School_3")
-        {
-            Grabber grabber = FindObjectOfType<Grabber>();
-            grabber.OnGrab(this);
-            isGrabbable = false;
-            BagInteraction();
-        }
-        
-        else if (SceneManager.GetActiveScene().name == "Eq_Home_2")
-        {
-            Grabber grabber = FindObjectOfType<Grabber>();
-            grabber.OnGrab(this);
-            isGrabbable = false;
-            BagInteraction();
-        }
     }
 
     public void BagInteraction()

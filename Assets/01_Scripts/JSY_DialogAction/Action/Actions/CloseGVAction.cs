@@ -33,26 +33,26 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
         
         while (!_isComplete)
         {
-            if (Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.1f
-                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.1f)
+            if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.1f
+                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.1f) && _knob.value < 0.99f)
             {
                 _knob.enabled = true;
-                
-                if (_knob.value >= 0.99f)
-                {
-                    _knob.enabled = false;
-                    _knob.value = 1f;
-                    _target.GetComponent<BaseOutlineObject>().enabled = false;
-                    _highlighter.SetActive(false);
-
-                    _isComplete = true;
-                }
-
             }
-
-            else
+            
+            else if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) > 0.1f
+                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) > 0.1f) && _knob.value < 0.99f)
             {
                 _knob.enabled = false;
+            }
+            
+            if (_knob.value >= 0.99f)
+            {
+                _knob.enabled = false;
+                _knob.value = 1f;
+                _target.GetComponent<BaseOutlineObject>().enabled = false;
+                _highlighter.SetActive(false);
+
+                _isComplete = true;
             }
 
             yield return null; 
