@@ -162,9 +162,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
     IEnumerator Step1() 
     {
-        // UI 이동
-        yield return StartCoroutine(UIPosition(0));
-
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(0); 
@@ -262,9 +259,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // yield return StartCoroutine(OnGrab());
         yield return StartCoroutine(PlaySmokeParticles());
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-
-        // UI 이동
-        yield return StartCoroutine(UIPosition(2));
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -379,10 +373,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(PlaySmokeParticles());
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-
-        // UI 이동
-        yield return StartCoroutine(UIPosition(3));
-
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(19);
@@ -438,9 +428,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
-
-        // UI 이동
-        yield return StartCoroutine(UIPosition(4));
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -726,7 +713,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
         if (uIPosition == null)
         {
-            Debug.LogError("uIPosition 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("UIPosition 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         else
