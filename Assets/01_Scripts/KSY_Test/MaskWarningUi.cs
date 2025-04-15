@@ -61,7 +61,7 @@ public class MaskWarningUI : MonoBehaviour
                 UIManager.Instance.CloseWarningUI();
 
                 // 메시지 창 활성화
-                UIManager.Instance.dialogUI.gameObject.SetActive(true);
+                //UIManager.Instance.dialogUI.gameObject.SetActive(true);
                 Debug.Log("경고창 비활성화");
             }
 
@@ -72,7 +72,7 @@ public class MaskWarningUI : MonoBehaviour
                 UIManager.Instance.OpenWarningUI();
 
                 // 메시지 창 활성화
-                UIManager.Instance.dialogUI.gameObject.SetActive(false);
+                //UIManager.Instance.dialogUI.gameObject.SetActive(false);
                 Debug.Log("경고창 활성화");
             }
         }
@@ -89,7 +89,7 @@ public class MaskWarningUI : MonoBehaviour
         UIManager.Instance.CloseWarningUI();
 
         // 메시지 창 활성화
-        UIManager.Instance.dialogUI.gameObject.SetActive(true);
+        //UIManager.Instance.dialogUI.gameObject.SetActive(true);
         Debug.Log("손수건과 충돌할 때 실행");
 
         // 충돌 상태 저장하기 -> true: 충돌o
@@ -103,7 +103,7 @@ public class MaskWarningUI : MonoBehaviour
         UIManager.Instance.OpenWarningUI();
 
         // 메시지 창 비활성화
-        UIManager.Instance.dialogUI.gameObject.SetActive(false);
+        //UIManager.Instance.dialogUI.gameObject.SetActive(false);
         Debug.Log("손수건과 충돌 종료할 때 실행");
 
         // 충돌 상태 저장하기 -> flase: 충돌x
@@ -117,7 +117,7 @@ public class MaskWarningUI : MonoBehaviour
         UIManager.Instance.OpenWarningUI();
 
         // 메시지 창 비활성화
-        UIManager.Instance.dialogUI.gameObject.SetActive(false);
+        //UIManager.Instance.dialogUI.gameObject.SetActive(false);
         Debug.Log("손수건을 잡을 때 실행");
     }
 }
