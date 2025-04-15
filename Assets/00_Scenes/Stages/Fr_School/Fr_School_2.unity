@@ -4565,8 +4565,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.001
-  m_Height: 0.005
+  m_Radius: 0.0001
+  m_Height: 0.01
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &441388817
@@ -23318,99 +23318,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1422590861}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2124360728
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2124360730}
-  - component: {fileID: 2124360729}
-  m_Layer: 0
-  m_Name: "UI \uC704\uCE58"
-  m_TagString: UIPosition
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2124360729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124360728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d50c5b3fc8600cd4ead293e60373876e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uIDatas:
-  - uiObject: {fileID: 0}
-    sceneName: 1
-    uiType: 2
-    changePositions:
-    - {x: 1500, y: 350, z: -100}
-    - {x: 3950, y: 350, z: -4000}
-    - {x: 2000, y: 350, z: 19700}
-    changeRotations:
-    - {x: -15, y: 90, z: 0}
-    - {x: -15, y: 180, z: 0}
-    - {x: -15, y: 90, z: 0}
-    useLocal: 1
-  - uiObject: {fileID: 0}
-    sceneName: 1
-    uiType: 0
-    changePositions:
-    - {x: 2000, y: 350, z: -100}
-    - {x: 2000, y: 350, z: -100}
-    - {x: 2500, y: 350, z: 19700}
-    changeRotations:
-    - {x: 0, y: 90, z: 0}
-    - {x: 0, y: 90, z: 0}
-    - {x: 0, y: 90, z: 0}
-    useLocal: 1
-  - uiObject: {fileID: 0}
-    sceneName: 1
-    uiType: 1
-    changePositions:
-    - {x: 1500, y: 350, z: -100}
-    - {x: 3950, y: 350, z: -4000}
-    - {x: 2000, y: 350, z: 19700}
-    changeRotations:
-    - {x: 0, y: 90, z: 0}
-    - {x: 0, y: 180, z: 0}
-    - {x: 0, y: 90, z: 0}
-    useLocal: 1
-  - uiObject: {fileID: 0}
-    sceneName: 1
-    uiType: 3
-    changePositions:
-    - {x: 1.6, y: 1.6, z: 1.35}
-    - {x: 4.5, y: 1.6, z: -3.1}
-    - {x: 1.85, y: 1.6, z: 21.1}
-    changeRotations:
-    - {x: 10, y: -105, z: 0}
-    - {x: 10, y: -15, z: 0}
-    - {x: 10, y: -105, z: 0}
-    useLocal: 0
---- !u!4 &2124360730
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124360728}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2124393270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24223,7 +24130,7 @@ Transform:
   m_GameObject: {fileID: 3808418283284310768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.2588191, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 1.6, y: 1.5, z: 20.4}
+  m_LocalPosition: {x: 1.2, y: 1.5, z: 20.35}
   m_LocalScale: {x: 0.030164748, y: 0.9896022, z: 0.3199}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -24245,7 +24152,6 @@ SceneRoots:
   - {fileID: 57998262}
   - {fileID: 579973819}
   - {fileID: 1216028040}
-  - {fileID: 2124360730}
   - {fileID: 312400779}
   - {fileID: 973751957}
   - {fileID: 289174539}
