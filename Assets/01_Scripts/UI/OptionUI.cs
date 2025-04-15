@@ -56,7 +56,7 @@ public class OptionUI : OutlineHighlight
 
     #endregion
 
-    private void HighlightSetting()
+    public void HighlightSetting()
     {
         if (optionText.text.Contains(highlightText))
         {
