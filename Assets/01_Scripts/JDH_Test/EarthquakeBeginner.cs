@@ -37,6 +37,7 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private GameObject backpack;
     [SerializeField] private GameObject emergencyExit; // 비상 출구 (Outlinable 컴포넌트 추가 필요)
     [SerializeField] private GameObject fireAlarm;
+    [SerializeField] private GameObject earthquakeSound;
     [SerializeField] private ExitLine advEmergencyExitLine;
     public EarthquakeSystem earthquake;
 
@@ -116,7 +117,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 seti.SetLookingFor();
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
-
+                earthquakeSound.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
@@ -162,6 +163,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 지진 종료
                 earthquake.StopEarthquake();
+                earthquakeSound.gameObject.SetActive(false);
                 yield return new WaitUntil(() => earthquake._endEarthquake == true);
 
                 sixthDialog.gameObject.SetActive(true);
@@ -192,7 +194,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => isprotectedHead == true);
                 //8. 마지막 대사가 끝난 후 복도로 이동
                 eighthDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => eighthDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => eighthDialog.isDialogsEnd == true && isprotectedHead == true);
                 //다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -236,7 +238,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => isprotectedHead == true || firstDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => isprotectedHead == true && firstDialog.isDialogsEnd == true);
 
                 // 2. 선택지 이미지 변경 및 버튼 활성화
                 LeftImg.sprite = leftChangeImg;
@@ -250,10 +252,11 @@ public class EarthquakeBeginner : MonoBehaviour
                 RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
 
                 yield return new WaitUntil(() =>
-                    (leftChoiceDialog.isDialogsEnd == true ||
-                    rightChoiceDialog.isDialogsEnd == true) && isprotectedHead == true);
+                    (leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true) 
+                    && isprotectedHead == true);
 
                 seti.SetBasic();
+
                 // 4. 다음 대화 진행
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && isprotectedHead == true);

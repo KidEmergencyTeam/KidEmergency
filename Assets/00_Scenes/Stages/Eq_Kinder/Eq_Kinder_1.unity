@@ -1700,7 +1700,7 @@ MonoBehaviour:
       \uB300\uD53C\uD558\uC790!"
     audioClip: {fileID: 8300000, guid: 89685aa7a2a78eb41b75087410ec45f4, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -2407,7 +2407,7 @@ MonoBehaviour:
       \uD574"
     audioClip: {fileID: 8300000, guid: d1cc36c8d80602041b745f036ec4ed43, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -10759,7 +10759,7 @@ MonoBehaviour:
       \uB4E4\uC5B4\uAC00!"
     audioClip: {fileID: 8300000, guid: 02682b67261bc954f8309b4733ccd143, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -11014,7 +11014,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 27bdb09779b7b4c46ad8e05a2d1cbcfe, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0e46e93f7a0b6d4468c57ae284b398f3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
   m_Pitch: 1
@@ -13987,6 +13987,7 @@ MonoBehaviour:
   backpack: {fileID: 1780486226544467756}
   emergencyExit: {fileID: 0}
   fireAlarm: {fileID: 1029074397}
+  earthquakeSound: {fileID: 1737106865}
   advEmergencyExitLine: {fileID: 0}
   earthquake: {fileID: 1035372212}
   isHeadDown: 0
@@ -15434,7 +15435,7 @@ MonoBehaviour:
       \uBC11\uC5D0\uC11C \uB098\uAC08 \uC900\uBE44\uB97C \uD558\uC790"
     audioClip: {fileID: 8300000, guid: 4673c1063abf0ab419a271ff991c8320, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -15574,7 +15575,7 @@ MonoBehaviour:
       \uAC70 \uAC19\uC544!"
     audioClip: {fileID: 8300000, guid: 26f63a4b00e8922468343cb3c39ed3af, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -17489,7 +17490,7 @@ MonoBehaviour:
       \uB2E4\uB9AC\uB97C \uACC4\uC18D \uC7A1\uACE0 \uC788\uC5B4!!"
     audioClip: {fileID: 8300000, guid: 532546b2cd6f03c41a17ce7fd5381dc8, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -19070,6 +19071,158 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733859044}
   m_Mesh: {fileID: -8670401986210828039, guid: b47ee7e21355ad94b9128dd099329700, type: 3}
+--- !u!1 &1737106865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1737106868}
+  - component: {fileID: 1737106867}
+  - component: {fileID: 1737106866}
+  m_Layer: 0
+  m_Name: earthquakeSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!164 &1737106866
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737106865}
+  m_Enabled: 1
+  m_DryLevel: 0
+  m_Room: 0
+  m_RoomHF: 0
+  m_DecayTime: 16
+  m_DecayHFRatio: 0.5
+  m_ReflectionsLevel: -3368
+  m_ReverbLevel: 800
+  m_ReverbDelay: 0.1
+  m_Diffusion: 100
+  m_Density: 100
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0.3
+  m_ReverbPreset: 27
+--- !u!82 &1737106867
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737106865}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 27bdb09779b7b4c46ad8e05a2d1cbcfe, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1737106868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737106865}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737382387
 GameObject:
   m_ObjectHideFlags: 0
@@ -20613,7 +20766,7 @@ MonoBehaviour:
       \uB098\uAC00\uC790!"
     audioClip: {fileID: 8300000, guid: bcbdc3a41e6b8dd42a78b376dcfd098e, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1264326195}
   isDialogsEnd: 0
@@ -25136,5 +25289,6 @@ SceneRoots:
   - {fileID: 1332082414}
   - {fileID: 1231277318}
   - {fileID: 1029074400}
+  - {fileID: 1737106868}
   - {fileID: 3358227777845487078}
   - {fileID: 1035372213}
