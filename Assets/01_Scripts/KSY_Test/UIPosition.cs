@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 
 public enum SceneName
 {
-    Fr_School_1,
     None,
+    Fr_School_1,
     Fr_School_2,
     Fr_School_3,
     Fr_School_4
 }
+
 public enum UIType
 {
     OptionPos,
@@ -20,45 +21,58 @@ public enum UIType
 }
 
 [System.Serializable]
+public class SceneTransformMapping
+{
+    [Header("씬 이름")]
+    public SceneName scene;
+
+    [Header("위치값")]
+    public Vector3 position;
+
+    [Header("회전값")]
+    public Vector3 rotation;
+}
+
+[System.Serializable]
 public class UIData
 {
     [Header("UI 오브젝트")]
     public GameObject uiObject;
 
-    [Header("씬 이름")]
-    public SceneName sceneName;
-
     [Header("UI 타입")]
     public UIType uiType;
 
-    [Header("위치값")]
-    public List<Vector3> changePositions = new List<Vector3>();
-
-    [Header("회전값")]
-    public List<Vector3> changeRotations = new List<Vector3>();
+    [Header("위치/회전값 (씬별)")]
+    public List<SceneTransformMapping> sceneTransforms = new List<SceneTransformMapping>();
 
     [Header("true: 로컬 좌표 기준, false: 월드 좌표 기준")]
     public bool useLocal;
 
-    // index에 해당하는 위치값 반환
-    public Vector3 GetPosition(int index)
+    // 전달된 씬에 해당하는 위치값 반환
+    public Vector3 GetPosition(SceneName currentScene)
     {
-        if (changePositions != null && index >= 0 && index < changePositions.Count)
+        foreach (SceneTransformMapping mapping in sceneTransforms)
         {
-            return changePositions[index];
+            if (mapping.scene.Equals(currentScene))
+            {
+                return mapping.position;
+            }
         }
-        Debug.LogWarning(uiType + "의 changePositions 리스트에서 " + index + "번째 값을 찾을 수 없습니다.");
+        Debug.LogWarning(uiType + "의 sceneTransforms 리스트에 " + currentScene + "에 해당하는 위치값을 찾을 수 없습니다.");
         return Vector3.zero;
     }
 
-    // index에 해당하는 회전값 반환
-    public Vector3 GetRotation(int index)
+    // 전달된 씬에 해당하는 회전값 반환
+    public Vector3 GetRotation(SceneName currentScene)
     {
-        if (changeRotations != null && index >= 0 && index < changeRotations.Count)
+        foreach (SceneTransformMapping mapping in sceneTransforms)
         {
-            return changeRotations[index];
+            if (mapping.scene.Equals(currentScene))
+            {
+                return mapping.rotation;
+            }
         }
-        Debug.LogWarning(uiType + "의 changeRotations 리스트에서 " + index + "번째 값을 찾을 수 없습니다.");
+        Debug.LogWarning(uiType + "의 sceneTransforms 리스트에 " + currentScene + "에 해당하는 회전값을 찾을 수 없습니다.");
         return Vector3.zero;
     }
 }
@@ -68,12 +82,32 @@ public class UIPosition : MonoBehaviour
     [Header("상세 설정")]
     public List<UIData> uIDatas = new List<UIData>();
 
-    void Start()
+    void OnEnable()
     {
-        // 열거형 선택에 따라 인덱스 설정
-        int sceneIndex = GetSceneIndex();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-        // uiObject가 null이면, UIType에 해당하는 태그로 게임오브젝트 찾기
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // 씬이 로드될 때 호출
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 현재 활성화된 씬의 이름을 SceneName으로 변환
+        SceneName currentScene;
+        try
+        {
+            currentScene = (SceneName)Enum.Parse(typeof(SceneName), SceneManager.GetActiveScene().name);
+        }
+        catch (Exception)
+        {
+            Debug.LogError("현재 씬 이름 \"" + SceneManager.GetActiveScene().name + "\"이 SceneName 열거형에 정의되어 있지 않습니다. 기본값 None 사용");
+            currentScene = SceneName.None;
+        }
+
+        // uiObject가 null이면, UIType에 해당하는 태그로 오브젝트 찾기
         foreach (UIData uIData in uIDatas)
         {
             if (uIData.uiObject == null)
@@ -85,67 +119,36 @@ public class UIPosition : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError(uIData.uiType.ToString() + " 태그를 가진 게임오브젝트를 찾을 수 없습니다.");
+                    Debug.LogError(uIData.uiType.ToString() + " 태그를 가진 오브젝트를 찾을 수 없습니다.");
                 }
             }
         }
 
-        // 해당 인덱스에 설정된 위치 및 회전값 업데이트
-        UpdatePosition(sceneIndex);
+        // 해당 씬에 따른 위치 및 회전값 적용
+        UpdatePosition(currentScene);
     }
 
-    // 현재 활성화된 씬 이름을 기반으로 인덱스를 반환
-    int GetSceneIndex()
-    {
-        // 현재 활성화된 씬 이름 가져오기
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        try
-        {
-            // 열거형에서 현재 씬 이름과 일치하는 값을 찾음
-            SceneName scene = (SceneName)Enum.Parse(typeof(SceneName), currentSceneName);
-
-            // 열거형 값을 정수형으로 변환하여 반환
-            return (int)scene;
-        }
-        catch (Exception)
-        {
-            // 기본 인덱스 0 반환
-            Debug.LogError("현재 씬 이름 \"" + currentSceneName + "\"이 SceneName 열거형에 정의x 따라서 기본 인덱스 0 사용");
-            return 0;
-        }
-    }
-
-    // 각 UIData에 대해 index에 해당하는 위치 및 회전값을 적용
-    public void UpdatePosition(int index)
+    // 각 UIData에 대해 전달받은 씬에 해당하는 위치 및 회전값을 적용
+    public void UpdatePosition(SceneName currentScene)
     {
         foreach (UIData uIData in uIDatas)
         {
-            // index에 해당하는 오브젝트가 존재하면 실행
             if (uIData.uiObject != null)
             {
-                // 대상 오브젝트 위치값 설정
-                Vector3 targetPosition = uIData.GetPosition(index);
-
-                // 대상 오브젝트 회전값 설정
-                Vector3 targetRotation = uIData.GetRotation(index);
+                // 씬에 해당하는 위치값과 회전값 가져오기
+                Vector3 targetPosition = uIData.GetPosition(currentScene);
+                Vector3 targetRotation = uIData.GetRotation(currentScene);
 
                 // 로컬 좌표 기준
                 if (uIData.useLocal)
                 {
-                    // 위치값 반영
                     uIData.uiObject.transform.localPosition = targetPosition;
-
-                    // 회전값 반영
                     uIData.uiObject.transform.localRotation = Quaternion.Euler(targetRotation);
                 }
-
                 // 월드 좌표 기준
                 else
                 {
-                    // 위치값 반영
                     uIData.uiObject.transform.position = targetPosition;
-
-                    // 회전값 반영
                     uIData.uiObject.transform.rotation = Quaternion.Euler(targetRotation);
                 }
             }
