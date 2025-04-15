@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 // 씬별 파티클 설정
 [Serializable]
@@ -240,7 +239,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(Positions());
 
         // UI 이동
-        yield return StartCoroutine(UIPosition(1));
+        yield return StartCoroutine(UIPosition(SceneName.None));
 
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -428,11 +427,17 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step36: 연속 재생 종료 후 타이핑 실행
     IEnumerator Step36()
     {
+        // 손수건 체크 제거
+        MaskWarningUIStateManager.Instance.disableSingleton = true;
+
         // 경고창 제거
         MaskWarningUIStateManager.Instance.disableSingleton = true;
 
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
+
+        // OptionChoice 제거
+        OptionChoice.Instance.disableSingleton = true;
 
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -444,21 +449,21 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
     IEnumerator Step37() { yield return PlayAndWait(25); }
 
-    // 마지막 대사 출력 -> 마지막 씬 이동
+    // 운동장 씬에서 마지막 대사 출력 -> 마지막 씬 이동
     IEnumerator Step38()
     {
         yield return PlayAndWait(26);
+
+        // UI 매니저 제거
+        Destroy(UIManager.Instance.gameObject);
 
         // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
 
-        // 로비 씬 이동 이후 -> OptionChoice 제거
-        OptionChoice.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> TypingEffect 제거
         TypingEffect.Instance.disableSingleton = true;
-
-        // 시나리오 매니저 인스터스 제거
+        // 로비 씬 이동 이후 -> ScenarioManager 제거
         disableSingleton = true;
     }
     #endregion
@@ -731,7 +736,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     }
 
     // 주요 UI 위치 및 회전값을 변경
-    private IEnumerator UIPosition(int index)
+    private IEnumerator UIPosition(SceneName currentScene)
     {
         // "UIPosition" 태그가 붙은 오브젝트 찾기
         UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
@@ -742,7 +747,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
         else
         {
-            uIPosition.UpdatePosition(index);
+            uIPosition.UpdatePosition(currentScene);
             Debug.Log("주요 UI 변경될 위치 및 회전값을 변경 완료");
         }
     }
