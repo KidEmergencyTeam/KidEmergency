@@ -41,7 +41,6 @@ public class EarthquakeAction : MonoBehaviour, IActionEffect
             yield return null;
         }
         
-        seti.SetAnimaiton("LookingFor");
         _isComplete = true;
     }
 
