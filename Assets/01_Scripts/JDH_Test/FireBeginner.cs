@@ -369,11 +369,26 @@ public class FireBeginner : MonoBehaviour
 	private void Update()
 	{
 		//손수건 획득 후 손수건으로 입을 잘 가리고 있는지 확인
-		if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false)
-			warningUi.SetActive(true);
-		else if (ruleCheck == true && hasHandkerchief == true &&
-		         iscoverFace == true)
-			warningUi.SetActive(false);
+		if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false && isHeadDown == true)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막으세요!";
+            warningUi.SetActive(true);
+        }
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == true && isHeadDown == false)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "머리를 숙이세요!";
+            warningUi.SetActive(true);
+        }
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == false && isHeadDown == false)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막고 머리를 숙이세요!";
+            warningUi.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("모든 행동을 만족했습니다.");
+            warningUi.SetActive(false);
+        }
 
 		DetectHeadLowering(); // 머리 숙임 감지
 	}

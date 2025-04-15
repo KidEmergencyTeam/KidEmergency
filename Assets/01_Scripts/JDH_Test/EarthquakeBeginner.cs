@@ -139,8 +139,6 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
                 deskLegObj.GetComponent<DeskLeg>().enabled = true;
-                leftDeskLeg.SetActive(true);
-                rightDeskLeg.SetActive(true);
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
