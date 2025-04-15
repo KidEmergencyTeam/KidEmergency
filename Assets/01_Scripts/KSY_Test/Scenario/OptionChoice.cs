@@ -111,6 +111,7 @@ public class OptionChoice : DisableableSingleton<OptionChoice>
                 optionUI_A.optionText.text = foundAnswer.newTextA;
                 optionUI_A.highlightText = foundAnswer.newHighlightTextA;
                 optionUI_A.optionImage.sprite = foundAnswer.newSpriteA;
+                UIManager.Instance.optionUI[0].HighlightSetting();
             }
         }
         else
@@ -130,6 +131,7 @@ public class OptionChoice : DisableableSingleton<OptionChoice>
                 optionUI_B.optionText.text = foundAnswer.newTextB;
                 optionUI_B.highlightText = foundAnswer.newHighlightTextB;
                 optionUI_B.optionImage.sprite = foundAnswer.newSpriteB;
+                UIManager.Instance.optionUI[1].HighlightSetting();
             }
         }
         else
