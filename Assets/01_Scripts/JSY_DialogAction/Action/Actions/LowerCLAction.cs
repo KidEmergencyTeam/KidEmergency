@@ -9,13 +9,21 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
     [SerializeField] private GameObject _highlighter;
     [SerializeField] private AudioClip audio;
     [SerializeField] private ActionBasedController[] _controller;
-
+    [SerializeField] private Collider[] _hand;
     
     private bool _isComplete = false;
     public bool isLvLeftTrigger = false;
     public bool isLvRightTrigger = false;
     public bool IsActionComplete => _isComplete;
 
+    private void Start()
+    {
+        for (int i = 0; i < _hand.Length; i++)
+        {
+            _hand[i].enabled = false;
+        }
+    }
+    
     public void StartAction()
     {
         _isComplete = false;
@@ -27,6 +35,10 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
     private IEnumerator LowerCircuitLever()
     {
         _highlighter.SetActive(true);
+        for (int i = 0; i < _hand.Length; i++)
+        {
+            _hand[i].enabled = true;
+        }
         BaseOutlineObject outline = _lever.GetComponent<BaseOutlineObject>();
         outline.enabled = true;
         
@@ -49,6 +61,10 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
                     _lever.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
                     print("레버 위치 바ㅏ꼈다~");
                     _highlighter.SetActive(false);
+                    for (int i = 0; i < _hand.Length; i++)
+                    {
+                        _hand[i].enabled = false;
+                    }
                     _isComplete = true;
                 }
             }
@@ -65,6 +81,10 @@ public class LowerCLAction : MonoBehaviour, IActionEffect
                     _lever.transform.localPosition = new Vector3(0, 0.093f, 0.08f);
                     _lever.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
                     _highlighter.SetActive(false);
+                    for (int i = 0; i < _hand.Length; i++)
+                    {
+                        _hand[i].enabled = false;
+                    }
                     _isComplete = true;
                 }
             }

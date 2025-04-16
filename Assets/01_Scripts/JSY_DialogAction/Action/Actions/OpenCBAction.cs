@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Serialization;
@@ -9,12 +10,21 @@ public class OpenCBAction : MonoBehaviour, IActionEffect
     [SerializeField] private GameObject _circuitBox;
     [SerializeField] private GameObject _highlighter;
     [SerializeField] private ActionBasedController[] _controller;
+    [SerializeField] private Collider[] _hand;
     
     private bool _isComplete = false;
     public bool isBtLeftTrigger = false;
     public bool isBtRightTrigger = false;
     
     public bool IsActionComplete => _isComplete;
+
+    private void Start()
+    {
+        for (int i = 0; i < _hand.Length; i++)
+        {
+            _hand[i].enabled = false;
+        }
+    }
 
     public void StartAction()
     {
@@ -27,6 +37,10 @@ public class OpenCBAction : MonoBehaviour, IActionEffect
     private IEnumerator OpenCircuitBox()
     {
         _highlighter.SetActive(true);
+        for (int i = 0; i < _hand.Length; i++)
+        {
+            _hand[i].enabled = true;
+        }
         BaseOutlineObject outline = _cb.GetComponent<BaseOutlineObject>();
         outline.enabled = true;
         
@@ -40,6 +54,10 @@ public class OpenCBAction : MonoBehaviour, IActionEffect
                     _circuitBox.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
 
                     _highlighter.SetActive(false);
+                    for (int i = 0; i < _hand.Length; i++)
+                    {
+                        _hand[i].enabled = false;
+                    }
                     _isComplete = true;   
                 }
             }
@@ -52,6 +70,10 @@ public class OpenCBAction : MonoBehaviour, IActionEffect
                     _circuitBox.transform.localRotation = Quaternion.Euler(new Vector3(-90, 0, 0));
 
                     _highlighter.SetActive(false);
+                    for (int i = 0; i < _hand.Length; i++)
+                    {
+                        _hand[i].enabled = false;
+                    }
                     _isComplete = true;   
                 }
             }
