@@ -13,11 +13,17 @@ public class EmergencyBellButton : MonoBehaviour
     [Header("EmergencyBell 버튼")]
     public Button emergencyBell;
 
+    [Header("EmergencyBell 콜라이더")]
+    public Collider bellCollider;
+
     [Header("highlighter")]
     public Highlighter highlighter;
 
     [Header("XRI Default Input Actions")]
     public InputActionAsset inputActionAsset;
+
+    [Header("HandAnimation")]
+    public HandAnimation handAnimation;
 
     // PC 에디터에서 사용하기 위한 오른손 Select 액션
     private InputAction rightSelectAction;
@@ -36,44 +42,45 @@ public class EmergencyBellButton : MonoBehaviour
             return;
         }
 
-        // XRI RightHand Interaction에서 Select 액션을 찾음
         var rightHandInteractionMap = inputActionAsset.FindActionMap("XRI RightHand Interaction", true);
-        if (rightHandInteractionMap != null)
-        {
-            rightSelectAction = rightHandInteractionMap.FindAction("Select", true);
-            if (rightSelectAction != null)
-            {
-                rightSelectAction.performed += OnSelectActionPerformed;
-                rightSelectAction.Enable();
-                Debug.Log("우측 컨트롤러 Select 액션 활성화");
-            }
-            else
-            {
-                Debug.LogError("우측 컨트롤러의 Select 액션을 찾을 수 없습니다.");
-            }
-        }
-        else
+        if (rightHandInteractionMap == null)
         {
             Debug.LogError("XRI RightHand Interaction을 찾을 수 없습니다.");
+            return;
         }
+
+        rightSelectAction = rightHandInteractionMap.FindAction("Select", true);
+        if (rightSelectAction == null)
+        {
+            Debug.LogError("우측 컨트롤러의 Select 액션을 찾을 수 없습니다.");
+            return;
+        }
+
+        rightSelectAction.performed += OnSelectActionPerformed;
+        rightSelectAction.Enable();
+        Debug.Log("우측 컨트롤러 Select 액션 활성화");
     }
 
+    // PC 에디터에서 우측 컨트롤러의 Select 액션 입력이 되었을 때 호출
     private void OnSelectActionPerformed(InputAction.CallbackContext context)
     {
-        // PC 에디터에서 우측 컨트롤러의 Select 액션 입력이 되었을 때 호출
         Debug.Log("우측 컨트롤러 Select 액션 입력 감지");
     }
 
-    // 버튼 이벤트 등록
+    // 버튼 클릭 이벤트 등록
     private void Start()
     {
         if (emergencyBell != null)
+        {
             emergencyBell.onClick.AddListener(HandleButtonClick);
+        }
         else
+        {
             Debug.LogError("EmergencyBell 버튼 -> null");
+        }
     }
 
-    // 버튼 노란색 표시 및 깜빡이 켜기
+    // 버튼에 노란색 표시 및 깜빡이 켜기
     public void Highlighter()
     {
         // 노란색 표시
@@ -81,46 +88,53 @@ public class EmergencyBellButton : MonoBehaviour
 
         // 깜빡이 켜기
         highlighter.isBlinking = true;
+
+        // 경고벨 콜라이더 켜기
+        bellCollider.isTrigger = true;
     }
 
     // 버튼 이벤트 실행
     private void HandleButtonClick()
     {
-        // 다른 스크립트에 실행했음을 전달
+        // 다른 스크립트에 버튼 클릭 알림 전달
         OnEmergencyBellClicked?.Invoke();
 
-        // 버튼 실행 여부 -> 참
+        // 버튼 실행 여부 true로 변경
         isButton = true;
     }
 
     // 트리거 영역 내에 있을 때 호출
     private void OnTriggerStay(Collider other)
     {
-        // 충돌한 객체의 태그가 Hand2인지 확인
         if (!other.CompareTag("Hand2"))
             return;
 
         // 버튼 실행
         if (isButton)
         {
+            // 일반 애니메이션 상태로 복귀
+            handAnimation.isEmergencyBellTrigger = false;
+
+            // 검정색 표시
             highlighter.SetColor(Color.black);
+
+            // 깜빡이 끄기
             highlighter.isBlinking = false;
+            return;
         }
 
-        // 버튼 실행 x
-        if (!isButton)
-        {
-            // 빨간색 표시
-            highlighter.SetColor(Color.red);
-        }
+        // 버튼 실행 전이면 트리거 애니메이션 상태로 고정
+        handAnimation.isEmergencyBellTrigger = true;
 
-        // 충돌 표시
+        // 빨간색 표시
+        highlighter.SetColor(Color.red);
+
         Debug.Log("Hand2/콜라이더와 충돌 중");
 
         // 우측 컨트롤러 그립 버튼 입력 여부 
         bool inputDetected = false;
 
-        // 실물 = 우측 컨트롤러의 그립 버튼 입력 확인
+        // 실물 VR: 우측 컨트롤러의 그립 버튼 입력 확인
         List<XRDevice> devices = new List<XRDevice>();
         InputDeviceCharacteristics characteristics = InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Right;
         XRDevices.GetDevicesWithCharacteristics(characteristics, devices);
@@ -130,17 +144,15 @@ public class EmergencyBellButton : MonoBehaviour
             bool gripPressed = false;
             if (device.TryGetFeatureValue(XRCommonUsages.gripButton, out gripPressed) && gripPressed)
             {
-                //우측 컨트롤러 그립 버튼 입력 시 true 변경
                 inputDetected = true;
                 Debug.Log("우측 VR 컨트롤러 그립 버튼 입력 감지 - EmergencyBell 실행");
                 break;
             }
         }
 
-        // PC = 우측 Select 액션 입력 확인
+        // PC: 우측 Select 액션 입력 확인
         if (!inputDetected && rightSelectAction != null && rightSelectAction.triggered)
         {
-            //우측 컨트롤러 그립 버튼 입력 시 true 변경
             inputDetected = true;
             Debug.Log("PC 에디터의 우측 Select 액션 입력 감지 - EmergencyBell 실행");
         }
@@ -153,15 +165,18 @@ public class EmergencyBellButton : MonoBehaviour
         }
     }
 
+    // 트리거 영역 밖에 있을 때 호출
     private void OnTriggerExit(Collider other)
     {
-        // 충돌한 객체의 태그가 Hand2인지 확인
         if (!other.CompareTag("Hand2"))
             return;
 
         // 버튼 실행 x
         if (!isButton)
         {
+            // 일반 애니메이션 상태로 복귀
+            handAnimation.isEmergencyBellTrigger = false;
+
             // 노란색 표시
             highlighter.SetColor(Color.yellow);
         }
