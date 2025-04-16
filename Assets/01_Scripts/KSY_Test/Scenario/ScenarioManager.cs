@@ -267,7 +267,13 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return PlayAndWait(10);
     }
 
-    IEnumerator Step17() { yield return PlayAndWait(11); }
+    IEnumerator Step17()
+    {
+        yield return PlayAndWait(11);
+        
+        // 비상벨 경고등 켜기
+        yield return StartCoroutine(EmergencyBell());
+    }
 
     // Step18: 화재 경보벨 연출 -> 버튼 클릭 대기 후 화재 경보벨 재생
     // Step35까지 화재 경보벨 사운드 출력
@@ -768,27 +774,19 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
     }
 
-    // 잡는 손 유지
-    private IEnumerator OnGrab()
+    // 경고벨 깜빡이 활성화
+    private IEnumerator EmergencyBell()
     {
-        // "Handker" 태그가 붙은 오브젝트 찾기,GrabReleaseCall
-        Grabbable grabbable = GameObject.FindGameObjectWithTag("Handker")?.GetComponent<Grabbable>();
-        if (grabbable == null)
+        // "ToggleHighlighter" 태그가 붙은 오브젝트 찾기
+        EmergencyBellButton emergencyBellButton = GameObject.FindGameObjectWithTag("EmergencyBell")?.GetComponent<EmergencyBellButton>();
+        if (emergencyBellButton == null)
         {
-            Debug.LogError("Grabbable 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // "Hand" 태그가 붙은 오브젝트 찾기
-        Grabber grabber = GameObject.FindGameObjectWithTag("Hand")?.GetComponent<Grabber>();
-        if (grabber == null)
-        {
-            Debug.LogError("Grabber 컴포넌트를 찾을 수 없습니다.");
+            Debug.LogError("EmergencyBellButton 컴포넌트를 찾을 수 없습니다.");
             yield break;
         }
         else
         {
-            grabber.OnGrab(grabbable);
+            emergencyBellButton.Highlighter();
         }
     }
 }
