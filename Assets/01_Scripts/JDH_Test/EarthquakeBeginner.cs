@@ -32,11 +32,14 @@ public class EarthquakeBeginner : MonoBehaviour
     public GameObject exampleDescUi;
     public GameObject leftHand; // 메뉴 조작 핸드 오브젝트
     public Canvas playerUi; // 플레이어 UI Canvas
+    public GameObject exitLineUI;
+    public GameObject grabDeskLegUI;
 
     [Header("가방, 출구, 경보 장치 오브젝트")]
     [SerializeField] private GameObject backpack;
     [SerializeField] private GameObject emergencyExit; // 비상 출구 (Outlinable 컴포넌트 추가 필요)
     [SerializeField] private GameObject fireAlarm;
+    [SerializeField] private GameObject earthquakeSound;
     [SerializeField] private ExitLine advEmergencyExitLine;
     public EarthquakeSystem earthquake;
 
@@ -62,6 +65,9 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private Button RightBtn;
     [SerializeField] private Sprite leftChangeImg;
     [SerializeField] private Sprite rightChangeImg;
+    [SerializeField] private Image warningImg;
+    [SerializeField] private Sprite protectedHeadImg;
+    [SerializeField] private Sprite grabDeskLegImg;
 
     [Header("진행 상태 체크 변수")]
     public bool isFirstStepRdy;
@@ -71,6 +77,7 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool doProtectedHead;    //머리를 보호하고 있어야 하는 구간
     public bool isprotectedHead;    //머리를 잘 보호하는지 확인하는 변수
     public bool isButtonClick;
+    public bool doGrapDeskLeg;  
     public GameObject deskLegObj;  //책상 다리 잡기 오브젝트
     public GameObject bagObj;  //가방 오브젝트
     public GameObject leftDeskLeg;
@@ -112,7 +119,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 seti.SetLookingFor();
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
-
+                earthquakeSound.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
@@ -138,12 +145,12 @@ public class EarthquakeBeginner : MonoBehaviour
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
+                grabDeskLegUI.SetActive(true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = true;
-                leftDeskLeg.SetActive(true);
-                rightDeskLeg.SetActive(true);
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
+                grabDeskLegUI.SetActive(false);
 
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
@@ -154,6 +161,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true);
                 // 7. 지진 종료
                 earthquake.StopEarthquake();
+                earthquakeSound.gameObject.SetActive(false);
                 yield return new WaitUntil(() => earthquake._endEarthquake == true);
 
                 sixthDialog.gameObject.SetActive(true);
@@ -168,21 +176,23 @@ public class EarthquakeBeginner : MonoBehaviour
                 // 플레이어와 NPC를 원래 위치로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
-                doProtectedHead = true;     //머리 보호구간
                 ReturnToOriginalPosition();
                 SetAllNpcState(NpcRig.State.None);
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 
                 //가방을 줍도록 하는 대사 출력
+                ruleCheck = true;
                 seventhDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => seventhDialog.isDialogsEnd == true);
-
+                //머리 보호구간
+                ruleCheck = true;
+                doProtectedHead = true;
                 //가방을 주운뒤 머리 위에 올릴 때 까지 대기
                 yield return new WaitUntil(() => isprotectedHead == true);
                 //8. 마지막 대사가 끝난 후 복도로 이동
                 eighthDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => eighthDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => eighthDialog.isDialogsEnd == true && isprotectedHead == true);
                 //다음 씬으로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -191,6 +201,9 @@ public class EarthquakeBeginner : MonoBehaviour
 
             // 복도
             case PLACE.HALLWAY:
+                //머리 보호구간
+                ruleCheck = true;
+                doProtectedHead = true;
                 SetAllNpcState(NpcRig.State.HoldBag);
 
                 // 첫 번째 대화 후 씬 이동
@@ -201,11 +214,11 @@ public class EarthquakeBeginner : MonoBehaviour
 
                 //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
                 advEmergencyExitLine.ExitLineInteraction();
-
+                exitLineUI.SetActive(true);
                 // 선택 완료까지 대기
-                yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
+                yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true && isprotectedHead == true);
                 Debug.Log("비상구 유도선 선택 완료!");
-
+                exitLineUI.SetActive(false);
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -214,13 +227,16 @@ public class EarthquakeBeginner : MonoBehaviour
 
             // 계단과 엘리베이터
             case PLACE.STAIRS_ELEVATOR:
+                //머리 보호구간
+                ruleCheck = true;
+                doProtectedHead = true;
                 SetAllNpcState(NpcRig.State.HoldBag);
 
                 // 1. 첫 번째 대화 시작
                 StartCoroutine(FadeInOut.Instance.FadeIn());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 firstDialog.gameObject.SetActive(true);
-                yield return new WaitUntil(() => isprotectedHead == true || firstDialog.isDialogsEnd == true);
+                yield return new WaitUntil(() => isprotectedHead == true && firstDialog.isDialogsEnd == true);
 
                 // 2. 선택지 이미지 변경 및 버튼 활성화
                 LeftImg.sprite = leftChangeImg;
@@ -234,10 +250,11 @@ public class EarthquakeBeginner : MonoBehaviour
                 RightBtn.GetComponent<Button>().onClick.AddListener(() => HandleChoice(false));
 
                 yield return new WaitUntil(() =>
-                    (leftChoiceDialog.isDialogsEnd == true ||
-                    rightChoiceDialog.isDialogsEnd == true) && isprotectedHead == true);
+                    (leftChoiceDialog.isDialogsEnd == true || rightChoiceDialog.isDialogsEnd == true) 
+                    && isprotectedHead == true);
 
                 seti.SetBasic();
+
                 // 4. 다음 대화 진행
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true && isprotectedHead == true);
@@ -268,6 +285,15 @@ public class EarthquakeBeginner : MonoBehaviour
 
     private void Update()
     {
+        if (ruleCheck == true && doProtectedHead == true && isprotectedHead == false)
+        {
+            warningImg.sprite = protectedHeadImg;
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "가방으로 머리를 보호하세요!";
+            warningUi.SetActive(true);
+        }
+        else
+            warningUi.SetActive(false);
+
         DetectHeadLowering(); // 고개 숙임 감지
     }
 

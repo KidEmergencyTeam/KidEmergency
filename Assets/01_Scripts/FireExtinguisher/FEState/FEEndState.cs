@@ -22,8 +22,10 @@ public class FEEndState : FEState
 
 		if (_startTime + _delay + OVRScreenFade.Instance.fadeTime < Time.time)
 		{
-			SceneManager.LoadScene(0);
+			scene.currentDialogData = null;
+			scene.currentDialogIndex = 0;
 			scene.currentDialog = null;
+			SceneManager.LoadScene(0);
 		}
 	}
 

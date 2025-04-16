@@ -42,6 +42,7 @@ public class FireBeginner : MonoBehaviour
 
 	[SerializeField] private GameObject handkerchief;
 	[SerializeField] private GameObject fireAlarm;
+    [SerializeField] private GameObject exitUiObj;
 
 	[Header("머리 위치 체크")] public bool isHeadDown = false;
 	public float headHeightThreshold; // 머리 높이 기준 (이 값보다 낮으면 머리를 숙인 것으로 판단)
@@ -63,7 +64,8 @@ public class FireBeginner : MonoBehaviour
 	[SerializeField] private Sprite leftChangeImg;
 	[SerializeField] private Sprite rightChangeImg;
 
-	[Header("상황 진행 체크")] public bool isFirstStepRdy;
+	[Header("상황 진행 체크")] 
+    public bool isFirstStepRdy;
 	public bool isSecondStepRdy;
 	public bool hasHandkerchief;
 	public bool iscoverFace;
@@ -73,8 +75,8 @@ public class FireBeginner : MonoBehaviour
     public bool canGetItems;    //아이템을 잡을 수 있는 상황
     public bool isButtonClick;  // 눌렸는지 확인하는 변수 
 
-	[Header("대화 시스템")] [SerializeField] private BeginnerDialogSystem firstDialog;
-
+	[Header("대화 시스템")] 
+    [SerializeField] private BeginnerDialogSystem firstDialog;
 	[SerializeField] private BeginnerDialogSystem secondDialog;
 	[SerializeField] private BeginnerDialogSystem thirdDialog;
 	[SerializeField] private BeginnerDialogSystem forthDialog;
@@ -136,7 +138,6 @@ public class FireBeginner : MonoBehaviour
                         hasHandkerchief == true && iscoverFace == true);
                     Debug.Log("손수건 사용 및 얼굴 가리기 완료");
                     exampleDescUi.SetActive(false);
-                    ruleCheck = true; //해당 시점부터 손수건 경고 출력
 
                     // 6. 페이드 인/아웃을 통한 NPC 및 플레이어 이동
                     StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -150,6 +151,7 @@ public class FireBeginner : MonoBehaviour
 
                     // 7. 추가 대화 진행 후 얼굴 가리기 완료 대기, 페이드 아웃 후 씬 전환
                     thirdDialog.gameObject.SetActive(true);
+                    ruleCheck = true; //해당 시점부터 손수건 경고 출력
                     yield return new WaitUntil(() =>thirdDialog.isDialogsEnd == true && iscoverFace == true);
                     fadeInOutImg.gameObject.SetActive(true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -274,7 +276,8 @@ public class FireBeginner : MonoBehaviour
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 					forthDialog.gameObject.SetActive(true);
-                    //손수건 활성화
+                    handkerchief.gameObject.SetActive(true);
+                    ruleCheck = true;
                     yield return new WaitUntil(() => forthDialog.isDialogsEnd == true && iscoverFace == true);
 
                     //마지막 대사 출력 후 이동
@@ -287,6 +290,7 @@ public class FireBeginner : MonoBehaviour
 						break;
 
 				case PLACE.STAIRS_ELEVATOR:
+                    ruleCheck = true;
                     SetAllNpcState(NpcRig.State.Bow);
                     fireAlarm.gameObject.SetActive(true);
                     // 1. Fade In, Out 진행 후 첫 번째 대화 시작 
@@ -308,31 +312,32 @@ public class FireBeginner : MonoBehaviour
                     seti.SetBasic();
                     //3. 피난 유도선 Ray로 선택 시 Outline 강조, 대사종료 후 놀이터 Scene으로 이동
                     secondDialog.gameObject.SetActive(true);
-                    yield return new WaitUntil(() => secondDialog.isDialogsEnd);
+                    yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
                     // ExitLineInteraction 호출
                     advEmergencyExitLine.ExitLineInteraction();
-
-                    // 선택 완료까지 대기
-                    yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
-                    Debug.Log("비상구 유도선 선택 완료!");
-
 
                     thirdDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => thirdDialog.isDialogsEnd);
 
-					isSecondStepRdy = true;
+                    // 선택 완료까지 대기
+                    exitUiObj.SetActive(true);
+                    yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true);
+                    Debug.Log("비상구 유도선 선택 완료!");
+                    //비활성화
+                    exitUiObj.SetActive(false);
+
+                    isSecondStepRdy = true;
 					yield return new WaitUntil(() => isSecondStepRdy == true);
 
-                    //선택시 시점 변환플레이어 시점 변환
-
                     //머리 숙이고 코를 막아야 이동
-                    yield return new WaitUntil(() => isHeadDown == true && iscoverFace);
+                    yield return new WaitUntil(() => isHeadDown == true && iscoverFace == true && isHeadDown == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
                     SceneManager.LoadScene("Fr_Home_3");
                     break;
 
                 case PLACE.DOWNSTAIR:
+                    ruleCheck = true;
                     SetAllNpcState(NpcRig.State.Bow);
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
@@ -369,11 +374,26 @@ public class FireBeginner : MonoBehaviour
 	private void Update()
 	{
 		//손수건 획득 후 손수건으로 입을 잘 가리고 있는지 확인
-		if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false)
-			warningUi.SetActive(true);
-		else if (ruleCheck == true && hasHandkerchief == true &&
-		         iscoverFace == true)
-			warningUi.SetActive(false);
+		if (ruleCheck == true && hasHandkerchief == true && iscoverFace == false && isHeadDown == true)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막으세요!";
+            warningUi.SetActive(true);
+        }
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == true && isHeadDown == false)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "몸을 숙이세요!";
+            warningUi.SetActive(true);
+        }
+        else if(ruleCheck == true && hasHandkerchief == true && iscoverFace == false && isHeadDown == false)
+        {
+            warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "손수건으로 코를 막고 몸을 숙이세요!";
+            warningUi.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("모든 행동을 만족했습니다.");
+            warningUi.SetActive(false);
+        }
 
 		DetectHeadLowering(); // 머리 숙임 감지
 	}

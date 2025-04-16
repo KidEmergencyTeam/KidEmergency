@@ -64,19 +64,19 @@ public class Grabber : MonoBehaviour
 			if (isLeft)
 			{
 				_handAnimation.isLeftGrabbed = true;
-				_handAnimation.animator.SetFloat("Left Grip", 1);
+				_handAnimation.animator.SetFloat("Left Grip", 1f);
 			}
 
 			else
 			{
 				_handAnimation.isRightGrabbed = true;
-				_handAnimation.animator.SetFloat("Right Grip", 1);
+				_handAnimation.animator.SetFloat("Right Grip", 1f);
 			}
 		}
 		else
 		{
-			_handAnimation.isLeftGrabbed = false;
-			_handAnimation.isRightGrabbed = false;
+			if(isLeft) _handAnimation.isLeftGrabbed = false;
+			else _handAnimation.isRightGrabbed = false;
 		}
 	}
 

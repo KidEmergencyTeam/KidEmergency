@@ -51,7 +51,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
 
                 if (ActionManager.Instance.beforeDialog.nextScene == "Eq_Home_3")
                 {
-                    UIManager.Instance.DialogPosReset(5);
+                    UIManager.Instance.DialogPosReset(6);
                 }
                 while(!asyncChange.isDone)
                 {
