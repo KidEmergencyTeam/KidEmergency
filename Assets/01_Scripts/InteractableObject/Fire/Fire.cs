@@ -6,6 +6,7 @@ public class Fire : MonoBehaviour
 	public float fireHp;
 	public Vector3 originalScale;
 	public bool is30 = false;
+	public GameObject fire;
 
 	private void Awake()
 	{
@@ -26,7 +27,7 @@ public class Fire : MonoBehaviour
 			JSWDialogManager.Instance.delay = 1f;
 			FEScene.Instance.currentDialogIndex = 15;
 			FEScene.Instance.ChangeState(FEStateType.FEDialog);
-			Destroy(gameObject);
+			Destroy(fire.gameObject);
 		}
 	}
 }
