@@ -33,14 +33,14 @@ public class CloseGVAction : MonoBehaviour, IActionEffect
         
         while (!_isComplete)
         {
-            if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.15f
-                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.15f) && _knob.value < 0.99f)
+            if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) < 0.08f
+                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) < 0.08f) && _knob.value < 0.99f)
             {
                 _knob.enabled = true;
             }
             
-            else if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) > 0.15f
-                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) > 0.15f) && _knob.value < 0.99f)
+            else if ((Vector3.Distance(_target.transform.position, _hand[0].transform.position) > 0.08f
+                || Vector3.Distance(_target.transform.position, _hand[1].transform.position) > 0.08f) && _knob.value < 0.99f)
             {
                 _knob.enabled = false;
             }
