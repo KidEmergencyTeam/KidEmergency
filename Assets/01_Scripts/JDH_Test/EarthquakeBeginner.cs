@@ -150,6 +150,12 @@ public class EarthquakeBeginner : MonoBehaviour
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
+                //DeskLegObj의 모든 자식게임오브젝트 비활성화
+                // DeskLegObj의 모든 자식 게임 오브젝트 비활성화
+                foreach (Transform child in deskLegObj.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
                 grabDeskLegUI.SetActive(false);
 
                 forthDialog.gameObject.SetActive(true);
