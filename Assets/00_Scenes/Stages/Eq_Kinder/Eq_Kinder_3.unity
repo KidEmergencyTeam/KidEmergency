@@ -5059,7 +5059,7 @@ MonoBehaviour:
       \uC218\uB3C4 \uC788\uC5B4"
     audioClip: {fileID: 8300000, guid: 1430d21ecd16b4c4ea937eaf0eeb7797, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1018369418}
   isDialogsEnd: 0
@@ -6028,6 +6028,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7315814010928607826, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
   m_PrefabInstance: {fileID: 370928267}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &370928270 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2213344147194867528, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
+  m_PrefabInstance: {fileID: 370928267}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &379166053
 GameObject:
   m_ObjectHideFlags: 0
@@ -11705,7 +11716,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985398049}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 600}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12358,7 +12369,7 @@ MonoBehaviour:
       \uC120\uD0DD\uD574\uC918"
     audioClip: {fileID: 8300000, guid: 5306ae30d362ec94b9cd8079f4f467ad, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1018369418}
   isDialogsEnd: 0
@@ -15523,18 +15534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82ed36db4d497b4ead79ca35d261021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Left Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 42ff4a76-c0ef-430b-a280-82280e7df48e
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -4289430672226363583, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   leftGrip:
     m_UseReference: 1
     m_Action:
@@ -15547,18 +15546,6 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  rightPinch:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Right Pinch
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec18a641-ad79-4944-8c22-a45c8b051082
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 7904272356298805229, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightGrip:
     m_UseReference: 1
     m_Action:
@@ -16049,9 +16036,12 @@ MonoBehaviour:
   exampleDescUi: {fileID: 985398049}
   leftHand: {fileID: 0}
   playerUi: {fileID: 1754686483}
+  exitLineUI: {fileID: 0}
+  grabDeskLegUI: {fileID: 0}
   backpack: {fileID: 0}
   emergencyExit: {fileID: 0}
   fireAlarm: {fileID: 1491296861}
+  earthquakeSound: {fileID: 0}
   advEmergencyExitLine: {fileID: 0}
   earthquake: {fileID: 0}
   isHeadDown: 0
@@ -16069,6 +16059,9 @@ MonoBehaviour:
   RightBtn: {fileID: 1781276794}
   leftChangeImg: {fileID: 21300000, guid: 24855ea507a0b9a41855889a4c94ff41, type: 3}
   rightChangeImg: {fileID: 21300000, guid: df2b9817adc75f04ba3e21efe43f8590, type: 3}
+  warningImg: {fileID: 370928270}
+  protectedHeadImg: {fileID: 21300000, guid: 107439c11d29bc34986dbd902c62e778, type: 3}
+  grabDeskLegImg: {fileID: 0}
   isFirstStepRdy: 0
   isSecondStepRdy: 0
   hasHandkerchief: 0
@@ -16076,8 +16069,11 @@ MonoBehaviour:
   doProtectedHead: 0
   isprotectedHead: 0
   isButtonClick: 0
+  doGrapDeskLeg: 0
   deskLegObj: {fileID: 0}
   bagObj: {fileID: 0}
+  leftDeskLeg: {fileID: 0}
+  rightDeskLeg: {fileID: 0}
   firstDialog: {fileID: 148890330}
   secondDialog: {fileID: 1024297581}
   thirdDialog: {fileID: 1383276149}
@@ -17369,7 +17365,7 @@ MonoBehaviour:
       \uB354 \uD798\uB0B4"
     audioClip: {fileID: 8300000, guid: a6b71aa37d003274f9d3d29b2bdf2437, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1018369418}
   isDialogsEnd: 0
@@ -21934,7 +21930,7 @@ MonoBehaviour:
       \uC548\uC804\uD558\uAC8C \uACC4\uB2E8\uC73C\uB85C \uB0B4\uB824\uAC00\uC790"
     audioClip: {fileID: 8300000, guid: df8bafeaca5e5e84ea5d91060d66b5ff, type: 3}
   isAutoStart: 1
-  typingSpeed: 0.1
+  typingSpeed: 0.13
   dialogDelay: 2
   audioSource: {fileID: 1018369418}
   isDialogsEnd: 0
@@ -24520,8 +24516,8 @@ MonoBehaviour:
   isLeft: 1
   detectRadius: 0.05
   rayInteractor: {fileID: 122227990}
+  currentGrabbedObject: {fileID: 59084298}
   isOnGrabCalled: 0
-  currentGrabbedObject: {fileID: 0}
   controllerButtonClick:
     m_UseReference: 0
     m_Action:
