@@ -9009,19 +9009,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.x
@@ -9029,7 +9029,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.z
@@ -9041,7 +9041,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -12876,6 +12876,7 @@ MonoBehaviour:
   animator: {fileID: 975373633}
   isLeftGrabbed: 0
   isRightGrabbed: 0
+  isEmergencyBellTrigger: 0
 --- !u!114 &975373631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14896,6 +14897,7 @@ MonoBehaviour:
   animator: {fileID: 1133437469}
   isLeftGrabbed: 0
   isRightGrabbed: 0
+  isEmergencyBellTrigger: 0
 --- !u!114 &1133437467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17625,22 +17627,22 @@ MonoBehaviour:
     initialPosition: {x: 0.5, y: 0.1, z: 3}
     initialRotation: {x: 0, y: 90, z: 0}
     step14Position: {x: 4, y: 0.1, z: -1}
-    step14Rotation: {x: 0, y: 180, z: 0}
+    step14Rotation: {x: 0, y: -90, z: 0}
   - playerNpc: {fileID: 0}
     initialPosition: {x: 0.5, y: 0.1, z: 1}
     initialRotation: {x: 0, y: 90, z: 0}
     step14Position: {x: 4, y: 0.1, z: -2}
-    step14Rotation: {x: 0, y: 180, z: 0}
+    step14Rotation: {x: 0, y: -90, z: 0}
   - playerNpc: {fileID: 0}
     initialPosition: {x: 0.5, y: 0.1, z: -1}
     initialRotation: {x: 0, y: 90, z: 0}
     step14Position: {x: 4, y: 0.1, z: 0}
-    step14Rotation: {x: 0, y: 180, z: 0}
+    step14Rotation: {x: 0, y: -90, z: 0}
   - playerNpc: {fileID: 0}
     initialPosition: {x: 0.5, y: 0.1, z: -3}
     initialRotation: {x: 0, y: 90, z: 0}
     step14Position: {x: 4, y: 0.1, z: 1}
-    step14Rotation: {x: 0, y: 180, z: 0}
+    step14Rotation: {x: 0, y: -90, z: 0}
 --- !u!4 &1296830807
 Transform:
   m_ObjectHideFlags: 0
@@ -23620,8 +23622,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1858168635}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.1, z: -3.5}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 4, y: 0.1, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23629,7 +23631,7 @@ Transform:
   - {fileID: 151560188}
   - {fileID: 1947369611}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1862522920
 GameObject:
   m_ObjectHideFlags: 0
@@ -23942,11 +23944,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23954,7 +23956,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.x
@@ -23962,7 +23964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalRotation.z
@@ -23974,7 +23976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 5583606577665645712, guid: 56903efe379cb1e40b2580091bfdde6f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -24381,8 +24383,8 @@ MonoBehaviour:
     uiType: 2
     sceneTransforms:
     - scene: 0
-      position: {x: 3950, y: 350, z: -4000}
-      rotation: {x: -15, y: 180, z: 0}
+      position: {x: 2800, y: 250, z: -3100}
+      rotation: {x: -15, y: -90, z: 0}
     - scene: 1
       position: {x: 1500, y: 350, z: -100}
       rotation: {x: -15, y: 90, z: 0}
@@ -24400,8 +24402,8 @@ MonoBehaviour:
     uiType: 0
     sceneTransforms:
     - scene: 0
-      position: {x: 2000, y: 350, z: -100}
-      rotation: {x: 0, y: 90, z: 0}
+      position: {x: 2400, y: 250, z: -1500}
+      rotation: {x: 0, y: -50, z: 0}
     - scene: 1
       position: {x: 2500, y: 350, z: -100}
       rotation: {x: 0, y: 90, z: 0}
@@ -24419,8 +24421,8 @@ MonoBehaviour:
     uiType: 1
     sceneTransforms:
     - scene: 0
-      position: {x: 3950, y: 350, z: -4000}
-      rotation: {x: 0, y: 180, z: 0}
+      position: {x: 2800, y: 250, z: -3100}
+      rotation: {x: 0, y: -90, z: 0}
     - scene: 1
       position: {x: 1500, y: 350, z: -100}
       rotation: {x: 0, y: 90, z: 0}
@@ -24438,8 +24440,8 @@ MonoBehaviour:
     uiType: 3
     sceneTransforms:
     - scene: 0
-      position: {x: 4.5, y: 1.6, z: -3.1}
-      rotation: {x: 10, y: -15, z: 0}
+      position: {x: 3, y: 1.6, z: -1.6}
+      rotation: {x: 10, y: 120, z: 0}
     - scene: 1
       position: {x: 1.6, y: 1.6, z: 1.35}
       rotation: {x: 10, y: -105, z: 0}
