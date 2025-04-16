@@ -64,6 +64,22 @@ public class BaseOutlineObject : MonoBehaviour
                 }
             }
 
+            else if(ActionManager.Instance.currentAction == ActionType.CloseGasValve)
+            {
+                if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.08f
+                   || Vector3.Distance(this.gameObject.transform.position, _rightHand.transform.position) < 0.08f)
+                {
+                    _highlighter.SetColor(Color.green);
+                    _highlighter.isBlinking = false;
+                }
+        
+                else
+                {
+                    _highlighter.SetColor(Color.yellow);
+                    _highlighter.isBlinking = true; 
+                } 
+            }
+            
             else
             {
                 if(Vector3.Distance(this.gameObject.transform.position, _leftHand.transform.position) < 0.15f
