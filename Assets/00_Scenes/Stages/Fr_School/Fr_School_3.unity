@@ -1578,7 +1578,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 163662300}
-  - {fileID: 1776027521}
   m_Father: {fileID: 371039359}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &115489939
@@ -2204,7 +2203,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.0022786704, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1776027521}
   m_Father: {fileID: 113087192}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &165135729
@@ -19825,12 +19825,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776027520}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0.0013, z: 0}
+  m_LocalRotation: {x: 0.5, y: 0.50000006, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0, y: -0.0009786711, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 113087192}
+  m_Father: {fileID: 163662300}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
 --- !u!114 &1776027522
 MonoBehaviour:
@@ -19859,6 +19859,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Handker
+  myCollider: {fileID: 1776027524}
+  myGrabber: {fileID: 550430835}
 --- !u!136 &1776027524
 CapsuleCollider:
   m_ObjectHideFlags: 0
