@@ -23,6 +23,7 @@ public class FEHandle : MonoBehaviour
 	private float _fireEndCoolTime = 0f;
 	private Grabbable _grabbable;
 	private FireDetectCollider _fireDetectCollider;
+	private bool _soundPlaying = false;
 
 	private void Awake()
 	{
@@ -60,6 +61,12 @@ public class FEHandle : MonoBehaviour
 
 		if (fireAction.action.ReadValue<float>() > 0)
 		{
+			if (!_soundPlaying)
+			{
+				_soundPlaying = true;
+				hose.spraySound.Play();
+			}
+
 			print("ButtonClick");
 			if (Time.time > _fireEndCoolTime)
 			{
@@ -86,6 +93,11 @@ public class FEHandle : MonoBehaviour
 				_fire.TakeDamage(currentExtinguishingDamage * Time.deltaTime);
 				print($"current damage : {currentExtinguishingDamage * Time.deltaTime}");
 			}
+		}
+		else
+		{
+			_soundPlaying = false;
+			hose.spraySound.Stop();
 		}
 	}
 
