@@ -55,7 +55,10 @@ public class DeskLeg : MonoBehaviour
         
         if (isInteractable)
         { 
-            UIManager.Instance.CloseWarningUI();
+            if(UIManager.Instance != null)
+            {
+                UIManager.Instance.CloseWarningUI();
+                            }
             _durationTime += Time.deltaTime;
             if (_durationTime >= _endTime)
             { 
@@ -66,8 +69,11 @@ public class DeskLeg : MonoBehaviour
         else
         {
             _durationTime = 0f;
-            UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
-            UIManager.Instance.OpenWarningUI(); 
+            if(UIManager.Instance != null)
+            {
+                UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
+                UIManager.Instance.OpenWarningUI();
+            }
             isHoldComplete = false;
         }
     }
