@@ -32,6 +32,8 @@ public class EarthquakeBeginner : MonoBehaviour
     public GameObject exampleDescUi;
     public GameObject leftHand; // 메뉴 조작 핸드 오브젝트
     public Canvas playerUi; // 플레이어 UI Canvas
+    public GameObject exitLineUI;
+    public GameObject grabDeskLegUI;
 
     [Header("가방, 출구, 경보 장치 오브젝트")]
     [SerializeField] private GameObject backpack;
@@ -143,16 +145,12 @@ public class EarthquakeBeginner : MonoBehaviour
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
-                /*
-                warningImg.sprite = grabDeskLegImg;
-                warningUi.GetComponentInChildren<TextMeshProUGUI>().text = "가방 주변의 책상 다리를 5초간 잡으세요!";
-                warningUi.SetActive(true);
+                grabDeskLegUI.SetActive(true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = true;
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
-                warningUi.SetActive(true);
-                */
+                grabDeskLegUI.SetActive(false);
 
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
@@ -216,11 +214,11 @@ public class EarthquakeBeginner : MonoBehaviour
 
                 //유도선 선택 대기 후 선택 시 모든 자식오브젝트의 outliner활성화
                 advEmergencyExitLine.ExitLineInteraction();
-
+                exitLineUI.SetActive(true);
                 // 선택 완료까지 대기
                 yield return new WaitUntil(() => advEmergencyExitLine.isSelected == true && isprotectedHead == true);
                 Debug.Log("비상구 유도선 선택 완료!");
-
+                exitLineUI.SetActive(false);
                 // 씬 전환
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
