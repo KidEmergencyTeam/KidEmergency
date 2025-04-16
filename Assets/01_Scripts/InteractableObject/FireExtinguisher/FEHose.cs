@@ -5,6 +5,13 @@ public class FEHose : Grabbable
 {
 	public ChainIKConstraint hoseIKChain;
 	public Transform grabPoint;
+	public AudioSource spraySound;
+
+	protected override void Start()
+	{
+		base.Start();
+		spraySound = GetComponent<AudioSource>();
+	}
 
 	protected override void Update()
 	{

@@ -32,6 +32,7 @@ public class JSWDialogManager : MonoBehaviour
 		
 		robot.emotionChanger.SetEmotionEyes(_scene.currentDialogData.emotionEye);
 		robot.emotionChanger.SetEmotionMouth(_scene.currentDialogData.emotionMouth);
+		robot.robotColorManager.ChangeBodyColor(_scene.currentDialogData.emotionColor);
 		if(_scene.currentDialogData.isAnimation) robot.SetAnimaiton(_scene.currentDialogData.animationName);
 
 		for (int i = 0; i < _scene.currentDialog.Length; i++)
