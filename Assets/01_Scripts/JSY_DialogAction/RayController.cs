@@ -133,6 +133,18 @@ public class RayController : MonoBehaviour
                 }
             }
         }
+        
+        if (UIManager.Instance == null)
+        {
+            OptionUI[] optionUI = FindObjectsOfType<OptionUI>();
+            for (int i = 0; i < optionUI.Length; i++)
+            {
+                if (optionUI[i].gameObject.activeSelf)
+                {
+                    return true;
+                }
+            }
+        }
 
         if (TitleUI.Instance != null)
         {
