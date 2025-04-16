@@ -257,7 +257,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
     IEnumerator Step16()
     {
-        // yield return StartCoroutine(OnGrab());
         // 연기 파티클 실행
         yield return StartCoroutine(PlaySmokeParticles());
         // npc 허리 숙이기
@@ -373,8 +372,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step29: 씬 전환 후 NPC 상태를 Bow로 변경하고 대사 출력
     IEnumerator Step29()
     {
-        // yield return StartCoroutine(OnGrab());
-
         // 안전 유도선 활성화
         yield return StartCoroutine(SafetyLine());
         // 파티클 활성화
