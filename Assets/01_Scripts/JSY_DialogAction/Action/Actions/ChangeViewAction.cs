@@ -86,6 +86,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                 {
                     player = GameObject.Find("VR + Player");
                     SetNewView(newPos, newRot, PlayerRig.State.None);
+                    UIManager.Instance.DialogPosReset(5);
                     UIManager.Instance.WarningPosReset(3); 
                     seti.SetRobotPos(seti.setiPos[1]);
                 }

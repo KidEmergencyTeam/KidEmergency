@@ -19,18 +19,24 @@ public class BaseOutlineObject : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Eq_Home_2")
         {
-            if (_leftRay != null && _rightRay != null)
+            if (ActionManager.Instance.currentDialog.name == "EqHome22_Dialog" && ActionManager.Instance.currentAction == ActionType.ShowDialog)
             {
-                if (_leftRay.hasHover || _rightRay.hasHover)
-                {
-                    _highlighter.SetColor(Color.green);
-                    _highlighter.isBlinking = false;
-                }
-                else
-                {
-                    _highlighter.SetColor(Color.yellow);
-                    _highlighter.isBlinking = true; 
-                }   
+                // if (_leftRay.hasHover || _rightRay.hasHover)
+                // {
+                //     _highlighter.SetColor(Color.green);
+                //     _highlighter.isBlinking = false;
+                // }
+                // else
+                // {
+                _highlighter.gameObject.SetActive(true);
+                _highlighter.SetColor(Color.yellow);
+                _highlighter.isBlinking = true; 
+                // }   
+            }
+
+            else
+            {
+                _highlighter.gameObject.SetActive(false);
             }
         }
         

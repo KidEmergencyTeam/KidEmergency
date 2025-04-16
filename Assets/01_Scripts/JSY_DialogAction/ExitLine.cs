@@ -29,7 +29,7 @@ public class ExitLine : MonoBehaviour
 
     private IEnumerator ExitLineCoroutine()
     {
-        highlighter.gameObject. SetActive(true);
+        highlighter.gameObject.SetActive(true);
         _grab.enabled = true;
         
         while (!isSelected)
