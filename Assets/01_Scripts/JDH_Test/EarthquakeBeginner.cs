@@ -142,7 +142,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 
                 //5. 책상 밑에서 대사가 완료된 후 책상 다리를 잡도록 Outline활성화 및 잡기
-                /*
+                
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
@@ -151,14 +151,14 @@ public class EarthquakeBeginner : MonoBehaviour
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
-                //DeskLegObj의 모든 자식게임오브젝트 비활성화
+                
                 // DeskLegObj의 모든 자식 게임 오브젝트 비활성화
                 foreach (Transform child in deskLegObj.transform)
                 {
                     child.gameObject.SetActive(false);
                 }
                 grabDeskLegUI.SetActive(false);
-                */
+                
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
                 // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
