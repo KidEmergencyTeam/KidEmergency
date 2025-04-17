@@ -12,7 +12,10 @@ public class HandAnimation : MonoBehaviour
 	public bool isLeftGrabbed = false;
 	public bool isRightGrabbed = false;
 
-	private RayController _ray;
+	// 경고벨 트리거 여부
+	public bool isEmergencyBellTrigger = false;
+
+    private RayController _ray;
 	private Grabber _grabber;
 
 	private void Start()
@@ -21,9 +24,24 @@ public class HandAnimation : MonoBehaviour
 		_grabber = FindObjectOfType<Grabber>();
 	}
 
-	protected virtual void Update()
+    // 우측 핸드 트리거 애니메이션 상태로 고정
+    public void LockTriggerAnimation()
+    {
+        // 여기서는 우측 트리거를 1로, 그립은 0으로 고정
+        animator.SetFloat("Right Trigger", 1f);
+        animator.SetFloat("Right Grip", 0f);
+    }
+
+    protected virtual void Update()
 	{
-		if (_ray.UIActive())
+        // 비상벨 트리거가 활성화된 경우, 애니메이션을 고정시킵니다.
+        if (isEmergencyBellTrigger)
+        {
+            LockTriggerAnimation();
+            return;
+        }
+
+        if (_ray.UIActive())
 		{
 			if (_grabber.isOnGrabCalled)
 			{
@@ -89,7 +107,7 @@ public class HandAnimation : MonoBehaviour
 
 			else
 			{
-				animator.SetFloat("Left Trigger", 0);
+                animator.SetFloat("Left Trigger", 0);
 				animator.SetFloat("Right Trigger", 0);
 
 				if (!isLeftGrabbed)
