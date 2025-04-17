@@ -301,7 +301,7 @@ public class EarthquakeBeginner : MonoBehaviour
     // 캐릭터 순간이동 함수
     private void TeleportCharacters()
     {
-        Vector3 newScale = Vector3.one * 0.8f; // 0.8로 스케일 설정
+        Vector3 newScale = Vector3.one * 0.5f; // 0.5로 스케일 설정
 
         // 플레이어 이동
         if (playerMovPos != null)
