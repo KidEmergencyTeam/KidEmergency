@@ -843,16 +843,16 @@ MonoBehaviour:
     textDialogue: {fileID: 1597631006}
   dialogs:
   - dialogIndex: 0
-    dialogue: "\uC544\uB2C8\uC57C \uD654\uC7AC\uAC00 \uB0AC\uC744 \uB54C\uB294 \uC5D8\uB9AC\uBCA0\uC774\uD130\uAC00
+    dialogue: "\uC544\uB2C8\uC57C \uBD88\uC774 \uB0AC\uC744 \uB54C\uB294 \uC5D8\uB9AC\uBCA0\uC774\uD130\uAC00
       \uC791\uB3D9\uC744 \uBA48\uCD9C \uC218\uB3C4 \uC788\uC5B4"
     audioClip: {fileID: 8300000, guid: 1e6ff6aa3b16e92448d2385539845f65, type: 3}
   - dialogIndex: 1
     dialogue: "\uD0D4\uB2E4\uAC00 \uC5D8\uB9AC\uBCA0\uC774\uD130\uC5D0 \uAC07\uD78C\uB2E4\uBA74
-      \uD070\uC77C\uB0A0\uAEBC\uC57C"
+      \uD070\uC77C \uB0A0 \uAC70\uC57C"
     audioClip: {fileID: 8300000, guid: 6339c6444ef22f04eb1f48f77edfe55d, type: 3}
   - dialogIndex: 2
-    dialogue: "\uC774\uB7F4\uB550 \uC548\uC804\uD558\uAC8C \uACC4\uB2E8\uC73C\uB85C
-      \uB0B4\uB824\uAC00\uC790\n"
+    dialogue: "\uC774\uB7F4 \uB550 \uC548\uC804\uD558\uAC8C \uACC4\uB2E8\uC73C\uB85C
+      \uB0B4\uB824\uAC00\uC790"
     audioClip: {fileID: 8300000, guid: 1ce2455b8b9401b45a2332d6dc033ccb, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
@@ -3197,12 +3197,13 @@ MonoBehaviour:
     dialogue: "\uB9DE\uC558\uC5B4!"
     audioClip: {fileID: 8300000, guid: f535611a2f1f38140acaea1cb0f165e5, type: 3}
   - dialogIndex: 1
-    dialogue: "\uD0D4\uB2E4\uAC00 \uC5D8\uB9AC\uBCA0\uC774\uD130\uAC00 \uD654\uC7AC\uB85C
-      \uBA48\uCD9C\uC218\uB3C4 \uC788\uAE30\uB54C\uBB38\uC5D0"
+    dialogue: "\uC5D8\uB9AC\uBCA0\uC774\uD130\uB97C \uD0D4\uB2E4\uAC00 \uD654\uC7AC\uB85C
+      \uBA48\uCD9C \uC218\uB3C4 \uC788\uAE30 \uB54C\uBB38\uC5D0"
     audioClip: {fileID: 8300000, guid: f94af2dfe58311045a990bd7dc2b5c47, type: 3}
   - dialogIndex: 2
-    dialogue: "\uD654\uC7AC\uAC00 \uB0AC\uC744 \uB54C\uB294 \uC5D8\uB9AC\uBCA0\uC774\uD130\uB294
-      \uC808\uB300\uB85C \uD0C0\uC9C0\uB9D0\uACE0 \uACC4\uB2E8\uC73C\uB85C \uB0B4\uB824\uAC00\uC57C\uD574"
+    dialogue: "\uBD88\uC774 \uB0AC\uC744 \uB54C\uB294 \uC5D8\uB9AC\uBCA0\uC774\uD130\uB294
+      \uC808\uB300 \uD0C0\uC9C0 \uB9D0\uACE0 \uACC4\uB2E8\uC73C\uB85C \uB0B4\uB824\uAC00\uC57C
+      \uD574"
     audioClip: {fileID: 8300000, guid: b30c239bc5af2e740a7d3b21e24fe6b9, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
@@ -4378,7 +4379,7 @@ Transform:
   m_GameObject: {fileID: 531954243}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 3, y: 1.25, z: 0.5}
+  m_LocalPosition: {x: 3, y: 1.7, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -7652,7 +7653,7 @@ MonoBehaviour:
   fireAlarm: {fileID: 219134546}
   exitUiObj: {fileID: 1304497675}
   isHeadDown: 0
-  headHeightThreshold: 1
+  headHeightThreshold: 0.9
   xrCamera: {fileID: 0}
   initialHeight: 0
   playerMovPos: {fileID: 0}
@@ -8072,6 +8073,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Handker
+  myCollider: {fileID: 0}
+  myGrabber: {fileID: 0}
 --- !u!136 &1020310807
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8456,9 +8459,9 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1051088106}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 600}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 400}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 644264624}
   - {fileID: 1805149219}
@@ -17049,15 +17052,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17069,7 +17072,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17106,6 +17109,10 @@ PrefabInstance:
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

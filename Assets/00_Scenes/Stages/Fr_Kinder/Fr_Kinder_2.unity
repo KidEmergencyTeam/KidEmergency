@@ -8747,7 +8747,7 @@ MonoBehaviour:
   fireAlarm: {fileID: 1397079268}
   exitUiObj: {fileID: 0}
   isHeadDown: 0
-  headHeightThreshold: 0.8
+  headHeightThreshold: 0.9
   xrCamera: {fileID: 0}
   initialHeight: 0
   playerMovPos: {fileID: 0}
@@ -9220,7 +9220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13746,6 +13746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Handker
+  myCollider: {fileID: 0}
+  myGrabber: {fileID: 0}
 --- !u!136 &1564675104
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15408,8 +15410,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1710015092}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

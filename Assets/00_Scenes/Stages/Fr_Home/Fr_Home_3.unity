@@ -4116,6 +4116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Handker
+  myCollider: {fileID: 0}
+  myGrabber: {fileID: 0}
 --- !u!136 &333212195
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11714,7 +11716,7 @@ MonoBehaviour:
   fireAlarm: {fileID: 219134546}
   exitUiObj: {fileID: 0}
   isHeadDown: 0
-  headHeightThreshold: 1
+  headHeightThreshold: 0.9
   xrCamera: {fileID: 0}
   initialHeight: 0
   playerMovPos: {fileID: 0}
@@ -20296,7 +20298,7 @@ MonoBehaviour:
     textDialogue: {fileID: 1685235031}
   dialogs:
   - dialogIndex: 0
-    dialogue: "\uC800\uAE30 \uBD10\uBD10!"
+    dialogue: "\uC800\uAE30 \uBD10!"
     audioClip: {fileID: 8300000, guid: 789c9a8cef145ba4ba559218ef1716c0, type: 3}
   isAutoStart: 1
   typingSpeed: 0.1
@@ -20603,15 +20605,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20660,6 +20662,10 @@ PrefabInstance:
     - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970452594503722716, guid: e30c9f85f1478ea449c5fd1f2f01a590, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

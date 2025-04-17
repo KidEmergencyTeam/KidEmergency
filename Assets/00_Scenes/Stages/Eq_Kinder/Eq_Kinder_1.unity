@@ -604,7 +604,7 @@ Transform:
   m_GameObject: {fileID: 88632623}
   serializedVersion: 2
   m_LocalRotation: {x: -0.27059954, y: -0.65328085, z: -0.6532809, w: 0.27059945}
-  m_LocalPosition: {x: -1.42, y: 0.6, z: -2.92}
+  m_LocalPosition: {x: -1.42, y: 0.45, z: -2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7095,13 +7095,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 719211075}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2, y: -0.55, z: 0.565}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -2.152, y: -0.55, z: 0.428}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &726579474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9011,6 +9011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Handker
+  myCollider: {fileID: 0}
+  myGrabber: {fileID: 0}
 --- !u!136 &848877911
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13828,7 +13830,7 @@ Transform:
   m_GameObject: {fileID: 1284402687}
   serializedVersion: 2
   m_LocalRotation: {x: -0.65328175, y: -0.27059758, z: -0.27059755, w: 0.6532816}
-  m_LocalPosition: {x: -1.42, y: 0.6, z: 2.92}
+  m_LocalPosition: {x: -1.42, y: 0.45, z: 2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15565,7 +15567,7 @@ MonoBehaviour:
   - dialogIndex: 0
     dialogue: "\uCC45\uC0C1 \uC704\uC5D0 \uC788\uB358 \uAC00\uBC29\uC774 \uB5A8\uC5B4\uC838
       \uC788\uC5B4 \uC800\uAC78 \uC0AC\uC6A9\uD574\uC11C \uBA38\uB9AC\uB97C \uBCF4\uD638\uD558\uB294
-      \uAC8C \uC88B\uC744 \uAEBC \uAC19\uC544"
+      \uAC8C \uC88B\uC744 \uAC70 \uAC19\uC544"
     audioClip: {fileID: 8300000, guid: 57546d1a31d75674d907145b44c3f51d, type: 3}
   - dialogIndex: 1
     dialogue: "\uC11C\uC11C\uD788 \uD754\uB4E4\uB9BC\uC774 \uC904\uC5B4\uB4E4\uACE0
@@ -17624,7 +17626,7 @@ MonoBehaviour:
     dialogue: "\uB2E4\uB4E4 \uCC45\uC0C1 \uBC11\uC73C\uB85C \uB4E4\uC5B4\uAC14\uC5B4? "
     audioClip: {fileID: 8300000, guid: 87dd7b61606eb3b4e84a75e650aa357e, type: 3}
   - dialogIndex: 1
-    dialogue: "\uD754\uB4E4\uB9AC\uB294 \uAC8C \uBA48\uCD9C\uB54C\uAE4C\uC9C0 \uCC45\uC0C1
+    dialogue: "\uD754\uB4E4\uB9AC\uB294 \uAC8C \uBA48\uCD9C \uB54C\uAE4C\uC9C0 \uCC45\uC0C1
       \uB2E4\uB9AC\uB97C \uACC4\uC18D \uC7A1\uACE0 \uC788\uC5B4!!"
     audioClip: {fileID: 8300000, guid: 532546b2cd6f03c41a17ce7fd5381dc8, type: 3}
   isAutoStart: 1
@@ -20900,8 +20902,7 @@ MonoBehaviour:
   dialogs:
   - dialogIndex: 0
     dialogue: "\uBAA8\uB450 \uBB38 \uC55E\uC5D0 \uC77C\uB82C\uB85C \uC11C\uC918!
-      \uBAA8\uB450 \uAC00\uBC29\uC73C\uB85C \uBA38\uB9AC\uB97C \uC9C0\uD0A4\uBA74\uC11C
-      \uB098\uAC00\uC790!"
+      \uAC00\uBC29\uC73C\uB85C \uBA38\uB9AC\uB97C \uC9C0\uD0A4\uBA74\uC11C \uB098\uAC00\uC790!"
     audioClip: {fileID: 8300000, guid: bcbdc3a41e6b8dd42a78b376dcfd098e, type: 3}
   isAutoStart: 1
   typingSpeed: 0.13
@@ -22666,7 +22667,7 @@ Transform:
   m_GameObject: {fileID: 2014550354}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50000083, y: -0.49999925, z: -0.49999928, w: 0.5000007}
-  m_LocalPosition: {x: -2, y: 0.6, z: -1}
+  m_LocalPosition: {x: -2, y: 0.45, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24022,7 +24023,7 @@ Transform:
   m_GameObject: {fileID: 2067065137}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50000083, y: -0.49999925, z: -0.49999928, w: 0.5000007}
-  m_LocalPosition: {x: -2, y: 0.6, z: 1}
+  m_LocalPosition: {x: -2, y: 0.45, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -25408,7 +25409,7 @@ Transform:
   m_GameObject: {fileID: 1780486226544467756}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.096, y: 0.168, z: 0.042}
+  m_LocalPosition: {x: -2.255, y: 0.168, z: 0.021}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children:

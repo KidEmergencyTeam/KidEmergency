@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.6313726, g: 0.6313726, b: 0.6313726, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0f1401d983cde1c49a7f687a57e62c5a, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -35,7 +35,7 @@ RenderSettings:
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
-  m_ReflectionIntensity: 1
+  m_ReflectionIntensity: 0.5
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
@@ -9845,29 +9845,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7062450903261405161}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1436624083019517434
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6459454555026773871}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1441116318671175598
 GameObject:
   m_ObjectHideFlags: 0
@@ -10382,21 +10359,6 @@ Transform:
   - {fileID: 1973209059048162665}
   m_Father: {fileID: 2539587391121222459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &2120455656261005455
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6459454555026773871}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.000000029802312, y: 2.3283056e-10, z: 7.1304357e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 0.0013, z: 0}
-  m_LocalScale: {x: 0.0025000002, y: 0.0025000002, z: 0.0025000002}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3341382304255898228}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2126150426540846669
 Transform:
   m_ObjectHideFlags: 0
@@ -10562,19 +10524,6 @@ Transform:
   - {fileID: 712506630847720659}
   m_Father: {fileID: 2539587391121222459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2353612418085260654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6459454555026773871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43515e551e3424e4c891a2b922c93e6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: Handker
 --- !u!4 &2359065552327005938
 Transform:
   m_ObjectHideFlags: 0
@@ -16093,7 +16042,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4100196631052561711}
-  - {fileID: 2120455656261005455}
   m_Father: {fileID: 6664401286778303835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3357652133506088194
@@ -23525,6 +23473,7 @@ MonoBehaviour:
   fireHp: 100
   originalScale: {x: 0, y: 0, z: 0}
   is30: 0
+  fire: {fileID: 1195291999}
 --- !u!4 &5293205486735166958
 Transform:
   m_ObjectHideFlags: 0
@@ -25062,24 +25011,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1852223697729789108}
   m_LocalEulerAnglesHint: {x: -45, y: 0, z: -180}
---- !u!1 &6459454555026773871
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2120455656261005455}
-  - component: {fileID: 1436624083019517434}
-  - component: {fileID: 2353612418085260654}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Head
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &6491596639998403960
 GameObject:
   m_ObjectHideFlags: 0
