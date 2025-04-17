@@ -23,6 +23,7 @@ public class RayController : MonoBehaviour
         Grabber grabber = FindObjectOfType<Grabber>();
         if (_rightRay != null && _leftRay != null)
         {
+
             if (SceneManager.GetActiveScene().name == "Eq_Home_2")
             {
                 if (UIActive() || ActionManager.Instance.currentAction == ActionType.SelectGuideLine)
@@ -43,7 +44,26 @@ public class RayController : MonoBehaviour
                     leftLine.enabled = false;
                 }
             }
+            else if (SceneManager.GetActiveScene().name == "Eq_Kinder_2" || SceneManager.GetActiveScene().name == "Fr_Home_2")
+            {
+                if (GameObject.Find("Highlight")?.activeInHierarchy == true || UIActive())
+                {
+                    _rightRay.enabled = true;
+                    _leftRay.enabled = false;
 
+                    rightLine.enabled = true;
+                    leftLine.enabled = false;
+                }
+
+                else
+                {
+                    _rightRay.enabled = true;
+                    _leftRay.enabled = false;
+
+                    rightLine.enabled = false;
+                    leftLine.enabled = false;
+                }
+            }
             else
             {
                 if (UIActive())
