@@ -142,6 +142,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 
                 //5. 책상 밑에서 대사가 완료된 후 책상 다리를 잡도록 Outline활성화 및 잡기
+                /*
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
                 //책상 다리 outline 활성화
@@ -157,7 +158,7 @@ public class EarthquakeBeginner : MonoBehaviour
                     child.gameObject.SetActive(false);
                 }
                 grabDeskLegUI.SetActive(false);
-
+                */
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
                 // 6.가방을 찾을 수 있도록 유도하는 이벤트 발생
@@ -172,12 +173,6 @@ public class EarthquakeBeginner : MonoBehaviour
 
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
-
-                // 책상 밖으로 이동을 위해 버튼 다시 활성화
-                okBtn.GetComponentInChildren<TextMeshProUGUI>().text = "책상 밖으로";
-                okBtn.gameObject.SetActive(true);
-                yield return new WaitUntil(() => isButtonClick == true);
-                okBtn.gameObject.SetActive(false);
 
                 // 플레이어와 NPC를 원래 위치로 이동
                 StartCoroutine(FadeInOut.Instance.FadeOut());
@@ -279,7 +274,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
                 firstDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
-
+                seti.SetBasic();
                 // 씬 전환 (타이틀 화면으로 이동)
                 StartCoroutine(FadeInOut.Instance.FadeOut());
                 yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
@@ -303,59 +298,69 @@ public class EarthquakeBeginner : MonoBehaviour
         DetectHeadLowering(); // 고개 숙임 감지
     }
 
-	// 캐릭터 순간이동 함수
-	private void TeleportCharacters()
-	{
-		// 플레이어 이동
-		if (playerMovPos != null)
-		{
-			player.transform.position = playerMovPos.position;
-			player.transform.rotation = playerMovPos.rotation;
-		}
+    // 캐릭터 순간이동 함수
+    private void TeleportCharacters()
+    {
+        Vector3 newScale = Vector3.one * 0.8f; // 0.8로 스케일 설정
 
-		// 세티 이동
-		if (setiMovPos != null)
-		{
-			seti.gameObject.transform.position = setiMovPos.position;
-		}
+        // 플레이어 이동
+        if (playerMovPos != null)
+        {
+            player.transform.position = playerMovPos.position;
+            player.transform.rotation = playerMovPos.rotation;
+            player.transform.localScale = newScale; // 스케일 수정
+        }
 
-		// NPC 이동
-		for (int i = 0; i < NPC.Length; i++)
-		{
-			if (npcMovPos.Length > i && npcMovPos[i] != null)
-			{
-				NPC[i].transform.position = npcMovPos[i].position;
-			}
-		}
+        // 세티 이동
+        if (setiMovPos != null)
+        {
+            seti.gameObject.transform.position = setiMovPos.position;
+        }
 
-		Debug.Log("플레이어 및 NPC 이동 완료");
-	}
+        // NPC 이동
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcMovPos.Length > i && npcMovPos[i] != null)
+            {
+                NPC[i].transform.position = npcMovPos[i].position;
+                NPC[i].transform.localScale = newScale; // 스케일 수정
+            }
+        }
 
-	// 초기 위치로 복귀하는 함수
-	public void ReturnToOriginalPosition()
-	{
-		// 플레이어 위치 복귀
-		if (playerSpawnPos != null)
-		{
-			player.transform.position = playerSpawnPos.position;
-			player.transform.rotation = playerSpawnPos.rotation;
-		}
+        Debug.Log("플레이어 및 NPC 이동 및 스케일 조정 완료");
+    }
 
-		// NPC 위치 복귀
-		for (int i = 0; i < NPC.Length; i++)
-		{
-			if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
-			{
-				NPC[i].transform.position = npcSpawnPos[i].position;
-				NPC[i].transform.rotation = npcSpawnPos[i].rotation;
-			}
-		}
 
-		Debug.Log("플레이어 및 NPC의 초기 위치로 복귀 완료");
-	}
+    // 초기 위치로 복귀하는 함수
+    public void ReturnToOriginalPosition()
+    {
+        Vector3 originalScale = Vector3.one; // 기본 스케일 (1,1,1)
 
-	// 부모 오브젝트의 모든 자식에게 Outlinable 컴포넌트 활성화
-	private void ActiveOutlineToChildren(GameObject parent)
+        // 플레이어 위치 복귀
+        if (playerSpawnPos != null)
+        {
+            player.transform.position = playerSpawnPos.position;
+            player.transform.rotation = playerSpawnPos.rotation;
+            player.transform.localScale = originalScale; // 스케일 원래대로
+        }
+
+        // NPC 위치 복귀
+        for (int i = 0; i < NPC.Length; i++)
+        {
+            if (npcSpawnPos.Length > i && npcSpawnPos[i] != null)
+            {
+                NPC[i].transform.position = npcSpawnPos[i].position;
+                NPC[i].transform.rotation = npcSpawnPos[i].rotation;
+                NPC[i].transform.localScale = originalScale; // 스케일 원래대로
+            }
+        }
+
+        Debug.Log("플레이어 및 NPC의 초기 위치 및 스케일로 복귀 완료");
+    }
+
+
+    // 부모 오브젝트의 모든 자식에게 Outlinable 컴포넌트 활성화
+    private void ActiveOutlineToChildren(GameObject parent)
 	{
 		if (parent == null) return;
 

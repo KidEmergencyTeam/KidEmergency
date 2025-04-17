@@ -361,6 +361,7 @@ public class FireBeginner : MonoBehaviour
                     seti.SetHappy();
                     firstDialog.gameObject.SetActive(true);
                     yield return new WaitUntil(() => firstDialog.isDialogsEnd == true);
+                    seti.SetBasic();
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
 					SceneManager.LoadScene(0);
