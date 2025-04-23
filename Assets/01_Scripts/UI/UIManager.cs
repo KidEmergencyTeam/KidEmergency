@@ -48,17 +48,29 @@ public class UIManager : SingletonManager<UIManager>
 
     public void OpenWarningUI()
     {
+        if (warningUI == null)
+        {
+            warningUI = FindAnyObjectByType<WarningUI>(FindObjectsInactive.Include);
+        }
         warningUI.gameObject.SetActive(true);
     }
 
     public void SetWarningUI(Sprite image, string text)
     {
+        if (warningUI == null)
+        {
+            warningUI = FindAnyObjectByType<WarningUI>(FindObjectsInactive.Include);
+        }
         warningUI.warningImage.sprite = image;
         warningUI.warningText.text = text;
     }
 
     public void CloseWarningUI()
     {
+        if (warningUI == null)
+        {
+            warningUI = FindAnyObjectByType<WarningUI>(FindObjectsInactive.Include);
+        }
         warningUI.gameObject.SetActive(false);
     }
 
@@ -81,12 +93,12 @@ public class UIManager : SingletonManager<UIManager>
         optionPanel.transform.localEulerAngles = Vector3.zero;
     }
 
-    public void WarningPosReset(int index)
-    {
-        warningUI.transform.SetParent(warningPos[index]);
-        warningUI.transform.localPosition = Vector3.zero;
-        warningUI.transform.localEulerAngles = Vector3.zero;
-    }
+    // public void WarningPosReset(int index)
+    // {
+    //     warningUI.transform.SetParent(warningPos[index]);
+    //     warningUI.transform.localPosition = Vector3.zero;
+    //     warningUI.transform.localEulerAngles = Vector3.zero;
+    // }
     
     #endregion
 }
