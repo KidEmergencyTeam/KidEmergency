@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIManager : SingletonManager<UIManager>
 {
@@ -11,10 +10,6 @@ public class UIManager : SingletonManager<UIManager>
     public Transform[] dialogPos;
     public Transform[] optionPos;
     public Transform[] warningPos;
-    protected override void Awake()
-    {
-        base.Awake();
-    }
     
     #region Option
 
