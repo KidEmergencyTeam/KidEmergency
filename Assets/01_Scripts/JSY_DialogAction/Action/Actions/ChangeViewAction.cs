@@ -37,7 +37,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                 {
                     SetNewView(newPos, newRot, PlayerRig.State.None);
                     UIManager.Instance.DialogPosReset(0);
-                    UIManager.Instance.WarningPosReset(1);
+                    // UIManager.Instance.WarningPosReset(1);
                     seti.SetRobotPos(seti.setiPos[0]);
                     
                     GameObject bag = GameObject.Find("Bags");
@@ -55,7 +55,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                     // 지진 학교 - 책상 다리로 시점 변경
                     SetNewView(newPos, newRot, PlayerRig.State.Down);
                     UIManager.Instance.DialogPosReset(1);
-                    UIManager.Instance.WarningPosReset(0);
+                    // UIManager.Instance.WarningPosReset(0);
                     seti.SetRobotPos(seti.setiPos[1]);
                     if (npcCtrl != null)
                     {
@@ -70,7 +70,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                  { 
                      SetNewView(newPos, newRot, PlayerRig.State.None); 
                      UIManager.Instance.DialogPosReset(0); 
-                     UIManager.Instance.WarningPosReset(1); 
+                     // UIManager.Instance.WarningPosReset(1); 
                      seti.SetRobotPos(seti.setiPos[0]); 
                  }
                  
@@ -79,7 +79,7 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                      // 지진 집 - 책상 다리로 시점 변경
                      SetNewView(newPos, newRot, PlayerRig.State.Down); 
                      UIManager.Instance.DialogPosReset(1); 
-                     UIManager.Instance.WarningPosReset(0); 
+                     // UIManager.Instance.WarningPosReset(0); 
                      seti.SetRobotPos(seti.setiPos[1]); 
                  }
                  
@@ -107,13 +107,13 @@ public class ChangeViewAction : MonoBehaviour, IActionEffect
                     player = GameObject.Find("VR + Player");
                     SetNewView(newPos, newRot, PlayerRig.State.None);
                     UIManager.Instance.DialogPosReset(5);
-                    UIManager.Instance.WarningPosReset(3); 
+                    // UIManager.Instance.WarningPosReset(3); 
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
                 else
                 {
                     SetNewView(newPos, newRot, PlayerRig.State.None);
-                    UIManager.Instance.WarningPosReset(3); 
+                    // UIManager.Instance.WarningPosReset(3); 
                     seti.SetRobotPos(seti.setiPos[1]);
                 }
             }
