@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class OpenCBAction : MonoBehaviour, IActionEffect
