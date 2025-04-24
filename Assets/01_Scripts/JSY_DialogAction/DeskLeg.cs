@@ -47,19 +47,41 @@ public class DeskLeg : MonoBehaviour
         
         bool isLeftGrapped = _controller[0].selectAction.action.ReadValue<float>() >= 1;
         bool isRightGrapped = _controller[1].selectAction.action.ReadValue<float>() >= 1;
-        
-        bool isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.15f &&
+
+        bool isInteractable;
+
+        if (SceneManager.GetActiveScene().name == "Eq_Kinder_1")
+        {
+            // Eq_Kinder_1 씬에서는 왼손이든 오른손이든, 양손 모두 인식
+            isInteractable =
+                (Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.15f && isLeftGrapped) ||
+                (Vector3.Distance(_legs[0].transform.position, _hand[1].transform.position) < 0.15f && isRightGrapped);
+        }
+        else
+        {
+            // 기본 로직
+            isInteractable = Vector3.Distance(_legs[0].transform.position, _hand[0].transform.position) < 0.15f &&
                              isLeftGrapped &&
                              Vector3.Distance(_legs[1].transform.position, _hand[1].transform.position) < 0.15f &&
                              isRightGrapped;
-        
+        }
+
         if (isInteractable)
-        { 
-            if(UIManager.Instance != null)
+        {
+            if (SceneManager.GetActiveScene().name == "Eq_Kinder_1")
+            {
+                GameObject grabUI = GameObject.Find("GrabDeskLegUI");
+                if (grabUI != null && grabUI.activeSelf)
+                {
+                    grabUI.SetActive(false);
+                }
+            }
+
+            if (UIManager.Instance != null)
             {
                 UIManager.Instance.CloseWarningUI();
-                            }
-            _durationTime += Time.deltaTime;
+            }
+                _durationTime += Time.deltaTime;
             if (_durationTime >= _endTime)
             { 
                 isHoldComplete = true;
@@ -69,12 +91,23 @@ public class DeskLeg : MonoBehaviour
         else
         {
             _durationTime = 0f;
-            if(UIManager.Instance != null)
+
+            if (SceneManager.GetActiveScene().name == "Eq_Kinder_1")
+            {
+                GameObject grabUI = GameObject.Find("GrabDeskLegUI");
+                if (grabUI != null && !grabUI.activeInHierarchy)
+                {
+                    grabUI.SetActive(true);
+                }
+            }
+
+            if (UIManager.Instance != null)
             {
                 UIManager.Instance.SetWarningUI(_warningSprite, _warningText);
                 UIManager.Instance.OpenWarningUI();
             }
-            isHoldComplete = false;
+            else 
+                isHoldComplete = false;
         }
     }
     
@@ -87,7 +120,7 @@ public class DeskLeg : MonoBehaviour
         }
         
         else return false;
-    }
+    } 
 
     public void RemoveOutline()
     {
