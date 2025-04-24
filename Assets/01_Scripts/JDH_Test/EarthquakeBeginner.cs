@@ -1,6 +1,7 @@
 using EPOOutline;
 using System.Collections;
 using TMPro;
+using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -80,8 +81,7 @@ public class EarthquakeBeginner : MonoBehaviour
     public bool doGrapDeskLeg;  
     public GameObject deskLegObj;  //책상 다리 잡기 오브젝트
     public GameObject bagObj;  //가방 오브젝트
-    public GameObject leftDeskLeg;
-    public GameObject rightDeskLeg;
+    public GameObject grapDeskCheck;
 
     [Header("대화 시스템")]
     [SerializeField] private BeginnerDialogSystem firstDialog;
@@ -145,11 +145,13 @@ public class EarthquakeBeginner : MonoBehaviour
                 
                 thirdDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => thirdDialog.isDialogsEnd == true);
+                doGrapDeskLeg = true;
                 //책상 다리 outline 활성화
-                grabDeskLegUI.SetActive(true);
+                //grabDeskLegUI.SetActive(true);
                 deskLegObj.GetComponent<DeskLeg>().enabled = true;
                 //책상 다리를 잡을때까지 대기 ->5초
                 yield return new WaitUntil(() => deskLegObj.GetComponent<DeskLeg>().isHoldComplete == true);
+                doGrapDeskLeg = false;
                 deskLegObj.GetComponent<DeskLeg>().enabled = false;
                 
                 // DeskLegObj의 모든 자식 게임 오브젝트 비활성화
@@ -157,7 +159,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 {
                     child.gameObject.SetActive(false);
                 }
-                grabDeskLegUI.SetActive(false);
+                //grabDeskLegUI.SetActive(false);
                 
                 forthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => forthDialog.isDialogsEnd == true);
@@ -295,7 +297,17 @@ public class EarthquakeBeginner : MonoBehaviour
         else
             warningUi.SetActive(false);
 
-        DetectHeadLowering(); // 고개 숙임 감지
+        //잡지 않고 있을 때 경고창 활성화
+        if (doGrapDeskLeg == true && grapDeskCheck.GetComponent<DeskLeg>().isStillGrap == false)
+        {
+            grabDeskLegUI.SetActive(true);
+        }
+        else if(doGrapDeskLeg == true && grapDeskCheck.GetComponent<DeskLeg>().isStillGrap == true)
+        {
+            grabDeskLegUI.SetActive(false);
+        }
+
+            DetectHeadLowering(); // 고개 숙임 감지
     }
 
     // 캐릭터 순간이동 함수

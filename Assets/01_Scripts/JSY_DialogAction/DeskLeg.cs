@@ -19,6 +19,7 @@ public class DeskLeg : MonoBehaviour
     
     private float _durationTime = 0f; // 지속 시간
     private float _endTime = 5f; // 종료 시간
+    public bool isStillGrap = false ;
     public bool isHoldComplete = false;
     
     private void Start()
@@ -70,11 +71,7 @@ public class DeskLeg : MonoBehaviour
         {
             if (SceneManager.GetActiveScene().name == "Eq_Kinder_1")
             {
-                GameObject grabUI = GameObject.Find("GrabDeskLegUI");
-                if (grabUI != null && grabUI.activeSelf)
-                {
-                    grabUI.SetActive(false);
-                }
+                isStillGrap = true; //해당 변수의 상태에 따라 Eq_Kinder_1 에서 경고 UI의 활성화 여부가 달라진다.
             }
 
             if (UIManager.Instance != null)
@@ -94,11 +91,7 @@ public class DeskLeg : MonoBehaviour
 
             if (SceneManager.GetActiveScene().name == "Eq_Kinder_1")
             {
-                GameObject grabUI = GameObject.Find("GrabDeskLegUI");
-                if (grabUI != null && !grabUI.activeInHierarchy)
-                {
-                    grabUI.SetActive(true);
-                }
+                isStillGrap = false; 
             }
 
             if (UIManager.Instance != null)
