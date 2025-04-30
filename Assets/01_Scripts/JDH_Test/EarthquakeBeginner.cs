@@ -40,6 +40,7 @@ public class EarthquakeBeginner : MonoBehaviour
     [SerializeField] private GameObject backpack;
     [SerializeField] private GameObject emergencyExit; // 비상 출구 (Outlinable 컴포넌트 추가 필요)
     [SerializeField] private GameObject fireAlarm;
+    [SerializeField] private GameObject emergencyDisaterMessage;
     [SerializeField] private GameObject earthquakeSound;
     [SerializeField] private ExitLine advEmergencyExitLine;
     public EarthquakeSystem earthquake;
@@ -119,6 +120,7 @@ public class EarthquakeBeginner : MonoBehaviour
                 seti.SetLookingFor();
                 earthquake.StartEarthquake();
                 fireAlarm.gameObject.SetActive(true);
+                emergencyDisaterMessage.SetActive(true);
                 earthquakeSound.gameObject.SetActive(true);
                 // 3. 두 번째 대화 시작
                 secondDialog.gameObject.SetActive(true);
