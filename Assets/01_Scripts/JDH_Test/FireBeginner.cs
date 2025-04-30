@@ -115,10 +115,10 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                     // 3. OK 버튼 활성화 및 버튼 클릭 대기
-                    okBtn.gameObject.SetActive(true);
-                    Debug.Log("OK 버튼 활성화");
-                    okBtn.GetComponent<Button>().onClick.AddListener(() => OkBtnClick());
-                    yield return new WaitUntil(() => isButtonClick == true);
+                    //okBtn.gameObject.SetActive(true);
+                    //Debug.Log("OK 버튼 활성화");
+                    //okBtn.GetComponent<Button>().onClick.AddListener(() => OkBtnClick());
+                    //yield return new WaitUntil(() => isButtonClick == true);
                     seti.SetBasic();
                     // 버튼 클릭 후 예제 UI 이미지 변경 및 첫 번째 단계 준비 완료
                     LeftImg.sprite = leftChangeImg;
