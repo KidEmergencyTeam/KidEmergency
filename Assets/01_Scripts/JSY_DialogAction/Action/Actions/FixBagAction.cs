@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using XRController = UnityEngine.XR.Interaction.Toolkit.XRController;
 
 public class FixBagAction : MonoBehaviour, IActionEffect
 {

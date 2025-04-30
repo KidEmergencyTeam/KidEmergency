@@ -26,14 +26,14 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
                 {
                     UIManager.Instance.DialogPosReset(2);
                     UIManager.Instance.OptionPosReset(1);
-                    UIManager.Instance.WarningPosReset(2);
+                    // UIManager.Instance.WarningPosReset(2);
                 }
 
                 if (ActionManager.Instance.beforeDialog.nextScene == "Eq_School_3")
                 {
                     UIManager.Instance.DialogPosReset(3);
                     UIManager.Instance.OptionPosReset(2);
-                    UIManager.Instance.WarningPosReset(3);
+                    // UIManager.Instance.WarningPosReset(3);
                 }
 
                 if (ActionManager.Instance.beforeDialog.nextScene == "Eq_School_4")
@@ -45,7 +45,7 @@ public class ChangeSceneAction : MonoBehaviour, IActionEffect
                 if (ActionManager.Instance.beforeDialog.nextScene == "Eq_Home_2")
                 {
                     UIManager.Instance.DialogPosReset(4);
-                    UIManager.Instance.WarningPosReset(2);
+                    // UIManager.Instance.WarningPosReset(2);
                     UIManager.Instance.OptionPosReset(1);
                 }
 

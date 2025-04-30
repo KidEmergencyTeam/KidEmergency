@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Dialog", menuName = "DialogSystem/Dialog")]
 public class DialogData : ScriptableObject

@@ -18,7 +18,6 @@ public class Bag : Grabbable
             SceneManager.GetActiveScene().name == "Eq_Home_1")
         {
             isGrabbable = false;
-            currentGrabber.currentGrabbedObject = null;
         }
         
         else if (SceneManager.GetActiveScene().name == "Eq_School_2" || SceneManager.GetActiveScene().name == "Eq_School_3" || 
@@ -36,27 +35,7 @@ public class Bag : Grabbable
     { 
         StartCoroutine(ProtectHead());
     }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (SceneManager.GetActiveScene().name == "Eq_School_1"
-            || SceneManager.GetActiveScene().name == "Eq_Home_1")
-        {
-            if (currentGrabber.currentGrabbedObject == this)
-            {
-                isGrabbable = false;
-                
-                if (_handObject != null)
-                {
-                    this.transform.SetParent(_handObject);
-                    this.transform.localPosition = new Vector3(0.00022f, 0.00106f, 0.00014f);
-                    this.transform.localRotation = Quaternion.Euler(-90, -90, -90);
-                    this.transform.localScale = new Vector3(0.003f, 0.003f, 0.003f);
-                }
-            }
-        }
-    }
+    
 
     private IEnumerator ProtectHead()
     {
