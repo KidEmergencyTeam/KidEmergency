@@ -220,13 +220,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9740027}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.9503366, y: 0.011330422, z: 0.029842667, w: 0.30958277}
+  m_LocalPosition: {x: 0.00002, y: 0.00124, z: 0.00023}
+  m_LocalScale: {x: 0.010000005, y: 0.01, z: 0.009999999}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 274952879}
-  m_Father: {fileID: 898791197}
+  m_Father: {fileID: 109705857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9740029
 MonoBehaviour:
@@ -1009,6 +1009,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 965ee566772ef4540a0ee0509d3b01d4, type: 3}
+--- !u!4 &109705857 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1874508205186464772, guid: d38382ce58471054eba58656e6bf2519, type: 3}
+  m_PrefabInstance: {fileID: 1229895149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &112528312
 GameObject:
   m_ObjectHideFlags: 0
@@ -10160,7 +10165,6 @@ Transform:
   - {fileID: 250696998}
   - {fileID: 1671955890}
   - {fileID: 769108064}
-  - {fileID: 9740028}
   m_Father: {fileID: 1296184824}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &898791198
@@ -14143,6 +14147,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5755047616316756115, guid: d38382ce58471054eba58656e6bf2519, type: 3}
       insertIndex: -1
       addedObject: {fileID: 580526637}
+    - targetCorrespondingSourceObject: {fileID: 1874508205186464772, guid: d38382ce58471054eba58656e6bf2519, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9740028}
     - targetCorrespondingSourceObject: {fileID: 1685194540410217803, guid: d38382ce58471054eba58656e6bf2519, type: 3}
       insertIndex: -1
       addedObject: {fileID: 333212193}
@@ -14255,6 +14262,7 @@ MonoBehaviour:
   animator: {fileID: 1229895162}
   isLeftGrabbed: 0
   isRightGrabbed: 0
+  isEmergencyBellTrigger: 0
 --- !u!1 &1243285565
 GameObject:
   m_ObjectHideFlags: 0
