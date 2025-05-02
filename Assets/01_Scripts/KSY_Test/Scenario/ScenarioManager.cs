@@ -469,6 +469,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         TypingEffect.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> ScenarioManager 제거
         disableSingleton = true;
+        // 로비 씬 이동 이후 -> SoundManager 제거
+        Destroy(SoundManager.Instance.gameObject);
     }
     #endregion
 
