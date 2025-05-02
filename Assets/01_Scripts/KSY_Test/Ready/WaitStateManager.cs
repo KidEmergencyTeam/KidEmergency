@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,8 +8,11 @@ using UnityEngine.UI;
 // 준비 처리
 public class WaitStateManager : MonoBehaviour
 {
-    [Header("대기 상태 UI")]
-    public Image readyIndicatorImage;
+    [Header("대기 상태 UI -> O")]
+    public Image image;
+
+    [Header("대기 상태 UI -> V")]
+    public Image readyForFinish;
 
     [Header("다음 씬 이름")]
     public string SceneName;
@@ -61,10 +65,20 @@ public class WaitStateManager : MonoBehaviour
         {
             Debug.Log("모든 플레이어 준비 완료!");
 
-            // 준비 완료 이미지 활성화 
-            if (readyIndicatorImage != null)
+            // 준비 완료 -> O 이미지 녹색으로 색상 변경
+            if (image != null)
             {
-                readyIndicatorImage.gameObject.SetActive(true);
+                image.color = new Color32(0, 255, 0, 255);
+            }
+            else
+            {
+                Debug.LogWarning("image가 할당되어 있지 않습니다.");
+            }
+
+            // 준비 완료 -> V 이미지 활성화
+            if (readyForFinish != null)
+            {
+                readyForFinish.gameObject.SetActive(true);
             }
             else
             {
