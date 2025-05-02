@@ -209,6 +209,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return PlayAndWait(6);
         currentStep = 12;
     }
+
     IEnumerator Step11() { yield return null; }
 
     IEnumerator Step12() { yield return PlayAndWait(7); }
