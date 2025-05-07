@@ -445,9 +445,11 @@ public class FireBeginner : MonoBehaviour
             seti.transform.rotation = setiMovPos.rotation;
             Vector3 dialogPosition = setiMovPos.position;
             dialogPosition.y += 0.1f; // y 좌표를 플레이어 y + 0.1로 지정
-
-            dialogObj.transform.position = dialogPosition;
-            dialogObj.transform.rotation = setiMovPos.rotation;
+            if(isFireAdvanced)
+            {
+                dialogObj.transform.position = dialogPosition;
+                dialogObj.transform.rotation = setiMovPos.rotation;
+            }
         }
 
 		// NPC 이동
