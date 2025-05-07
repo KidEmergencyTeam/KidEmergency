@@ -53,7 +53,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             if (y <= -0.1f)
             {
                 // 경고창 비활성화
-                UIManager.Instance.CloseWarningUI();
+                //UIManager.Instance.CloseWarningUI();
 
                 // 콜백 실행 -> 플레이어 숙이기 완료
                 HeightReached?.Invoke();
@@ -61,7 +61,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             else
             {
                 // 경고창 활성화
-                UIManager.Instance.OpenWarningUI();
+                //UIManager.Instance.OpenWarningUI();
             }
         }
     }
