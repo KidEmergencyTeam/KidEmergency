@@ -16,9 +16,10 @@ public class WarningPopup : MonoBehaviour
         {
             leftGrabber.OnGrabEvent += HandkerGrab;
         }
-
         else
+        {
             Debug.LogError("[WarningPopup] leftGrabber -> null");
+        }
 
         // FireEvacuationMask 이벤트 등록
         if (fireEvacuationMask != null)
@@ -27,7 +28,9 @@ public class WarningPopup : MonoBehaviour
             fireEvacuationMask.OnHandkerchiefExit += HandkerExit;
         }
         else
+        {
             Debug.LogError("[WarningPopup] fireEvacuationMask -> null");
+        }
     }
 
     private void OnDisable()
