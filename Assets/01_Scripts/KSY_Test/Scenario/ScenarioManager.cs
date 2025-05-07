@@ -260,7 +260,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         // 연기 파티클 실행
         yield return StartCoroutine(PlaySmokeParticles());
-        // npc 허리 숙이기
+        // npc 입막기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
         // DialogUI 활성화
         yield return StartCoroutine(DialogUIActivation());
@@ -325,6 +325,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 사용자 낮은 자세로 숙이기
     IEnumerator Step22()
     {
+        // npc 허리 숙이기
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
+
         // 플레이어 높이 체크
         yield return StartCoroutine(VRCamera());
     }
