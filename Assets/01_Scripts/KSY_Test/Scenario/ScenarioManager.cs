@@ -432,10 +432,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step36()
     {
         // 손수건 체크 제거
-        MaskWarningUIStateManager.Instance.disableSingleton = true;
+        WarningPopupStateManager.Instance.disableSingleton = true;
 
         // 경고창 제거
-        MaskWarningUIStateManager.Instance.disableSingleton = true;
+        WarningPopupStateManager.Instance.disableSingleton = true;
 
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
