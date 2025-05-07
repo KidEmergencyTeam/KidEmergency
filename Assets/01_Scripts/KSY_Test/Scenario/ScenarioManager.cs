@@ -280,17 +280,16 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 코루틴 처리 안한 이유: 중단 없이 전 스텝에 출력하기 위해
     IEnumerator Step18()
     {
-        // 화재 경보벨 누름
-        // 버튼 클릭할 때까지 대기
+        // 현재 화재 경보벨 누름 상태 
         bool buttonClicked = false;
 
-        // 콜백 등록 
+        // 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
         Action callback = () => buttonClicked = true;
 
-        // 버튼 클릭 이벤트에 콜백 등록 -> 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
+        // 콜백 등록
         EmergencyBellButton.OnEmergencyBellClicked += callback;
 
-        // buttonClicked = true가 될 때까지 대기
+        // buttonClicked = true가 될 때까지 대기 -> 버튼 클릭할 때까지 대기
         yield return new WaitUntil(() => buttonClicked);
 
         // 콜백 제거
@@ -328,8 +327,22 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
 
-        // 플레이어 높이 체크
-        yield return StartCoroutine(VRCamera());
+        // 현재 플레이어 숙이기 상태
+        bool heightReachedFlag = false;
+
+        // 일정 범위 높이 도달 시 콜백 실행 -> heightReachedFlag = true 처리
+        Action callback = () => heightReachedFlag = true;
+
+        // 콜백 등록
+        CameraHeightChecker.Instance.HeightReached += callback;
+
+        // heightReachedFlag = true가 될 때까지 대기 -> 플레이어가 허리를 숙일 때까지 대기
+        yield return new WaitUntil(() => heightReachedFlag);
+
+        // 콜백 제거
+        CameraHeightChecker.Instance.HeightReached -= callback;
+
+        Debug.Log("플레이어 숙이기 완료");
     }
 
     IEnumerator Step23() { yield return PlayAndWait(15); }
