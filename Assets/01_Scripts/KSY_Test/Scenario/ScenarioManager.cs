@@ -40,6 +40,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     [Header("씬 이름")]
     public List<string> sceneNames;
 
+    [Header("스텝22 진입 여부")]
+    public bool step22_Flag = false;
+
     // 생성된 모든 연기 파티클 저장
     private List<ParticleSystem> activeSmokeParticles = new List<ParticleSystem>();
 
@@ -161,8 +164,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
     IEnumerator Step1() 
     {
-        // DialogUI 활성화
-        yield return StartCoroutine(DialogUIActivation());
         yield return PlayAndWait(0); 
     }
 
@@ -209,6 +210,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return PlayAndWait(6);
         currentStep = 12;
     }
+
     IEnumerator Step11() { yield return null; }
 
     IEnumerator Step12() { yield return PlayAndWait(7); }
@@ -241,6 +243,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // UI 이동
         yield return StartCoroutine(UIPosition(SceneName.None));
 
+        // 대사 초기화 
+        yield return StartCoroutine(DialogTextReset());
+
         // 페이드 인 효과 실행
         yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
     }
@@ -248,8 +253,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step15 -> 페이드 아웃 효과 필수
     IEnumerator Step15()
     {
-        // 대사 초기화 
-        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(9);
         yield return StartCoroutine(ChangeScene(0));
     }
@@ -259,10 +262,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         // 연기 파티클 실행
         yield return StartCoroutine(PlaySmokeParticles());
-        // npc 허리 숙이기
+
+        // npc 입막기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Hold));
-        // DialogUI 활성화
-        yield return StartCoroutine(DialogUIActivation());
+
         yield return PlayAndWait(10);
     }
 
@@ -279,17 +282,16 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 코루틴 처리 안한 이유: 중단 없이 전 스텝에 출력하기 위해
     IEnumerator Step18()
     {
-        // 화재 경보벨 누름
-        // 버튼 클릭할 때까지 대기
+        // 현재 화재 경보벨 누름 상태 
         bool buttonClicked = false;
 
-        // 콜백 등록 
+        // 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
         Action callback = () => buttonClicked = true;
 
-        // 버튼 클릭 이벤트에 콜백 등록 -> 버튼 클릭 시 이벤트 발생하면 콜백 실행 -> buttonClicked = true 처리
+        // 콜백 등록
         EmergencyBellButton.OnEmergencyBellClicked += callback;
 
-        // buttonClicked = true가 될 때까지 대기
+        // buttonClicked = true가 될 때까지 대기 -> 버튼 클릭할 때까지 대기
         yield return new WaitUntil(() => buttonClicked);
 
         // 콜백 제거
@@ -324,8 +326,28 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // 사용자 낮은 자세로 숙이기
     IEnumerator Step22()
     {
-        // 플레이어 높이 체크
-        yield return StartCoroutine(VRCamera());
+        // npc 허리 숙이기
+        yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
+
+        // 스텝22 진입
+        step22_Flag = true;
+
+        // 현재 플레이어 숙이기 상태
+        bool bowFlag = false;
+
+        // 일정 범위 높이 도달 시 콜백 실행 -> heightReachedFlag = true 처리
+        Action callback = () => bowFlag = true;
+
+        // 콜백 등록
+        CameraHeightChecker.Instance.HeightReached += callback;
+
+        // heightReachedFlag = true가 될 때까지 대기 -> 플레이어가 허리를 숙일 때까지 대기
+        yield return new WaitUntil(() => bowFlag);
+
+        // 콜백 제거
+        CameraHeightChecker.Instance.HeightReached -= callback;
+
+        Debug.Log("플레이어 숙이기 완료");
     }
 
     IEnumerator Step23() { yield return PlayAndWait(15); }
@@ -378,10 +400,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return StartCoroutine(PlaySmokeParticles());
         // npc 허리 숙이기
         yield return StartCoroutine(SetAllNPCsState(NpcRig.State.Bow));
-        // DialogUI 활성화
-        yield return StartCoroutine(DialogUIActivation());
-        // 대사 초기화 
-        yield return StartCoroutine(DialogTextReset());
+
         yield return PlayAndWait(19);
     }
 
@@ -423,6 +442,12 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(23);
 
+        // 플레이어 높이 체크 제거
+        CameraHeightChecker.Instance.disableSingleton = true;
+
+        // 활성화된 경고창 끄기
+        UIManager.Instance.CloseWarningUI();
+
         // 운동장 씬 
         yield return StartCoroutine(ChangeScene(2));
     }
@@ -431,10 +456,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step36()
     {
         // 손수건 체크 제거
-        MaskWarningUIStateManager.Instance.disableSingleton = true;
+        WarningPopupStateManager.Instance.disableSingleton = true;
 
         // 경고창 제거
-        MaskWarningUIStateManager.Instance.disableSingleton = true;
+        WarningPopupStateManager.Instance.disableSingleton = true;
 
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
@@ -442,11 +467,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         // OptionChoice 제거
         OptionChoice.Instance.disableSingleton = true;
 
-        // DialogUI 활성화
-        yield return StartCoroutine(DialogUIActivation());
-
-        // 대사 초기화 
-        yield return StartCoroutine(DialogTextReset());
         yield return PlayAndWait(24);
     }
 
@@ -468,6 +488,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         TypingEffect.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> ScenarioManager 제거
         disableSingleton = true;
+        // 로비 씬 이동 이후 -> SoundManager 제거
+        Destroy(SoundManager.Instance.gameObject);
     }
     #endregion
 
@@ -487,6 +509,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
                 // 로딩 대기
                 yield return null;
             }
+
+            // 대사 초기화 
+            yield return StartCoroutine(DialogTextReset());
 
             // 씬 로드 후 페이드 인 효과 실행
             yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
@@ -641,28 +666,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         yield return new WaitForSeconds(delay);
     }
 
-    // 플레이어 높낮이 체크
-    public IEnumerator VRCamera()
-    {
-        // 1."MainCamera" 태그가 붙은 오브젝트를 찾습니다.
-        GameObject vrCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-
-        if (vrCameraObj == null)
-        {
-            Debug.LogError("MainCamera 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // 높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달할 때까지 대기
-        yield return new WaitUntil(() =>
-
-    vrCameraObj.transform.localPosition.y >= -0.3f &&
-
-    vrCameraObj.transform.localPosition.y <= -0.2f);
-
-        Debug.Log("높이가  -0.3 이상이면서 -0.2 이하인 범위에 도달하여 다음 스텝으로 진행합니다.");
-    }
-
     // 세티 표정 초기화
     private IEnumerator ApplySelectionAndDelayedReset(float delay, bool isCorrect)
     {
@@ -703,22 +706,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 딜레이 적용
         yield return new WaitForSeconds(delay);
-    }
-
-    // DialogUI 활성화
-    private IEnumerator DialogUIActivation()
-    {
-        // "DialogUI" 태그가 붙은 오브젝트 찾기
-        DialogUI dialogUI = GameObject.FindGameObjectWithTag("DialogUI")?.GetComponent<DialogUI>();
-        if (dialogUI == null)
-        {
-            Debug.LogError("DialogUI 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-        else
-        {
-            dialogUI.dialogPanel.SetActive(true);
-        }
     }
 
     // DialogText 초기화
