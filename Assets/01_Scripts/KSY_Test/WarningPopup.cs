@@ -9,6 +9,17 @@ public class WarningPopup : MonoBehaviour
     [Header("Grabber")]
     public Grabber leftGrabber;
 
+    [Header("텍스트·이미지")]
+    public WarningUIController warningUIController;
+
+    [Header("마스크 경고창 이미지")]
+    public Sprite warningImage;
+
+    [Header("마스크 경고창 메시지")]
+    [TextArea]
+    public string heightWarningMessage;
+
+
     private void OnEnable()
     {
         // Grabber 이벤트 등록
@@ -31,6 +42,8 @@ public class WarningPopup : MonoBehaviour
         {
             Debug.LogError("[WarningPopup] fireEvacuationMask -> null");
         }
+
+        CacheWarningUIController();
     }
 
     private void OnDisable()
@@ -90,6 +103,9 @@ public class WarningPopup : MonoBehaviour
     // 손수건과 충돌 종료할 때 실행
     private void HandkerExit()
     {
+        // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
+        warningUIController.SetWarning(warningImage, heightWarningMessage);
+
         // 경고창 활성화
         UIManager.Instance.OpenWarningUI();
 
@@ -102,9 +118,22 @@ public class WarningPopup : MonoBehaviour
     // 손수건을 잡을 때 실행
     private void HandkerGrab()
     {
+        // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
+        warningUIController.SetWarning(warningImage, heightWarningMessage);
+
         // 경고창 활성화
         UIManager.Instance.OpenWarningUI();
 
         Debug.Log("손수건을 잡을 때 실행");
+    }
+
+    // WarningUIController 스크립트 찾기
+    private void CacheWarningUIController()
+    {
+        warningUIController = FindObjectOfType<WarningUIController>();
+        if (warningUIController == null)
+        {
+            Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
+        }
     }
 }
