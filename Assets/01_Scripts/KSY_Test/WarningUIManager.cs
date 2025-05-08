@@ -2,10 +2,13 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 
-public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
+public class WarningUIManager : DisableableSingleton<WarningUIManager>
 {
     [Header("FireEvacuationMask")]
     public FireEvacuationMask fireEvacuationMask;
+
+    [Header("Grabber")]
+    public Grabber grabber;
 
     [Header("MainCamera 오브젝트")]
     public GameObject vrCameraObj;
@@ -67,6 +70,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             Debug.LogError("[WarningPopup] fireEvacuationMask -> null");
         }
 
+        // Grabber 스크립트 찾기
+        Grabber();
+
         // 메인 카메라 찾기
         FindCamera();
 
@@ -81,6 +87,16 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         if (fireEvacuationMask == null)
         {
             Debug.LogError("FireEvacuationMask.cs를 찾을 수 없습니다.");
+        }
+    }
+
+    // Grabber 스크립트 찾기
+    private void Grabber()
+    {
+        grabber = FindObjectOfType<Grabber>();
+        if (grabber == null)
+        {
+            Debug.LogError("Grabber.cs를 찾을 수 없습니다.");
         }
     }
 
@@ -104,8 +120,30 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         }
     }
 
-    // 플레이어 높이 체크
-    private void HeightCheck()
+    // 스텝 21까지 적용되는 경고창 실행 흐름
+    private void BasicWarningUI()
+    {
+        // step22_Flag -> true면 중단하고 false면 정상 진행
+        if (ScenarioManager.Instance.step22_Flag)
+        {
+            return;
+        }
+
+        // 1) 손수건 OK(true) → 경고창 끄기
+        if (grabber.currentGrabbedObject != null && isHandkerOK)
+        {
+            UIManager.Instance.CloseWarningUI();
+        }
+        // 2) 손수건 NOT OK(false) → 손수건 경고
+        else if(grabber.currentGrabbedObject != null && !isHandkerOK)
+        {
+            warningUIController.SetWarning(warningImageC, heightWarningMessageC);
+            UIManager.Instance.OpenWarningUI();
+        }
+    }
+
+    // 스텝 22부터 적용되는 경고창 실행 흐름
+    private void Step22WarningUI()
     {
         // Y값 읽기
         float y = vrCameraObj.transform.localPosition.y;
@@ -119,7 +157,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         // 플레이어 숙였는지를 판단하는 기준값
         const float bendThreshold = -0.1f;    
 
-        // 머리 숙이기 완료 콜백 -> 다음 단계 진행 가능
+        // 머리 숙이기 완료 콜백 -> 다음 단계 진행 가능, 추후에 한 번만 호출하고 중단하도록 구현
         if (y <= bendThreshold)
         {
             HeightReached?.Invoke();
@@ -169,7 +207,10 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             return;
         }
 
-        // 플레이어 높이 체크
-        HeightCheck();
+        // 스텝 21까지 적용되는 경고창 실행 흐름
+        BasicWarningUI();
+
+        // 스텝 22부터 적용되는 경고창 실행 흐름
+        Step22WarningUI();
     }
 }
