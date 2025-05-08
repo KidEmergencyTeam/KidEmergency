@@ -60,13 +60,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         }
     }
 
-    void Update()
+    // 플레이어 높이 체크
+    private void HeightCheck()
     {
-        if (vrCameraObj == null)
-        {
-            return;
-        }
-
         // 로컬 포지션 Y값 읽기
         float y = vrCameraObj.transform.localPosition.y;
 
@@ -76,8 +72,8 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             // 변경: -0.1 이하면 실행
             if (y <= -0.1f)
             {
-                // 경고창 활성화
-                //UIManager.Instance.OpenWarningUI();
+                // 경고창 비활성화
+                //UIManager.Instance.CloseWarningUI();
 
                 // 콜백 실행 -> 플레이어 숙이기 완료
                 HeightReached?.Invoke();
@@ -87,9 +83,20 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
                 // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
                 warningUIController.SetWarning(warningImage, heightWarningMessage);
 
-                // 경고창 비활성화
-                //UIManager.Instance.CloseWarningUI();
+                // 경고창 활성화
+                //UIManager.Instance.OpenWarningUI();
             }
         }
+    }
+
+    void Update()
+    {
+        if (vrCameraObj == null)
+        {
+            return;
+        }
+
+        // 플레이어 높이 체크
+        HeightCheck();
     }
 }
