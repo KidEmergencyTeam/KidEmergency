@@ -4,8 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
 {
-    // MainCamera 오브젝트 참조
+    [Header("MainCamera 오브젝트")]
     public GameObject vrCameraObj;
+
+    [Header("텍스트·이미지")]
+    public WarningUIController warningUIController;
+
+    [Header("숙이기 경고창 이미지")]
+    public Sprite warningImage;
+
+    [Header("숙이기 경고창 메시지")]
+    [TextArea]
+    public string heightWarningMessage;
 
     // 카메라 높이 도달 시 호출할 이벤트
     public event Action HeightReached;
@@ -23,7 +33,11 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
     // 씬이 로드될 때마다 실행
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // 메인 카메라 찾기
         FindCamera();
+
+        // WarningUIController 스크립트 찾기
+        CacheWarningUIController();
     }
 
     // MainCamera 태그로 찾기
@@ -36,13 +50,19 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         }
     }
 
-    void Update()
+    // WarningUIController 스크립트 찾기
+    private void CacheWarningUIController()
     {
-        if (vrCameraObj == null)
+        warningUIController = FindObjectOfType<WarningUIController>();
+        if (warningUIController == null)
         {
-            return;
+            Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
         }
+    }
 
+    // 플레이어 높이 체크
+    private void HeightCheck()
+    {
         // 로컬 포지션 Y값 읽기
         float y = vrCameraObj.transform.localPosition.y;
 
@@ -60,9 +80,23 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             }
             else
             {
+                // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
+                //warningUIController.SetWarning(warningImage, heightWarningMessage);
+
                 // 경고창 활성화
                 //UIManager.Instance.OpenWarningUI();
             }
         }
+    }
+
+    void Update()
+    {
+        if (vrCameraObj == null)
+        {
+            return;
+        }
+
+        // 플레이어 높이 체크
+        HeightCheck();
     }
 }

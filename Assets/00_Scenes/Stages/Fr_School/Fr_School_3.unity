@@ -12651,6 +12651,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireEvacuationMask: {fileID: 1128964250}
   leftGrabber: {fileID: 878338372}
+  warningUIController: {fileID: 0}
+  warningImage: {fileID: 21300000, guid: 0f0e31cab8e4c6b479625c684a5c3a47, type: 3}
+  heightWarningMessage: "\uC190\uC218\uAC74\uC73C\uB85C \uC785\uC744 \uBCF4\uD638\uD558\uC138\uC694!"
 --- !u!114 &1128964250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13468,6 +13471,51 @@ Transform:
   - {fileID: 1554985220}
   m_Father: {fileID: 166576195}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1203897981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1203897983}
+  - component: {fileID: 1203897982}
+  m_Layer: 0
+  m_Name: WarningUIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1203897982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203897981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ee0ae09472112f42b65d188258e6288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  warningUI: {fileID: 1264013182}
+--- !u!4 &1203897983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203897981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1212761594
 GameObject:
   m_ObjectHideFlags: 0
@@ -14110,8 +14158,8 @@ GameObject:
   - component: {fileID: 1264013185}
   - component: {fileID: 1264013184}
   - component: {fileID: 1264013183}
-  - component: {fileID: 1264013182}
   - component: {fileID: 1264013181}
+  - component: {fileID: 1264013182}
   m_Layer: 6
   m_Name: WarningUI
   m_TagString: Untagged
@@ -24566,6 +24614,7 @@ SceneRoots:
   - {fileID: 1788436111}
   - {fileID: 1420545013}
   - {fileID: 1488793491}
+  - {fileID: 1203897983}
   - {fileID: 1409398074}
   - {fileID: 1286253800}
   - {fileID: 17360865}
