@@ -92,7 +92,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
                 // 경고창 비활성화 -> WarningPopup.cs Inspector에서 설정한 이미지·텍스트로 변경
                 warningPopup.warningUIController.SetWarning(warningImage, heightWarningMessage);
 
-                // 경고창 비활성화
+                // 경고창 비활성화 -> 여기서 조건을 하나 추가한다. -> 마스크 경고창 활성화 상태 체크
                 //UIManager.Instance.CloseWarningUI();
 
                 // 콜백 실행 -> 플레이어 숙이기 완료
@@ -103,7 +103,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
                 // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
                 warningUIController.SetWarning(warningImage, heightWarningMessage);
 
-                // 경고창 활성화
+                // 경고창 활성화 여기서 조건을 하나 추가한다. -> 마스크 경고창 활성화 상태 체크 -> 마스크 경고창이 활성화 된 상태라면 숙이고, 입을 가려라 -> 마스크 경고창이 비활성화 된 상태라면 숙이기만
                 //UIManager.Instance.OpenWarningUI();
             }
         }
