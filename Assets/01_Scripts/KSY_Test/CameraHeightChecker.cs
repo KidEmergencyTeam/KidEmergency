@@ -10,25 +10,29 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
     [Header("MainCamera 오브젝트")]
     public GameObject vrCameraObj;
 
-    [Header("WarningPopup")]
-    public WarningPopup warningPopup;
-
     [Header("텍스트·이미지")]
     public WarningUIController warningUIController;
 
-    [Header("숙이기 경고창 이미지")]
+    [Header("숙이기 X + 손수건 O -> 이미지")]
     public Sprite warningImageA;
 
-    [Header("숙이기 경고창 메시지")]
+    [Header("숙이기 X + 손수건 O -> 메시지")]
     [TextArea]
     public string heightWarningMessageA;
 
-    [Header("숙이기 X + 손수건 입 X -> 이미지")]
+    [Header("숙이기 X + 손수건 X -> 이미지")]
     public Sprite warningImageB;
 
-    [Header("숙이기 X + 손수건 입 X -> 메시지")]
+    [Header("숙이기 X + 손수건 X -> 메시지")]
     [TextArea]
     public string heightWarningMessageB;
+
+    [Header("숙이기 O + 손수건 X -> 이미지")]
+    public Sprite warningImageC;
+
+    [Header("숙이기 O + 손수건 X -> 메시지")]
+    [TextArea]
+    public string heightWarningMessageC;
 
     [Header("손수건 충돌 상태 여부")]
     public bool isHandkerOK = false;
@@ -49,6 +53,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
     // 씬이 로드될 때마다 실행
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // FireEvacuationMask 스크립트 찾기
+        CacheFireEvacuationMaskr();
+
         // FireEvacuationMask 이벤트 등록
         if (fireEvacuationMask != null)
         {
@@ -63,11 +70,18 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         // 메인 카메라 찾기
         FindCamera();
 
-        // WarningPopup 스크립트 찾기
-        CacheWarningPopupr();
-
         // WarningUIController 스크립트 찾기
         CacheWarningUIController();
+    }
+
+    // FireEvacuationMask 스크립트 찾기
+    private void CacheFireEvacuationMaskr()
+    {
+        fireEvacuationMask = FindObjectOfType<FireEvacuationMask>();
+        if (fireEvacuationMask == null)
+        {
+            Debug.LogError("FireEvacuationMask.cs를 찾을 수 없습니다.");
+        }
     }
 
     // MainCamera 태그로 찾기
@@ -77,16 +91,6 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         if (vrCameraObj == null)
         {
             Debug.LogError("MainCamera 오브젝트를 찾을 수 없습니다.");
-        }
-    }
-
-    // WarningPopup 스크립트 찾기
-    private void CacheWarningPopupr()
-    {
-        warningPopup = FindObjectOfType<WarningPopup>();
-        if (warningPopup == null)
-        {
-            Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
         }
     }
 
@@ -100,45 +104,55 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         }
     }
 
-
     // 플레이어 높이 체크
     private void HeightCheck()
     {
         // Y값 읽기
         float y = vrCameraObj.transform.localPosition.y;
 
-        // step22_Flag -> true면 실행(스텝22부터 조건만 맞으면 언제든지 실행 가능) 
-        if (ScenarioManager.Instance.step22_Flag)
+        // step22_Flag -> false면 중단하고 true면 정상 진행
+        if (!ScenarioManager.Instance.step22_Flag)
         {
-            // 플레이어 높이가 -0.1 보다 같거나 작으면서(플레이어가 숙인 상태) isHandkerOK = true;면(손수건을 입에 붙여 놓은 상태) 실행
-            if (y <= -0.1f && isHandkerOK)
-            {
-                // 경고창 비활성화 -> WarningPopup.cs Inspector에서 설정한 이미지·텍스트로 변경
-                warningPopup.warningUIController.SetWarning(warningImageA, heightWarningMessageA);
+            return;
+        }
 
-                // 경고창 비활성화 -> 여기서 조건을 하나 추가한다. -> 마스크 경고창 활성화 상태 체크
-                //UIManager.Instance.CloseWarningUI();
+        // 플레이어 숙였는지를 판단하는 기준값
+        const float bendThreshold = -0.1f;    
 
-                // 콜백 실행 -> 플레이어 숙이기 완료
-                HeightReached?.Invoke();
-            }
+        // 머리 숙이기 완료 콜백 -> 다음 단계 진행 가능
+        if (y <= bendThreshold)
+        {
+            HeightReached?.Invoke();
+        }
 
-            // 플레이어 높이가 -0.11 보다 같거나 크면서(플레이어가 숙이지 않은 상태) isHandkerOK = false면(손수건을 입에 떼어 놓은 상태) 실행
-            if (y >= -0.11f && !isHandkerOK)
-            {
-                // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
-                warningUIController.SetWarning(warningImageA, heightWarningMessageA);
-
-                // 경고창 활성화 여기서 조건을 하나 추가한다. -> 마스크 경고창 활성화 상태 체크 -> 마스크 경고창이 활성화 된 상태라면 숙이고, 입을 가려라 -> 마스크 경고창이 비활성화 된 상태라면 숙이기만
-                //UIManager.Instance.OpenWarningUI();
-            }
+        // 1) 숙이고(isHandkerOK), 손수건 OK(true) → 경고창 끄기
+        if (y <= bendThreshold && isHandkerOK)
+        {
+            UIManager.Instance.CloseWarningUI();
+        }
+        // 2) 숙이고(isHandkerOK), 손수건 NOT OK(false) → 손수건만 경고
+        else if (y <= bendThreshold && !isHandkerOK)
+        {
+            warningUIController.SetWarning(warningImageC, heightWarningMessageC);
+            UIManager.Instance.OpenWarningUI();
+        }
+        // 3) 안 숙이고(!isHandkerOK), 손수건 OK(true) → 숙이기만 경고
+        else if (y > bendThreshold && isHandkerOK)
+        {
+            warningUIController.SetWarning(warningImageA, heightWarningMessageA);
+            UIManager.Instance.OpenWarningUI();
+        }
+        // 4) 안 숙이고(!isHandkerOK), 손수건 NOT OK(false) → 전부 경고
+        else
+        {
+            warningUIController.SetWarning(warningImageB, heightWarningMessageB);
+            UIManager.Instance.OpenWarningUI();
         }
     }
 
     // 손수건과 충돌할 때 실행
     private void HandkerEnterCheck()
     {
-        // 불함수를 넣어서 처리?
         isHandkerOK = true;
     }
 
