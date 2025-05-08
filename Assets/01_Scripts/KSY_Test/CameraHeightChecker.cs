@@ -81,7 +81,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             else
             {
                 // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
-                warningUIController.SetWarning(warningImage, heightWarningMessage);
+                //warningUIController.SetWarning(warningImage, heightWarningMessage);
 
                 // 경고창 활성화
                 //UIManager.Instance.OpenWarningUI();
