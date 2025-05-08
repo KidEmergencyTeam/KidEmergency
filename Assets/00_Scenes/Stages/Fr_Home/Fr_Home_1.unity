@@ -762,7 +762,7 @@ GameObject:
   - component: {fileID: 291000792}
   - component: {fileID: 291000791}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: SetiDialog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -775,17 +775,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291000789}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0009999998, y: 0.001, z: 0.0009999998}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -1.5}
+  m_LocalScale: {x: 0.0005, y: 0.0005, z: 0.0005}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1628149221}
-  m_Father: {fileID: 1565975332}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1.3}
   m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &291000791
@@ -6191,7 +6191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &979088748
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10174,6 +10174,8 @@ MonoBehaviour:
   warningUi: {fileID: 815387877}
   exampleDescUi: {fileID: 519377087}
   playerUi: {fileID: 261620923}
+  dialogObj: {fileID: 291000789}
+  warningUIObj: {fileID: 815387877}
   emergencyExit: {fileID: 0}
   advEmergencyExitLine: {fileID: 0}
   handkerchief: {fileID: 1403248661}
@@ -11806,7 +11808,6 @@ Transform:
   m_Children:
   - {fileID: 918398760}
   - {fileID: 1977853556}
-  - {fileID: 291000790}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1571169135
@@ -19719,6 +19720,7 @@ SceneRoots:
   - {fileID: 1306377611}
   - {fileID: 935879086}
   - {fileID: 1565975332}
+  - {fileID: 291000790}
   - {fileID: 404721531}
   - {fileID: 5583606576211957256}
   - {fileID: 5583606576675886379}

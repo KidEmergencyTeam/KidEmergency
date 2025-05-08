@@ -34,6 +34,8 @@ public class FireBeginner : MonoBehaviour
 	public GameObject warningUi;
 	public GameObject exampleDescUi;
 	public Canvas playerUi; //플레이어 UI Canvas
+    public GameObject dialogObj;
+    public GameObject warningUIObj;
 
 	[SerializeField]
 	private GameObject emergencyExit; // 비상구 오브젝트 
@@ -277,11 +279,11 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
 					forthDialog.gameObject.SetActive(true);
                     handkerchief.gameObject.SetActive(true);
-                    ruleCheck = true;
                     yield return new WaitUntil(() => forthDialog.isDialogsEnd == true && iscoverFace == true);
 
                     //마지막 대사 출력 후 이동
                     fifthDialog.gameObject.SetActive(true);
+                    ruleCheck = true;
                     yield return new WaitUntil(() => fifthDialog.isDialogsEnd == true && iscoverFace == true);
                     StartCoroutine(FadeInOut.Instance.FadeOut());
                     yield return new WaitUntil(() => FadeInOut.Instance.isFadeOut == false);
@@ -338,6 +340,7 @@ public class FireBeginner : MonoBehaviour
 
                 case PLACE.DOWNSTAIR:
                     ruleCheck = true;
+                    hasHandkerchief = true;
                     SetAllNpcState(NpcRig.State.Bow);
                     StartCoroutine(FadeInOut.Instance.FadeIn());
                     yield return new WaitUntil(() => fadeInOutImg.isFadeIn == false);
@@ -349,7 +352,7 @@ public class FireBeginner : MonoBehaviour
                     yield return new WaitUntil(() => secondDialog.isDialogsEnd == true);
 
                     StartCoroutine(FadeInOut.Instance.FadeOut());
-                    yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false);
+                    yield return new WaitUntil(() => fadeInOutImg.isFadeOut == false && isHeadDown == true && iscoverFace == true);
                     SceneManager.LoadScene("Fr_Home_4");
                     break;
 
@@ -427,6 +430,12 @@ public class FireBeginner : MonoBehaviour
 		{
 			player.transform.position = playerMovPos.position;
             player.transform.rotation = playerMovPos.rotation;
+            if(isFireAdvanced)
+            {
+                Vector3 warningPosition = warningUIObj.transform.position;
+                warningPosition.y = 1f; // y 좌표를 1로 설정
+                warningUIObj.transform.position = warningPosition;
+            }
         }
 
 		// 세티 이동
@@ -434,7 +443,14 @@ public class FireBeginner : MonoBehaviour
 		{
 			seti.transform.position = setiMovPos.position;
             seti.transform.rotation = setiMovPos.rotation;
-		}
+            Vector3 dialogPosition = setiMovPos.position;
+            dialogPosition.y += 0.1f; // y 좌표를 플레이어 y + 0.1로 지정
+            if(isFireAdvanced)
+            {
+                dialogObj.transform.position = dialogPosition;
+                dialogObj.transform.rotation = setiMovPos.rotation;
+            }
+        }
 
 		// NPC 이동
 		for (int i = 0; i < NPC.Length; i++)
