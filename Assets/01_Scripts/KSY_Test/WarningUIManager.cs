@@ -129,12 +129,12 @@ public class WarningUIManager : DisableableSingleton<WarningUIManager>
             return;
         }
 
-        // 1) 손수건 OK(true) → 경고창 끄기
+        // 1) 손수건 잡은 상태에서 손수건 OK(true) → 경고창 끄기
         if (grabber.currentGrabbedObject != null && isHandkerOK)
         {
             UIManager.Instance.CloseWarningUI();
         }
-        // 2) 손수건 NOT OK(false) → 손수건 경고
+        // 2) 손수건 잡은 상태에서 손수건 NOT OK(false) → 손수건 경고
         else if(grabber.currentGrabbedObject != null && !isHandkerOK)
         {
             warningUIController.SetWarning(warningImageC, heightWarningMessageC);
