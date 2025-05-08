@@ -254,6 +254,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step15()
     {
         yield return PlayAndWait(9);
+        yield return StartCoroutine(DialogTextReset());
         yield return StartCoroutine(ChangeScene(0));
     }
 
@@ -386,6 +387,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     IEnumerator Step28()
     {
         yield return PlayAndWait(18);
+        yield return StartCoroutine(DialogTextReset());
         yield return StartCoroutine(ChangeScene(1));
 
         // 씬 전환 -> NPC 상태 초기화
@@ -447,7 +449,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
 
         // 활성화된 경고창 끄기
         UIManager.Instance.CloseWarningUI();
-
+        yield return StartCoroutine(DialogTextReset());
         // 운동장 씬 
         yield return StartCoroutine(ChangeScene(2));
     }
@@ -471,6 +473,9 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(26);
 
+        // UI 매니저 제거
+        Destroy(UIManager.Instance.gameObject);
+
         // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
@@ -479,9 +484,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         TypingEffect.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> ScenarioManager 제거
         disableSingleton = true;
-
-        // UI 매니저 제거
-        Destroy(UIManager.Instance.gameObject);
 
         // 로비 씬 이동 이후 -> SoundManager 제거
         Destroy(SoundManager.Instance.gameObject);
@@ -504,9 +506,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
                 // 로딩 대기
                 yield return null;
             }
-
-            // 대사 초기화 
-            yield return StartCoroutine(DialogTextReset());
 
             // 씬 로드 후 페이드 인 효과 실행
             yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
