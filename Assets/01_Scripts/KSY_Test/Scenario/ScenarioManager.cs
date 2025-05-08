@@ -455,12 +455,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step36: 연속 재생 종료 후 타이핑 실행
     IEnumerator Step36()
     {
-        // 손수건 체크 제거
-        WarningPopupStateManager.Instance.disableSingleton = true;
-
-        // 경고창 제거
-        WarningPopupStateManager.Instance.disableSingleton = true;
-
         // 비상벨 정지
         TypingEffect.Instance.StopContinuousSeparateTypingClip();
 

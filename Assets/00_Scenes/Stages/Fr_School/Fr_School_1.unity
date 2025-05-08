@@ -11490,50 +11490,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1095348683}
   m_Mesh: {fileID: 1489070156917786265, guid: 67504c84481d9aa44892a2ba691a7d55, type: 3}
---- !u!1 &1103258013
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1103258015}
-  - component: {fileID: 1103258014}
-  m_Layer: 0
-  m_Name: WarningPopupStateManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1103258014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103258013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b184c4a59f27f5469a64b97935010eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1103258015
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103258013}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1105221792
 GameObject:
   m_ObjectHideFlags: 0
@@ -18554,7 +18510,6 @@ GameObject:
   - component: {fileID: 1710655953}
   - component: {fileID: 1710655956}
   - component: {fileID: 1710655955}
-  - component: {fileID: 1710655954}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Head
@@ -18577,23 +18532,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1838327449}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
---- !u!114 &1710655954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710655952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0567b34e16dd68a4e8b29e42dad0ac14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireEvacuationMask: {fileID: 1710655955}
-  leftGrabber: {fileID: 645867314}
-  warningUIController: {fileID: 0}
-  warningImage: {fileID: 21300000, guid: 0f0e31cab8e4c6b479625c684a5c3a47, type: 3}
-  heightWarningMessage: "\uC190\uC218\uAC74\uC73C\uB85C \uC785\uC744 \uBCF4\uD638\uD558\uC138\uC694!"
 --- !u!114 &1710655955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23920,7 +23858,6 @@ SceneRoots:
   - {fileID: 869607492}
   - {fileID: 1296830807}
   - {fileID: 812006879}
-  - {fileID: 1103258015}
   - {fileID: 2094478426}
   - {fileID: 1110185838}
   - {fileID: 1085814015}

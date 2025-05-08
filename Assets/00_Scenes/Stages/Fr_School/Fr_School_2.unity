@@ -5785,10 +5785,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c88abb31dcd8344aefb372386193cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireEvacuationMask: {fileID: 0}
   vrCameraObj: {fileID: 0}
   warningUIController: {fileID: 0}
-  warningImage: {fileID: 21300000, guid: 344d0953360f88d40a134c10fac39b7c, type: 3}
-  heightWarningMessage: "\uC790\uC138\uB97C \uC219\uC5EC\uC918!"
+  warningImageA: {fileID: 21300000, guid: 3f7b1c38d68f63a47b4236b8f3c26029, type: 3}
+  heightWarningMessageA: "\uD5C8\uB9AC\uB97C \uC219\uC5EC\uC918!"
+  warningImageB: {fileID: 21300000, guid: 344d0953360f88d40a134c10fac39b7c, type: 3}
+  heightWarningMessageB: "\uD5C8\uB9AC\uB97C \uC219\uC774\uACE0 \uC190\uC218\uAC74\uC73C\uB85C
+    \uC785\uC744 \uBCF4\uD638\uD574\uC918!"
+  warningImageC: {fileID: 21300000, guid: 0cd2120007be01c44bec8cd3cb370a4f, type: 3}
+  heightWarningMessageC: "\uC190\uC218\uAC74\uC73C\uB85C \uC785\uC744 \uBCF4\uD638\uD558\uC138\uC694!"
+  isHandkerOK: 0
 --- !u!1001 &497212215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7489,7 +7496,6 @@ GameObject:
   - component: {fileID: 679989213}
   - component: {fileID: 679989216}
   - component: {fileID: 679989215}
-  - component: {fileID: 679989214}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Head
@@ -7512,23 +7518,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1454065634}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
---- !u!114 &679989214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 679989212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0567b34e16dd68a4e8b29e42dad0ac14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireEvacuationMask: {fileID: 679989215}
-  leftGrabber: {fileID: 1461362929}
-  warningUIController: {fileID: 0}
-  warningImage: {fileID: 21300000, guid: 0f0e31cab8e4c6b479625c684a5c3a47, type: 3}
-  heightWarningMessage: "\uC190\uC218\uAC74\uC73C\uB85C \uC785\uC744 \uBCF4\uD638\uD558\uC138\uC694!"
 --- !u!114 &679989215
 MonoBehaviour:
   m_ObjectHideFlags: 0
