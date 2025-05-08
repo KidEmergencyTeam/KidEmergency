@@ -471,9 +471,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(26);
 
-        // UI 매니저 제거
-        Destroy(UIManager.Instance.gameObject);
-
         // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
         yield return StartCoroutine(SetRobotState(3f));
         yield return StartCoroutine(ChangeScene(3));
@@ -482,6 +479,10 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         TypingEffect.Instance.disableSingleton = true;
         // 로비 씬 이동 이후 -> ScenarioManager 제거
         disableSingleton = true;
+
+        // UI 매니저 제거
+        Destroy(UIManager.Instance.gameObject);
+
         // 로비 씬 이동 이후 -> SoundManager 제거
         Destroy(SoundManager.Instance.gameObject);
     }
