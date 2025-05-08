@@ -339,13 +339,13 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         Action callback = () => bowFlag = true;
 
         // 콜백 등록
-        CameraHeightChecker.Instance.HeightReached += callback;
+        WarningUIManager.Instance.HeightReached += callback;
 
         // heightReachedFlag = true가 될 때까지 대기 -> 플레이어가 허리를 숙일 때까지 대기
         yield return new WaitUntil(() => bowFlag);
 
         // 콜백 제거
-        CameraHeightChecker.Instance.HeightReached -= callback;
+        WarningUIManager.Instance.HeightReached -= callback;
 
         Debug.Log("플레이어 숙이기 완료");
     }
@@ -442,8 +442,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(23);
 
-        // 플레이어 높이 체크 제거
-        CameraHeightChecker.Instance.disableSingleton = true;
+        // WarningUIManager 제거
+        WarningUIManager.Instance.disableSingleton = true;
 
         // 활성화된 경고창 끄기
         UIManager.Instance.CloseWarningUI();
