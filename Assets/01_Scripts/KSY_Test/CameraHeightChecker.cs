@@ -4,8 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
 {
-    // MainCamera 오브젝트 참조
+    [Header("MainCamera 오브젝트")]
     public GameObject vrCameraObj;
+
+    [Header("텍스트·이미지")]
+    public WarningUIController warningUIController;
+
+    [Header("숙이기 경고창 이미지")]
+    public Sprite warningImage;
+
+    [Header("숙이기 경고창 메시지")]
+    [TextArea]
+    public string heightWarningMessage;
 
     // 카메라 높이 도달 시 호출할 이벤트
     public event Action HeightReached;
@@ -23,7 +33,11 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
     // 씬이 로드될 때마다 실행
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        // 메인 카메라 찾기
         FindCamera();
+
+        // WarningUIController 스크립트 찾기
+        CacheWarningUIController();
     }
 
     // MainCamera 태그로 찾기
@@ -33,6 +47,16 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         if (vrCameraObj == null)
         {
             Debug.LogError("MainCamera 오브젝트를 찾을 수 없습니다.");
+        }
+    }
+
+    // WarningUIController 스크립트 찾기
+    private void CacheWarningUIController()
+    {
+        warningUIController = FindObjectOfType<WarningUIController>();
+        if (warningUIController == null)
+        {
+            Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
         }
     }
 
@@ -52,16 +76,19 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             // 변경: -0.1 이하면 실행
             if (y <= -0.1f)
             {
-                // 경고창 비활성화
-                //UIManager.Instance.CloseWarningUI();
+                // 경고창 활성화
+                //UIManager.Instance.OpenWarningUI();
 
                 // 콜백 실행 -> 플레이어 숙이기 완료
                 HeightReached?.Invoke();
             }
             else
             {
-                // 경고창 활성화
-                //UIManager.Instance.OpenWarningUI();
+                // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
+                warningUIController.SetWarning(warningImage, heightWarningMessage);
+
+                // 경고창 비활성화
+                //UIManager.Instance.CloseWarningUI();
             }
         }
     }
