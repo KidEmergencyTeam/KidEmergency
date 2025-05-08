@@ -35,6 +35,7 @@ public class EarthquakeBeginner : MonoBehaviour
     public Canvas playerUi; // 플레이어 UI Canvas
     public GameObject exitLineUI;
     public GameObject grabDeskLegUI;
+    public GameObject grabBagUI;
 
     [Header("가방, 출구, 경보 장치 오브젝트")]
     [SerializeField] private GameObject backpack;
@@ -174,6 +175,11 @@ public class EarthquakeBeginner : MonoBehaviour
                 earthquake.StopEarthquake();
                 earthquakeSound.gameObject.SetActive(false);
                 yield return new WaitUntil(() => earthquake._endEarthquake == true);
+
+                //가방을 주워야 하는 UI 출력
+                grabBagUI.SetActive(true);
+                yield return new WaitUntil(() => leftHand.GetComponent<Grabber>().currentGrabbedObject != null);
+                grabBagUI.SetActive(false);
 
                 sixthDialog.gameObject.SetActive(true);
                 yield return new WaitUntil(() => sixthDialog.isDialogsEnd == true);
