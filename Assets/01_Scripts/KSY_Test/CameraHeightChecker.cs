@@ -7,6 +7,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
     [Header("MainCamera 오브젝트")]
     public GameObject vrCameraObj;
 
+    [Header("WarningPopup")]
+    public WarningPopup warningPopup;
+
     [Header("텍스트·이미지")]
     public WarningUIController warningUIController;
 
@@ -36,6 +39,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         // 메인 카메라 찾기
         FindCamera();
 
+        // WarningPopup 스크립트 찾기
+        CacheWarningPopupr();
+
         // WarningUIController 스크립트 찾기
         CacheWarningUIController();
     }
@@ -50,6 +56,16 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
         }
     }
 
+    // WarningPopup 스크립트 찾기
+    private void CacheWarningPopupr()
+    {
+        warningPopup = FindObjectOfType<WarningPopup>();
+        if (warningPopup == null)
+        {
+            Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
+        }
+    }
+
     // WarningUIController 스크립트 찾기
     private void CacheWarningUIController()
     {
@@ -59,6 +75,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             Debug.LogError("WarningUIController.cs를 찾을 수 없습니다.");
         }
     }
+
 
     // 플레이어 높이 체크
     private void HeightCheck()
@@ -72,6 +89,9 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             // 변경: -0.1 이하면 실행
             if (y <= -0.1f)
             {
+                // 경고창 비활성화 -> WarningPopup.cs Inspector에서 설정한 이미지·텍스트로 변경
+                warningPopup.warningUIController.SetWarning(warningImage, heightWarningMessage);
+
                 // 경고창 비활성화
                 //UIManager.Instance.CloseWarningUI();
 
@@ -81,7 +101,7 @@ public class CameraHeightChecker : DisableableSingleton<CameraHeightChecker>
             else
             {
                 // 경고창 활성화 -> Inspector에서 설정한 이미지·텍스트로 변경
-                //warningUIController.SetWarning(warningImage, heightWarningMessage);
+                warningUIController.SetWarning(warningImage, heightWarningMessage);
 
                 // 경고창 활성화
                 //UIManager.Instance.OpenWarningUI();
