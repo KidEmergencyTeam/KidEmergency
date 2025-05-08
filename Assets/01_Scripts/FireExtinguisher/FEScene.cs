@@ -82,6 +82,11 @@ public class FEScene : MonoBehaviour
 		currentState = newState;
 	}
 
+	public void DestroyUIManager()
+	{
+		Destroy(UIManager.Instance.gameObject);
+	}
+
 	public void FadeOut()
 	{
 		StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));

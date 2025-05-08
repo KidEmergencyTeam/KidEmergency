@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Content.Interaction;
 
 public class FEEndState : FEState
 {
@@ -23,6 +24,7 @@ public class FEEndState : FEState
 		if (_startTime + _delay + OVRScreenFade.Instance.fadeTime < Time.time)
 		{
 			UIManager.Instance.dialogUI.dialogText.text = "";
+			scene.DestroyUIManager();
 			SceneManager.LoadScene(0);
 		}
 	}
