@@ -19,7 +19,6 @@ public class WarningPopup : MonoBehaviour
     [TextArea]
     public string heightWarningMessage;
 
-
     private void OnEnable()
     {
         // Grabber 이벤트 등록
