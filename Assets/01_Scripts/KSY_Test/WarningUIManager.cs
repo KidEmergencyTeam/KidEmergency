@@ -67,7 +67,7 @@ public class WarningUIManager : DisableableSingleton<WarningUIManager>
         }
         else
         {
-            Debug.LogError("[WarningPopup] fireEvacuationMask -> null");
+            Debug.LogError("fireEvacuationMask -> null");
         }
 
         // Grabber 스크립트 찾기
