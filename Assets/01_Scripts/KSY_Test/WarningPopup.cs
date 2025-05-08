@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // 경고창 ui 관리 스크립트
-public class MaskWarningUI : MonoBehaviour
+public class WarningPopup : MonoBehaviour
 {
     [Header("FireEvacuationMask")]
     public FireEvacuationMask fireEvacuationMask;
@@ -16,9 +16,10 @@ public class MaskWarningUI : MonoBehaviour
         {
             leftGrabber.OnGrabEvent += HandkerGrab;
         }
-
         else
-            Debug.LogError("[MaskWarningUI] leftGrabber -> null");
+        {
+            Debug.LogError("[WarningPopup] leftGrabber -> null");
+        }
 
         // FireEvacuationMask 이벤트 등록
         if (fireEvacuationMask != null)
@@ -27,7 +28,9 @@ public class MaskWarningUI : MonoBehaviour
             fireEvacuationMask.OnHandkerchiefExit += HandkerExit;
         }
         else
-            Debug.LogError("[MaskWarningUI] fireEvacuationMask -> null");
+        {
+            Debug.LogError("[WarningPopup] fireEvacuationMask -> null");
+        }
     }
 
     private void OnDisable()
@@ -48,10 +51,10 @@ public class MaskWarningUI : MonoBehaviour
 
     private void Start()
     {
-        if (MaskWarningUIStateManager.Instance != null)
+        if (WarningPopupStateManager.Instance != null)
         {
             // 충돌 상태 불러오기
-            bool currentState = MaskWarningUIStateManager.Instance.GetCollisionState();
+            bool currentState = WarningPopupStateManager.Instance.GetCollisionState();
             Debug.Log("충돌 상태 불러오기 완료");
 
             // 충돌 상태라면 -> true를 불러오면
@@ -68,7 +71,7 @@ public class MaskWarningUI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("MaskWarningUIStateManager -> null");
+            Debug.LogError("WarningPopupStateManager -> null");
         }
     }
 
@@ -81,7 +84,7 @@ public class MaskWarningUI : MonoBehaviour
         Debug.Log("손수건과 충돌할 때 실행");
 
         // 충돌 상태 저장하기 -> true: 충돌o
-        MaskWarningUIStateManager.Instance.SetCollisionState(true);
+        WarningPopupStateManager.Instance.SetCollisionState(true);
     }
 
     // 손수건과 충돌 종료할 때 실행
@@ -93,7 +96,7 @@ public class MaskWarningUI : MonoBehaviour
         Debug.Log("손수건과 충돌 종료할 때 실행");
 
         // 충돌 상태 저장하기 -> flase: 충돌x
-        MaskWarningUIStateManager.Instance.SetCollisionState(false);
+        WarningPopupStateManager.Instance.SetCollisionState(false);
     }
 
     // 손수건을 잡을 때 실행
