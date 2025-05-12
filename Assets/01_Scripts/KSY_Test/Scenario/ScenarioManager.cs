@@ -234,20 +234,8 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     // Step14에서 페이드 효과 + 문 앞으로 이동
     IEnumerator Step14()
     {
-        // 페이드 아웃 효과 실행
-        yield return StartCoroutine(OVRScreenFade.Instance.Fade(0, 1));
-
-        // 문 앞으로 이동
-        yield return StartCoroutine(Positions());
-
-        // UI 이동
-        yield return StartCoroutine(UIPosition(SceneName.None));
-
-        // 대사 초기화 
         yield return StartCoroutine(DialogTextReset());
-
-        // 페이드 인 효과 실행
-        yield return StartCoroutine(OVRScreenFade.Instance.Fade(1, 0));
+        yield return StartCoroutine(ChangeScene(0));
     }
 
     // Step15 -> 페이드 아웃 효과 필수
@@ -255,7 +243,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(9);
         yield return StartCoroutine(DialogTextReset());
-        yield return StartCoroutine(ChangeScene(0));
+        yield return StartCoroutine(ChangeScene(1));
     }
 
     // Step16: 씬 전환 후 NPC 상태를 Hold로 변경하고 대사 출력
@@ -388,7 +376,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(18);
         yield return StartCoroutine(DialogTextReset());
-        yield return StartCoroutine(ChangeScene(1));
+        yield return StartCoroutine(ChangeScene(2));
 
         // 씬 전환 -> NPC 상태 초기화
     }
@@ -451,7 +439,7 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         UIManager.Instance.CloseWarningUI();
         yield return StartCoroutine(DialogTextReset());
         // 운동장 씬 
-        yield return StartCoroutine(ChangeScene(2));
+        yield return StartCoroutine(ChangeScene(3));
     }
 
     // Step36: 연속 재생 종료 후 타이핑 실행
@@ -473,12 +461,13 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
     {
         yield return PlayAndWait(26);
 
+        // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
+        yield return StartCoroutine(SetRobotState(3f));
+
         // UI 매니저 제거
         Destroy(UIManager.Instance.gameObject);
 
-        // 모든 시나리오를 마친 후 세티 표정 SetHappy 반영 -> 3초 대기 -> 씬 전환
-        yield return StartCoroutine(SetRobotState(3f));
-        yield return StartCoroutine(ChangeScene(3));
+        yield return StartCoroutine(ChangeScene(4));
 
         // 로비 씬 이동 이후 -> TypingEffect 제거
         TypingEffect.Instance.disableSingleton = true;
@@ -582,30 +571,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         }
 
         yield return null;
-    }
-
-    // 문 앞으로 이동
-    public IEnumerator Positions()
-    {
-        // PlayerPosition 컴포넌트 가져오기
-        PlayerPosition playerPosition = FindObjectOfType<PlayerPosition>();
-        if (playerPosition == null)
-        {
-            Debug.LogError("PlayerPosition 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-
-        // playerEntries 리스트 유효성 검사
-        if (playerPosition.playerEntries == null || playerPosition.playerEntries.Count == 0)
-        {
-            Debug.LogError("playerEntries 리스트가 비어있습니다.");
-            yield break;
-        }
-
-        // 할당된 모든 플레이어를 스텝14 위치와 회전으로 이동
-        playerPosition.ApplyStep14Positions();
-
-        Debug.Log("문 앞으로 이동");
     }
 
     // 비활성화된 손수건 활성화
@@ -716,23 +681,6 @@ public class ScenarioManager : DisableableSingleton<ScenarioManager>
         {
             // 텍스트 내용 초기화: 기존 대사 내용을 빈 문자열로 설정
             dialogText.text = "";
-        }
-    }
-
-    // 주요 UI 위치 및 회전값을 변경
-    private IEnumerator UIPosition(SceneName currentScene)
-    {
-        // "UIPosition" 태그가 붙은 오브젝트 찾기
-        UIPosition uIPosition = GameObject.FindGameObjectWithTag("UIPosition")?.GetComponent<UIPosition>();
-        if (uIPosition == null)
-        {
-            Debug.LogError("UIPosition 컴포넌트를 찾을 수 없습니다.");
-            yield break;
-        }
-        else
-        {
-            uIPosition.UpdatePosition(currentScene);
-            Debug.Log("주요 UI 변경될 위치 및 회전값을 변경 완료");
         }
     }
 
