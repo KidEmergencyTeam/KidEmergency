@@ -7,6 +7,7 @@ public enum SceneName
 {
     None,
     Fr_School_1,
+    Fr_School_1_1,
     Fr_School_2,
     Fr_School_3,
     Fr_School_4
