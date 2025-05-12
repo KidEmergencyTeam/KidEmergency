@@ -12,10 +12,6 @@ public class PlayerEntry
     [Header("초기 위치와 회전")]
     public Vector3 initialPosition;
     public Vector3 initialRotation;
-
-    [Header("스텝14에서의 위치와 회전")]
-    public Vector3 step14Position;
-    public Vector3 step14Rotation;
 }
 
 public class PlayerPosition : MonoBehaviour
@@ -107,20 +103,5 @@ public class PlayerPosition : MonoBehaviour
             }
         }
         Debug.Log("초기 위치 적용 완료");
-    }
-
-    // 모든 플레이어를 스텝14 위치와 회전으로 이동
-    // ScenarioManager.cs에서 호출될 때만 스텝14 위치로 이동
-    public void ApplyStep14Positions()
-    {
-        foreach (PlayerEntry entry in playerEntries)
-        {
-            if (entry.playerNpc != null)
-            {
-                entry.playerNpc.transform.position = entry.step14Position;
-                entry.playerNpc.transform.rotation = Quaternion.Euler(entry.step14Rotation);
-            }
-        }
-        Debug.Log("스텝14 위치 적용 완료");
     }
 }
