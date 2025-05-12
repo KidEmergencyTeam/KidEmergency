@@ -2792,37 +2792,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290996395}
   m_Mesh: {fileID: 3729232237028251342, guid: 182f9a3e040d3634099430e437bf11c1, type: 3}
---- !u!1 &317766719
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 317766720}
-  m_Layer: 0
-  m_Name: "===== \uD544\uC218"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &317766720
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 317766719}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &326812661
 GameObject:
   m_ObjectHideFlags: 0
@@ -11715,6 +11684,11 @@ MonoBehaviour:
     particleData:
     - position: {x: -1.5, y: 2.5, z: -5.5}
       rotation: {x: -90, y: 90, z: 0}
+  - sceneName: Fr_School_1-1
+    smokeEffect: {fileID: 8897067982782790473, guid: 965ee566772ef4540a0ee0509d3b01d4, type: 3}
+    particleData:
+    - position: {x: -1.5, y: 2.5, z: -5.5}
+      rotation: {x: -90, y: 0, z: 0}
   - sceneName: Fr_School_2
     smokeEffect: {fileID: 6545677522994133847, guid: 5ca041493b496aa41aa831f530777278, type: 3}
     particleData:
@@ -12886,6 +12860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireEvacuationMask: {fileID: 0}
+  grabber: {fileID: 0}
   vrCameraObj: {fileID: 0}
   warningUIController: {fileID: 0}
   warningImageA: {fileID: 21300000, guid: 3f7b1c38d68f63a47b4236b8f3c26029, type: 3}
@@ -23917,7 +23892,6 @@ SceneRoots:
   - {fileID: 1110185838}
   - {fileID: 1085814015}
   - {fileID: 1250764694}
-  - {fileID: 317766720}
   - {fileID: 1939421931}
   - {fileID: 640751046}
   - {fileID: 1742765580}
