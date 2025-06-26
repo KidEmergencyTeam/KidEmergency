@@ -6,7 +6,9 @@
 
 ## 📷 스크린샷
 
-> (이미지 추가 예정)
+![소화기 조작 교육](Images/screenshot1.png)
+![화재 대처 교육](Images/screenshot3.png)
+![지진 대처 교육](Images/screenshot2.png)
 
 ---
 
@@ -37,7 +39,7 @@
 
 ## 🛠 사용 기술
 
-- Unity 2022.x
+- Unity 2022.3.50f1
 - C# (VR 인터랙션 및 시스템 구현)
 - XR Interaction Toolkit
 - Blender / Mixamo (애니메이션 리소스 활용)
