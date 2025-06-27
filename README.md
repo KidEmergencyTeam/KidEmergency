@@ -6,9 +6,24 @@
 
 ## 📷 스크린샷
 
-![소화기 조작 교육](Images/screenshot1.png)
-![화재 대처 교육](Images/screenshot3.png)
-![지진 대처 교육](Images/screenshot2.png)
+<div style="display: flex; justify-content: space-between; gap: 10px;">
+
+  <div style="text-align: center;">
+    <img src="Images/screenshot1.png" alt="소화기 조작 교육" width="300"/>
+    <p><strong>소화기 조작 교육</strong></p>
+  </div>
+
+  <div style="text-align: center;">
+    <img src="Images/screenshot2.png" alt="화재 대처 교육" width="300"/>
+    <p><strong>화재 대처 교육</strong></p>
+  </div>
+
+  <div style="text-align: center;">
+    <img src="Images/screenshot3.png" alt="지진 대처 교육" width="300"/>
+    <p><strong>지진 대처 교육</strong></p>
+  </div>
+
+</div>
 
 ---
 
