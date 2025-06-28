@@ -4,23 +4,23 @@
 
 ---
 
-## 📷 스크린샷
+## 📷 인게임 이미지
 
-<div style="display: flex; justify-content: space-between; gap: 10px;">
+<div style="display: flex; justify-content: center; gap: 40px;">
 
   <div style="text-align: center;">
-    <img src="Images/screenshot1.png" alt="소화기 조작 교육" width="300"/>
     <p><strong>소화기 조작 교육</strong></p>
+    <img src="Images/screenshot1.png" alt="소화기 조작 교육" width="400"/>
   </div>
 
   <div style="text-align: center;">
-    <img src="Images/screenshot2.png" alt="화재 대처 교육" width="300"/>
     <p><strong>화재 대처 교육</strong></p>
+    <img src="Images/screenshot2.png" alt="화재 대처 교육" width="400"/>
   </div>
 
   <div style="text-align: center;">
-    <img src="Images/screenshot3.png" alt="지진 대처 교육" width="300"/>
     <p><strong>지진 대처 교육</strong></p>
+    <img src="Images/screenshot3.png" alt="지진 대처 교육" width="400"/>
   </div>
 
 </div>
