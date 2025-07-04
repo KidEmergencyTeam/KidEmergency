@@ -2,9 +2,11 @@
 
 **Unity VR 팀 프로젝트**
 
+[![YouTube](https://img.shields.io/badge/YouTube-영상_바로가기-red?logo=youtube&style=for-the-badge)](https://www.youtube.com/watch?v=3B3rsYC-NDE)
+
 ---
 
-## 📷 인게임 이미지
+## 📷 인게임 스크린샷
 
 <div style="display: flex; justify-content: center; gap: 40px;">
 
